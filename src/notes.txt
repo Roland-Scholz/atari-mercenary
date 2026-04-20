@@ -1,0 +1,37 @@
+sector 1-4 	bootcode loads at $0500, start at $506
+		shows selector for low/hi-res (select)
+		
+		load $2a = 42 sectors 6 - 47 at $0700
+
+		jsr $a00 - decodes title-graph data to $
+		jmp $700 - copy $700-$8ff to $500
+		jmp to $51a
+		
+		load sector 5 to $680
+		copy protection
+
+		$B5 pointer to sector / buffer list $05F8
+		hi-res = $c, lo-res = 00
+		games starts at $1e00 (hi-res), $8800 (lo-res)
+		
+		$05F8 list structure:
+		0	1		x	D1	D2
+		DBUFHI	HI-END ($b4)	OS-OFF	DAUX1	DAUX2
+					(0=on)
+
+		X = $c: $5f8 + $c = $604
+		
+		$604 	07	17	c0	32	00		2kb	at $c000	 50
+		$609 	58	80	D8	68	02		5kb	at $D800	616
+		$60e	70	7D	00   	04   	01		$0680	at $7000	260
+		$613	07	70	00	90	01		$3480   at $0700	400
+		$618	7D	80	00	62	02		$0180	at $7d00	610
+		$61d	91	9c	00	B8	02		$0580	at $9100 	696
+		$622	00
+
+		
+sector 5	copy protection, loads at $0680
+		used to EOR code for obfuscation
+
+
+		$29df		main loop

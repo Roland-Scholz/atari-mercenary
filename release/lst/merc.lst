@@ -1,0 +1,813 @@
+ca65 V2.17 - Git 59ab140
+Main file   : ..\src\merc.a65
+Current file: ..\src\merc.a65
+
+000000r 1               ;
+000000r 1               ;
+000000r 1               ;
+000000r 1                        .include "os.a65"
+000000r 2               ;
+000000r 2               ; System equates
+000000r 2               ;
+000000r 2               ; OS EQUATES
+000000r 2               ; ----------
+000000r 2               ;
+000000r 2               ; Syntax:
+000000r 2               ; Use '=' for addresses
+000000r 2               ; and '<' for read addresses (ex: KBCODE)
+000000r 2               ; and '>' for write addresses (ex: STIMER)
+000000r 2               ; and '#' for values
+000000r 2               ;
+000000r 2               ; IO EQUATES
+000000r 2               ;
+000000r 2               ICHID       = $0000
+000000r 2               ICDNO       = $0001
+000000r 2               ICCOM       = $0002
+000000r 2               ICSTA       = $0003
+000000r 2               ICBAL       = $0004
+000000r 2               ICBAH       = $0005
+000000r 2               ICPTL       = $0006
+000000r 2               ICPTH       = $0007
+000000r 2               ICBLL       = $0008
+000000r 2               ICBLH       = $0009
+000000r 2               ICAX1       = $000A
+000000r 2               ICAX2       = $000B
+000000r 2               ICAX3       = $000C
+000000r 2               ICAX4       = $000D
+000000r 2               ICAX5       = $000E
+000000r 2               ICAX6       = $000F
+000000r 2               ;
+000000r 2               ; DISPLAY LIST EQUATES
+000000r 2               ;
+000000r 2               ADLI        = $0080
+000000r 2               AVB         = $0040
+000000r 2               ALMS        = $0040
+000000r 2               AVSCR       = $0020
+000000r 2               AHSCR       = $0010
+000000r 2               AJMP        = $0001
+000000r 2               AEMPTY1     = $0000
+000000r 2               AEMPTY2     = $0010
+000000r 2               AEMPTY3     = $0020
+000000r 2               AEMPTY4     = $0030
+000000r 2               AEMPTY5     = $0040
+000000r 2               AEMPTY6     = $0050
+000000r 2               AEMPTY7     = $0060
+000000r 2               AEMPTY8     = $0070
+000000r 2               ;
+000000r 2               ; OS VARIABLES FOR XL/XE
+000000r 2               ;
+000000r 2               ; PAGE 0
+000000r 2               ;
+000000r 2               NGFLAG      = $0001
+000000r 2               CASINI      = $0002
+000000r 2               RAMLO       = $0004
+000000r 2               TRAMSZ      = $0006
+000000r 2               CMCMD       = $0007
+000000r 2               WARMST      = $0008
+000000r 2               BOOT        = $0009
+000000r 2               DOSVEC      = $000A
+000000r 2               DOSINI      = $000C
+000000r 2               APPMHI      = $000E
+000000r 2               POKMSK      = $0010
+000000r 2               BRKKEY      = $0011
+000000r 2               RTCLOK      = $0012
+000000r 2               BUFADR      = $0015
+000000r 2               ICCOMT      = $0017
+000000r 2               DSKFMS      = $0018
+000000r 2               DSKUTL      = $001A
+000000r 2               ABUFPT      = $001C
+000000r 2               ICHIDZ      = $0020
+000000r 2               ICDNOZ      = $0021
+000000r 2               ICCOMZ      = $0022
+000000r 2               ICSTAZ      = $0023
+000000r 2               ICBALZ      = $0024
+000000r 2               ICBAHZ      = $0025
+000000r 2               ICPTLZ      = $0026
+000000r 2               ICPTHZ      = $0027
+000000r 2               ICBLLZ      = $0028
+000000r 2               ICBLHZ      = $0029
+000000r 2               ICAX1Z      = $002A
+000000r 2               ICAX2Z      = $002B
+000000r 2               ICAX3Z      = $002C
+000000r 2               ICAX4Z      = $002D
+000000r 2               ICAX5Z      = $002E
+000000r 2               ICAX6Z      = $002F
+000000r 2               STATUS      = $0030
+000000r 2               CHKSUM      = $0031
+000000r 2               BUFRLO      = $0032
+000000r 2               BUFRHI      = $0033
+000000r 2               BFENLO      = $0034
+000000r 2               BFENHI      = $0035
+000000r 2               LTEMP       = $0036
+000000r 2               BUFRFL      = $0038
+000000r 2               RECVDN      = $0039
+000000r 2               XMTDON      = $003A
+000000r 2               CHKSNT      = $003B
+000000r 2               NOCKSM      = $003C
+000000r 2               BPTR        = $003D
+000000r 2               FTYPE       = $003E
+000000r 2               FEOF        = $003F
+000000r 2               FREQ        = $0040
+000000r 2               SOUNDR      = $0041
+000000r 2               CRITIC      = $0042
+000000r 2               FMSZPG      = $0043
+000000r 2               ZCHAIN      = $004A
+000000r 2               DSTAT       = $004C
+000000r 2               ATRACT      = $004D
+000000r 2               DRKMSK      = $004E
+000000r 2               COLRSH      = $004F
+000000r 2               TEMP        = $0050
+000000r 2               HOLD1       = $0051
+000000r 2               LMARGN      = $0052
+000000r 2               RMARGN      = $0053
+000000r 2               ROWCRS      = $0054
+000000r 2               COLCRS      = $0055
+000000r 2               DINDEX      = $0057
+000000r 2               SAVMSC      = $0058
+000000r 2               OLDROW      = $005A
+000000r 2               OLDCOL      = $005B
+000000r 2               OLDCHR      = $005D
+000000r 2               OLDADR      = $005E
+000000r 2               FKDEF       = $0060
+000000r 2               PALNTS      = $0062
+000000r 2               LOGCOL      = $0063
+000000r 2               ADRESS      = $0064
+000000r 2               MLTTMP      = $0066
+000000r 2               SAVADR      = $0068
+000000r 2               RAMTOP      = $006A
+000000r 2               BUFCNT      = $006B
+000000r 2               BUFSTR      = $006C
+000000r 2               BITMSK      = $006E
+000000r 2               SHFAMT      = $006F
+000000r 2               ROWAC       = $0070
+000000r 2               COLAC       = $0072
+000000r 2               ENDPT       = $0074
+000000r 2               DELTAR      = $0076
+000000r 2               DELTAC      = $0077
+000000r 2               KEYDEF      = $0079
+000000r 2               SWPFLG      = $007B
+000000r 2               HOLDCH      = $007C
+000000r 2               INSDAT      = $007D
+000000r 2               COUNTR      = $007E
+000000r 2               LOMEM       = $0080
+000000r 2               ;
+000000r 2               ; PAGE 2
+000000r 2               ;
+000000r 2               VDSLST      = $0200
+000000r 2               VPRCED      = $0202
+000000r 2               VINTER      = $0204
+000000r 2               VBREAK      = $0206
+000000r 2               VKEYBD      = $0208
+000000r 2               VSERIN      = $020A
+000000r 2               VSEROR      = $020C
+000000r 2               VSEROC      = $020E
+000000r 2               VTIMR1      = $0210
+000000r 2               VTIMR2      = $0212
+000000r 2               VTIMR4      = $0214
+000000r 2               VIMIRQ      = $0216
+000000r 2               CDTMV1      = $0218
+000000r 2               CDTMV2      = $021A
+000000r 2               CDTMV3      = $021C
+000000r 2               CDTMV4      = $021E
+000000r 2               CDTMV5      = $0220
+000000r 2               VVBLKI      = $0222
+000000r 2               VVBLKD      = $0224
+000000r 2               CDTMA1      = $0226
+000000r 2               CDTMA2      = $0228
+000000r 2               CDTMF3      = $022A
+000000r 2               SRTIMR      = $022B
+000000r 2               CDTMF4      = $022C
+000000r 2               INTEMP      = $022D
+000000r 2               CDTMF5      = $022E
+000000r 2               SDMCTL      = $022F
+000000r 2               SDLSTL      = $0230
+000000r 2               SDLSTH      = $0231
+000000r 2               SSKCTL      = $0232
+000000r 2               SPARE       = $0233
+000000r 2               LPENH       = $0234
+000000r 2               LPENV       = $0235
+000000r 2               BRKKY       = $0236
+000000r 2               VPIRQ       = $0238
+000000r 2               CDEVIC      = $023A
+000000r 2               CCOMND      = $023B
+000000r 2               CAUX1       = $023C
+000000r 2               CAUX2       = $023D
+000000r 2               TMPSIO      = $023E
+000000r 2               ERRFLG      = $023F
+000000r 2               DFLAGS      = $0240
+000000r 2               DBSECT      = $0241
+000000r 2               BOOTAD      = $0242
+000000r 2               COLDST      = $0244
+000000r 2               RECLEN      = $0245
+000000r 2               DSKTIM      = $0246
+000000r 2               PDVMSK      = $0247
+000000r 2               SHPDVS      = $0248
+000000r 2               PDMSK       = $0249
+000000r 2               RELADR      = $024A
+000000r 2               PPTMPA      = $024C
+000000r 2               PPTMPX      = $024D
+000000r 2               CHSALT      = $026B
+000000r 2               VSFLAG      = $026C
+000000r 2               KEYDIS      = $026D
+000000r 2               FINE        = $026E
+000000r 2               GPRIOR      = $026F
+000000r 2               PADDL0      = $0270
+000000r 2               PADDL1      = $0271
+000000r 2               PADDL2      = $0272
+000000r 2               PADDL3      = $0273
+000000r 2               PADDL4      = $0274
+000000r 2               PADDL5      = $0275
+000000r 2               PADDL6      = $0276
+000000r 2               PADDL7      = $0277
+000000r 2               STICK0      = $0278
+000000r 2               STICK1      = $0279
+000000r 2               STICK2      = $027A
+000000r 2               STICK3      = $027B
+000000r 2               PTRIG0      = $027C
+000000r 2               PTRIG1      = $027D
+000000r 2               PTRIG2      = $027E
+000000r 2               PTRIG3      = $027F
+000000r 2               PTRIG4      = $0280
+000000r 2               PTRIG5      = $0281
+000000r 2               PTRIG6      = $0282
+000000r 2               PTRIG7      = $0283
+000000r 2               STRIG0      = $0284
+000000r 2               STRIG1      = $0285
+000000r 2               STRIG2      = $0286
+000000r 2               STRIG3      = $0287
+000000r 2               HIBYTE      = $0288
+000000r 2               WMODE       = $0289
+000000r 2               BLIM        = $028A
+000000r 2               IMASK       = $028B
+000000r 2               JVECK       = $028C
+000000r 2               NEWADR      = $028E
+000000r 2               TXTROW      = $0290
+000000r 2               TXTCOL      = $0291
+000000r 2               TINDEX      = $0293
+000000r 2               TXTMSC      = $0294
+000000r 2               TXTOLD      = $0296
+000000r 2               CRETRY      = $029C
+000000r 2               HOLD3       = $029D
+000000r 2               SUBTMP      = $029E
+000000r 2               HOLD2       = $029F
+000000r 2               DMASK       = $02A0
+000000r 2               TMPLBT      = $02A1
+000000r 2               ESCFLG      = $02A2
+000000r 2               TABMAP      = $02A3
+000000r 2               LOGMAP      = $02B2
+000000r 2               INVFLG      = $02B6
+000000r 2               FILFLG      = $02B7
+000000r 2               TMPROW      = $02B8
+000000r 2               TMPCOL      = $02B9
+000000r 2               SCRFLG      = $02BB
+000000r 2               HOLD4       = $02BC
+000000r 2               DRETRY      = $02BD
+000000r 2               SHFLOC      = $02BE
+000000r 2               BOTSCR      = $02BF
+000000r 2               PCOLR0      = $02C0
+000000r 2               PCOLR1      = $02C1
+000000r 2               PCOLR2      = $02C2
+000000r 2               PCOLR3      = $02C3
+000000r 2               COLOR0      = $02C4
+000000r 2               COLOR1      = $02C5
+000000r 2               COLOR2      = $02C6
+000000r 2               COLOR3      = $02C7
+000000r 2               COLOR4      = $02C8
+000000r 2               RUNADR      = $02C9
+000000r 2               HIUSED      = $02CB
+000000r 2               ZHIUSE      = $02CD
+000000r 2               GBYTEA      = $02CF
+000000r 2               LOADAD      = $02D1
+000000r 2               ZLOADA      = $02D3
+000000r 2               DSCTLN      = $02D5
+000000r 2               ACMISR      = $02D7
+000000r 2               KRPDER      = $02D9
+000000r 2               KEYREP      = $02DA
+000000r 2               NOCLIK      = $02DB
+000000r 2               HELPFG      = $02DC
+000000r 2               DMASAV      = $02DD
+000000r 2               PBPNT       = $02DE
+000000r 2               PBUFSZ      = $02DF
+000000r 2               RUNAD       = $02E0
+000000r 2               INITAD      = $02E2
+000000r 2               RAMSIZ      = $02E4
+000000r 2               MEMTOP      = $02E5
+000000r 2               MEMLO       = $02E7
+000000r 2               HNDLOD      = $02E9
+000000r 2               DVSTAT      = $02EA
+000000r 2               CBAUDL      = $02EE
+000000r 2               CBAUDH      = $02EF
+000000r 2               CRSINH      = $02F0
+000000r 2               KEYDEL      = $02F1
+000000r 2               CH1         = $02F2
+000000r 2               CHACT       = $02F3
+000000r 2               CHBAS       = $02F4
+000000r 2               NEWROW      = $02F5
+000000r 2               NEWCOL      = $02F6
+000000r 2               ROWINC      = $02F8
+000000r 2               COLINC      = $02F9
+000000r 2               CHAR        = $02FA
+000000r 2               ATACHR      = $02FB
+000000r 2               CH          = $02FC
+000000r 2               FILDAT      = $02FD
+000000r 2               DSPFLG      = $02FE
+000000r 2               SSFLAG      = $02FF
+000000r 2               ;
+000000r 2               ; PAGE 3
+000000r 2               ;
+000000r 2               DDEVIC      = $0300
+000000r 2               DUNIT       = $0301
+000000r 2               DCOMND      = $0302
+000000r 2               DSTATS      = $0303
+000000r 2               DBUFLO      = $0304
+000000r 2               DBUFHI      = $0305
+000000r 2               DTIMLO      = $0306
+000000r 2               DUNUSE      = $0307
+000000r 2               DBYTLO      = $0308
+000000r 2               DBYTHI      = $0309
+000000r 2               DAUX1       = $030A
+000000r 2               DAUX2       = $030B
+000000r 2               TIMER1      = $030C
+000000r 2               ADDCOR      = $030E
+000000r 2               CASFLG      = $030F
+000000r 2               TIMER2      = $0310
+000000r 2               TEMP1       = $0312
+000000r 2               TEMP2       = $0314
+000000r 2               TEMP3       = $0315
+000000r 2               SAVIO       = $0316
+000000r 2               TIMFLG      = $0317
+000000r 2               STACKP      = $0318
+000000r 2               TSTAT       = $0319
+000000r 2               HATABS      = $031A
+000000r 2               PUPBT1      = $033D
+000000r 2               PUPBT2      = $033E
+000000r 2               PUPBT3      = $033F
+000000r 2               IOCB0       = $0340
+000000r 2               IOCB1       = $0350
+000000r 2               IOCB2       = $0360
+000000r 2               IOCB3       = $0370
+000000r 2               IOCB4       = $0380
+000000r 2               IOCB5       = $0390
+000000r 2               IOCB6       = $03A0
+000000r 2               IOCB7       = $03B0
+000000r 2               PRNBUF      = $03C0
+000000r 2               SUPERF      = $03E8
+000000r 2               CKEY        = $03E9
+000000r 2               CASSBT      = $03EA
+000000r 2               CARTCK      = $03EB
+000000r 2               DERRF       = $03EC
+000000r 2               ACMVAR      = $03ED
+000000r 2               BASICF      = $03F8
+000000r 2               MINTLK      = $03F9
+000000r 2               GINTLK      = $03FA
+000000r 2               CHLINK      = $03FB
+000000r 2               CASBUF      = $03FD
+000000r 2               ;
+000000r 2               ; HARDWARE REGISTERS
+000000r 2               ;
+000000r 2               ; GTIA
+000000r 2               ;
+000000r 2               M0PF        = $D000
+000000r 2               HPOSP0      = $D000
+000000r 2               M1PF        = $D001
+000000r 2               HPOSP1      = $D001
+000000r 2               M2PF        = $D002
+000000r 2               HPOSP2      = $D002
+000000r 2               M3PF        = $D003
+000000r 2               HPOSP3      = $D003
+000000r 2               P0PF        = $D004
+000000r 2               HPOSM0      = $D004
+000000r 2               P1PF        = $D005
+000000r 2               HPOSM1      = $D005
+000000r 2               P2PF        = $D006
+000000r 2               HPOSM2      = $D006
+000000r 2               P3PF        = $D007
+000000r 2               HPOSM3      = $D007
+000000r 2               M0PL        = $D008
+000000r 2               SIZEP0      = $D008
+000000r 2               M1PL        = $D009
+000000r 2               SIZEP1      = $D009
+000000r 2               M2PL        = $D00A
+000000r 2               SIZEP2      = $D00A
+000000r 2               M3PL        = $D00B
+000000r 2               SIZEP3      = $D00B
+000000r 2               P0PL        = $D00C
+000000r 2               SIZEM       = $D00C
+000000r 2               P1PL        = $D00D
+000000r 2               GRAFP0      = $D00D
+000000r 2               P2PL        = $D00E
+000000r 2               GRAFP1      = $D00E
+000000r 2               P3PL        = $D00F
+000000r 2               GRAFP2      = $D00F
+000000r 2               TRIG0       = $D010
+000000r 2               GRAFP3      = $D010
+000000r 2               TRIG1       = $D011
+000000r 2               GRAFM       = $D011
+000000r 2               TRIG2       = $D012
+000000r 2               COLPM0      = $D012
+000000r 2               TRIG3       = $D013
+000000r 2               COLPM1      = $D013
+000000r 2               PAL         = $D014
+000000r 2               COLPM2      = $D014
+000000r 2               COLPM3      = $D015
+000000r 2               COLPF0      = $D016
+000000r 2               COLPF1      = $D017
+000000r 2               COLPF2      = $D018
+000000r 2               COLPF3      = $D019
+000000r 2               COLBK       = $D01A
+000000r 2               PRIOR       = $D01B
+000000r 2               VDELAY      = $D01C
+000000r 2               GRACTL      = $D01D
+000000r 2               HITCLR      = $D01E
+000000r 2               CONSOL      = $D01F
+000000r 2               ;
+000000r 2               ; POKEY
+000000r 2               ;
+000000r 2               POT0        = $D200
+000000r 2               AUDF1       = $D200
+000000r 2               POT1        = $D201
+000000r 2               AUDC1       = $D201
+000000r 2               POT2        = $D202
+000000r 2               AUDF2       = $D202
+000000r 2               POT3        = $D203
+000000r 2               AUDC2       = $D203
+000000r 2               POT4        = $D204
+000000r 2               AUDF3       = $D204
+000000r 2               POT5        = $D205
+000000r 2               AUDC3       = $D205
+000000r 2               POT6        = $D206
+000000r 2               AUDF4       = $D206
+000000r 2               POT7        = $D207
+000000r 2               AUDC4       = $D207
+000000r 2               ALLPOT      = $D208
+000000r 2               AUDCTL      = $D208
+000000r 2               KBCODE      = $D209
+000000r 2               STIMER      = $D209
+000000r 2               RANDOM      = $D20A
+000000r 2               SKREST      = $D20A
+000000r 2               POTGO       = $D20B
+000000r 2               SERIN       = $D20D
+000000r 2               SEROUT      = $D20D
+000000r 2               IRQST       = $D20E
+000000r 2               IRQEN       = $D20E
+000000r 2               SKSTAT      = $D20F
+000000r 2               SKCTL       = $D20F
+000000r 2               ;
+000000r 2               ; PIA
+000000r 2               ;
+000000r 2               PORTA       = $D300
+000000r 2               PORTB       = $D301
+000000r 2               PACTL       = $D302
+000000r 2               PBCTL       = $D303
+000000r 2               ;
+000000r 2               ; ANTIC
+000000r 2               ;
+000000r 2               DMACLT      = $D400
+000000r 2               CHACTL      = $D401
+000000r 2               DLISTL      = $D402
+000000r 2               DLISTH      = $D403
+000000r 2               HSCROL      = $D404
+000000r 2               VSCROL      = $D405
+000000r 2               PMBASE      = $D407
+000000r 2               CHBASE      = $D409
+000000r 2               WSYNC       = $D40A
+000000r 2               VCOUNT      = $D40B
+000000r 2               PENH        = $D40C
+000000r 2               PENV        = $D40D
+000000r 2               NMIEN       = $D40E
+000000r 2               NMIST       = $D40F
+000000r 2               NMIRES      = $D40F
+000000r 2               ;
+000000r 2               ; FLOATING POINT ROUTINES
+000000r 2               ;
+000000r 2               AFP         = $D800
+000000r 2               FASC        = $D8E6
+000000r 2               IFP         = $D9AA
+000000r 2               FPI         = $D9D2
+000000r 2               ZFR0        = $DA44
+000000r 2               ZF1         = $DA46
+000000r 2               FSUB        = $DA60
+000000r 2               FADD        = $DA66
+000000r 2               FMUL        = $DADB
+000000r 2               FDIV        = $DB28
+000000r 2               PLYEVL      = $DD40
+000000r 2               FLD0R       = $DD89
+000000r 2               FLD0P       = $DD8D
+000000r 2               FLD1R       = $DD98
+000000r 2               FLD1P       = $DD9C
+000000r 2               FSTOR       = $DDA7
+000000r 2               FSTOP       = $DDAB
+000000r 2               FMOVE       = $DDB6
+000000r 2               EXP         = $DDC0
+000000r 2               EXP10       = $DDCC
+000000r 2               LOG         = $DECD
+000000r 2               LOG10       = $DED1
+000000r 2               ;
+000000r 2               ; ROM VECTORS
+000000r 2               ;
+000000r 2               DSKINV      = $E453
+000000r 2               CIOV        = $E456
+000000r 2               SIOV        = $E459
+000000r 2               SETVBV      = $E45C
+000000r 2               SYSVBV      = $E45F
+000000r 2               XITVBV      = $E462
+000000r 2               SIOINV      = $E465
+000000r 2               SENDEV      = $E468
+000000r 2               INTINV      = $E46B
+000000r 2               CIOINV      = $E46E
+000000r 2               SELFSV      = $E471
+000000r 2               WARMSV      = $E474
+000000r 2               COLDSV      = $E477
+000000r 2               RBLOKV      = $E47A
+000000r 2               CSOPIV      = $E47D
+000000r 2               PUPDIV      = $E480
+000000r 2               SELFTSV     = $E483
+000000r 2               PENTV       = $E486
+000000r 2               PHUNLV      = $E489
+000000r 2               PHINIV      = $E48C
+000000r 2               GPDVV       = $E48F
+000000r 2               
+000000r 1               	 .MACPACK atari
+000000r 2               ; Convert characters to screen codes
+000000r 2               
+000000r 2               ; Helper macro that converts and outputs one character
+000000r 2               .macro _scrcode char
+000000r 2                       .if (char >= 0) .and (char <= 31)
+000000r 2                               .byte   (char + 64)
+000000r 2                       .elseif (char >= 32) .and (char <= 95)
+000000r 2                               .byte   (char - 32)
+000000r 2                       .elseif (char >= 96) .and (char <= 127)
+000000r 2                               .byte   char
+000000r 2                       .elseif (char >= 128) .and (char <= 159)
+000000r 2                               .byte   (char + 64)
+000000r 2                       .elseif (char >= 160) .and (char <= 223)
+000000r 2                               .byte   (char - 32)
+000000r 2                       .elseif (char >= 224) .and (char <= 255)
+000000r 2                               .byte   char
+000000r 2                       .else
+000000r 2                               .error  "scrcode: Character constant out of range"
+000000r 2                       .endif
+000000r 2               .endmacro
+000000r 2               
+000000r 2               .macro  scrcode arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9
+000000r 2               
+000000r 2                       ; Bail out if next argument is empty
+000000r 2                       .if     .blank (arg1)
+000000r 2                               .exitmacro
+000000r 2                       .endif
+000000r 2               
+000000r 2                       ; Check for a string
+000000r 2                       .if     .match ({arg1}, "")
+000000r 2               
+000000r 2                               ; Walk over all string chars
+000000r 2                               .repeat .strlen (arg1), i
+000000r 2                                       _scrcode        {.strat (arg1, i)}
+000000r 2                               .endrepeat
+000000r 2               
+000000r 2                       ; Check for a number
+000000r 2                       .elseif .match (.left (1, {arg1}), 0)
+000000r 2               
+000000r 2                               ; Just output the number
+000000r 2                               _scrcode        arg1
+000000r 2               
+000000r 2                       ; Check for a character
+000000r 2                       .elseif .match (.left (1, {arg1}), 'a')
+000000r 2               
+000000r 2                               ; Just output the character
+000000r 2                               _scrcode        arg1
+000000r 2               
+000000r 2                       ; Anything else is an error
+000000r 2                       .else
+000000r 2               
+000000r 2                               .error  "scrcode: invalid argument type"
+000000r 2               
+000000r 2                       .endif
+000000r 2               
+000000r 2                       ; Call the macro recursively with the remaining args
+000000r 2                       scrcode arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9
+000000r 2               .endmacro
+000000r 2               
+000000r 2               
+000000r 1               ;
+000000r 1               ; Code equates
+000000r 1               ;
+000000r 1               L00B5       = $00B5
+000000r 1               L00B6       = $00B6
+000000r 1               L00B7       = $00B7
+000000r 1               L00ED       = $00ED
+000000r 1               L00EE       = $00EE
+000000r 1               L06C6       = $06C6
+000000r 1               L06C7       = $06C7
+000000r 1               L06E0       = $06E0
+000000r 1               L0700       = $0700
+000000r 1               L070B       = $070B
+000000r 1               L0733       = $0733
+000000r 1               L0739       = $0739
+000000r 1               L0742       = $0742
+000000r 1               L074D       = $074D
+000000r 1               L074F       = $074F
+000000r 1               L0758       = $0758
+000000r 1               L0760       = $0760
+000000r 1               L0A00       = $0A00
+000000r 1               L1E3A       = $1E3A
+000000r 1               L206F       = $206F
+000000r 1               L212F       = $212F
+000000r 1               L2D25       = $2D25
+000000r 1               L3200       = $3200
+000000r 1               L3225       = $3225
+000000r 1               L3400       = $3400
+000000r 1               L4106       = $4106
+000000r 1               L7005       = $7005
+000000r 1               L7006       = $7006
+000000r 1               L7070       = $7070
+000000r 1               LBFFC       = $BFFC
+000000r 1               LFFF0       = $FFF0
+000000r 1               ;
+000000r 1               ; Start of code
+000000r 1               ;
+000000r 1               		.org $0506
+000506  1               ;
+000506  1  A2 04        		ldx	#$04				;set 5 colors
+000508  1  BD E8 05     L0508:      	lda	L05E8,X
+00050B  1  9D C4 02     		sta	COLOR0,X
+00050E  1  CA           		dex
+00050F  1  10 F7        		bpl	L0508
+000511  1  AD 14 D0     		lda	PAL				;no PAL adjustment
+000514  1  29 0E        		and	#$0E
+000516  1  F0 02        		beq	L051A
+000518  1  EA           		nop
+000519  1  EA           		nop
+00051A  1  A9 00        L051A:      	lda	#$00
+00051C  1  85 B7        		sta	L00B7
+00051E  1  8D 0E D4     		sta	NMIEN
+000521  1  A9 01        		lda	#$01
+000523  1  8D F8 03     		sta	BASICF
+000526  1  A9 FE        		lda	#$FE				;turn off os-rom
+000528  1  8D 01 D3     		sta	PORTB				;test ram
+00052B  1  AD F0 FF     		lda	LFFF0
+00052E  1  49 FF        		eor	#$FF
+000530  1  8D F0 FF     		sta	LFFF0
+000533  1  CD F0 FF     		cmp	LFFF0
+000536  1  08           		php
+000537  1  A9 FF        		lda	#$FF				;turn os-rom on
+000539  1  8D 01 D3     		sta	PORTB
+00053C  1  A9 40        		lda	#$40
+00053E  1  8D 0E D4     		sta	NMIEN
+000541  1  58           		cli
+000542  1  28           		plp
+000543  1  D0 28        		bne	L056D				;os-rom not switchable
+000545  1               
+000545  1  AD FC BF     		lda	LBFFC				;test Basic on
+000548  1  49 FF        		eor	#$FF
+00054A  1  8D FC BF     		sta	LBFFC
+00054D  1  CD FC BF     		cmp	LBFFC
+000550  1  F0 03        		beq	L0555				;off
+000552  1  4C 9D 05     		jmp	L059D				;on -> remove card
+000555  1               
+000555  1  A9 B5        L0555:      	lda	#<DLIST0			;64/48k
+000557  1  8D 30 02     		sta	SDLSTL
+00055A  1  A9 06        		lda	#>DLIST0
+00055C  1  8D 31 02     		sta	SDLSTH
+00055F  1  A5 14        		lda	RTCLOK+2
+000561  1  C5 14        L0561:      	cmp	RTCLOK+2
+000563  1  F0 FC        		beq	L0561
+000565  1  20 AA 05     		jsr	L05AA
+000568  1  B0 12        		bcs	L057C
+00056A  1  4C 00 07     		jmp	L0700
+00056D  1               
+00056D  1  C6 B7        L056D:      	dec	L00B7				;$b7 = $ff (os-rom not switchable)
+00056F  1  AD FC BF     		lda	LBFFC
+000572  1  49 FF        		eor	#$FF
+000574  1  8D FC BF     		sta	LBFFC
+000577  1  CD FC BF     		cmp	LBFFC
+00057A  1  D0 17        		bne	L0593				;basic/card installed -> insufficient memory
+00057C  1               
+00057C  1  A9 CF        L057C:      	lda	#<DLIST1			;48k (fast) version
+00057E  1  8D 30 02     		sta	SDLSTL
+000581  1  A9 06        		lda	#>DLIST1
+000583  1  8D 31 02     		sta	SDLSTH
+000586  1  A5 14        		lda	RTCLOK+2
+000588  1  C5 14        L0588:      	cmp	RTCLOK+2
+00058A  1  F0 FC        		beq	L0588
+00058C  1  20 AA 05     		jsr	L05AA
+00058F  1  4C 00 07     		jmp	L0700
+000592  1  60           		rts
+000593  1               
+000593  1  A9 EE        L0593:      	lda	#<DLIST3			;insufficient memory
+000595  1  8D 30 02     		sta	SDLSTL
+000598  1  A9 06        		lda	#>DLIST3
+00059A  1  4C A4 05     		jmp	L05A4
+00059D  1               
+00059D  1  A9 E5        L059D:      	lda	#<DLIST2			;remove cart
+00059F  1  8D 30 02     		sta	SDLSTL
+0005A2  1  A9 06        		lda	#>DLIST2
+0005A4  1  8D 31 02     L05A4:      	sta	SDLSTH
+0005A7  1  4C A7 05     L05A7:      	jmp	L05A7
+0005AA  1               
+0005AA  1  A9 06        L05AA:      	lda	#$06
+0005AC  1  8D 0A 03     		sta	DAUX1
+0005AF  1  A9 00        		lda	#$00
+0005B1  1  8D 04 03     		sta	DBUFLO
+0005B4  1  A9 07        		lda	#$07
+0005B6  1  8D 05 03     		sta	DBUFHI
+0005B9  1  A9 2A        		lda	#$2A
+0005BB  1  85 B6        		sta	L00B6
+0005BD  1  20 53 E4     L05BD:      	jsr	DSKINV
+0005C0  1  AD 04 03     		lda	DBUFLO
+0005C3  1  49 80        		eor	#$80
+0005C5  1  8D 04 03     		sta	DBUFLO
+0005C8  1  D0 03        		bne	L05CD
+0005CA  1  EE 05 03     		inc	DBUFHI
+0005CD  1  EE 0A 03     L05CD:      	inc	DAUX1
+0005D0  1  A5 B7        		lda	L00B7
+0005D2  1  D0 07        		bne	L05DB
+0005D4  1  AD 1F D0     		lda	CONSOL
+0005D7  1  29 02        		and	#$02
+0005D9  1  F0 09        		beq	L05E4
+0005DB  1  C6 B6        L05DB:      	dec	L00B6
+0005DD  1  D0 DE        		bne	L05BD
+0005DF  1  20 00 0A     		jsr	L0A00
+0005E2  1  18           		clc
+0005E3  1  60           		rts
+0005E4  1  C6 B7        L05E4:      	dec	L00B7
+0005E6  1  38           		sec
+0005E7  1  60           		rts
+0005E8  1               
+0005E8  1  5E 3A 1E 3A  L05E8:		.byte	$5E, $3A, $1E, $3A,$34		;5-bytes color values
+0005EC  1  34           
+0005ED  1               
+0005ED  1               ;			          1         2
+0005ED  1               ;			 12345678901234567890
+0005ED  1  00 00 00 00  Text:		scrcode "      LOADING       "
+0005F1  1  00 00 2C 2F  
+0005F5  1  21 24 29 2E  
+000601  1  00 00 00 00  		scrcode "     MERCENARY      "
+000605  1  00 2D 25 32  
+000609  1  23 25 2E 21  
+000615  1  00 00 25 33  		scrcode "  ESCAPE FROM TARG  "
+000619  1  23 21 30 25  
+00061D  1  00 26 32 2F  
+000629  1  00 00 23 32  		scrcode "  CRACKED BY ROB.C  "
+00062D  1  21 23 2B 25  
+000631  1  24 00 22 39  
+00063D  1  16 14 2B 00  hires:		scrcode "64K (HI-RES) VERSION"
+000641  1  08 28 29 0D  
+000645  1  32 25 33 09  
+000651  1  00 00 30 32  		scrcode "  PRESS SELECT FOR  "
+000655  1  25 33 33 00  
+000659  1  33 25 2C 25  
+000665  1  00 14 18 2B  		scrcode " 48K (FAST) VERSION "
+000669  1  00 08 26 21  
+00066D  1  33 34 09 00  
+000679  1  00 14 18 2B  lores:		scrcode " 48K (FAST) VERSION "
+00067D  1  00 08 26 21  
+000681  1  33 34 09 00  
+00068D  1  00 00 32 25  rmcard:		scrcode "  REMOVE CARTRIDGE  "
+000691  1  2D 2F 36 25  
+000695  1  00 23 21 32  
+0006A1  1  00 29 2E 33  insufmem:	scrcode " INSUFFICIENT MEMORY"
+0006A5  1  35 26 26 29  
+0006A9  1  23 29 25 2E  
+0006B5  1               
+0006B5  1  70 70 70     DLIST0:		.byte	$70, $70, $70
+0006B8  1  46           		.byte	$46				;mode 6 + Load Memory Scan Counter
+0006B9  1  ED 05        		.word	Text				;address
+0006BB  1  70 07        		.byte	$70, $07			;mode 7
+0006BD  1  70 07        		.byte	$70, $07			;mode 7
+0006BF  1  70 06        		.byte	$70, $06			;mode 6
+0006C1  1  70 70 70     		.byte	$70, $70, $70
+0006C4  1  46           		.byte	$46				;;mode 6 + Load Memory Scan Counter
+0006C5  1  3D 06        		.word	hires				;address
+0006C7  1  70 70 06     		.byte	$70, $70, $06			;mode 6
+0006CA  1  30 06        		.byte	$30, $06  			;3 space + mode 6
+0006CC  1  41           		.byte	$41
+0006CD  1  B5 06        		.word	DLIST0
+0006CF  1               
+0006CF  1  70 70 70     DLIST1:		.byte	$70, $70, $70
+0006D2  1  46           		.byte	$46
+0006D3  1  ED 05        		.word	Text
+0006D5  1  70 07        		.byte	$70, $07
+0006D7  1  70 07        		.byte	$70, $07
+0006D9  1  70 06        		.byte	$70, $06
+0006DB  1  70 70 70 70  		.byte	$70, $70, $70, $70
+0006DF  1  46           		.byte	$46
+0006E0  1  79 06        		.word	lores
+0006E2  1  41           		.byte	$41
+0006E3  1  CF 06        		.word	DLIST1
+0006E5  1               
+0006E5  1  70 70 70     DLIST2:		.byte	$70, $70, $70
+0006E8  1  47           		.byte	$47
+0006E9  1  8D 06        		.word	rmcard
+0006EB  1  41           		.byte	$41
+0006EC  1  E5 06        		.word	DLIST2
+0006EE  1               
+0006EE  1  70 70 70     DLIST3:		.byte	$70, $70, $70
+0006F1  1  47           		.byte	$47
+0006F2  1  A1 06        		.word	insufmem
+0006F4  1  41           		.byte	$41
+0006F5  1  EE 06        		.word	DLIST3
+0006F7  1               
+0006F7  1  00 EE 6F 20  		.byte	$00, $EE, $6F, $20, $D3, $2F, $9B, $73, $A3
+0006FB  1  D3 2F 9B 73  
+0006FF  1  A3           
+0006FF  1               

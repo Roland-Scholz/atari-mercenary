@@ -1,0 +1,204 @@
+; 
+; 
+; 
+         .include "os.a65"        
+	 .MACPACK atari
+;
+; Code equates
+;
+L00B5       = $00B5
+L00B6       = $00B6
+L00B7       = $00B7
+L00ED       = $00ED
+L00EE       = $00EE
+L06C6       = $06C6
+L06C7       = $06C7
+L06E0       = $06E0
+L0700       = $0700
+L070B       = $070B
+L0733       = $0733
+L0739       = $0739
+L0742       = $0742
+L074D       = $074D
+L074F       = $074F
+L0758       = $0758
+L0760       = $0760
+L0A00       = $0A00
+L1E3A       = $1E3A
+L206F       = $206F
+L212F       = $212F
+L2D25       = $2D25
+L3200       = $3200
+L3225       = $3225
+L3400       = $3400
+L4106       = $4106
+L7005       = $7005
+L7006       = $7006
+L7070       = $7070
+LBFFC       = $BFFC
+LFFF0       = $FFF0
+;
+; Start of code
+;
+		.org $0506
+;
+		ldx	#$04				;set 5 colors
+L0508:      	lda	L05E8,X
+		sta	COLOR0,X
+		dex	
+		bpl	L0508
+		lda	PAL				;no PAL adjustment
+		and	#$0E
+		beq	L051A
+		nop	
+		nop	
+L051A:      	lda	#$00
+		sta	L00B7
+		sta	NMIEN
+		lda	#$01
+		sta	BASICF
+		lda	#$FE				;turn off os-rom
+		sta	PORTB				;test ram
+		lda	LFFF0
+		eor	#$FF
+		sta	LFFF0
+		cmp	LFFF0
+		php	
+		lda	#$FF				;turn os-rom on
+		sta	PORTB
+		lda	#$40
+		sta	NMIEN
+		cli	
+		plp	
+		bne	L056D				;os-rom not switchable				
+		
+		lda	LBFFC				;test Basic on
+		eor	#$FF
+		sta	LBFFC
+		cmp	LBFFC
+		beq	L0555				;off
+		jmp	L059D				;on -> remove card
+		
+L0555:      	lda	#<DLIST0			;64/48k
+		sta	SDLSTL
+		lda	#>DLIST0
+		sta	SDLSTH
+		lda	RTCLOK+2
+L0561:      	cmp	RTCLOK+2
+		beq	L0561
+		jsr	L05AA
+		bcs	L057C
+		jmp	L0700
+
+L056D:      	dec	L00B7				;$b7 = $ff (os-rom not switchable)
+		lda	LBFFC
+		eor	#$FF
+		sta	LBFFC
+		cmp	LBFFC
+		bne	L0593				;basic/card installed -> insufficient memory
+		
+L057C:      	lda	#<DLIST1			;48k (fast) version
+		sta	SDLSTL
+		lda	#>DLIST1
+		sta	SDLSTH
+		lda	RTCLOK+2
+L0588:      	cmp	RTCLOK+2
+		beq	L0588
+		jsr	L05AA
+		jmp	L0700
+		rts	
+		
+L0593:      	lda	#<DLIST3			;insufficient memory
+		sta	SDLSTL
+		lda	#>DLIST3
+		jmp	L05A4
+		
+L059D:      	lda	#<DLIST2			;remove cart		
+		sta	SDLSTL
+		lda	#>DLIST2
+L05A4:      	sta	SDLSTH
+L05A7:      	jmp	L05A7
+
+L05AA:      	lda	#$06
+		sta	DAUX1
+		lda	#$00
+		sta	DBUFLO
+		lda	#$07
+		sta	DBUFHI
+		lda	#$2A
+		sta	L00B6
+L05BD:      	jsr	DSKINV
+		lda	DBUFLO
+		eor	#$80
+		sta	DBUFLO
+		bne	L05CD
+		inc	DBUFHI
+L05CD:      	inc	DAUX1
+		lda	L00B7
+		bne	L05DB
+		lda	CONSOL
+		and	#$02
+		beq	L05E4
+L05DB:      	dec	L00B6
+		bne	L05BD
+		jsr	L0A00
+		clc	
+		rts	
+L05E4:      	dec	L00B7
+		sec	
+		rts	
+
+L05E8:		.byte	$5E, $3A, $1E, $3A,$34		;5-bytes color values
+
+;			          1         2
+;			 12345678901234567890
+Text:		scrcode "      LOADING       "
+		scrcode "     MERCENARY      "
+		scrcode "  ESCAPE FROM TARG  "
+		scrcode "  CRACKED BY ROB.C  "
+hires:		scrcode "64K (HI-RES) VERSION"
+		scrcode "  PRESS SELECT FOR  "
+		scrcode " 48K (FAST) VERSION "
+lores:		scrcode " 48K (FAST) VERSION "
+rmcard:		scrcode "  REMOVE CARTRIDGE  "
+insufmem:	scrcode " INSUFFICIENT MEMORY"
+	
+DLIST0:		.byte	$70, $70, $70      
+		.byte	$46				;mode 6 + Load Memory Scan Counter
+		.word	Text				;address
+		.byte	$70, $07			;mode 7
+		.byte	$70, $07			;mode 7
+		.byte	$70, $06			;mode 6
+		.byte	$70, $70, $70
+		.byte	$46				;;mode 6 + Load Memory Scan Counter
+		.word	hires				;address
+		.byte	$70, $70, $06			;mode 6
+		.byte	$30, $06  			;3 space + mode 6
+		.byte	$41
+		.word	DLIST0
+			
+DLIST1:		.byte	$70, $70, $70
+		.byte	$46
+		.word	Text
+		.byte	$70, $07
+		.byte	$70, $07
+		.byte	$70, $06
+		.byte	$70, $70, $70, $70
+		.byte	$46
+		.word	lores
+		.byte	$41
+		.word	DLIST1
+	
+DLIST2:		.byte	$70, $70, $70
+		.byte	$47
+		.word	rmcard
+		.byte	$41
+		.word	DLIST2
+			
+DLIST3:		.byte	$70, $70, $70
+		.byte	$47
+		.word	insufmem
+		.byte	$41
+		.word	DLIST3
+			
+		.byte	$00, $EE, $6F, $20, $D3, $2F, $9B, $73, $A3       
