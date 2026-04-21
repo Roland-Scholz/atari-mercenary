@@ -35,3 +35,5 @@ sector 5	copy protection, loads at $0680
 
 
 		$29df		main loop
+		L492C		setup_rotation		$26 roll, $28 pitch, $2a yaw
+		
