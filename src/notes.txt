@@ -15,18 +15,17 @@ sector 1-4 	bootcode loads at $0500, start at $506
 		games starts at $1e00 (hi-res), $8800 (lo-res)
 		
 		$05F8 list structure:
-		0	1		x	D1	D2
-		DBUFHI	HI-END ($b4)	OS-OFF	DAUX1	DAUX2
-					(0=on)
-
 		X = $c: $5f8 + $c = $604
-		
-		$604 	07	17	c0	32	00		2kb	at $c000	 50
-		$609 	58	80	D8	68	02		5kb	at $D800	616
-		$60e	70	7D	00   	04   	01		$0680	at $7000	260
-		$613	07	70	00	90	01		$3480   at $0700	400
-		$618	7D	80	00	62	02		$0180	at $7d00	610
-		$61d	91	9c	00	B8	02		$0580	at $9100 	696
+
+				0	1	OS	D1	D2
+		DBUFHI	HI-END 	($b4)	OS-OFF	DAUX1	DAUX2		sector (decimal)
+						(0=on)		
+		$604 	07	17	c0	32	00		$0800	at $c000	 50	(data)
+		$609 	58	80	D8	68	02		$1400	at $D800	616	(data)
+		$60e	70	7D	00	04	01		$0680	at $7000	260 (code + data)
+		$613	07	70	00	90	01		$6900   at $0700	400 (data)
+		$618	7D	80	00	62	02		$0180	at $7d00	610	(data)
+		$61d	91	9c	00	B8	02		$0580	at $9100 	696	(data)
 		$622	00
 
 		
@@ -36,4 +35,5 @@ sector 5	copy protection, loads at $0680
 
 		$29df		main loop
 		L492C		setup_rotation		$26 roll, $28 pitch, $2a yaw
+		34d2		DRAW_MAP_LINES
 		
