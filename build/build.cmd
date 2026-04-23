@@ -1,22 +1,19 @@
 @echo off
 
 set PLATFORM=4
-set ATR=mercen
+set ATR=mercenary
 call var-def.cmd
 
-
-call :compile_module merc 0506
+call :compile_module objectview 2200
 if NOT %result%==0 goto ende
-call :compile_module merc-a00-1c00 0A00
-if NOT %result%==0 goto ende
-call :compile_module 0500-6ff 0500
+call :compile_module runad 02E0
 if NOT %result%==0 goto ende
 
 cd %REL%
 copy %RES%\mydos90k.atr %ATR%.atr
-rem copy /Y /B merc.com + runad.com adm3ax80.ar0
+copy /Y /B objectview.com + runad.com objectv.ar0
 
-%TOOLS%\xfddos -i %ATR%.atr merc.com
+%TOOLS%\xfddos -i %ATR%.atr objectv.ar0
 
 rem cd %ATR%
 rem rmdir /Q /S obj > nul 2> nul
@@ -34,6 +31,7 @@ rem move *.com obj > nul 2> nul
 move *.ar* obj > nul 2> nul
 
 rem c:\atari\aspeqt7\aspeqt.exe
+"C:\Program Files (x86)\Altirra\Altirra64.exe"
 pause
 goto eof
 

@@ -17,23 +17,42 @@ sector 1-4 	bootcode loads at $0500, start at $506
 		$05F8 list structure:
 		X = $c: $5f8 + $c = $604
 
-				0	1	OS	D1	D2
-		DBUFHI	HI-END 	($b4)	OS-OFF	DAUX1	DAUX2		sector (decimal)
+			0	1	OS	D1	D2
+		DBUFHI	HI-END 	($b4)	OS-OFF	DAUX1	DAUX2				sector (decimal)
 						(0=on)		
-		$604 	07	17	c0	32	00		$0800	at $c000	 50	(data)
-		$609 	58	80	D8	68	02		$1400	at $D800	616	(data)
-		$60e	70	7D	00	04	01		$0680	at $7000	260 (code + data)
-		$613	07	70	00	90	01		$6900   at $0700	400 (data)
-		$618	7D	80	00	62	02		$0180	at $7d00	610	(data)
-		$61d	91	9c	00	B8	02		$0580	at $9100 	696	(data)
+		$604 	07	17	c0	32	00	$0800	at $c000	 50	(data)
+		$609 	58	80	D8	68	02	$1400	at $D800	616	(data)
+		$60e	70	7D	00	04	01	$0680	at $7000	260	(code + data)
+		$613	07	70	00	90	01	$6900   at $0700	400	(data)
+		$618	7D	80	00	62	02	$0180	at $7d00	610	(data)
+		$61d	91	9c	00	B8	02	$0580	at $9100 	696	(data)
 		$622	00
 
 		
 sector 5	copy protection, loads at $0680
 		used to EOR code for obfuscation
+		
+		24	space
+		152	0e
+		4	space
+		48	02
+		===
+		228
 
-
+		$1e00		Start
+		$2800		Display List	11+7*16+15+14 = 152 x Antic $0e
+		$7000-$73ff	Font
+		
+		$8010-$97CF	Screen0
+		$e010-$F7CF	Screen1		
+		
+		$97D0		Cockpit-Data		6 x Antic $02 = 48
+		
+		
 		$29df		main loop
-		L492C		setup_rotation		$26 roll, $28 pitch, $2a yaw
-		34d2		DRAW_MAP_LINES
+		$492C		setup_rotation		$26 roll, $28 pitch, $2a yaw
+		$34d2		DRAW_MAP_LINES
+		
+		
+		
 		
