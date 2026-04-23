@@ -1,12 +1,16 @@
-dsplist:	.byte	$70,$70,$70,$4E
+dsplist:	.byte	$70,$70,$70
+		.byte	$4E
 		.word	videoram
-		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+		.byte	$0E,$0E,$0E,$0E,$0E
 		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
 		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
 		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
 		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
 		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$4E,$00,$F0,$0E,$0E
+		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+		.byte	$4E
+		.word	videoram+$1000
+		.byte	$0E,$0E
 		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
 		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
 		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E

@@ -52,6 +52,7 @@ sector 5	copy protection, loads at $0680
 		$29df		main loop
 		$492C		setup_rotation		$26 roll, $28 pitch, $2a yaw
 		$34d2		DRAW_MAP_LINES
+		$5957		Joystick
 		
 		
 		

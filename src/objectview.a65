@@ -1,6 +1,6 @@
-videoram	= $8010
-CURR_X_MSB	= $CA
-CURR_X_HSB	= $FE
+videoram	= SCREEN0
+CURR_X_MSB	= $fe
+CURR_X_HSB	= $ca
 
 SCREEN0		= $8010
 SCREEN1		= $a010
@@ -8,8 +8,8 @@ SCREEN_0 	= $80
 SCREEN_1 	= $a0
 
 rega		= $80
-REGX		= $81
-REGY		= $82
+regx		= $81
+regy		= $82
 ptr		= $83
 ptr1		= $85
 cnt		= $87
@@ -42,7 +42,26 @@ fill_vertab1:	inx
 		sta	SDLSTL
 		lda	#>dsplist
 		sta	SDLSTH
-
+		
+		lda	#$0f
+		sta	COLOR0
+		lda	#$46
+		sta	COLOR1
+		lda	#$36
+		sta	COLOR2
+		lda	#2
+		sta	COLOR3
+		lda	#$12
+		sta	COLOR4
+		
+		lda	RTCLOK+2
+waitclock:	cmp	RTCLOK+2
+		beq	waitclock
+		
+		sei
+		lda	#0
+		sta	NMIEN
+		
 		ldx	#CURR_X_MSB
 		lda	#CURR_X_HSB
 		ldy	#0
@@ -62,75 +81,70 @@ incptr1:	rts
 ;
 ;
 ;
-hex16:		sty	REGY	; Y = YPOS / A = HI / X = LO
-		stx	REGX		
-		ldx	#0
+hex16:		sty	regy	; Y = YPOS / A = HI / X = LO
+		stx	regx		
+		ldx	#0				;xpos
 		jsr	hex8
-		lda	REGX
-		ldy	REGY
-		ldx	#2
+		lda	regx
+		ldy	regy
+		inx
 		jsr	hex8
 		rts
 
 hex8:		pha		; A = NUM / Y = YPOS / X = XPOS
-		txa
-		pha
 		lsr
 		lsr
 		lsr
 		lsr
-		tsx
-		lda	$102, x
 		jsr	hexnib
-		pla
-		tax
 		inx
 		pla
+		and	#15
 		
 hexnib:		clc		; A = NUM / Y = YPOS / X = XPOS
-
-		pha
-		lda	ver_tab_lo, y
-		sta	ptr
-		lda	ver_tab_hi, y
-		adc	#SCREEN_0
-		sta	ptr+1
-		lda	#5
-		sta	cnt
-		
-		txa
-		tay
-
-		clc
-		pla
 		adc	#<HEX0
 		sta	ptr1
 		lda	#>HEX0
 		adc	#0
 		sta	ptr1+1
 		
-		ldx	#0
-hex8_1:		lda	(ptr1, x)
-		sta	(ptr, x)
+		txa
+		clc
+		adc	#<SCREEN0
+		adc	ver_tab_lo, y
+		sta	ptr
+		lda	ver_tab_hi, y
+		adc	#>SCREEN0
+		sta	ptr+1
+		lda	#5
+		sta	cnt
+
+		tya
+		pha
+		
+		ldy	#0
+hex8_1:		lda	(ptr1), y
+		sta	(ptr), y
 		
 		clc
 		lda	ptr
 		adc	#40
 		sta	ptr
-		lda	ptr+1
-		adc 	#0
-		sta	ptr+1
+		bcc	*+4
+		inc	ptr+1
 		
 		clc
 		lda	ptr1
 		adc	#16
 		sta	ptr1
-		lda	ptr1+1
-		adc 	#0
-		sta	ptr1+1
+		bcc	*+4
+		inc	ptr1+1
 		
 		dec	cnt
 		bne	hex8_1
+		
+		pla
+		tay
 		rts
 		
 			
@@ -156,15 +170,10 @@ ver_tab_hi:	.word 0, 0, 0, 0, 0, 0, 0, 0
 		.word 0, 0, 0, 0, 0, 0, 0, 0
 		.word 0, 0, 0, 0, 0, 0, 0, 0
 		
-HEX0:		.BYTE	%10000000,%10100010,%10000000,%10000000,%10001000,%10000000,%10000000,%10000000
-		.BYTE	%10000000,%10000000,%10000000,%10000000,%10000000,%10000010,%10000000,%10000000 
-HEX1:		.BYTE	%10001000,%10000010,%10101000,%10101000,%10001000,%10001010,%10001010,%10101000
-		.BYTE	%10001000,%10001000,%10001000,%10001000,%10001010,%10001000,%10001010,%10001010 
-HEX2:		.BYTE	%10001000,%10100010,%10000000,%10000000,%10000000,%10000000,%10000000,%10101000
-		.byte	%10000000,%10000000,%10000000,%10000010,%10001010,%10001000,%10000000,%10000000
-HEX3:		.BYTE	%10001000,%10100010,%10001010,%10101000,%10101000,%10101000,%10001000,%10101000
-		.byte	%10001000,%10101000,%10001000,%10001000,%10001010,%10001000,%10001010,%10001010
-HEX4:		.BYTE	%10000000,%10000000,%10000000,%10000000,%10101000,%10000000,%10000000,%10101000
-		.BYTE	%10000000,%10000000,%10001000,%10000000,%10100000,%10000010,%10000000,%10001010
+HEX0:		.BYTE	%00010101,%00000100,%00010101,%00010101,%00010001,%00010101,%00010101,%00010101,%00010101,%00010101,%00010101,%00010000,%00010101,%00000001,%00010101,%00010101 
+HEX1:		.BYTE	%00010001,%00010100,%00000001,%00000001,%00010001,%00010000,%00010000,%00000001,%00010001,%00010001,%00010001,%00010000,%00010000,%00000001,%00010000,%00010000 
+HEX2:		.BYTE	%00010001,%00000100,%00010101,%00010101,%00010101,%00010101,%00010101,%00000001,%00010101,%00010101,%00010101,%00010101,%00010000,%00010101,%00010101,%00010100
+HEX3:		.BYTE	%00010001,%00000100,%00010000,%00000001,%00000001,%00000001,%00010001,%00000001,%00010001,%00000001,%00010001,%00010001,%00010000,%00010001,%00010000,%00010000
+HEX4:		.BYTE	%00010101,%00010101,%00010101,%00010101,%00000001,%00010101,%00010101,%00000001,%00010101,%00010101,%00010001,%00010101,%00010101,%00010101,%00010101,%00010000
 	
 		.include "dsplist.a65"
