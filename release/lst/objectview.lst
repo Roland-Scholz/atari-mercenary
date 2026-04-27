@@ -17,6 +17,12 @@ Current file: ..\src\objectview.a65
 000000r 1               ptr		= $83
 000000r 1               ptr1		= $85
 000000r 1               cnt		= $87
+000000r 1               mul_lo		= $88
+000000r 1               mul_hi		= $89
+000000r 1               save_msb	= $8a
+000000r 1               save_lsb	= $8b
+000000r 1               ret_man		= $8c
+000000r 1               ret_exp		= $8d
 000000r 1               
 000000r 1               		.include "os.a65"
 000000r 2               ;
@@ -541,258 +547,685 @@ Current file: ..\src\objectview.a65
 000000r 2               GPDVV       = $E48F
 000000r 2               
 000000r 1               
+000000r 1               ;------------------------------------------------------------
+000000r 1               ;
+000000r 1               ;------------------------------------------------------------
 000000r 1               
 000000r 1               		.org $2200
 002200  1               
-002200  1  A9 00        		lda	#0
-002202  1  AA           		tax
-002203  1  A8           		tay
-002204  1  85 80        		sta	rega
-002206  1               
-002206  1  9D C3 22     fill_vertab:	sta	ver_tab_lo, x
-002209  1  48           		pha
-00220A  1  A5 80        		lda	rega
-00220C  1  9D 63 23     		sta	ver_tab_hi, x
-00220F  1  68           		pla
-002210  1               
-002210  1  18           		clc
-002211  1  69 28        		adc	#40
-002213  1  90 02        		bcc	fill_vertab1
-002215  1  E6 80        		inc	rega
-002217  1  E8           fill_vertab1:	inx
-002218  1  E0 98        		cpx	#152
-00221A  1  D0 EA        		bne	fill_vertab
-00221C  1               
-00221C  1  A9 53        		lda	#<dsplist
-00221E  1  8D 30 02     		sta	SDLSTL
-002221  1  A9 24        		lda	#>dsplist
-002223  1  8D 31 02     		sta	SDLSTH
-002226  1               
-002226  1  A9 0F        		lda	#$0f
-002228  1  8D C4 02     		sta	COLOR0
-00222B  1  A9 46        		lda	#$46
-00222D  1  8D C5 02     		sta	COLOR1
-002230  1  A9 36        		lda	#$36
-002232  1  8D C6 02     		sta	COLOR2
-002235  1  A9 02        		lda	#2
-002237  1  8D C7 02     		sta	COLOR3
-00223A  1  A9 12        		lda	#$12
-00223C  1  8D C8 02     		sta	COLOR4
-00223F  1               
-00223F  1  A5 14        		lda	RTCLOK+2
-002241  1  C5 14        waitclock:	cmp	RTCLOK+2
-002243  1  F0 FC        		beq	waitclock
-002245  1               
-002245  1  78           		sei
-002246  1  A9 00        		lda	#0
-002248  1  8D 0E D4     		sta	NMIEN
+002200  1  20 1B 25     		jsr	miscinit
+002203  1               
+002203  1  78           		sei
+002204  1  A9 00        		lda	#0
+002206  1  8D 0E D4     		sta	NMIEN
+002209  1               
+002209  1               
+002209  1  A9 00        		lda	#0
+00220B  1  AA           		tax
+00220C  1  A8           		tay
+00220D  1  85 80        		sta	rega
+00220F  1               
+00220F  1  9D E9 22     fill_vertab:	sta	ver_tab_lo, x
+002212  1  48           		pha
+002213  1  A5 80        		lda	rega
+002215  1  9D 89 23     		sta	ver_tab_hi, x
+002218  1  68           		pla
+002219  1               
+002219  1  18           		clc
+00221A  1  69 28        		adc	#40
+00221C  1  90 02        		bcc	fill_vertab1
+00221E  1  E6 80        		inc	rega
+002220  1  E8           fill_vertab1:	inx
+002221  1  E0 98        		cpx	#152
+002223  1  D0 EA        		bne	fill_vertab
+002225  1               
+002225  1  4C 5A 22     		jmp	testmath
+002228  1               
+002228  1               ;------------------------------------------------------------
+002228  1               ;
+002228  1               ;------------------------------------------------------------
+002228  1  A9 79        		lda	#<dsplist
+00222A  1  8D 30 02     		sta	SDLSTL
+00222D  1  A9 24        		lda	#>dsplist
+00222F  1  8D 31 02     		sta	SDLSTH
+002232  1               
+002232  1  A9 0F        		lda	#$0f
+002234  1  8D C4 02     		sta	COLOR0
+002237  1  A9 46        		lda	#$46
+002239  1  8D C5 02     		sta	COLOR1
+00223C  1  A9 36        		lda	#$36
+00223E  1  8D C6 02     		sta	COLOR2
+002241  1  A9 02        		lda	#2
+002243  1  8D C7 02     		sta	COLOR3
+002246  1  A9 12        		lda	#$12
+002248  1  8D C8 02     		sta	COLOR4
 00224B  1               
-00224B  1  A2 FE        		ldx	#CURR_X_MSB
-00224D  1  A9 CA        		lda	#CURR_X_HSB
-00224F  1  A0 00        		ldy	#0
-002251  1  20 60 22     		jsr	hex16
-002254  1               
-002254  1  4C 54 22     end:		jmp	end
-002257  1               
-002257  1               ;
-002257  1               ;
-002257  1               ;
-002257  1  91 83        stoptr:		sta	(ptr), y
-002259  1  E6 83        incptr:		inc	ptr
-00225B  1  D0 02        		bne	incptr1
-00225D  1  E6 84        		inc	ptr + 1
-00225F  1  60           incptr1:	rts
-002260  1               
-002260  1               ;
-002260  1               ;
-002260  1               ;
-002260  1  84 82        hex16:		sty	regy	; Y = YPOS / A = HI / X = LO
-002262  1  86 81        		stx	regx
-002264  1  A2 00        		ldx	#0				;xpos
-002266  1  20 73 22     		jsr	hex8
-002269  1  A5 81        		lda	regx
-00226B  1  A4 82        		ldy	regy
-00226D  1  A2 02        		ldx	#2
-00226F  1  20 73 22     		jsr	hex8
-002272  1  60           		rts
+00224B  1  A5 14        		lda	RTCLOK+2
+00224D  1  C5 14        waitclock:	cmp	RTCLOK+2
+00224F  1  F0 FC        		beq	waitclock
+002251  1               
+002251  1               
+002251  1  A2 FE        		ldx	#CURR_X_MSB
+002253  1  A9 CA        		lda	#CURR_X_HSB
+002255  1  A0 00        		ldy	#0
+002257  1  20 87 22     		jsr	hex16
+00225A  1               
+00225A  1               ;------------------------------------------------------------
+00225A  1               ;
+00225A  1               ;------------------------------------------------------------
+00225A  1               testmath:
+00225A  1  A0 AA        		ldy	#$AA
+00225C  1  A2 03        		ldx	#$03					;%00000011 10101010 -> $24 $D5 X=16-7=9  %00001001	%11010101
+00225E  1  A9 00        		lda	#0
+002260  1  20 D1 25     		jsr	BIT24TOFP
+002263  1               
+002263  1  A0 01        		ldy	#$01
+002265  1  A2 00        		ldx	#$00
+002267  1  A9 80        		lda	#$80
+002269  1  20 D1 25     		jsr	BIT24TOFP
+00226C  1               
+00226C  1  A6 8C        		ldx	ret_man
+00226E  1  A4 8D        		ldy	ret_exp
+002270  1  20 69 25     		jsr	FPTO16BIT
 002273  1               
-002273  1  48           hex8:		pha		; A = NUM / Y = YPOS / X = XPOS
-002274  1  4A           		lsr
-002275  1  4A           		lsr
-002276  1  4A           		lsr
-002277  1  4A           		lsr
-002278  1  20 7F 22     		jsr	hexnib
-00227B  1  E8           		inx
-00227C  1  68           		pla
-00227D  1  29 0F        		and	#15
-00227F  1               
-00227F  1  18           hexnib:		clc		; A = NUM / Y = YPOS / X = XPOS
-002280  1  69 03        		adc	#<HEX0
-002282  1  85 85        		sta	ptr1
-002284  1  A9 24        		lda	#>HEX0
-002286  1  69 00        		adc	#0
-002288  1  85 86        		sta	ptr1+1
-00228A  1               
-00228A  1  8A           		txa
-00228B  1  18           		clc
-00228C  1  69 10        		adc	#<SCREEN0
-00228E  1  79 C3 22     		adc	ver_tab_lo, y
-002291  1  85 83        		sta	ptr
-002293  1  B9 63 23     		lda	ver_tab_hi, y
-002296  1  69 80        		adc	#>SCREEN0
-002298  1  85 84        		sta	ptr+1
-00229A  1  A9 05        		lda	#5
-00229C  1  85 87        		sta	cnt
-00229E  1               
-00229E  1  98           		tya
-00229F  1  48           		pha
-0022A0  1               
-0022A0  1  A0 00        		ldy	#0
-0022A2  1  B1 85        hex8_1:		lda	(ptr1), y
-0022A4  1               		;eor	#$ff
-0022A4  1  91 83        		sta	(ptr), y
-0022A6  1               
-0022A6  1  18           		clc
-0022A7  1  A5 83        		lda	ptr
-0022A9  1  69 28        		adc	#40
-0022AB  1  85 83        		sta	ptr
-0022AD  1  90 02        		bcc	*+4
-0022AF  1  E6 84        		inc	ptr+1
-0022B1  1               
+002273  1  98           		tya
+002274  1  20 40 25     		jsr	puthex
+002277  1  8A           		txa
+002278  1  20 40 25     		jsr	puthex
+00227B  1               
+00227B  1  4C 7B 22     end:		jmp	end
+00227E  1               
+00227E  1               ;
+00227E  1               ;
+00227E  1               ;
+00227E  1  91 83        stoptr:		sta	(ptr), y
+002280  1  E6 83        incptr:		inc	ptr
+002282  1  D0 02        		bne	incptr1
+002284  1  E6 84        		inc	ptr + 1
+002286  1  60           incptr1:	rts
+002287  1               
+002287  1               ;
+002287  1               ;
+002287  1               ;
+002287  1  84 82        hex16:		sty	regy	; Y = YPOS / A = HI / X = LO
+002289  1  86 81        		stx	regx
+00228B  1  A2 00        		ldx	#0				;xpos
+00228D  1  20 99 22     		jsr	hex8
+002290  1  A5 81        		lda	regx
+002292  1  A4 82        		ldy	regy
+002294  1  E8           		inx
+002295  1  20 99 22     		jsr	hex8
+002298  1  60           		rts
+002299  1               
+002299  1  48           hex8:		pha		; A = NUM / Y = YPOS / X = XPOS
+00229A  1  4A           		lsr
+00229B  1  4A           		lsr
+00229C  1  4A           		lsr
+00229D  1  4A           		lsr
+00229E  1  20 A5 22     		jsr	hexnib
+0022A1  1  E8           		inx
+0022A2  1  68           		pla
+0022A3  1  29 0F        		and	#15
+0022A5  1               
+0022A5  1  18           hexnib:		clc		; A = NUM / Y = YPOS / X = XPOS
+0022A6  1  69 29        		adc	#<HEX0
+0022A8  1  85 85        		sta	ptr1
+0022AA  1  A9 24        		lda	#>HEX0
+0022AC  1  69 00        		adc	#0
+0022AE  1  85 86        		sta	ptr1+1
+0022B0  1               
+0022B0  1  8A           		txa
 0022B1  1  18           		clc
-0022B2  1  A5 85        		lda	ptr1
-0022B4  1  69 10        		adc	#16
-0022B6  1  85 85        		sta	ptr1
-0022B8  1  90 02        		bcc	*+4
-0022BA  1  E6 86        		inc	ptr1+1
-0022BC  1               
-0022BC  1  C6 87        		dec	cnt
-0022BE  1  D0 E2        		bne	hex8_1
-0022C0  1               
-0022C0  1  68           		pla
-0022C1  1  A8           		tay
-0022C2  1  60           		rts
-0022C3  1               
-0022C3  1               
-0022C3  1  00 00 00 00  ver_tab_lo:	.word 0, 0, 0, 0, 0, 0, 0, 0
-0022C7  1  00 00 00 00  
-0022CB  1  00 00 00 00  
-0022D3  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-0022D7  1  00 00 00 00  
-0022DB  1  00 00 00 00  
-0022E3  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-0022E7  1  00 00 00 00  
-0022EB  1  00 00 00 00  
-0022F3  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-0022F7  1  00 00 00 00  
-0022FB  1  00 00 00 00  
-002303  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-002307  1  00 00 00 00  
-00230B  1  00 00 00 00  
-002313  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-002317  1  00 00 00 00  
-00231B  1  00 00 00 00  
-002323  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-002327  1  00 00 00 00  
-00232B  1  00 00 00 00  
-002333  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-002337  1  00 00 00 00  
-00233B  1  00 00 00 00  
-002343  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-002347  1  00 00 00 00  
-00234B  1  00 00 00 00  
-002353  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-002357  1  00 00 00 00  
-00235B  1  00 00 00 00  
-002363  1               
-002363  1  00 00 00 00  ver_tab_hi:	.word 0, 0, 0, 0, 0, 0, 0, 0
-002367  1  00 00 00 00  
-00236B  1  00 00 00 00  
-002373  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-002377  1  00 00 00 00  
-00237B  1  00 00 00 00  
-002383  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-002387  1  00 00 00 00  
-00238B  1  00 00 00 00  
-002393  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-002397  1  00 00 00 00  
-00239B  1  00 00 00 00  
-0023A3  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-0023A7  1  00 00 00 00  
-0023AB  1  00 00 00 00  
-0023B3  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-0023B7  1  00 00 00 00  
-0023BB  1  00 00 00 00  
-0023C3  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-0023C7  1  00 00 00 00  
-0023CB  1  00 00 00 00  
-0023D3  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-0023D7  1  00 00 00 00  
-0023DB  1  00 00 00 00  
-0023E3  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-0023E7  1  00 00 00 00  
-0023EB  1  00 00 00 00  
-0023F3  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
-0023F7  1  00 00 00 00  
-0023FB  1  00 00 00 00  
-002403  1               
-002403  1               ;			0		1	2	3	4		5	6	7	8		9
-002403  1  15 04 15 15  HEX0:		.BYTE	%00010101,%00000100,%00010101,%00010101,%00010001,%00010101,%00010101,%00010101,%00010101,%00010101,%00010101,%00010000,%00010101,%00000001,%00010101,%00010101
-002407  1  11 15 15 15  
-00240B  1  15 15 15 10  
-002413  1  11 14 01 01  HEX1:		.BYTE	%00010001,%00010100,%00000001,%00000001,%00010001,%00010000,%00010000,%00000001,%00010001,%00010001,%00010001,%00010000,%00010000,%00000001,%00010000,%00010000
-002417  1  11 10 10 01  
-00241B  1  11 11 11 10  
-002423  1  11 04 15 15  HEX2:		.BYTE	%00010001,%00000100,%00010101,%00010101,%00010101,%00010101,%00010101,%00000001,%00010101,%00010101,%00010101,%00010101,%00010000,%00010101,%00010101,%00010100
-002427  1  15 15 15 01  
-00242B  1  15 15 15 15  
-002433  1  11 04 10 01  HEX3:		.BYTE	%00010001,%00000100,%00010000,%00000001,%00000001,%00000001,%00010001,%00000001,%00010001,%00000001,%00010001,%00010001,%00010000,%00010001,%00010000,%00010000
-002437  1  01 01 11 01  
-00243B  1  11 01 11 11  
-002443  1  15 15 15 15  HEX4:		.BYTE	%00010101,%00010101,%00010101,%00010101,%00000001,%00010101,%00010101,%00000001,%00010101,%00010101,%00010001,%00010101,%00010101,%00010101,%00010101,%00010000
-002447  1  01 15 15 01  
-00244B  1  15 15 11 15  
-002453  1               
-002453  1               		.include "dsplist.a65"
-002453  2  70 70 70     dsplist:	.byte	$70,$70,$70
-002456  2  4E           		.byte	$4E
-002457  2  10 80        		.word	videoram
-002459  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E
-00245D  2  0E           
-00245E  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-002462  2  0E 0E 0E 0E  
-002466  2  0E 0E 0E 0E  
-00246E  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-002472  2  0E 0E 0E 0E  
-002476  2  0E 0E 0E 0E  
-00247E  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-002482  2  0E 0E 0E 0E  
-002486  2  0E 0E 0E 0E  
-00248E  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-002492  2  0E 0E 0E 0E  
-002496  2  0E 0E 0E 0E  
-00249E  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-0024A2  2  0E 0E 0E 0E  
-0024A6  2  0E 0E 0E 0E  
-0024AE  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-0024B2  2  0E 0E 0E 0E  
-0024B6  2  0E 0E 0E 0E  
-0024BE  2  4E           		.byte	$4E
-0024BF  2  10 90        		.word	videoram+$1000
-0024C1  2  0E 0E        		.byte	$0E,$0E
-0024C3  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-0024C7  2  0E 0E 0E 0E  
-0024CB  2  0E 0E 0E 0E  
-0024D3  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-0024D7  2  0E 0E 0E 0E  
-0024DB  2  0E 0E 0E 0E  
-0024E3  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-0024E7  2  0E 0E 0E 0E  
-0024EB  2  0E 0E 0E 0E  
-0024F1  2               ;		.byte	$8E,$30,$42,$D0,$97,$02,$82,$02,$02,$02
-0024F1  2  0E           		.byte	$0E
-0024F2  2  41           		.byte	$41
-0024F3  2  53 24        		.word	dsplist
-0024F5  2               
-0024F5  2               
-0024F5  1               
+0022B2  1  69 10        		adc	#<SCREEN0
+0022B4  1  79 E9 22     		adc	ver_tab_lo, y
+0022B7  1  85 83        		sta	ptr
+0022B9  1  B9 89 23     		lda	ver_tab_hi, y
+0022BC  1  69 80        		adc	#>SCREEN0
+0022BE  1  85 84        		sta	ptr+1
+0022C0  1  A9 05        		lda	#5
+0022C2  1  85 87        		sta	cnt
+0022C4  1               
+0022C4  1  98           		tya
+0022C5  1  48           		pha
+0022C6  1               
+0022C6  1  A0 00        		ldy	#0
+0022C8  1  B1 85        hex8_1:		lda	(ptr1), y
+0022CA  1  91 83        		sta	(ptr), y
+0022CC  1               
+0022CC  1  18           		clc
+0022CD  1  A5 83        		lda	ptr
+0022CF  1  69 28        		adc	#40
+0022D1  1  85 83        		sta	ptr
+0022D3  1  90 02        		bcc	*+4
+0022D5  1  E6 84        		inc	ptr+1
+0022D7  1               
+0022D7  1  18           		clc
+0022D8  1  A5 85        		lda	ptr1
+0022DA  1  69 10        		adc	#16
+0022DC  1  85 85        		sta	ptr1
+0022DE  1  90 02        		bcc	*+4
+0022E0  1  E6 86        		inc	ptr1+1
+0022E2  1               
+0022E2  1  C6 87        		dec	cnt
+0022E4  1  D0 E2        		bne	hex8_1
+0022E6  1               
+0022E6  1  68           		pla
+0022E7  1  A8           		tay
+0022E8  1  60           		rts
+0022E9  1               
+0022E9  1               
+0022E9  1  00 00 00 00  ver_tab_lo:	.word 0, 0, 0, 0, 0, 0, 0, 0
+0022ED  1  00 00 00 00  
+0022F1  1  00 00 00 00  
+0022F9  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+0022FD  1  00 00 00 00  
+002301  1  00 00 00 00  
+002309  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00230D  1  00 00 00 00  
+002311  1  00 00 00 00  
+002319  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00231D  1  00 00 00 00  
+002321  1  00 00 00 00  
+002329  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00232D  1  00 00 00 00  
+002331  1  00 00 00 00  
+002339  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00233D  1  00 00 00 00  
+002341  1  00 00 00 00  
+002349  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00234D  1  00 00 00 00  
+002351  1  00 00 00 00  
+002359  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00235D  1  00 00 00 00  
+002361  1  00 00 00 00  
+002369  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00236D  1  00 00 00 00  
+002371  1  00 00 00 00  
+002379  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00237D  1  00 00 00 00  
+002381  1  00 00 00 00  
+002389  1               
+002389  1  00 00 00 00  ver_tab_hi:	.word 0, 0, 0, 0, 0, 0, 0, 0
+00238D  1  00 00 00 00  
+002391  1  00 00 00 00  
+002399  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00239D  1  00 00 00 00  
+0023A1  1  00 00 00 00  
+0023A9  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+0023AD  1  00 00 00 00  
+0023B1  1  00 00 00 00  
+0023B9  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+0023BD  1  00 00 00 00  
+0023C1  1  00 00 00 00  
+0023C9  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+0023CD  1  00 00 00 00  
+0023D1  1  00 00 00 00  
+0023D9  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+0023DD  1  00 00 00 00  
+0023E1  1  00 00 00 00  
+0023E9  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+0023ED  1  00 00 00 00  
+0023F1  1  00 00 00 00  
+0023F9  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+0023FD  1  00 00 00 00  
+002401  1  00 00 00 00  
+002409  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00240D  1  00 00 00 00  
+002411  1  00 00 00 00  
+002419  1  00 00 00 00  		.word 0, 0, 0, 0, 0, 0, 0, 0
+00241D  1  00 00 00 00  
+002421  1  00 00 00 00  
+002429  1               
+002429  1  15 04 15 15  HEX0:		.BYTE	%00010101,%00000100,%00010101,%00010101,%00010001,%00010101,%00010101,%00010101,%00010101,%00010101,%00010101,%00010000,%00010101,%00000001,%00010101,%00010101
+00242D  1  11 15 15 15  
+002431  1  15 15 15 10  
+002439  1  11 14 01 01  HEX1:		.BYTE	%00010001,%00010100,%00000001,%00000001,%00010001,%00010000,%00010000,%00000001,%00010001,%00010001,%00010001,%00010000,%00010000,%00000001,%00010000,%00010000
+00243D  1  11 10 10 01  
+002441  1  11 11 11 10  
+002449  1  11 04 15 15  HEX2:		.BYTE	%00010001,%00000100,%00010101,%00010101,%00010101,%00010101,%00010101,%00000001,%00010101,%00010101,%00010101,%00010101,%00010000,%00010101,%00010101,%00010100
+00244D  1  15 15 15 01  
+002451  1  15 15 15 15  
+002459  1  11 04 10 01  HEX3:		.BYTE	%00010001,%00000100,%00010000,%00000001,%00000001,%00000001,%00010001,%00000001,%00010001,%00000001,%00010001,%00010001,%00010000,%00010001,%00010000,%00010000
+00245D  1  01 01 11 01  
+002461  1  11 01 11 11  
+002469  1  15 15 15 15  HEX4:		.BYTE	%00010101,%00010101,%00010101,%00010101,%00000001,%00010101,%00010101,%00000001,%00010101,%00010101,%00010001,%00010101,%00010101,%00010101,%00010101,%00010000
+00246D  1  01 15 15 01  
+002471  1  15 15 11 15  
+002479  1               
+002479  1               		.include "dsplist.a65"
+002479  2  70 70 70     dsplist:	.byte	$70,$70,$70
+00247C  2  4E           		.byte	$4E
+00247D  2  10 80        		.word	videoram
+00247F  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E
+002483  2  0E           
+002484  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+002488  2  0E 0E 0E 0E  
+00248C  2  0E 0E 0E 0E  
+002494  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+002498  2  0E 0E 0E 0E  
+00249C  2  0E 0E 0E 0E  
+0024A4  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+0024A8  2  0E 0E 0E 0E  
+0024AC  2  0E 0E 0E 0E  
+0024B4  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+0024B8  2  0E 0E 0E 0E  
+0024BC  2  0E 0E 0E 0E  
+0024C4  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+0024C8  2  0E 0E 0E 0E  
+0024CC  2  0E 0E 0E 0E  
+0024D4  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+0024D8  2  0E 0E 0E 0E  
+0024DC  2  0E 0E 0E 0E  
+0024E4  2  4E           		.byte	$4E
+0024E5  2  10 90        		.word	videoram+$1000
+0024E7  2  0E 0E        		.byte	$0E,$0E
+0024E9  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+0024ED  2  0E 0E 0E 0E  
+0024F1  2  0E 0E 0E 0E  
+0024F9  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+0024FD  2  0E 0E 0E 0E  
+002501  2  0E 0E 0E 0E  
+002509  2  0E 0E 0E 0E  		.byte	$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+00250D  2  0E 0E 0E 0E  
+002511  2  0E 0E 0E 0E  
+002517  2               ;		.byte	$8E,$30,$42,$D0,$97,$02,$82,$02,$02,$02
+002517  2  0E           		.byte	$0E
+002518  2  41           		.byte	$41
+002519  2  79 24        		.word	dsplist
+00251B  2               
+00251B  2               
+00251B  1               		.include "misc.a65"
+00251B  2               EOL		=	$9b
+00251B  2               
+00251B  2  AE 06 E4     miscinit:	ldx	$E406				;CHAR PUT routine
+00251E  2  AC 07 E4     		ldy	$E407
+002521  2  E8           		inx
+002522  2  8E 38 25     		stx	printjsr+1
+002525  2  D0 01        		bne	geoutch1
+002527  2  C8           		iny
+002528  2  8C 39 25     geoutch1:	sty	printjsr+2
+00252B  2  60           		rts
+00252C  2               
+00252C  2               
+00252C  2  A9 9B        newline:	lda	#EOL
+00252E  2  48           print:		pha
+00252F  2  8A           		txa
+002530  2  48           		pha
+002531  2  98           		tya
+002532  2  48           		pha
+002533  2  BA           		tsx
+002534  2  BD 03 01     		lda	$103,X
+002537  2  20 00 00     printjsr:	jsr	$0
+00253A  2  68           		pla
+00253B  2  A8           		tay
+00253C  2  68           		pla
+00253D  2  AA           		tax
+00253E  2  68           		pla
+00253F  2  60           		rts
+002540  2               
+002540  2  48           puthex:		pha
+002541  2  8A           		txa
+002542  2  48           		pha
+002543  2  98           		tya
+002544  2  48           		pha
+002545  2               
+002545  2  BA           		tsx
+002546  2  BD 03 01     		lda	$103,X
+002549  2  48           		pha
+00254A  2  4A           		lsr
+00254B  2  4A           		lsr
+00254C  2  4A           		lsr
+00254D  2  4A           		lsr
+00254E  2  20 5D 25     		jsr	putnib
+002551  2  68           		pla
+002552  2  29 0F        		and	#$0f
+002554  2  20 5D 25     		jsr	putnib
+002557  2               
+002557  2  68           		pla
+002558  2  98           		tya
+002559  2  68           		pla
+00255A  2  AA           		tax
+00255B  2  68           		pla
+00255C  2  60           		rts
+00255D  2               
+00255D  2               
+00255D  2  18           putnib:		clc
+00255E  2  69 30        		adc	#'0'
+002560  2  C9 3A        		cmp	#'9'+1
+002562  2  90 02        		bcc	putnib1
+002564  2  69 06        		adc	#6
+002566  2  4C 2E 25     putnib1:	jmp	print
+002569  2               
+002569  2               
+002569  1               		.include "math.a65"
+002569  2               OVERFLOW	=	$E000
+002569  2               
+002569  2  98           FPTO16BIT:	TYA					; input X/Y (mantisa/exponent) -  output X=HI/Y=LO	; transfer exponent? to a
+00256A  2  30 57        		BMI 	b8501 		; if negative
+00256C  2  4A           		LSR 				; half and put bit into carry
+00256D  2  4A           		LSR 				; half and put bit into carry
+00256E  2  C9 0F        		CMP 	#15			; is it greater than 15
+002570  2  B0 5E        		BCS 	FP8BIT_ERR		; yes so error so exit with carry set
+002572  2  85 8A        		STA 	save_msb		; store intermediate in temp var
+002574  2  0A           		ASL 				; *2
+002575  2  65 8A        		ADC 	save_msb		; *3
+002577  2  8D 84 25     		STA 	FP16BIT_JMP +1	; number of bytes to jump
+00257A  2  A9 00        		LDA 	#0
+00257C  2  85 8A        		STA 	save_msb		; clear result
+00257E  2  8A           		TXA 				; get input (mantisa?)
+00257F  2  38           		SEC 				; set carry to move 1 into result
+002580  2  6A           		ROR 				; rotate carry into high bit and low bit into carry
+002581  2  66 8A        		ROR 	save_msb		; rotate carry into result
+002583  2  90 0F        FP16BIT_JMP:	BCC 	b84D2		; jump forward
+002585  2  4A           		LSR 				; half and shift lowest bit into carry
+002586  2  66 8A        		ROR 	save_msb		; half and rotate carry bit into result
+002588  2  4A           		LSR
+002589  2  66 8A        		ROR 	save_msb
+00258B  2  4A           		LSR
+00258C  2  66 8A        		ROR 	save_msb
+00258E  2  4A           		LSR
+00258F  2  66 8A        		ROR 	save_msb
+002591  2  4A           		LSR
+002592  2  66 8A        		ROR 	save_msb
+002594  2  4A           b84D2:   	LSR
+002595  2  66 8A        		ROR 	save_msb
+002597  2  4A           		LSR
+002598  2  66 8A        		ROR 	save_msb
+00259A  2  4A           		LSR
+00259B  2  66 8A        		ROR 	save_msb
+00259D  2  4A           		LSR
+00259E  2  66 8A        		ROR	save_msb
+0025A0  2  4A           		LSR
+0025A1  2  66 8A        		ROR 	save_msb
+0025A3  2  4A           		LSR
+0025A4  2  66 8A        		ROR 	save_msb
+0025A6  2  4A           		LSR
+0025A7  2  66 8A        		ROR 	save_msb
+0025A9  2  4A           		LSR
+0025AA  2  66 8A        		ROR 	save_msb
+0025AC  2  4A           		LSR
+0025AD  2  66 8A        		ROR 	save_msb
+0025AF  2  4A           		LSR
+0025B0  2  66 8A        		ROR 	save_msb
+0025B2  2  AA           		TAX 				; store low byte of result?
+0025B3  2  98           		TYA 				; get input (exponent?)
+0025B4  2  A4 8A        		LDY 	save_msb		; store high byte of result?
+0025B6  2  4A           		LSR 				; move 1st bit of input (sign) into carry
+0025B7  2  90 09        		BCC 	b8500		; clear so positive
+0025B9  2  8A           		TXA 			; negtive so
+0025BA  2  49 FF        		EOR 	#$FF	; negate x
+0025BC  2  AA           		TAX
+0025BD  2  98           		TYA
+0025BE  2  49 FF        		EOR 	#$FF	; negate y
+0025C0  2  A8           		TAY
+0025C1  2  18           		CLC
+0025C2  2  60           b8500:   	RTS 					; no
+0025C3  2               
+0025C3  2  4A           b8501: 		LSR 				; move 1st bit to carry
+0025C4  2  90 06        		BCC 	b850B		; set y/n
+0025C6  2  A2 FF        		LDX 	#$FF	; yes
+0025C8  2  A0 FF        		LDY 	#$FF
+0025CA  2  18           		CLC
+0025CB  2  60           		RTS
+0025CC  2  A2 00        b850B:   	LDX 	#0			; no
+0025CE  2  A0 00        		LDY 	#0
+0025D0  2  60           FP8BIT_ERR:	RTS
+0025D1  2               
+0025D1  2               ;------------------------------------------------------------
+0025D1  2               ; MATH_24BitToFP (FP.SetToObjectSpaceCoordinate24)
+0025D1  2               ; Enter: A = Coordinate.MSB X = Coordinate.MSB Y = Coordinate.LSB
+0025D1  2               ; Uses: save_msb  Temporary store for coordinate MSB
+0025D1  2               ; Uses: save_lsb  Temporary store for coordinate MSB
+0025D1  2               ; Exit:  ret_exp, ret_man  result, also stored in X:A (exp:man)
+0025D1  2               ;
+0025D1  2               ;------------------------------------------------------------
+0025D1  2  84 8B        BIT24TOFP:	STY	save_lsb
+0025D3  2  85 8A        		STA 	save_msb 				; store msb
+0025D5  2  10 11        		BPL 	b8527					; positive ?
+0025D7  2               
+0025D7  2  A9 00        		LDA 	#0	 				; negative so
+0025D9  2  38           		SEC
+0025DA  2  E5 8B        		SBC 	save_lsb 				; negate lsb
+0025DC  2  85 8B        		STA 	save_lsb
+0025DE  2  8A           		TXA 						; negate psb
+0025DF  2  49 FF        		EOR 	#$FF
+0025E1  2  69 00        		ADC 	#0
+0025E3  2  AA           		TAX
+0025E4  2  A9 00        		LDA 	#0
+0025E6  2  E5 8A        		SBC 	save_msb				; negate msb
+0025E8  2               
+0025E8  2  D0 0F        b8527:  	BNE 	b8538					; if msb not 0 - jump to set loop counter to 24 ($18)?
+0025EA  2  8A           		TXA 						; move psb to a
+0025EB  2  D0 23        		BNE 	b854F					; if psb not 0 - jump to set loop counter to 16 ($10)?
+0025ED  2               
+0025ED  2  A5 8B        		LDA 	save_lsb				; get lsb
+0025EF  2  F0 23        		BEQ 	b8553					; if lsb is 0 - jump to overflow and exit
+0025F1  2               
+0025F1  2  A2 00        		LDX 	#0
+0025F3  2  86 8B        		STX 	save_lsb
+0025F5  2  A2 08        		LDX 	#8					; set loop counter to 8?
+0025F7  2  D0 04        		BNE 	b853C 					; jump?
+0025F9  2               
+0025F9  2  86 8B        b8538:   	STX 	save_lsb				; store psb?
+0025FB  2  A2 18        		LDX 	#24					; set loop counter to 24?
+0025FD  2               
+0025FD  2  CA           b853C:   	DEX 						; find exponent - start from whatever x is passed in and reduce until x a bit set found
+0025FE  2  06 8B        		ASL 	save_lsb 				; shift lsb up into carry
+002600  2  2A           		ROL 	 					; shift msb up with carry - mantisa?
+002601  2  90 FA        		BCC 	b853C					; as soon as first bit is set then exit
+002603  2               
+002603  2  85 8C        		STA 	ret_man					; store mantisa?
+002605  2  8A           		TXA 						; x is exponent?
+002606  2  0A           		ASL 						; exponent *2?
+002607  2  06 8A        		ASL 	save_msb				; shift msb putting sign into carry
+002609  2  2A           		ROL 						; rotate carry into first bit of exponent
+00260A  2  AA           		TAX 						; copy exponent to x - bit 0 is sign
+00260B  2  86 8D        		STX 	ret_exp
+00260D  2  A5 8C        		LDA 	ret_man					; copy mantisa to a
+00260F  2  60           		RTS
+002610  2               
+002610  2  A2 10        b854F:   	LDX 	#16					; set loop counter to 16?
+002612  2  D0 E9        		BNE 	b853C 					; jump?
+002614  2               
+002614  2  A9 00        b8553:   	LDA 	#<OVERFLOW
+002616  2  A2 E0        		LDX 	#>OVERFLOW
+002618  2  85 8C        		STA 	ret_man
+00261A  2  86 8D        		STX 	ret_exp
+00261C  2  60           		RTS
+00261D  2               
+00261D  2               
+00261D  2               ;------------------------------------------------------------
+00261D  2               ; Y(hi) X(lo) * A (hi) FP_MULTIPLY_LO = A(hi) Y(lo)
+00261D  2               ;------------------------------------------------------------
+00261D  2  85 89        FP_MULTIPLY:	STA	mul_hi				; inputs = X-(LO) + Y-(HI) + A (HI) + FP_MULTILPLY_LO - outputs = AY
+00261F  2  BD 71 26     		LDA 	LOG_TABLE,X
+002622  2  A6 88        		LDX 	mul_lo
+002624  2  18           		CLC
+002625  2  7D 71 26     		ADC 	LOG_TABLE,X
+002628  2  AA           		TAX
+002629  2  98           		TYA
+00262A  2  90 03        		BCC 	_FP_MUL_CNT
+00262C  2  69 03        		ADC 	#$03					; add 4, get sign bit right
+00262E  2  18           		CLC
+00262F  2  65 89        _FP_MUL_CNT:	ADC 	mul_hi
+002631  2  29 FD        		AND 	#$FD					;clear sign bit
+002633  2  BC 71 27     		LDY 	EXP_TABLE,X
+002636  2  60           		RTS
+002637  2               
+002637  2               ;------------------------------------------------------------
+002637  2               ; Y(hi) X(Lo) *  mul_hi mul_lo = YX and mul_hi/mul_lo
+002637  2               ;------------------------------------------------------------
+002637  2  BD 71 26     FPMUL:		LDA	LOG_TABLE,X
+00263A  2  A6 88        		LDX	mul_lo
+00263C  2  18           		CLC
+00263D  2  7D 71 26     		ADC	LOG_TABLE,X
+002640  2  AA           		TAX
+002641  2  98           		TYA
+002642  2  90 03        		BCC	_PF_MUL_CNT
+002644  2  69 03        		ADC	#$03			; add 4?
+002646  2  18           		CLC
+002647  2  65 89        _PF_MUL_CNT:   	ADC	mul_hi
+002649  2  70 0C        		BVS	MATH_LIMIT
+00264B  2  29 FD        		AND	#$FD
+00264D  2  85 89        		STA	mul_hi
+00264F  2  A8           		TAY
+002650  2  BD 71 27     		LDA	EXP_TABLE,X
+002653  2  AA           		TAX
+002654  2  85 88        		STA	mul_lo
+002656  2  60           		RTS
+002657  2               
+002657  2  10 0C        MATH_LIMIT:	BPL	_MATH_LIMIT_POS
+002659  2  29 01        		AND	#$01
+00265B  2  09 78        		ORA	#$78
+00265D  2  A8           		TAY
+00265E  2  A2 00        		LDX	#$00
+002660  2  86 88        		STX	mul_lo
+002662  2  84 89        		STY	mul_hi
+002664  2  60           		RTS
+002665  2               
+002665  2               _MATH_LIMIT_POS:
+002665  2  29 01        		AND #$01
+002667  2  09 84        		ORA #$84
+002669  2               
+002669  2               MATH_LIMIT_EXIT:
+002669  2  A8           		TAY
+00266A  2  A2 00        		LDX	#$00
+00266C  2  86 88        		STX	mul_lo
+00266E  2  84 89        		STY 	mul_hi
+002670  2  60           		RTS
+002671  2               
+002671  2               
+002671  2               
+002671  2               LOG_TABLE:
+002671  2  00 01 03 04  		.BYTE $00,$01,$03,$04,$06,$07,$09,$0A
+002675  2  06 07 09 0A  
+002679  2  0B 0D 0E 10  		.BYTE $0B,$0D,$0E,$10,$11,$12,$14,$15
+00267D  2  11 12 14 15  
+002681  2  16 18 19 1A  		.BYTE $16,$18,$19,$1A,$1C,$1D,$1E,$20
+002685  2  1C 1D 1E 20  
+002689  2  21 22 24 25  		.BYTE $21,$22,$24,$25,$26,$28,$29,$2A
+00268D  2  26 28 29 2A  
+002691  2  2C 2D 2E 2F  		.BYTE $2C,$2D,$2E,$2F,$31,$32,$33,$34
+002695  2  31 32 33 34  
+002699  2  36 37 38 39  		.BYTE $36,$37,$38,$39,$3B,$3C,$3D,$3E
+00269D  2  3B 3C 3D 3E  
+0026A1  2  3F 41 42 43  		.BYTE $3F,$41,$42,$43,$44,$45,$47,$48
+0026A5  2  44 45 47 48  
+0026A9  2  49 4A 4B 4D  		.BYTE $49,$4A,$4B,$4D,$4E,$4F,$50,$51
+0026AD  2  4E 4F 50 51  
+0026B1  2  52 54 55 56  		.BYTE $52,$54,$55,$56,$57,$58,$59,$5A
+0026B5  2  57 58 59 5A  
+0026B9  2  5C 5D 5E 5F  		.BYTE $5C,$5D,$5E,$5F,$60,$61,$62,$63
+0026BD  2  60 61 62 63  
+0026C1  2  64 66 67 68  		.BYTE $64,$66,$67,$68,$69,$6A,$6B,$6C
+0026C5  2  69 6A 6B 6C  
+0026C9  2  6D 6E 6F 70  		.BYTE $6D,$6E,$6F,$70,$71,$72,$74,$75
+0026CD  2  71 72 74 75  
+0026D1  2  76 77 78 79  		.BYTE $76,$77,$78,$79,$7A,$7B,$7C,$7D
+0026D5  2  7A 7B 7C 7D  
+0026D9  2  7E 7F 80 81  		.BYTE $7E,$7F,$80,$81,$82,$83,$84,$85
+0026DD  2  82 83 84 85  
+0026E1  2  86 87 88 89  		.BYTE $86,$87,$88,$89,$8A,$8B,$8C,$8D
+0026E5  2  8A 8B 8C 8D  
+0026E9  2  8E 8F 90 91  		.BYTE $8E,$8F,$90,$91,$92,$93,$94,$95
+0026ED  2  92 93 94 95  
+0026F1  2  96 97 98 99  		.BYTE $96,$97,$98,$99,$9A,$9B,$9B,$9C
+0026F5  2  9A 9B 9B 9C  
+0026F9  2  9D 9E 9F A0  		.BYTE $9D,$9E,$9F,$A0,$A1,$A2,$A3,$A4
+0026FD  2  A1 A2 A3 A4  
+002701  2  A5 A6 A7 A8  		.BYTE $A5,$A6,$A7,$A8,$A9,$A9,$AA,$AB
+002705  2  A9 A9 AA AB  
+002709  2  AC AD AE AF  		.BYTE $AC,$AD,$AE,$AF,$B0,$B1,$B2,$B2
+00270D  2  B0 B1 B2 B2  
+002711  2  B3 B4 B5 B6  		.BYTE $B3,$B4,$B5,$B6,$B7,$B8,$B9,$B9
+002715  2  B7 B8 B9 B9  
+002719  2  BA BB BC BD  		.BYTE $BA,$BB,$BC,$BD,$BE,$BF,$C0,$C0
+00271D  2  BE BF C0 C0  
+002721  2  C1 C2 C3 C4  		.BYTE $C1,$C2,$C3,$C4,$C5,$C6,$C6,$C7
+002725  2  C5 C6 C6 C7  
+002729  2  C8 C9 CA CB  		.BYTE $C8,$C9,$CA,$CB,$CB,$CC,$CD,$CE
+00272D  2  CB CC CD CE  
+002731  2  CF D0 D0 D1  		.BYTE $CF,$D0,$D0,$D1,$D2,$D3,$D4,$D4
+002735  2  D2 D3 D4 D4  
+002739  2  D5 D6 D7 D8  		.BYTE $D5,$D6,$D7,$D8,$D8,$D9,$DA,$DB
+00273D  2  D8 D9 DA DB  
+002741  2  DC DC DD DE  		.BYTE $DC,$DC,$DD,$DE,$DF,$E0,$E0,$E1
+002745  2  DF E0 E0 E1  
+002749  2  E2 E3 E4 E4  		.BYTE $E2,$E3,$E4,$E4,$E5,$E6,$E7,$E7
+00274D  2  E5 E6 E7 E7  
+002751  2  E8 E9 EA EA  		.BYTE $E8,$E9,$EA,$EA,$EB,$EC,$ED,$EE
+002755  2  EB EC ED EE  
+002759  2  EE EF F0 F1  		.BYTE $EE,$EF,$F0,$F1,$F1,$F2,$F3,$F4
+00275D  2  F1 F2 F3 F4  
+002761  2  F4 F5 F6 F7  		.BYTE $F4,$F5,$F6,$F7,$F7,$F8,$F9,$F9
+002765  2  F7 F8 F9 F9  
+002769  2  FA FB FC FC  		.BYTE $FA,$FB,$FC,$FC,$FD,$FE,$FF,$FF
+00276D  2  FD FE FF FF  
+002771  2               
+002771  2               EXP_TABLE:
+002771  2  00 01 01 02  		.BYTE $00,$01,$01,$02,$03,$03,$04,$05
+002775  2  03 03 04 05  
+002779  2  06 06 07 08  		.BYTE $06,$06,$07,$08,$08,$09,$0A,$0B
+00277D  2  08 09 0A 0B  
+002781  2  0B 0C 0D 0E  		.BYTE $0B,$0C,$0D,$0E,$0E,$0F,$10,$10
+002785  2  0E 0F 10 10  
+002789  2  11 12 13 13  		.BYTE $11,$12,$13,$13,$14,$15,$16,$16
+00278D  2  14 15 16 16  
+002791  2  17 18 19 19  		.BYTE $17,$18,$19,$19,$1A,$1B,$1C,$1D
+002795  2  1A 1B 1C 1D  
+002799  2  1D 1E 1F 20  		.BYTE $1D,$1E,$1F,$20,$20,$21,$22,$23
+00279D  2  20 21 22 23  
+0027A1  2  24 24 25 26  		.BYTE $24,$24,$25,$26,$27,$28,$28,$29
+0027A5  2  27 28 28 29  
+0027A9  2  2A 2B 2C 2C  		.BYTE $2A,$2B,$2C,$2C,$2D,$2E,$2F,$30
+0027AD  2  2D 2E 2F 30  
+0027B1  2  30 31 32 33  		.BYTE $30,$31,$32,$33,$34,$35,$35,$36
+0027B5  2  34 35 35 36  
+0027B9  2  37 38 39 3A  		.BYTE $37,$38,$39,$3A,$3A,$3B,$3C,$3D
+0027BD  2  3A 3B 3C 3D  
+0027C1  2  3E 3F 40 41  		.BYTE $3E,$3F,$40,$41,$41,$42,$43,$44
+0027C5  2  41 42 43 44  
+0027C9  2  45 46 47 48  		.BYTE $45,$46,$47,$48,$48,$49,$4A,$4B
+0027CD  2  48 49 4A 4B  
+0027D1  2  4C 4D 4E 4F  		.BYTE $4C,$4D,$4E,$4F,$50,$51,$51,$52
+0027D5  2  50 51 51 52  
+0027D9  2  53 54 55 56  		.BYTE $53,$54,$55,$56,$57,$58,$59,$5A
+0027DD  2  57 58 59 5A  
+0027E1  2  5B 5C 5D 5E  		.BYTE $5B,$5C,$5D,$5E,$5E,$5F,$60,$61
+0027E5  2  5E 5F 60 61  
+0027E9  2  62 63 64 65  		.BYTE $62,$63,$64,$65,$66,$67,$68,$69
+0027ED  2  66 67 68 69  
+0027F1  2  6A 6B 6C 6D  		.BYTE $6A,$6B,$6C,$6D,$6E,$6F,$70,$71
+0027F5  2  6E 6F 70 71  
+0027F9  2  72 73 74 75  		.BYTE $72,$73,$74,$75,$76,$77,$78,$79
+0027FD  2  76 77 78 79  
+002801  2  7A 7B 7C 7D  		.BYTE $7A,$7B,$7C,$7D,$7E,$7F,$80,$81
+002805  2  7E 7F 80 81  
+002809  2  82 83 84 85  		.BYTE $82,$83,$84,$85,$87,$88,$89,$8A
+00280D  2  87 88 89 8A  
+002811  2  8B 8C 8D 8E  		.BYTE $8B,$8C,$8D,$8E,$8F,$90,$91,$92
+002815  2  8F 90 91 92  
+002819  2  93 95 96 97  		.BYTE $93,$95,$96,$97,$98,$99,$9A,$9B
+00281D  2  98 99 9A 9B  
+002821  2  9C 9D 9F A0  		.BYTE $9C,$9D,$9F,$A0,$A1,$A2,$A3,$A4
+002825  2  A1 A2 A3 A4  
+002829  2  A5 A6 A8 A9  		.BYTE $A5,$A6,$A8,$A9,$AA,$AB,$AC,$AD
+00282D  2  AA AB AC AD  
+002831  2  AF B0 B1 B2  		.BYTE $AF,$B0,$B1,$B2,$B3,$B4,$B6,$B7
+002835  2  B3 B4 B6 B7  
+002839  2  B8 B9 BA BC  		.BYTE $B8,$B9,$BA,$BC,$BD,$BE,$BF,$C0
+00283D  2  BD BE BF C0  
+002841  2  C2 C3 C4 C5  		.BYTE $C2,$C3,$C4,$C5,$C6,$C8,$C9,$CA
+002845  2  C6 C8 C9 CA  
+002849  2  CB CD CE CF  		.BYTE $CB,$CD,$CE,$CF,$D0,$D2,$D3,$D4
+00284D  2  D0 D2 D3 D4  
+002851  2  D6 D7 D8 D9  		.BYTE $D6,$D7,$D8,$D9,$DB,$DC,$DD,$DE
+002855  2  DB DC DD DE  
+002859  2  E0 E1 E2 E4  		.BYTE $E0,$E1,$E2,$E4,$E5,$E6,$E8,$E9
+00285D  2  E5 E6 E8 E9  
+002861  2  EA EC ED EE  		.BYTE $EA,$EC,$ED,$EE,$F0,$F1,$F2,$F4
+002865  2  F0 F1 F2 F4  
+002869  2  F5 F6 F8 F9  		.BYTE $F5,$F6,$F8,$F9,$FA,$FC,$FD,$FF
+00286D  2  FA FC FD FF  
+002871  2               
+002871  1               

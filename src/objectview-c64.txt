@@ -2670,7 +2670,7 @@ SIN_LSB   ; SIN/COS TABLE? f5A00
         .BYTE $FF,$00,$00,$00,$00,$00,$00,$00
  
 SIN_MSB ; f5B00   ; SIN / COS TABLE?
-		.BYTE $DC,$E4,$E4,$E8,$E8,$EC,$EC,$EC
+	.BYTE $DC,$E4,$E4,$E8,$E8,$EC,$EC,$EC
         .BYTE $EC,$EC,$F0,$F0,$F0,$F0,$F0,$F0
         .BYTE $F0,$F0,$F0,$F0,$F4,$F4,$F4,$F4
         .BYTE $F4,$F4,$F4,$F4,$F4,$F4,$F4,$F4

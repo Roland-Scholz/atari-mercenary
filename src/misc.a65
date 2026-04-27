@@ -1,0 +1,61 @@
+EOL		=	$9b
+
+miscinit:	ldx	$E406				;CHAR PUT routine
+		ldy	$E407
+		inx
+		stx	printjsr+1
+		bne	geoutch1
+		iny
+geoutch1:	sty	printjsr+2
+		rts
+		
+
+newline:	lda	#EOL
+print:		pha
+		txa
+		pha
+		tya
+		pha
+		tsx
+		lda	$103,X
+printjsr:	jsr	$0
+		pla
+		tay
+		pla
+		tax
+		pla
+		rts
+
+puthex:		pha
+		txa
+		pha
+		tya
+		pha
+	
+		tsx
+		lda	$103,X
+		pha
+		lsr	
+		lsr	
+		lsr	
+		lsr	
+		jsr	putnib
+		pla
+		and	#$0f
+		jsr	putnib
+	
+		pla
+		tya
+		pla
+		tax
+		pla
+		rts
+	
+	
+putnib:		clc
+		adc	#'0'
+		cmp	#'9'+1
+		bcc	putnib1
+		adc	#6
+putnib1:	jmp	print
+		

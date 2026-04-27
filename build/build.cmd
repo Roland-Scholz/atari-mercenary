@@ -4,6 +4,8 @@ set PLATFORM=4
 set ATR=mercenary
 call var-def.cmd
 
+call :compile_module merc-0700-6fff 0700
+if NOT %result%==0 goto ende
 call :compile_module objectview 2200
 if NOT %result%==0 goto ende
 call :compile_module runad 02E0
@@ -42,7 +44,7 @@ goto eof
 
 
 :compile_module
-%CC65%\ca65 -DPLATFORM=%PLATFORM% -l  %REL%\%1.lst %SRC%\%1.a65 -I %INC% -I %COMMON%\inc -o %REL%\%1.o
+%CC65%\ca65 -DPLATFORM=%PLATFORM% -l %REL%\%1.lst %SRC%\%1.a65 -I %INC% -I %COMMON%\inc -o %REL%\%1.o
 set result=%ERRORLEVEL%
 
 if %result%==0 (
