@@ -11515,7 +11515,11 @@ L5FC4:      asl L7300,X
             dex
             bne L5FC4
             rts
-L5FDA:     ldx #$00
+            
+;------------------------------------------------------------
+; exchange zero page by $2100
+;------------------------------------------------------------            
+L5FDA:      ldx #$00
 L5FDC:      ldy L2100,X
             lda ZP_00,X
             sta L2100,X
@@ -11524,26 +11528,35 @@ L5FDC:      ldy L2100,X
             inx
             bne L5FDC
             rts
-L5FEB:      sei
+            
+;------------------------------------------------------------
+; setup?
+;------------------------------------------------------------	                
+L5FEB:      sei                         ;disable ints
             lda #$00
             sta NMIEN
+            
             cld
-            jsr L5FDA
-            lda #$FE
+            jsr L5FDA                   ;exchange ZP
+            lda #$FE                    ;OS Rom off
             sta PORTB
-            sta LD508
-            lda #$5C
+            sta LD50
+            
+            lda #$5C                    ;NMI Vector $605C
             sta LFFFA
 L6002:      lda #$60
             sta LFFFB
+            
             lda #$FF
             sta VVBLKI
             lda #$60
             sta VVBLKI+1
+            
             lda #$84
             sta VDSLST
             lda #$60
             sta VDSLST+1
+            
             lda #$C0
             sta NMIEN
             lda #$70
@@ -11566,11 +11579,13 @@ L603B:      lda L604F,X
             lda #$00
             sta AUDCTL
             rts
+            
 L604F:      bvc L60BF+2
             bcc L6002+1
             jsr LD028
             cld
             .byte $03,$03,$03,$03,$FF
+            
             bit NMIST
             bpl L6064
             jmp (VDSLST)
@@ -11586,6 +11601,7 @@ L6064:      cld
             pha
             sta NMIRES
             jmp (VVBLKI)
+            
             pha
 L6071:      lda #$85
             sta VDSLST
@@ -11596,6 +11612,7 @@ L6076:      lda #$60
             sta COLBK
             pla
             rti
+            
 L6085:      pha
             lda #$F0
             sta VDSLST
