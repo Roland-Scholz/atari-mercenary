@@ -33,7 +33,7 @@ rem move *.com obj > nul 2> nul
 move *.ar* obj > nul 2> nul
 
 rem c:\atari\aspeqt7\aspeqt.exe
-"C:\Program Files (x86)\Altirra\Altirra64.exe"
+rem "C:\Program Files (x86)\Altirra\Altirra64.exe"
 pause
 goto eof
 

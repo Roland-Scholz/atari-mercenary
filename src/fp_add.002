@@ -1,0 +1,64 @@
+DSKINV      = $E453
+CIOV        = $E456
+SIOV        = $E459
+SETVBV      = $E45C
+SYSVBV      = $E45F
+XITVBV      = $E462
+SIOINV      = $E465
+SENDEV      = $E468
+INTINV      = $E46B
+CIOINV      = $E46E
+SELFSV      = $E471
+WARMSV      = $E474
+COLDSV      = $E477
+RBLOKV      = $E47A
+CSOPIV      = $E47D
+PUPDIV      = $E480
+SELFTSV     = $E483
+PENTV       = $E486
+PHUNLV      = $E489
+PHINIV      = $E48C
+GPDVV       = $E48F
+;
+; Code equates
+;
+L4F55       = $4F55
+;
+; Start of code
+;
+            *= $4F45
+;
+            tya
+            bmi L4F6D
+            lsr A
+            lsr A
+            cmp #$07
+            bcs L4F74
+            sta L4F55
+            txa
+            sec
+            ror A
+            bne L4F5B
+            lsr A
+            lsr A
+            lsr A
+            lsr A
+            lsr A
+L4F5B:      lsr A
+            lsr A
+L4F5D:      adc #$00
+            bmi L4F73
+            tax
+            tya
+            lsr A
+            txa
+            bcc L4F6C
+            eor #$FF
+            adc #$00
+            clc
+L4F6C:      rts
+L4F6D:      cmp #$FC
+            lda #$00
+            beq L4F5D
+L4F73:      sec
+L4F74:      rts
