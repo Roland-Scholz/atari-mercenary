@@ -1,5 +1,7 @@
 @echo off
 
+path=%PATH%;C:\github\Sally-2\jdk17.0.17_10\bin
+
 set PLATFORM=4
 set ATR=mercenary
 call var-def.cmd

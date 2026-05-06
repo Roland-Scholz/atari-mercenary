@@ -204,13 +204,13 @@ L00A5       = $00A5
 
 L00A8       = $00A8
 L00A9       = $00A9
-L00AA       = $00AA
+YAW_WALK_AA       = $00AA
 L00AB       = $00AB
 L00AC       = $00AC
 OBJECT_NUMBER_AD       = $00AD
 L00AE       = $00AE
 L00AF       = $00AF
-OBJS_TO_DRAW_B0       = $00B0
+NUM_OBJS_TO_DRAW_B0       = $00B0
 L00B1       = $00B1
 L00B2       = $00B2
 L00B3       = $00B3
@@ -233,7 +233,7 @@ L00C4       = $00C4
 L00C5       = $00C5
 L00C6       = $00C6
 L00C7       = $00C7
-L00C8       = $00C8
+room_change_L00C8       = $00C8
 L00C9       = $00C9
 L00CB       = $00CB
 L00CC       = $00CC
@@ -263,7 +263,7 @@ L00E6       = $00E6
 L00E7       = $00E7
 
 
-INVENTORY_ITEMS_EB       = $00EB
+NUM_INVENTORY_ITEMS_EB       = $00EB
 SPEED_FP_EC       = $00EC
 SPEED_FP_ED       = $00ED
 L00EE       = $00EE
@@ -340,7 +340,7 @@ L72E8       = $72E8
 L72F0       = $72F0
 L72F8       = $72F8
 L7300       = $7300
-L73C0       = $73C0
+SHIP_DATA_L73C0       = $73C0
 L73C2       = $73C2
 L73C3       = $73C3
 L73C4       = $73C4
@@ -748,7 +748,7 @@ L07A2:      ora (SPEED_FP_EC,X)
             sty L1B09
             .byte $03,$3C,$14,$32
             ora (LINE_COLOR0_80),Y
-            ora (INVENTORY_ITEMS_EB,X)
+            ora (NUM_INVENTORY_ITEMS_EB,X)
             .byte $C7
             cpy #$00
             ora (L00EF,X)
@@ -1350,7 +1350,7 @@ L0C77:      ora (L00DF,X)
             eor ROTATE_MX2_LO_44,X
             cmp MEM_PTR_LO_00
             .byte $14,$32
-            ora (INVENTORY_ITEMS_EB,X)
+            ora (NUM_INVENTORY_ITEMS_EB,X)
             asl L3803,X
             .byte $02,$00,$14,$32
             ora (ROTATE_MY3_LO_40),Y
@@ -1401,7 +1401,7 @@ L0CC2:      .byte $14,$32,$93
             ora (L00EF,X)
             ldy L00BE,X
             .byte $02,$00,$14,$32
-            ora (INVENTORY_ITEMS_EB,X)
+            ora (NUM_INVENTORY_ITEMS_EB,X)
             asl L3803,X
             .byte $02,$00,$14,$32
             ora (ROTATE_MY3_LO_40),Y
@@ -1487,7 +1487,7 @@ L0D26:      jsr L5053
             pha
             eor L00C4
             .byte $00
-            ora (INVENTORY_ITEMS_EB,X)
+            ora (NUM_INVENTORY_ITEMS_EB,X)
             dec L98E5
             .byte $00
             ora (POINT_LINE_COUNT_17,X)
@@ -1549,7 +1549,7 @@ L0E0E:      tax
 L0E0F:      ora A:L00F9
             .byte $00
 L0E13:      bpl L0E15
-L0E15:      ora (INVENTORY_ITEMS_EB,X)
+L0E15:      ora (NUM_INVENTORY_ITEMS_EB,X)
             plp
             cmp (MEM_PTR_LO_00,X)
             .byte $03
@@ -1689,7 +1689,7 @@ L0F0E:      asl APPMHI+1,X
             .byte $03
             rti
             .byte $0F
-L0F16:      ora (INVENTORY_ITEMS_EB,X)
+L0F16:      ora (NUM_INVENTORY_ITEMS_EB,X)
             .byte $B7,$FF
             jmp L4145
 L0F1D:      lsr L00C5,X
@@ -4075,8 +4075,26 @@ L28E2:      eor X_ROTATION_LO_56,X
             tax
 L292A:     tax
 L292B:      .byte $00
-L292C:      .byte $00,$00,$00,$00,$00,$00,$00,$00
-L2934:      .byte $00,$00
+
+;
+; 00
+; 01	Dominition Dart
+; 02	
+; 03	Jet
+; 06	Cheese
+; 10	Photon Emitter
+; 2c	Cataring Provisions
+; 2d	Data Bank
+; 2e	Pass
+
+;
+;10 bytes inventory list
+;
+INVENTORY_LIST_L292C:      
+		.byte $00,$00,$00,$00,$00,$00,$00,$00
+L2934:      	.byte $00,$00
+
+
 L2936:      .byte $00
 L2937:      .byte $00
 L2938:      .byte $00
@@ -4109,7 +4127,20 @@ L297F:      .byte $00
 L298D:      jsr L397E
             jmp MAIN_LOOP_L29DF
             jsr L5FEB
-L2996:      jsr L2A75
+	    
+	    
+;------------------------------------------------------------
+; Restart here after CTRL-Q
+; - scatter objects in inventory over Targ
+; - set player Y-pos to $000080
+; - set OUTDOOR
+; - give Dominion Dart
+; - set walking yaw to $10
+; - reset colors
+; - set players X and Z pos to Targ bounds 15-15
+; - set speed to zero
+;------------------------------------------------------------	    
+L2996:      jsr SCATTER_INVENTORY_L2A75
             lda #$80
             sta L0083
             lda #$80
@@ -4117,29 +4148,35 @@ L2996:      jsr L2A75
             lda #$00
             sta CUR_Y_MSB_74
             sta CUR_Y_HSB_75
-            sta PLANET_UNDERGROUND_A6
+            sta PLANET_UNDERGROUND_A6				;outddors
             sta L00CD
-            lda #$01
+            lda #$01						;set Dominion Dart
             sta CRAFT_ID_WALKING_A7
-            jsr L4189
+            jsr COPY_SHIP_DATA_L4189				;copy ship data
+	    
             lda #$10
-            sta L00AA
-            jsr L5921
+            sta YAW_WALK_AA
+	    
+            jsr SET_COLORS_L5921
+	    
             lda CUR_X_HSB_72
             and #$0F
             sta CUR_X_HSB_72
             lda CUR_Z_HSB_78
 L29C1:      and #$0F
             sta CUR_Z_HSB_78
+	    
             lda #$00
             sta YAW_LO_2A
             sta PITCH_LO_28
+	    
             lda #$02
             sta YAW_HI_2B
             sta PITCH_HI_29
-            jsr L3DC1
+	    
+            jsr L3DC1						; set speed?
             lda #$FF
-            sta L6941
+            sta L6941						;
             jsr L37ED
             jmp MAIN_LOOP_L29DF
 
@@ -4216,34 +4253,40 @@ L2A58:		jsr WHITE_LINES_L53B7                           ; setup white lines
 		jmp MAIN_LOOP_L29DF                             ; next loop
 		
 ;------------------------------------------------------------
-; 
+; scatter inventory items
 ;------------------------------------------------------------
-L2A75:		ldx INVENTORY_ITEMS_EB
+SCATTER_INVENTORY_L2A75:		
+		ldx NUM_INVENTORY_ITEMS_EB
 		inx
 		ldy CRAFT_ID_WALKING_A7
 		bmi L2AAE
-L2A7C:		jsr L53B1
+		
+L2A7C:		jsr GET_RANDOM_L53B1				;obj X HSB 0-15
 		and #$0F
 		sta OBJ_X_HSB_L6540,Y
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		sta OBJ_X_MSB_L6480,Y
-		jsr L53B1
+		
+		jsr GET_RANDOM_L53B1				;obj Z HSB 0-15
 		and #$0F
 		sta OBJ_Z_HSB_L65C0,Y
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		sta OBJ_Z_MSB_L6500,Y
-		lda #$00
+		
+		lda #$00					;Z all 0
 		sta OBJ_Y_HSB_L6580,Y
 		sta OBJ_Y_MSB_L64C0,Y
 		sta OBJ_Y_LSB_L68C0,Y
+		
 		sta L6940,Y
-		lda L69C0,Y
+		lda L69C0,Y					;reset bit 7
 		and #$7F
 		sta L69C0,Y
-L2AAE:		ldy L292A,X
+		
+L2AAE:		ldy L292A,X					;get object from inventory list
 		dex
 		bne L2A7C
-		stx INVENTORY_ITEMS_EB
+		stx NUM_INVENTORY_ITEMS_EB
 		rts
 
 ;------------------------------------------------------------
@@ -4641,7 +4684,7 @@ L2DFE:      lda #$00
             sta SOUND_F5
             lda #$09
             sta CRAFT_ID_WALKING_A7
-            jsr L4189
+            jsr COPY_SHIP_DATA_L4189
             lda #$FF
             sta L694E
             sta L694F
@@ -4799,7 +4842,7 @@ L2F50:		rts
             lda (BENSON_PTR_LO_1D),Y
 L2F60:      cmp L0100
             jmp L300C
-            jsr L53B1
+            jsr GET_RANDOM_L53B1
             iny
             lda (BENSON_PTR_LO_1D),Y
             cmp RANDOM_E8
@@ -4864,7 +4907,7 @@ L2F71:      lda TIMER_MSB_E3
             cmp (BENSON_PTR_LO_1D),Y
             bne L3008
             jsr RESET_KEY_L5AEE
-            jsr FLYING_NOISE_L5AFB
+            jsr SOUND_EFFECT_L5AFB
             jmp L300B
             ldx L274D
             lda L1F00,X
@@ -5117,7 +5160,7 @@ L319D:		sta AUDC1
 L31AE:		tax
 		jsr L322A
 L31B2:		jmp L3013
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		iny
 		and (BENSON_PTR_LO_1D),Y
 		clc
@@ -5181,17 +5224,18 @@ L321E:      .byte $5C
 L3224:      lda L00E6
             bne L3242
 L3228:      inc L00E0
-L322A:     lda L00E6
-            bne L3242
-L322E:      lda L7DE0,X
-            sta L32A4+2
-            lda L7DA0,X
-            sta L32A4+1
-            lda #$00
-            sta L00DE
-            sta L00DF
-            dec L00E6
-L3242:      rts
+
+L322A:		lda L00E6
+		bne L3242
+L322E:		lda L7DE0,X
+		sta L32A4+2
+		lda L7DA0,X
+		sta L32A4+1
+		lda #$00
+		sta L00DE
+		sta L00DF
+		dec L00E6
+L3242:		rts
 
 L3243:      inc L00E0
             lda L00E0
@@ -5579,7 +5623,7 @@ SETUP_ROOM_L353C:
 		jsr L37ED
 		lda #$09					;Prestinium
 		sta CRAFT_ID_WALKING_A7
-		jsr L4189
+		jsr COPY_SHIP_DATA_L4189
 		jsr L58FF
 		ldx #$08
 L3553:		lda L356B,X
@@ -5588,261 +5632,261 @@ L3553:		lda L356B,X
 		bpl L3553
 		dec FLIP_SCREEN_22
 		lda #$00
-		sta L00C8
+		sta room_change_L00C8
 		jsr DRAW_SCREEN_OUTDOOR_L559D
 		lda #$7F
-		sta L00C8
+		sta room_change_L00C8
 		jmp L397E
 	    
 	    
-L356B:      cpy #$67
-            php
-            .byte $80,$F4
-            rti
-            .byte $00
-            bvs L357B+1
+L356B:		cpy #$67
+		php
+		.byte $80,$F4
+		rti
+		.byte $00
+		bvs L357B+1
 	    
 
-L3574:      lda #$E0
-            sta L008B
-            lda ROOM_STRUCT_PTR_LO_L6300,X
-L357B:      sta SCREEN_LINES_19
-            lda ROOM_STRUCT_PTR_HI_L63C0,X
-            sta DSKUTL
-            ldy #$00
-            lda (SCREEN_LINES_19),Y
-            bpl L35C6
-            cpx #$72
-            bne L3597
-            jsr L53B1
-            and #$0E
-            clc
-            adc #$0A
-            tay
-            bne L35A5
-L3597:      lda L00CD
-            ldy #$0A
-            cmp (SCREEN_LINES_19),Y
-            bne L35A5
-            iny
-            iny
-            cmp (SCREEN_LINES_19),Y
-            beq L35C6
-L35A5:      lda (SCREEN_LINES_19),Y
-            pha
-            iny
-            lda (SCREEN_LINES_19),Y
-            sta TMP_04
-            ldy #$05
-            lda (SCREEN_LINES_19),Y
-            and #$8F
-            ora TMP_04
-            sta (SCREEN_LINES_19),Y
-            iny
-            pla
-            sta (SCREEN_LINES_19),Y
-            lda #$1F
-            sta L00F0
-            cpx #$7F
-            bne L35C6
-            jsr L37CE
-L35C6:      ldy MUL_HI_07
-            stx L00CD
-            lda (SCREEN_LINES_19),Y
-            sta CUR_X_MSB_71
-            iny
-            lda (SCREEN_LINES_19),Y
-            sta CUR_Z_MSB_77
-            dey
-            dey
-            dey
-            lda (SCREEN_LINES_19),Y
-            and #$80
-            sta CUR_Z_LSB_76
-            eor #$80
-            sta CUR_X_LSB_70
-L35E0:      jsr L37ED
-            lda #$00
-            sta CUR_X_HSB_72
-            sta CUR_Z_HSB_78
-            sta L00F6
-            ldy #$3F
-L35ED:      sta GROUND_STRUCTURE_X_LSB_1D00,Y
-            sta GROUND_STRUCTURE_X_MSB_1D40,Y
-            sta GROUND_STRUCTURE_X_HSB_9F40,Y
-            sta GROUND_STRUCTURE_Y_LSB_1D80,Y
-            sta GROUND_STRUCTURE_Y_MSB_1DC0,Y
-            sta GROUND_STRUCTURE_Y_HSB_9F80,Y
-            sta GROUND_STRUCTURE_Z_LSB_1E00,Y
-            sta GROUND_STRUCTURE_Z_MSB_1E40,Y
-            sta GROUND_STRUCTURE_Z_HSB_9FC0,Y
-            dey
-            bpl L35ED
-            ldy #$0C
-L360D:      lda L37B3+2,Y
-            sta L1E7F,Y
-            lda L37C1,Y
-            sta L1EBE+1,Y
-            dey
-            bne L360D
-            lda (SCREEN_LINES_19),Y
-            and #$7F
-            sta GROUND_STRUCTURE_X_MSB_1D40
-            sta L1D41
-            sta L1D44
-            sta L1D44+1
-            iny
-            lda (SCREEN_LINES_19),Y
-            and #$07
-            sta GROUND_STRUCTURE_Y_MSB_1DC0
-            sta L1DBF+2
-            sta L1DC2
-            sta L1DC3
-            iny
-            lda (SCREEN_LINES_19),Y
-            and #$7F
-            sta GROUND_STRUCTURE_Z_MSB_1E40
-            sta L1E43
-            sta L1E44
-            sta L1E45+2
-            lda #$0B
-            sta SHFAMT
-            lda #$07
-            sta ZP_6E
-            iny
-            lda (SCREEN_LINES_19),Y
-            sta L00C2
-            iny
-            lda (SCREEN_LINES_19),Y
-            sta L00C3
-L3660:      iny
-            lda (SCREEN_LINES_19),Y
-            beq L3683
-            bpl L36AA
-            cmp #$80
-            bne L36AE
-            lda #$10
-            jsr L3890
-            beq L3683
-            jsr L389B
-            beq L3683
-            lda #$00						;dark, no photon emitter
-            sta L00C0
-            sta L00C2
-            sta L00C3
-            lda #$01
-            sta L00F6
-L3683:      lda #$FF
-            sta L0096
-            ldy #$01
-            lda (SCREEN_LINES_19),Y
-            lsr
-            lsr
-            lsr
-            tax
-            beq L369F
-            iny
-            lda (SCREEN_LINES_19),Y
-            bpl L369D
-            txa
-            jsr L2F0D
-            jmp L369F
-L369D:      stx L00F6
-L369F:      jsr L3817
-            lda #$00
-            sta SOUND_F5
-            sta AUDC2
-            rts
-L36AA:     ldx #$1D
-            bne L36B0
-L36AE:      ldx #$1E
-L36B0:      stx L36D1+2
-            and #$0F
-            tax
-            lda L37A6,X
-            tax
-            iny
-            iny
-            lda (SCREEN_LINES_19),Y
-            sta MUL_LO_06
-            iny
-            lda (SCREEN_LINES_19),Y
-            sta MUL_HI_07
-            sty L00AB
-            ldy ZP_6E
-L36C9:      lda L3705,X
-            cmp #$FF
-            beq L36E9
-            iny
-L36D1:      sta GROUND_STRUCTURE_X_LSB_1D00,Y
-L36D4:      inx
-            lda L3705,X
-            sta GROUND_STRUCTURE_Y_LSB_1D80,Y
-            lda MUL_LO_06
-            sta GROUND_STRUCTURE_X_MSB_1D40,Y
-            lda MUL_HI_07
-L36E2:      sta GROUND_STRUCTURE_Z_MSB_1E40,Y
-L36E5:      inx
-            jmp L36C9
-L36E9:      ldx SHFAMT
-            inc ZP_6E
-            lda ZP_6E
-L36EF:      inx
-            sta L1E7F+1,X
-            inc ZP_6E
-L36F5:      lda ZP_6E
-L36F7:      sta L1EC0,X
-            cpy ZP_6E
-            bne L36EF
-            ldy L00AB
-            stx SHFAMT
-L3702:      jmp L3660
-L3705:      bvc L3707
-L3707:      bvc L36C9
-            bcs L36C9+2
-L370B:      bcs L370D
-L370D:      .byte $FF
-            bvc L3710
-L3710:      bvc L36D1+1
-            bcs L36D4
-L3714:      bcs L3716
-L3716:      bcs L3778
-L3718:      .byte $80
-            ldy #$50
-            rts
-L371C:      bcs L377D+1
-            .byte $FF
-            bvc L3721
-L3721:      bvc L36E2+1
-L3723:      bcs L36E5
-            bcs L3727
-L3727:      .byte $80,$00,$80
-            ldy #$70
-            .byte $80
-            bcc L36AE+1
-            .byte $80
-            ldy #$FF
-            bvc L3734
-L3734:      bvc L36F5+1
-            bcs L36F7+1
-            bcs L373A
-L373A:     .byte $80,$00
-            bvs L375D+1
-            bcc L3760
-            .byte $80,$00,$80
-            ldy #$FF
-            bvc L3707
-            bcs L3749
-L3749:      bcs L370B
-            bvc L370D
-            bvc L374F
-L374F:      bcs L3710+1
-            .byte $FF
-            bvc L3754
-L3754:      bvc L3716
-            bcs L3718
-            bcs L375A
-L375A:     bvc L371C
+L3574:		lda #$E0
+		sta L008B
+		lda ROOM_STRUCT_PTR_LO_L6300,X
+L357B:		sta SCREEN_LINES_19
+		lda ROOM_STRUCT_PTR_HI_L63C0,X
+		sta DSKUTL
+		ldy #$00
+		lda (SCREEN_LINES_19),Y
+		bpl L35C6
+		cpx #$72
+		bne L3597
+		jsr GET_RANDOM_L53B1
+		and #$0E
+		clc
+		adc #$0A
+		tay
+		bne L35A5
+L3597:		lda L00CD
+		ldy #$0A
+		cmp (SCREEN_LINES_19),Y
+		bne L35A5
+		iny
+		iny
+		cmp (SCREEN_LINES_19),Y
+		beq L35C6
+L35A5:		lda (SCREEN_LINES_19),Y
+		pha
+		iny
+		lda (SCREEN_LINES_19),Y
+		sta TMP_04
+		ldy #$05
+		lda (SCREEN_LINES_19),Y
+		and #$8F
+		ora TMP_04
+		sta (SCREEN_LINES_19),Y
+		iny
+		pla
+		sta (SCREEN_LINES_19),Y
+		lda #$1F
+		sta L00F0
+		cpx #$7F
+		bne L35C6
+		jsr L37CE
+L35C6:		ldy MUL_HI_07
+		stx L00CD
+		lda (SCREEN_LINES_19),Y
+		sta CUR_X_MSB_71
+		iny
+		lda (SCREEN_LINES_19),Y
+		sta CUR_Z_MSB_77
+		dey
+		dey
+		dey
+		lda (SCREEN_LINES_19),Y
+		and #$80
+		sta CUR_Z_LSB_76
+		eor #$80
+		sta CUR_X_LSB_70
+L35E0:		jsr L37ED
+		lda #$00
+		sta CUR_X_HSB_72
+		sta CUR_Z_HSB_78
+		sta L00F6
+		ldy #$3F
+L35ED:		sta GROUND_STRUCTURE_X_LSB_1D00,Y
+		sta GROUND_STRUCTURE_X_MSB_1D40,Y
+		sta GROUND_STRUCTURE_X_HSB_9F40,Y
+		sta GROUND_STRUCTURE_Y_LSB_1D80,Y
+		sta GROUND_STRUCTURE_Y_MSB_1DC0,Y
+		sta GROUND_STRUCTURE_Y_HSB_9F80,Y
+		sta GROUND_STRUCTURE_Z_LSB_1E00,Y
+		sta GROUND_STRUCTURE_Z_MSB_1E40,Y
+		sta GROUND_STRUCTURE_Z_HSB_9FC0,Y
+		dey
+		bpl L35ED
+		ldy #$0C
+L360D:		lda L37B3+2,Y
+		sta L1E7F,Y
+		lda L37C1,Y
+		sta L1EBE+1,Y
+		dey
+		bne L360D
+		lda (SCREEN_LINES_19),Y
+		and #$7F
+		sta GROUND_STRUCTURE_X_MSB_1D40
+		sta L1D41
+		sta L1D44
+		sta L1D44+1
+		iny
+		lda (SCREEN_LINES_19),Y
+		and #$07
+		sta GROUND_STRUCTURE_Y_MSB_1DC0
+		sta L1DBF+2
+		sta L1DC2
+		sta L1DC3
+		iny
+		lda (SCREEN_LINES_19),Y
+		and #$7F
+		sta GROUND_STRUCTURE_Z_MSB_1E40
+		sta L1E43
+		sta L1E44
+		sta L1E45+2
+		lda #$0B
+		sta SHFAMT
+		lda #$07
+		sta ZP_6E
+		iny
+		lda (SCREEN_LINES_19),Y
+		sta L00C2
+		iny
+		lda (SCREEN_LINES_19),Y
+		sta L00C3
+L3660:		iny
+		lda (SCREEN_LINES_19),Y
+		beq L3683
+		bpl L36AA
+		cmp #$80
+		bne L36AE
+		lda #$10						;obj 16 photon emitter?
+		jsr L3890
+		beq L3683						;in inventory
+		jsr L389B						;or in to draw list? 
+		beq L3683						;yes
+		lda #$00						;otherwise make room dark, no photon emitter
+		sta L00C0
+		sta L00C2
+		sta L00C3
+		lda #$01
+		sta L00F6
+L3683:		lda #$FF
+		sta L0096
+		ldy #$01
+		lda (SCREEN_LINES_19),Y
+		lsr
+		lsr
+		lsr
+		tax
+		beq L369F
+		iny
+		lda (SCREEN_LINES_19),Y
+		bpl L369D
+		txa
+		jsr L2F0D
+		jmp L369F
+L369D:		stx L00F6
+L369F:		jsr L3817
+		lda #$00
+		sta SOUND_F5
+		sta AUDC2
+		rts
+L36AA:		ldx #$1D
+		bne L36B0
+L36AE: 		ldx #$1E
+L36B0: 		stx L36D1+2
+		and #$0F
+		tax
+		lda L37A6,X
+		tax
+		iny
+		iny
+		lda (SCREEN_LINES_19),Y
+		sta MUL_LO_06
+		iny
+		lda (SCREEN_LINES_19),Y
+		sta MUL_HI_07
+		sty L00AB
+		ldy ZP_6E
+L36C9: 		lda L3705,X
+		cmp #$FF
+		beq L36E9
+		iny
+L36D1: 		sta GROUND_STRUCTURE_X_LSB_1D00,Y
+L36D4: 		inx
+		lda L3705,X
+		sta GROUND_STRUCTURE_Y_LSB_1D80,Y
+		lda MUL_LO_06
+		sta GROUND_STRUCTURE_X_MSB_1D40,Y
+		lda MUL_HI_07
+L36E2: 		sta GROUND_STRUCTURE_Z_MSB_1E40,Y
+L36E5: 		inx
+		jmp L36C9
+L36E9: 		ldx SHFAMT
+		inc ZP_6E
+		lda ZP_6E
+L36EF: 		inx
+		sta L1E7F+1,X
+		inc ZP_6E
+L36F5: 		lda ZP_6E
+L36F7: 		sta L1EC0,X
+		cpy ZP_6E
+		bne L36EF
+		ldy L00AB
+		stx SHFAMT
+L3702: 		jmp L3660
+L3705: 		bvc L3707
+L3707: 		bvc L36C9
+		bcs L36C9+2
+L370B: 		bcs L370D
+L370D: 		.byte $FF
+		bvc L3710
+L3710: 		bvc L36D1+1
+		bcs L36D4
+L3714: 		bcs L3716
+L3716: 		bcs L3778
+L3718: 		.byte $80
+		ldy #$50
+		rts
+L371C: 		bcs L377D+1
+		.byte $FF
+		bvc L3721
+L3721: 		bvc L36E2+1
+L3723: 		bcs L36E5
+		bcs L3727
+L3727: 		.byte $80,$00,$80
+		ldy #$70
+		.byte $80
+		bcc L36AE+1
+		.byte $80
+		ldy #$FF
+		bvc L3734
+L3734: 		bvc L36F5+1
+		bcs L36F7+1
+		bcs L373A
+L373A: 		.byte $80,$00
+		bvs L375D+1
+		bcc L3760
+		.byte $80,$00,$80
+		ldy #$FF
+		bvc L3707
+		bcs L3749
+L3749: 		bcs L370B
+		bvc L370D
+		bvc L374F
+L374F: 		bcs L3710+1
+		.byte $FF
+		bvc L3754
+L3754: 		bvc L3716
+		bcs L3718
+		bcs L375A
+L375A:		bvc L371C
             .byte $FF
 L375D:      bmi L375F
 L375F:      .byte $80
@@ -5916,7 +5960,7 @@ L37C1:      .byte $07
 L37CE:      lda SPECIAL_VIEW_FLAG_F1
             eor #$01
             sta SPECIAL_VIEW_FLAG_F1
-            ldx INVENTORY_ITEMS_EB
+            ldx NUM_INVENTORY_ITEMS_EB
             beq L37E6
 L37D8:      ldy L292B,X
             lda L69C0,X
@@ -5928,6 +5972,10 @@ L37E6:      ldx #$7F
             ldy #$07
             stx L00F0
             rts
+
+;
+;
+;
 L37ED:      lda #$00
             ldx L69E8
             bpl L37F6
@@ -5945,7 +5993,7 @@ L3803:      cmp L6940,Y
             sta OBJECT_DRAW_LIST_6980,X
 L380D:      dey
             bpl L3801
-            stx OBJS_TO_DRAW_B0
+            stx NUM_OBJS_TO_DRAW_B0
             lda #$0E
             sta L00C0
             rts
@@ -6014,24 +6062,37 @@ L3881:      lda L00AC
 L388D:      sta L00F7
             rts
 	    
-L3890:      ldx INVENTORY_ITEMS_EB
+;------------------------------------------------------------
+; check if object number in A is in inventory list
+;------------------------------------------------------------
+L3890:      ldx NUM_INVENTORY_ITEMS_EB
 L3892:      dex
             bmi L389A
-            cmp L292C,X
+            cmp INVENTORY_LIST_L292C,X
             bne L3892
 L389A:      rts
 
-L389B:      ldx OBJS_TO_DRAW_B0
+;------------------------------------------------------------
+; check if object number in A is in the object-to-draw-list
+;------------------------------------------------------------
+L389B:      ldx NUM_OBJS_TO_DRAW_B0
 L389D:      dex
             bmi L38A5
-            cmp L6981,X
+            cmp OBJ_TO_DRAW_LIST_L6981,X
             bne L389D
 L38A5:      rts
 
+;------------------------------------------------------------
+; 
+;------------------------------------------------------------
 L38A6:      ldx #$00
             jsr L322A
 L38AB:      clc
             rts
+	    
+;------------------------------------------------------------
+; 
+;------------------------------------------------------------
 L38AD:      lda L00F0
             bne L38AB
             ldy #$03
@@ -6105,13 +6166,14 @@ L3926:      bne L3931
             rol
             eor #$02
             jmp L3933
+	    
 L3931:      lda #$00
 L3933:      eor TMP_04
             lsr
             lsr
             ror
 L3938:      ora #$7F
-            sta L00C8
+            sta room_change_L00C8				;room change 00-no, $7f door bottom-top, $ff top-down
             lda MUL_HI_07
             lsr
             lsr
@@ -6426,7 +6488,7 @@ DRAW_OBJECTS_L3B77:
 		cmp #$15					; 'B' board
 		bne L3B86
 L3B83:		jsr RESET_KEY_L5AEE
-L3B86:		ldy OBJS_TO_DRAW_B0
+L3B86:		ldy NUM_OBJS_TO_DRAW_B0
 		beq L3B98
 		sty L00B1
 L3B8C:		ldx OBJECT_DRAW_LIST_6980,Y			; go through object draw list
@@ -6442,108 +6504,108 @@ L3B99:		stx OBJECT_NUMBER_AD
 		lda OBJECT_SHAPE_POINTER_HI_L6840,X
 		sta ABUFPT
 		jsr L3DC8					;compute distance
-		jsr L3C6B					;check if in range
+		jsr L3C6B					;check if in range for take
 		bcs L3BAE
 L3BAD:		rts
 
-L3BAE:      ldx #$00
-            stx POINT_LINE_COUNT_17
-            ldy #$01
-            jsr CALC_ABS_DIST_L3E0B
-            bcc L3BFB
-            lda DIF_Y_HSB_DA
-            bpl L3BC6
-            ldy L00B7
-            ldx #$00
-            jsr CALC_ABS_DIST_L3E0B
-            bcs L3BAD
-L3BC6:      lda DIF_X_LSB_D5
-            sta TMP_04+1
-            ldx DIF_X_MSB_D6
-            lda DIF_X_HSB_D7
-            jsr BIT24_TO_FP_L4FDE
-            sta PNT_X_LO_50
-            stx PNT_X_HI_51
-            lda DIF_Y_LSB_D8
-            sta TMP_04+1
-            ldx DIF_Y_MSB_D9
-            lda DIF_Y_HSB_DA
-            jsr L4283
-            sta PNT_Y_LO_52
-            stx PNT_Y_HI_53
-            lda DIF_Z_LSB_DB
-            sta TMP_04+1
-            ldx DIF_Z_MSB_DC
-            lda DIF_Z_HSB_DD
-            jsr BIT24_TO_FP_L4FDE
-            sta PNT_Z_LO_54
-            stx PNT_Z_HI_55
-            jsr ROTATE_PERS_L4B44
-            ldx #$00
-            jmp L538A
-L3BFB:      lda DIF_X_MSB_D6
-            sec
-            sbc #$08
-            sta DIF_X_MSB_D6
-            bcs L3C06
-            dec DIF_X_HSB_D7
-L3C06:      lda DIF_Y_MSB_D9
-            sec
-            sbc #$08
-            sta DIF_Y_MSB_D9
-            bcs L3C11
-            dec DIF_Y_HSB_DA
-L3C11:      lda DIF_Z_MSB_DC
-            sec
-            sbc #$08
-L3C16:      sta DIF_Z_MSB_DC
-            bcs L3C1C
-L3C1A:     dec DIF_Z_HSB_DD
-L3C1C:      ldy #$00
-            sty POINT_LINE_COUNT_17
-L3C20:      lda (DSKUTL+1),Y
-            sta L00AE
-            sty L00AB
-L3C26:      jsr L4A07
-L3C29:      jsr ROTATE_PERS_L4B44
-            lda POINT_LINE_COUNT_17
-L3C2E:      inc POINT_LINE_COUNT_17
-            cmp L00AE
-            bne L3C26
-            inc L00AB
-            ldy L00AB
-            lda (DSKUTL+1),Y
-L3C3A:     sta POINT_LINE_COUNT_17
-L3C3C:      bpl L3C52
-L3C3E:      ldy L00AB
-            iny
-            lda (DSKUTL+1),Y
-            tax
-            iny
-            lda (DSKUTL+1),Y
-            sty L00AB
-            tay
-            jsr LINE_DRAW_L42AE
-            dec POINT_LINE_COUNT_17
-            bmi L3C3E
-            rts
-L3C52:      ldy L00AB
-            iny
-            sty L00AB
-            lda (DSKUTL+1),Y
-            tax
-            and #$0F
-            tay
-            txa
-            lsr
-            lsr
-            lsr
-            lsr
-            tax
-            jsr LINE_DRAW_L42AE
-            dec POINT_LINE_COUNT_17
-            bpl L3C52
-            rts
+L3BAE:		ldx #$00
+		stx POINT_LINE_COUNT_17
+		ldy #$01
+		jsr CALC_ABS_DIST_L3E0B
+		bcc L3BFB
+		lda DIF_Y_HSB_DA
+		bpl L3BC6
+		ldy L00B7
+		ldx #$00
+		jsr CALC_ABS_DIST_L3E0B
+		bcs L3BAD
+L3BC6:		lda DIF_X_LSB_D5
+		sta TMP_04+1
+		ldx DIF_X_MSB_D6
+		lda DIF_X_HSB_D7
+		jsr BIT24_TO_FP_L4FDE
+		sta PNT_X_LO_50
+		stx PNT_X_HI_51
+		lda DIF_Y_LSB_D8
+		sta TMP_04+1
+		ldx DIF_Y_MSB_D9
+		lda DIF_Y_HSB_DA
+		jsr L4283
+		sta PNT_Y_LO_52
+		stx PNT_Y_HI_53
+		lda DIF_Z_LSB_DB
+		sta TMP_04+1
+		ldx DIF_Z_MSB_DC
+		lda DIF_Z_HSB_DD
+		jsr BIT24_TO_FP_L4FDE
+		sta PNT_Z_LO_54
+		stx PNT_Z_HI_55
+		jsr ROTATE_PERS_L4B44
+		ldx #$00
+		jmp L538A
+L3BFB:		lda DIF_X_MSB_D6
+		sec
+		sbc #$08
+		sta DIF_X_MSB_D6
+		bcs L3C06
+		dec DIF_X_HSB_D7
+L3C06:		lda DIF_Y_MSB_D9
+		sec
+		sbc #$08
+		sta DIF_Y_MSB_D9
+		bcs L3C11
+		dec DIF_Y_HSB_DA
+L3C11:		lda DIF_Z_MSB_DC
+		sec
+		sbc #$08
+L3C16:		sta DIF_Z_MSB_DC
+		bcs L3C1C
+L3C1A:		dec DIF_Z_HSB_DD
+L3C1C:		ldy #$00
+		sty POINT_LINE_COUNT_17
+L3C20:		lda (DSKUTL+1),Y
+		sta L00AE
+		sty L00AB
+L3C26:		jsr L4A07
+L3C29:		jsr ROTATE_PERS_L4B44
+		lda POINT_LINE_COUNT_17
+L3C2E:		inc POINT_LINE_COUNT_17
+		cmp L00AE
+		bne L3C26
+		inc L00AB
+		ldy L00AB
+		lda (DSKUTL+1),Y
+L3C3A:		sta POINT_LINE_COUNT_17
+L3C3C:		bpl L3C52
+L3C3E:		ldy L00AB
+		iny
+		lda (DSKUTL+1),Y
+		tax
+		iny
+		lda (DSKUTL+1),Y
+		sty L00AB
+		tay
+		jsr LINE_DRAW_L42AE
+		dec POINT_LINE_COUNT_17
+		bmi L3C3E
+		rts
+L3C52:		ldy L00AB
+		iny
+		sty L00AB
+		lda (DSKUTL+1),Y
+		tax
+		and #$0F
+		tay
+		txa
+		lsr
+		lsr
+		lsr
+		lsr
+		tax
+		jsr LINE_DRAW_L42AE
+		dec POINT_LINE_COUNT_17
+		bpl L3C52
+		rts
 	
 ;
 ;
@@ -6551,6 +6613,7 @@ L3C52:      ldy L00AB
 L3C6B:      lda L00B6
             cmp #$2D						; 'T' Take
             bne PLOT_POINT_POSSIBLY_L3CC0
+	    
             ldx #$01
             ldy #$00
             jsr CALC_ABS_DIST_L3E0B
@@ -6567,11 +6630,11 @@ L3C6B:      lda L00B6
             and #$20
             bne L3CB9
 L3C94:      txa
-            ldx INVENTORY_ITEMS_EB
+            ldx NUM_INVENTORY_ITEMS_EB
             inx
             cpx #$0B
             bcs L3CBE
-            stx INVENTORY_ITEMS_EB
+            stx NUM_INVENTORY_ITEMS_EB
             sta L292B,X
             tax
             lda L69C0,X
@@ -6584,6 +6647,7 @@ L3CAD:      lda #$FF
             jsr L37ED
             clc
             rts
+	    
 L3CB9:      ldx #$02
             jsr L322A
 L3CBE:      sec
@@ -6632,7 +6696,7 @@ PLOT_POINT_POSSIBLY_L3CC0:
 		sta YAW_LO_2A
 L3D11:		stx CRAFT_ID_WALKING_A7
 		txa
-L3D14:		jsr L4189
+L3D14:		jsr COPY_SHIP_DATA_L4189
 L3D17:		jsr SETUP_ROTATION_MATRIX_L4708
 		jsr L3DC1
 		ldx OBJECT_NUMBER_AD
@@ -6648,7 +6712,7 @@ L3D22:		and #$0C
 L3D30:		txa
 		jsr L2F0D
 L3D34:		ldx OBJECT_NUMBER_AD
-		jmp FLYING_NOISE_L5AFB
+		jmp SOUND_EFFECT_L5AFB
 L3D39:		ldy CRAFT_ID_WALKING_A7
 		bpl L3D3E
 L3D3D:		rts
@@ -6684,14 +6748,14 @@ L3D6F:		lda L69F8
 		bmi L3D78
 		lda INSDAT
 		beq L3D3D
-L3D78:		ldx INVENTORY_ITEMS_EB
+L3D78:		ldx NUM_INVENTORY_ITEMS_EB
 		beq L3D3D
-		dec INVENTORY_ITEMS_EB
+		dec NUM_INVENTORY_ITEMS_EB
 		ldy L292B,X
 		lda L69C0,Y
 		and #$7F
 		sta L69C0,Y
-		jsr FLYING_NOISE_L5AFB
+		jsr SOUND_EFFECT_L5AFB
 		
 L3D8C:		lda L00CD
 		sta L6940,Y
@@ -6813,7 +6877,7 @@ LINE_DRAW_L42AE:
 		cmp TMP_04
 		bcs POINT_X_INFRONT_L3E78
 		
-POINT_X_BEHIND_L3E6C:		
+POINT_X_BEHIND_L3E6C:	
 		tya
 		stx TMP_04
 		tax
@@ -7228,14 +7292,18 @@ L417D:		ldx LINE_START_HOR_68
 		jmp (ZP_02)
 L4188:		rts
 
-L4189:		asl
+;
+; copy 16 bytes ship data to $73C0
+;
+COPY_SHIP_DATA_L4189:		
+		asl
 		asl
 		asl
 		asl
 L418D:		tax
 		ldy #$00
-L4190:		lda L419D,X
-		sta L73C0,Y
+L4190:		lda SHIPS_TABLE_L419D,X
+		sta SHIP_DATA_L73C0,Y
 		inx
 		iny
 		cpy #$10
@@ -7243,172 +7311,91 @@ L4190:		lda L419D,X
 		rts
 		
 		
+;------------------------------------------------------------
+; ship data, 16 byte each
+; copied to SHIP_DATA_L73C0
+; byte 0/1 pointer to movement routine
+; 2: Y_MSB
+; 3: Roll
+; 4: Pitch_Hi
+; 5: Yaw
+; 6: Pitch_Lo
+; 7: ?
+; 8: 
+; A/B: Pitch?
+; C/D:
+; E/F:
+;------------------------------------------------------------	
+SHIPS_TABLE_L419D:
+		.byte $07,$43,$E0,$FC,$00,$00,$08,$08,$00,$FC,$00,$FC,$10,$5A,$D0,$FC
+		.byte $07,$43,$E0,$FC,$00,$00,$08,$08,$00,$FC,$00,$FC,$10,$0A,$90,$F8
+		.byte $ED,$42,$00,$C0,$00,$10,$00,$00,$00,$F8,$00,$FC,$10,$01,$90,$F4
+		.byte $07,$43,$C8,$FC,$00,$04,$0C,$08,$00,$00,$80,$FC,$10,$5A,$90,$F4
+		.byte $07,$43,$E0,$FC,$00,$04,$08,$88,$00,$00,$00,$F8,$10,$01,$90,$F8
+		.byte $ED,$42,$E0,$FC,$00,$00,$00,$00,$00,$FC,$00,$FC,$10,$01,$D0,$FC
+		.byte $07,$43,$E0,$FC,$00,$00,$08,$08,$00,$FC,$00,$FC,$10,$5A,$90,$FC
+		.byte $4D,$42,$E0,$FC,$00,$00,$08,$08,$00,$FC,$00,$FC,$10,$01,$90,$FC
+		.byte $07,$43,$00,$C0,$00,$10,$01,$08,$00,$00,$00,$F8,$00,$00,$00,$00
+		.byte $AE,$42,$2F,$10,$15,$0D,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+		.byte $56,$42,$20,$08,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+		.byte $4C,$2A,$50,$A5,$75,$F0,$5A,$10,$04,$A5,$75,$4A,$4A,$4A,$AA,$A5
+		.byte $74,$38,$FD,$8E,$42,$85,$74,$A5,$75,$FD,$9E,$42,$85,$75,$D0,$13
+		.byte $A9,$4C,$CD,$83,$42,$F0,$0C,$8D,$83,$42,$A9,$06,$85,$75,$A9,$50
 		
-L419D:      .byte $07,$43
-            cpx #$FC
-            .byte $00,$00
-            php
-            php
-            .byte $00,$FC,$00,$FC
-L41A9:      bpl L4205
-            bne L41A9
-            .byte $07,$43
-            cpx #$FC
-            .byte $00,$00
-            php
-            php
-L41B5:      .byte $00,$FC,$00,$FC
-            bpl L41C5
-            bcc L41B5
-            sbc A:ROTATE_MZ3_LO_42
-L41C0:      cpy #$00
-            bpl L41C4
-L41C4:      .byte $00
-L41C5:      .byte $00
-            sed
-            .byte $00,$FC
-            bpl L41CB+1
-L41CB:      bcc L41C0+1
-            .byte $07,$43
-            iny
-            .byte $FC
-L41D1:      .byte $00,$04,$0C
-            php
-            .byte $00,$00,$80,$FC
-            bpl L4235
-            bcc L41D1
-            .byte $07,$43
-            cpx #$FC
-            .byte $00,$04
-            php
-            dey
-L41E5:      .byte $00,$00,$00
-            sed
-            bpl L41EB+1
-L41EB:      bcc L41E5
-            sbc LE042
-            .byte $FC,$00,$00,$00,$00,$00,$FC,$00,$FC
-L41F9:      bpl L41FB+1
-L41FB:      bne L41F9
-            .byte $07,$43
-L41FF:      cpx #$FC
-            .byte $00,$00
-            php
-            php
-L4205:      .byte $00,$FC,$00,$FC
-L4209:      bpl L4264+1
-            bcc L4209
-            eor LE042
-            .byte $FC,$00,$00
-            php
-L4214:      php
-            .byte $00,$FC,$00,$FC
-L4219:      bpl L421B+1
-L421B:      bcc L4219
-            .byte $07,$43
-L421F:      .byte $00
-            cpy #$00
-            bpl L4225
-            php
-L4225:      .byte $00,$00,$00
-            sed
-            .byte $00,$00,$00,$00
-            ldx L2F41+1
-            bpl L4247
-            ora A:MEM_PTR_LO_00
-L4235:      .byte $00,$00,$00,$00,$00,$00,$00,$00
-            lsr ROTATE_MZ3_LO_42,X
-            jsr ZP_08
-            .byte $00,$00,$00,$00,$00
-L4247:      .byte $00,$00,$00,$00,$00,$00
-            jmp L502A
-            lda CUR_Y_HSB_75
-            beq L42AE
-            bpl L425A
-            lda CUR_Y_HSB_75
-            lsr
-            lsr
-L425A:     lsr
-            tax
-            lda CUR_Y_MSB_74
-            sec
-            sbc L428E,X
-            sta CUR_Y_MSB_74
-L4264:      lda CUR_Y_HSB_75
-            sbc L429E,X
-            sta CUR_Y_HSB_75
-            bne L4280
-            lda #$4C
-            cmp L4283
-            beq L4280
-            sta L4283
-            lda #$06
-            sta CUR_Y_HSB_75
-            lda #$50
-            sta L73C0
-L4280:      jmp L42C6
-L4283:      jmp BIT24_TO_FP_L4FDE
-            pha
-            txa
-            clc
-            adc #$0C
-            tax
-            pla
-            rts
-L428E:      rti
-            .byte $80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$00
-L429E:      .byte $00,$00
-            ora (MEM_PTR_HI_01,X)
-            .byte $02,$02,$03,$03,$04,$04
-            ora TMP_04+1
-            asl MUL_LO_06
-            .byte $07
-            php
-	    
-	    
-L42AE:      lda CUR_Y_MSB_74
-            sec
-            sbc L73C2
-            sta CUR_Y_MSB_74
-            lda CUR_Y_HSB_75
-            sbc #$00
-            sta CUR_Y_HSB_75
-            bpl L42C6
-L42BE:      lda #$00
-            sta L00F9
-            sec
-L42C3:      jmp L449F
-L42C6:      lda ROLL_LO_26
-            clc
-            adc L73C3
-            sta ROLL_LO_26
-            bcc L42D2
-            inc ROLL_HI_27
-L42D2:      lda PITCH_LO_28
-            clc
-            adc L73C4
-            sta PITCH_LO_28
-            bcc L42DE
-            inc PITCH_HI_29
-L42DE:      lda YAW_LO_2A
-            clc
-            adc L73C5
-            sta YAW_LO_2A
-            bcc L42EA
-            inc YAW_HI_2B
-L42EA:     jmp L451B
-            lda #$00
-            sta L73C6
-            lda #$3F
-            sta CUR_Y_LSB_73
-            jsr L4307
-            lda INSDAT
-            bne L4306
-            dec CUR_Y_HSB_75
-L42FF:      bpl L4306
-L4301:      sta CUR_Y_HSB_75
-            jmp L42BE
-L4306:      rts
+		.byte $8D,$C0,$73,$4C,$C6,$42,$4C,$DE,$4F,$48,$8A,$18,$69,$0C,$AA,$68
+		.byte $60,$40,$80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$00,$00
+		.byte $01,$01,$02,$02,$03,$03,$04,$04,$05,$05,$06,$06,$07,$08
+	
+L421F		= $421F
+L4283		= $4283 
+L41C4		= $41C4
+L41C0		= $41C0
+L41FF		= $41FF
+
+L42AE:		lda CUR_Y_MSB_74
+		sec
+		sbc L73C2
+		sta CUR_Y_MSB_74
+		lda CUR_Y_HSB_75
+		sbc #$00
+		sta CUR_Y_HSB_75
+		bpl L42C6
+L42BE:		lda #$00
+		sta L00F9
+		sec
+L42C3:		jmp L449F
+L42C6:		lda ROLL_LO_26
+		clc
+		adc L73C3
+		sta ROLL_LO_26
+		bcc L42D2
+		inc ROLL_HI_27
+L42D2:		lda PITCH_LO_28
+		clc
+		adc L73C4
+		sta PITCH_LO_28
+		bcc L42DE
+		inc PITCH_HI_29
+L42DE:		lda YAW_LO_2A
+		clc
+		adc L73C5
+		sta YAW_LO_2A
+		bcc L42EA
+		inc YAW_HI_2B
+L42EA:		jmp L451B
+
+		lda #$00
+		sta L73C6
+		lda #$3F
+		sta CUR_Y_LSB_73
+		jsr L4307
+		lda INSDAT
+		bne L4306
+		dec CUR_Y_HSB_75
+L42FF:		bpl L4306
+L4301:		sta CUR_Y_HSB_75
+		jmp L42BE
+L4306:		rts
 
 
 
@@ -7663,7 +7650,7 @@ L44E7:      lda #$00
             sta INSDAT
             sta L00F9
             lda CRAFT_ID_WALKING_A7
-            jsr L4189
+            jsr COPY_SHIP_DATA_L4189
 L44F2:      ldx ZP_20
             ldy ZP_21
             jsr BIT16_TO_FP_L4F75
@@ -7738,7 +7725,7 @@ L4560:      	lda PLANET_UNDERGROUND_A6
 		bne JOYSTICK_UNDERGROUND_L457B			;1=underground
 		lda CRAFT_ID_WALKING_A7
 		bmi JOYSTICK_UNDERGROUND_L457B			;$80 = walking
-		jmp (L73C0)					;$4307
+		jmp (SHIP_DATA_L73C0)					;$4307
 		
 		;	0   1   2   3   4   5   6   7   8   9   a   b   c   d   e   f
 L456B:		.byte $00,$01,$02,$03,$08,$09,$0A,$0B,$04,$05,$06,$07,$0C,$0D,$0E,$0F
@@ -7767,7 +7754,7 @@ L459C:		lda #$04
 		bne L45B1
 		lda YAW_LO_2A
 		clc
-		adc L00AA
+		adc YAW_WALK_AA
 		sta YAW_LO_2A
 		lda YAW_HI_2B
 		adc #$00
@@ -7778,7 +7765,7 @@ L45B1:		lda #$08
 		bne L45C6
 		lda YAW_LO_2A
 		sec
-		sbc L00AA
+		sbc YAW_WALK_AA
 		sta YAW_LO_2A
 		lda YAW_HI_2B
 		sbc #$00
@@ -7790,7 +7777,7 @@ L45C6:		lda L00F9
 		bcc L45DA
 		lda #$09
 		sta CRAFT_ID_WALKING_A7
-		jsr L4189
+		jsr COPY_SHIP_DATA_L4189
 		lda #$00
 		sta PLANET_UNDERGROUND_A6
 L45DA:		jmp L451B
@@ -8742,7 +8729,10 @@ L4CAB:		lda X_ROTATION_LO_56
 		lda Z_ROTATION_HI_5B
 L4CC6:		sta Z_ROT_TAB_HI_L9D40,Y
 		rts
-ROTATE_Y_PERS_L4CCA:		ldx PNT_X_LO_50
+		
+		
+ROTATE_Y_PERS_L4CCA:
+		ldx PNT_X_LO_50
 		ldy PNT_X_HI_51
 		stx MUL_LO_06
 		sty MUL_HI_07
@@ -8835,6 +8825,7 @@ L4D5B:		ldx PNT_Y_LO_52
 		stx MUL_LO_06
 		sty MUL_HI_07
 		rts
+
 		tya
 		asl
 		tya
@@ -9122,35 +9113,35 @@ L4F02:		jsr L4F13
 		sta L293A
 		rts
 		
-L4F10:      clc
-            adc #$10
-L4F13:      and #$3F
-            tay
-            and #$1F
-            tax
-            lda L4F25,X
-            cpy #$20
-            bcc L4F24
-L4F20:      eor #$FF
-            adc #$00
-L4F24:      rts
-L4F25:      .byte $00,$0C
-            ora L3124+1,Y
-            .byte $3C,$47
-            eor (Z_ROTATION_LO_5A),Y
-            .byte $62
-            ror
-            bvs L4FA7
-            .byte $7A
-            adc L7F7E,X
-            ror L7A7D,X
-            adc CUR_X_LSB_70,X
-            ror
-            .byte $62,$5A
-            eor (ROTATE_MY2_HI_47),Y
-            .byte $3C
-L4F41:      and (ZP_25),Y
-L4F43:      ;ora L980C,Y
+L4F10:		clc
+		adc #$10
+L4F13:		and #$3F
+		tay
+		and #$1F
+		tax
+		lda L4F25,X
+		cpy #$20
+		bcc L4F24
+L4F20:		eor #$FF
+		adc #$00
+L4F24:		rts
+L4F25:		.byte $00,$0C
+		ora L3124+1,Y
+		.byte $3C,$47
+		eor (Z_ROTATION_LO_5A),Y
+		.byte $62
+		ror
+		bvs L4FA7
+		.byte $7A
+		adc L7F7E,X
+		ror L7A7D,X
+		adc CUR_X_LSB_70,X
+		ror
+		.byte $62,$5A
+		eor (ROTATE_MY2_HI_47),Y
+		.byte $3C
+L4F41:		and (ZP_25),Y
+L4F43:		;ora L980C,Y
 		.byte $19, $0C
 
 ;------------------------------------------------------------
@@ -9487,11 +9478,11 @@ L517D:		lda L5221
 L5190:		jmp L5062
 
 L5193:		ldy POINT_LINE_COUNT_17
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		sta TMP_04+1
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		tax
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		and L521A
 		sec
 		sbc L521B
@@ -9499,11 +9490,11 @@ L5193:		ldy POINT_LINE_COUNT_17
 		sta X_ROT_TAB_LO_L9C00,Y
 		txa
 		sta X_ROT_TAB_HI_L9C40,Y
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		sta TMP_04
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		tax
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		and L521A
 		sec
 		sbc L521B
@@ -9511,7 +9502,7 @@ L5193:		ldy POINT_LINE_COUNT_17
 		sta Y_ROT_TAB_LO_L9C80,Y
 		txa
 		sta Y_ROT_TAB_HI_L9CC0,Y
-		jsr L53B1
+		jsr GET_RANDOM_L53B1
 		sta Z_ROT_TAB_LO_L9D00,Y
 		lda L521B+1
 		sta Z_ROT_TAB_HI_L9D40,Y
@@ -9748,9 +9739,17 @@ L538A:		lda POINT_CLASS_L9F00,X
 L53AC:		rts
 		cpy #$30
 		.byte $0C,$03
-L53B1:		lda RANDOM
+
+;------------------------------------------------------------
+; Get a random number from Pokey
+;------------------------------------------------------------
+GET_RANDOM_L53B1:		
+		lda RANDOM
 		sta RANDOM_E8
 		rts
+;------------------------------------------------------------
+; set white lines
+;------------------------------------------------------------		
 WHITE_LINES_L53B7:
 		lda #$06
 		ldx #$3D
@@ -9804,172 +9803,182 @@ L541B:		lda #$85
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
-
-L5426:      lda #$03
-            sta AUDF1
-            lda #$44
-            sta AUDC1
-            lda #$00
-            sta TIMER_LSB_E2
-
-L5434:      lda TIMER_LSB_E2
-            cmp #$1E
-            bcc L5434
+L5426:		lda #$03
+		sta AUDF1
+		lda #$44
+		sta AUDC1
+		lda #$00
+		sta TIMER_LSB_E2
+		
+L5434:		lda TIMER_LSB_E2
+		cmp #$1E
+		bcc L5434
+			
+		lda COLBAKS_A1
+		sta L00C4
+		lda COLPF0S_A2
+L5440:		sta L00C5
+		lda COLPF1S_A3
+		sta L00C6
+		lda COLPF2S_A4
+L5448:		sta L00C7
+		lda L00C2
+		sta COLBAKS_A1
+		sta COLPF0S_A2
+		sta COLPF1S_A3
+L5452:		sta COLPF2S_A4
+		lda #$01
+		sta AUDF1
+		lda #$00
+		sta POINT_LINE_COUNT_17
+L545D:		tay
+		jsr L53F2
+L5461:		lda VCOUNT
+		cmp #$70
+		bne L5461
+		sta WSYNC
+		sta WSYNC
+L546E:		lda POINT_LINE_COUNT_17
+		clc
+		adc #$06
+		sta POINT_LINE_COUNT_17
+		cmp #$94
+		bcc L545D
+		
+		lda L00C0
+		sta COLBAKS_A1
+		lda L00C1
+		sta COLPF0S_A2
+		lda L00C3
+		sta COLPF2S_A4
+L5485:		ldx L00F6
+		beq L548C
+		jsr L322A
+		
+L548C:		ldy #$00
+		sty L00F6
+		sty room_change_L00C8
+		sty AUDC1
+		dey
+		jmp L53F2
+			
+L5499:		lda L00C0
+		sta L00C4
+		lda L00C1
+		sta L00C5
+		lda L00C2
+		sta L00C6
+		lda L00C3
+		sta L00C7
+		lda COLPF1S_A3
+		sta COLBAKS_A1
+		sta COLPF0S_A2
+		sta COLPF2S_A4
+		lda #$03
+		sta AUDF1
+		lda #$44
+		sta AUDC1
+		lda #$93
+		sta POINT_LINE_COUNT_17
+L54BF:		tay
+		jsr L53F2
+		
+L54C3:		lda VCOUNT
+		cmp #$70
+		bne L54C3
+		
+		sta WSYNC
+		sta WSYNC
+		lda POINT_LINE_COUNT_17
+		sec
+		sbc #$04
+		sta POINT_LINE_COUNT_17
+		bcs L54BF
+		lda L00C2
+		sta COLPF1S_A3
+		lda L00C0
+		sta COLBAKS_A1
+		lda L00C1
+		sta COLPF0S_A2
+		lda L00C3
+		sta COLPF2S_A4
+		lda #$01
+		sta AUDF1
+		lda #$00
+		sta TIMER_LSB_E2
+L54F2:		lda TIMER_LSB_E2
+		cmp #$16
+		bcc L54F2
+		jmp L5485
+	
+;------------------------------------------------------------
+; CLEAR_SCREEN_INDOOR_L54FB
+;------------------------------------------------------------	
+CLEAR_SCREEN_INDOOR_L54FB:
+		lda #$AA
+		ldx #$00
+L54FF:		ldy GRAPH_MEM_HI_23
+		cpy #$E0
+		beq L5551
+L5505:		sta L8010,X
+		sta L8110,X
+		sta L8210,X
+		sta L8310,X
+		sta L8410,X
+		sta L8510,X
+		sta L8610,X
+		sta L8710,X
+		sta L8810,X
+		sta L8910,X
+		sta L8A10,X
+		sta L8B10,X
+		sta L8C10,X
+		sta L8D10,X
+		sta L8E10,X
+		sta L8F10,X
+		sta L9010,X
+		sta L9110,X
+		sta L9210,X
+		sta L9310,X
+L5541:		sta L9410,X
+L5544:		sta L9510,X
+		sta L9610,X
+		sta L96D0,X
+L554D:		inx
+L554E:		bne L5505
+		rts
+		
+L5551:		sta LE010,X
+		sta LE110,X
+		sta LE210,X
+		sta LE310,X
+		sta LE410,X
+		sta LE510,X
+		sta LE610,X
+		sta LE710,X
+		sta LE810,X
+		sta LE910,X
+		sta LEA10,X
+		sta LEB10,X
+		sta LEC10,X
+		sta LED10,X
+		sta LEE10,X
+		sta LEF10,X
+		sta LF010,X
+		sta LF110,X
+		sta LF210,X
+		sta LF310,X
+		sta LF410,X
+		sta LF510,X
+		sta LF610,X
+		sta LF6D0,X
+		inx
+		bne L5551
+		rts
 	    
-            lda COLBAKS_A1
-            sta L00C4
-            lda COLPF0S_A2
-L5440:      sta L00C5
-            lda COLPF1S_A3
-            sta L00C6
-            lda COLPF2S_A4
-L5448:      sta L00C7
-            lda L00C2
-            sta COLBAKS_A1
-            sta COLPF0S_A2
-            sta COLPF1S_A3
-L5452:      sta COLPF2S_A4
-            lda #$01
-            sta AUDF1
-            lda #$00
-            sta POINT_LINE_COUNT_17
-L545D:      tay
-            jsr L53F2
-L5461:      lda VCOUNT
-            cmp #$70
-            bne L5461
-            sta WSYNC
-            sta WSYNC
-L546E:      lda POINT_LINE_COUNT_17
-            clc
-            adc #$06
-            sta POINT_LINE_COUNT_17
-            cmp #$94
-            bcc L545D
-            lda L00C0
-            sta COLBAKS_A1
-            lda L00C1
-            sta COLPF0S_A2
-            lda L00C3
-            sta COLPF2S_A4
-L5485:      ldx L00F6
-            beq L548C
-            jsr L322A
-L548C:      ldy #$00
-            sty L00F6
-            sty L00C8
-            sty AUDC1
-            dey
-            jmp L53F2
-	    
-L5499:      lda L00C0
-            sta L00C4
-            lda L00C1
-            sta L00C5
-            lda L00C2
-            sta L00C6
-            lda L00C3
-            sta L00C7
-            lda COLPF1S_A3
-            sta COLBAKS_A1
-            sta COLPF0S_A2
-            sta COLPF2S_A4
-            lda #$03
-            sta AUDF1
-            lda #$44
-            sta AUDC1
-            lda #$93
-            sta POINT_LINE_COUNT_17
-L54BF:      tay
-            jsr L53F2
-L54C3:      lda VCOUNT
-            cmp #$70
-            bne L54C3
-            sta WSYNC
-            sta WSYNC
-            lda POINT_LINE_COUNT_17
-            sec
-            sbc #$04
-            sta POINT_LINE_COUNT_17
-            bcs L54BF
-            lda L00C2
-            sta COLPF1S_A3
-            lda L00C0
-            sta COLBAKS_A1
-            lda L00C1
-            sta COLPF0S_A2
-            lda L00C3
-            sta COLPF2S_A4
-            lda #$01
-            sta AUDF1
-            lda #$00
-            sta TIMER_LSB_E2
-L54F2:      lda TIMER_LSB_E2
-            cmp #$16
-            bcc L54F2
-            jmp L5485
-	    
-CLEAR_SCREEN_INDOOR_L54FB:      lda #$AA
-            ldx #$00
-L54FF:      ldy GRAPH_MEM_HI_23
-            cpy #$E0
-            beq L5551
-L5505:      sta L8010,X
-            sta L8110,X
-            sta L8210,X
-            sta L8310,X
-            sta L8410,X
-            sta L8510,X
-            sta L8610,X
-            sta L8710,X
-            sta L8810,X
-            sta L8910,X
-            sta L8A10,X
-            sta L8B10,X
-            sta L8C10,X
-            sta L8D10,X
-            sta L8E10,X
-            sta L8F10,X
-            sta L9010,X
-            sta L9110,X
-            sta L9210,X
-            sta L9310,X
-L5541:      sta L9410,X
-L5544:      sta L9510,X
-            sta L9610,X
-            sta L96D0,X
-L554D:      inx
-L554E:      bne L5505
-            rts
-L5551:      sta LE010,X
-            sta LE110,X
-            sta LE210,X
-            sta LE310,X
-            sta LE410,X
-            sta LE510,X
-            sta LE610,X
-            sta LE710,X
-            sta LE810,X
-            sta LE910,X
-            sta LEA10,X
-            sta LEB10,X
-            sta LEC10,X
-            sta LED10,X
-            sta LEE10,X
-            sta LEF10,X
-            sta LF010,X
-            sta LF110,X
-            sta LF210,X
-            sta LF310,X
-            sta LF410,X
-            sta LF510,X
-            sta LF610,X
-            sta LF6D0,X
-            inx
-            bne L5551
-            rts
-	    
-
+;------------------------------------------------------------
+; DRAW_SCREEN_OUTDOOR_L559D
+;------------------------------------------------------------	
 DRAW_SCREEN_OUTDOOR_L559D:      
 		lda #$98					
 		sta SCREEN_LINES_18				;152 screen lines
@@ -9980,7 +9989,7 @@ L55A5: 		lda VCOUNT					;wait until line 224 (2*112)
 		cmp #$70
 		bne L55A5
 		
-		lda L00C8					;?
+		lda room_change_L00C8					;?
 		bpl L55B3
 		jsr L5426
 		
@@ -10006,11 +10015,11 @@ L55CC: 		lda #$E0					;set graph-mem in display-list
 		sta GRAPH_MEM_HI_23
 		sta MEM_PTR_HI_01
 		
-L55DC: 		jsr L5C39
+L55DC: 		jsr L5C39					;lift
 
-		lda L00C8
+		lda room_change_L00C8
 		beq L55E6
-		jsr L5499					;room change
+		jsr L5499					;room change bottom-top
 		
 L55E6: 		lda PLANET_UNDERGROUND_A6
 		beq L55ED					;outdoor
@@ -10509,7 +10518,11 @@ L5917: 		sbc #$01
 		dey
 		bne L5917
 
-L5921: 		ldx #$04
+;------------------------------------------------------------
+; set colors to values stored at L5953
+;------------------------------------------------------------
+SET_COLORS_L5921: 		
+		ldx #$04
 L5923: 		lda L5953,X
 		sta COLBAKS_A1,X
 		dex
@@ -10615,7 +10628,7 @@ L59C3:		lda NEW_KEY_L00E9
 		beq L59F3
 		sta LOAD_SECTOR_L5BF7				;load-sector
 		jsr RESET_KEY_L5AEE
-		jsr FLYING_NOISE_L5AFB
+		jsr SOUND_EFFECT_L5AFB
 		ldx #$38
 		jsr L59F8
 L59E6:		lda NEW_KEY_L00E9
@@ -10638,7 +10651,8 @@ L59FF:		lda L00E0
 L5A06:		nop
 		cpy #$AF					;CTRL-Q
 		bne L5A18
-		jsr FLYING_NOISE_L5AFB
+
+		jsr SOUND_EFFECT_L5AFB				;yes, start from scratch
 		jsr RESET_KEY_L5AEE
 		ldx #$FF
 		txs
@@ -10648,7 +10662,7 @@ L5A06:		nop
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
-L5A18:		cpy #$2A
+L5A18:		cpy #$2A					; 'E' elevator
 		beq L5A1F
 		jmp L5AA6
 		
@@ -10669,24 +10683,25 @@ L5A24:		bne L5A51					;rts
 		lsr
 		cmp #$1C
 		bne L5A51					;rts
-		ldx #$08
-L5A40:		lda HANGAR_POS_5B02-1,X
+		
+		ldx #$08					; compare current HSB position
+L5A40:		lda HANGAR_POS_5B02-1,X				; to all 8 hangar positions
 		cmp CUR_X_HSB_72
 		bne L5A4E
 		lda L5B09,X
 		cmp CUR_Z_HSB_78
-		beq L5A52
+		beq L5A52					; jump if equal
 L5A4E:		dex
 		bne L5A40
 L5A51:		rts
 
-L5A52:		cpx #$05					;passkey at 03-15
+L5A52:		cpx #$05					;are we at 03-15?
 		bne L5A60
-		lda L69EE
+		lda L69EE					;pass available?
 		bmi L5A60
 		ldx #$39
 L5A5D:		jmp L322A
-L5A60:		jsr FLYING_NOISE_L5AFB
+L5A60:		jsr SOUND_EFFECT_L5AFB
 		stx L00CD
 		ldx #$03
 L5A67:		lda L6B56
@@ -10706,7 +10721,7 @@ L5A7C:		ldx #$00
 		bne L5A87
 		dex
 L5A87:		stx L00F9
-		jsr FLYING_NOISE_L5AFB
+		jsr SOUND_EFFECT_L5AFB
 		lda L6B51
 		sta L00C0
 		sta L00C1
@@ -10776,7 +10791,7 @@ L5AF3:		lda PLANET_UNDERGROUND_A6
 L5AF7:		lda CRAFT_ID_WALKING_A7
 		bmi L5B01
 		
-FLYING_NOISE_L5AFB:
+SOUND_EFFECT_L5AFB:
 		pha
 		lda #$24
 		sta SOUND_F5
@@ -10868,9 +10883,9 @@ L5B97:      ldy L00B2
             .byte $00,$07
 L5BA8:      sta L00B1
             lda L5C12,Y
-            sta OBJS_TO_DRAW_B0
+            sta NUM_OBJS_TO_DRAW_B0
             ldy #$00
-L5BB1:      lda (OBJS_TO_DRAW_B0),Y
+L5BB1:      lda (NUM_OBJS_TO_DRAW_B0),Y
 L5BB3:      sta L8800,Y
             iny
             bne L5BB1
@@ -10878,14 +10893,14 @@ L5BB3:      sta L8800,Y
             rts
 L5BBD:      sta L00B1
             lda L5C12,Y
-            sta OBJS_TO_DRAW_B0
+            sta NUM_OBJS_TO_DRAW_B0
             lda L5C13,Y
             sta L00B3
             jsr L5BDB
             bmi L5BDA
             ldy L00B3
 L5BD0:      lda L8800,Y
-            sta (OBJS_TO_DRAW_B0),Y
+            sta (NUM_OBJS_TO_DRAW_B0),Y
             dey
             cpy #$FF
             bne L5BD0
@@ -11430,13 +11445,13 @@ L5FDC:      ldy L2100,X
 ;------------------------------------------------------------
 ; setup?
 ;------------------------------------------------------------	                
-L5FEB:		sei                         ;disable ints
-		lda #$00
-		sta NMIEN
-		
-		cld
-		jsr L5FDA                   ;exchange ZP
-		lda #$FE                    ;OS Rom off
+L5FEB:		sei                         			;disable ints
+		lda #$00			
+		sta NMIEN			
+					
+		cld			
+		jsr L5FDA                   			;exchange ZP
+		lda #$FE                    			;OS Rom off
 		sta PORTB
 		sta LD508
             
@@ -11612,7 +11627,7 @@ VBIPROC:	lda #<DSPLIST_2800					;display list at $2800
 		jsr L6258					;shot sound
 L6139:		lda L00F0
 		beq L6161
-		ldx L00C8
+		ldx room_change_L00C8
 		bne L6161
 		dec L00F0
 		lsr
@@ -12036,7 +12051,7 @@ L6B5E		= $6B5E
 L6BC5		= $6BC5
 L6BBE		= $6BBE
 L6B57		= $6B57
-L6981		= $6981
+OBJ_TO_DRAW_LIST_L6981		= $6981
 L6BDB		= $6BDB
 L6F88		= $6F88
 L6E88		= $6E88
