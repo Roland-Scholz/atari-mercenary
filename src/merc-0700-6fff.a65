@@ -140,6 +140,8 @@ COLPF2S_A4       		= $A4
 PLANET_UNDERGROUND_A6		= $A6
 CRAFT_ID_WALKING_A7     	= $A7
 
+CHUNK_PTR_LO_B0			= $B0
+CHUNK_PTR_HI_B1			= $B1
 GROUND_STRUC_OBJ_TO_DRAW_B5	= $B5
 
 LIFT_UP_DOWN_CA			= $CA
@@ -212,8 +214,8 @@ L00AE       = $00AE
 L00AF       = $00AF
 NUM_OBJS_TO_DRAW_B0       = $00B0
 L00B1       = $00B1
-L00B2       = $00B2
-L00B3       = $00B3
+CHUNK_CNT_B2       = $B2
+CHUNK_LEN_B3       = $B3
 L00B4       = $00B4
 
 L00B6       = $00B6
@@ -377,7 +379,7 @@ L78CB       = $78CB
 L7973       = $7973
 L797A       = $797A
 L7A7D       = $7A7D
-L7B37       = $7B37
+L7B37	    = $7B37
 L7B7A       = $7B7A
 L7BCD       = $7BCD
 L7DA0       = $7DA0
@@ -522,7 +524,7 @@ LB85D       = $B85D
 LB8A4       = $B8A4
 LB921       = $B921
 LB9AB       = $B9AB
-LB9B3       = $B9B3
+;LB9CHUNK_LEN_B3       = $B9CHUNK_LEN_B3
 LB9B9       = $B9B9
 LBAB9       = $BAB9
 LBBA3       = $BBA3
@@ -1000,7 +1002,7 @@ L098D:      .byte $07,$02,$00
             .byte $07,$00,$02,$0B,$2B,$BF
             ora #$07
             ora MEM_PTR_LO_00
-            .byte $B3
+            .byte CHUNK_LEN_B3
             ora #$11
             ora (TMP_04+1,X)
             bpl L09C1+1
@@ -1364,7 +1366,7 @@ L0C77:      ora (L00DF,X)
             .byte $00,$14,$32
             ora (LAST_KEY_L00EA,X)
             .byte $E2
-            sbc L00B3
+            sbc CHUNK_LEN_B3
             .byte $00
             ora (COS_YAW_LO_3C,X)
             ldy L00BF,X
@@ -1382,7 +1384,7 @@ L0CC2:      .byte $14,$32,$93
             inc LA2E2
             .byte $FF
             eor (ROTATE_MY1_LO_4C,X)
-            .byte $53,$CF,$B3,$3C,$00
+            .byte $53,$CF,CHUNK_LEN_B3,$3C,$00
             ora (L00FF,X)
             .byte $44
             eor PNT_Y_HI_53
@@ -2800,7 +2802,7 @@ L17F2:      and L2B62
             .byte $EF
             sed
             sta (LINE_COLOR0_80),Y
-            ldx #$B3
+            ldx #CHUNK_LEN_B3
             cpy DIF_X_LSB_D5
             inc L00F7
             .byte $00
@@ -3160,13 +3162,13 @@ L1B24:      .byte $17,$12,$12
             .byte $13,$13
 L1B2D:      .byte $07
 L1B2E:      .byte $0C
-            bpl L1B3E
+            bpl L1CHUNK_LEN_B3E
             ora (APPMHI),Y
             .byte $14,$0F
             ora SCREEN_LINES_18,X
             ora L1A18+1,Y
             .byte $1A,$1B,$1B,$1C
-L1B3E:      .byte $1C
+L1CHUNK_LEN_B3E:      .byte $1C
             ora L1F1E,X
             .byte $1F
             jsr L2120
@@ -3408,7 +3410,7 @@ GROUND_STRUCTURE_Y_MSB_1DC0:
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		
 GROUND_STRUCTURE_Z_LSB_1E00:	
-		.byte $B3,$04,$47,$00,$00,$00,$00,$00,$00,$00,$00,$00,$A9,$FE,$8D,$01
+		.byte CHUNK_LEN_B3,$04,$47,$00,$00,$00,$00,$00,$00,$00,$00,$00,$A9,$FE,$8D,$01
 		.byte $D3,$BD,$00,$1E,$9D,$00,$C0,$E8,$D0,$F7,$EE,$13,$1E,$EE,$16,$1E
 		.byte $AD,$16,$1E,$C9,$C0,$D0,$EA,$BD,$00,$F8,$9D,$00,$B8,$E8,$D0,$F7
 		.byte $EE,$29,$1E,$EE,$2C,$1E,$AD,$2C,$1E,$C9,$B8,$D0,$EA,$4C,$00,$93
@@ -3416,7 +3418,7 @@ GROUND_STRUCTURE_Z_LSB_1E00:
 GROUND_STRUCTURE_Z_MSB_1E40:		
 		.byte $8E,$94,$8A,$8F,$82,$7E,$7E,$90,$90,$86,$86,$82,$07,$60,$BD,$00
 		.byte $9F,$F0,$25,$30,$17,$B9,$00,$9F,$F0,$12,$30,$1C,$B9,$40,$9D,$49
-		.byte $80,$85,$04,$BD,$40,$9D,$49,$80,$C5,$04,$B0,$0C,$98,$86,$04,$AA
+		.byte $80,$85,$04,$BD,$40,$9D,$49,$80,$C5,$04,CHUNK_PTR_LO_B0,$0C,$98,$86,$04,$AA
 		.byte $A4,$04,$BD,$00,$9F,$10,$01,$60,$BD,$00,$9F,$85,$6C,$30,$1E,$BD
 
 L1D44		= $1D44
@@ -3639,13 +3641,15 @@ ZERO_PAGE_SAVE_2100:
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
+L21FC		= $21FC
+
 LOG_TAB_L2200:
 		.BYTE $00,$01,$03,$04,$06,$07,$09,$0A,$0B,$0D,$0E,$10,$11,$12,$14,$15,$16,$18,$19,$1A,$1C,$1D,$1E,$20,$21,$22,$24,$25,$26,$28,$29,$2A
 		.BYTE $2C,$2D,$2E,$2F,$31,$32,$33,$34,$36,$37,$38,$39,$3B,$3C,$3D,$3E,$3F,$41,$42,$43,$44,$45,$47,$48,$49,$4A,$4B,$4D,$4E,$4F,$50,$51
 		.BYTE $52,$54,$55,$56,$57,$58,$59,$5A,$5C,$5D,$5E,$5F,$60,$61,$62,$63,$64,$66,$67,$68,$69,$6A,$6B,$6C,$6D,$6E,$6F,$70,$71,$72,$74,$75
 		.BYTE $76,$77,$78,$79,$7A,$7B,$7C,$7D,$7E,$7F,$80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8E,$8F,$90,$91,$92,$93,$94,$95
-		.BYTE $96,$97,$98,$99,$9A,$9B,$9B,$9C,$9D,$9E,$9F,$A0,$A1,$A2,$A3,$A4,$A5,$A6,$A7,$A8,$A9,$A9,$AA,$AB,$AC,$AD,$AE,$AF,$B0,$B1,$B2,$B2
-		.BYTE $B3,$B4,$B5,$B6,$B7,$B8,$B9,$B9,$BA,$BB,$BC,$BD,$BE,$BF,$C0,$C0,$C1,$C2,$C3,$C4,$C5,$C6,$C6,$C7,$C8,$C9,$CA,$CB,$CB,$CC,$CD,$CE
+		.BYTE $96,$97,$98,$99,$9A,$9B,$9B,$9C,$9D,$9E,$9F,$A0,$A1,$A2,$A3,$A4,$A5,$A6,$A7,$A8,$A9,$A9,$AA,$AB,$AC,$AD,$AE,$AF,CHUNK_PTR_LO_B0,CHUNK_PTR_HI_B1,$B2,$B2
+		.BYTE CHUNK_LEN_B3,$B4,$B5,$B6,$B7,$B8,$B9,$B9,$BA,$BB,$BC,$BD,$BE,$BF,$C0,$C0,$C1,$C2,$C3,$C4,$C5,$C6,$C6,$C7,$C8,$C9,$CA,$CB,$CB,$CC,$CD,$CE
 		.BYTE $CF,$D0,$D0,$D1,$D2,$D3,$D4,$D4,$D5,$D6,$D7,$D8,$D8,$D9,$DA,$DB,$DC,$DC,$DD,$DE,$DF,$E0,$E0,$E1,$E2,$E3,$E4,$E4,$E5,$E6,$E7,$E7
 		.BYTE $E8,$E9,$EA,$EA,$EB,$EC,$ED,$EE,$EE,$EF,$F0,$F1,$F1,$F2,$F3,$F4,$F4,$F5,$F6,$F7,$F7,$F8,$F9,$F9,$FA,$FB,$FC,$FC,$FD,$FE,$FF,$FF
 	
@@ -3660,7 +3664,7 @@ EXP_TAB_2300:	.BYTE $00,$01,$01,$02,$03,$03,$04,$05,$06,$06,$07,$08,$08,$09,$0A,
 		.BYTE $4C,$4D,$4E,$4F,$50,$51,$51,$52,$53,$54,$55,$56,$57,$58,$59,$5A,$5B,$5C,$5D,$5E,$5E,$5F,$60,$61,$62,$63,$64,$65,$66,$67,$68,$69
 		.BYTE $6A,$6B,$6C,$6D,$6E,$6F,$70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$7A,$7B,$7C,$7D,$7E,$7F,$80,$81,$82,$83,$84,$85,$87,$88,$89,$8A
 		.BYTE $8B,$8C,$8D,$8E,$8F,$90,$91,$92,$93,$95,$96,$97,$98,$99,$9A,$9B,$9C,$9D,$9F,$A0,$A1,$A2,$A3,$A4,$A5,$A6,$A8,$A9,$AA,$AB,$AC,$AD
-		.BYTE $AF,$B0,$B1,$B2,$B3,$B4,$B6,$B7,$B8,$B9,$BA,$BC,$BD,$BE,$BF,$C0,$C2,$C3,$C4,$C5,$C6,$C8,$C9,$CA,$CB,$CD,$CE,$CF,$D0,$D2,$D3,$D4
+		.BYTE $AF,CHUNK_PTR_LO_B0,CHUNK_PTR_HI_B1,$B2,CHUNK_LEN_B3,$B4,$B6,$B7,$B8,$B9,$BA,$BC,$BD,$BE,$BF,$C0,$C2,$C3,$C4,$C5,$C6,$C8,$C9,$CA,$CB,$CD,$CE,$CF,$D0,$D2,$D3,$D4
 		.BYTE $D6,$D7,$D8,$D9,$DB,$DC,$DD,$DE,$E0,$E1,$E2,$E4,$E5,$E6,$E8,$E9,$EA,$EC,$ED,$EE,$F0,$F1,$F2,$F4,$F5,$F6,$F8,$F9,$FA,$FC,$FD,$FF
 		
 L23F4		= $23F4
@@ -3695,7 +3699,7 @@ SIN_LSB:	.BYTE $92,$2E,$F7,$60,$C4,$14,$47,$79
 		.BYTE $F8,$02,$08,$0E,$14,$1A,$20,$26
 		.BYTE $2C,$32,$38,$3E,$44,$4A,$50,$56
 		.BYTE $5C,$62,$68,$6E,$73,$79,$7F,$85
-		.BYTE $8B,$91,$96,$9C,$A2,$A8,$AD,$B3
+		.BYTE $8B,$91,$96,$9C,$A2,$A8,$AD,CHUNK_LEN_B3
 		.BYTE $B9,$BE,$C4,$CA,$CF,$D5,$DA,$E0
 		.BYTE $E5,$EB,$F1,$F6,$FB,$00,$03,$06
 		.BYTE $09,$0B,$0E,$11,$13,$16,$19,$1B
@@ -3707,7 +3711,7 @@ SIN_LSB:	.BYTE $92,$2E,$F7,$60,$C4,$14,$47,$79
 		.BYTE $7C,$7F,$81,$83,$85,$87,$89,$8B
 		.BYTE $8D,$8F,$91,$93,$95,$97,$98,$9A
 		.BYTE $9C,$9E,$A0,$A2,$A4,$A5,$A7,$A9
-		.BYTE $AB,$AC,$AE,$B0,$B1,$B3,$B5,$B6
+		.BYTE $AB,$AC,$AE,CHUNK_PTR_LO_B0,CHUNK_PTR_HI_B1,CHUNK_LEN_B3,$B5,$B6
 		.BYTE $B8,$BA,$BB,$BD,$BE,$C0,$C1,$C3
 		.BYTE $C4,$C6,$C7,$C9,$CA,$CB,$CD,$CE
 		.BYTE $D0,$D1,$D2,$D3,$D5,$D6,$D7,$D8
@@ -3757,15 +3761,15 @@ SIN_HSB:	.BYTE $DC,$E4,$E4,$E8,$E8,$EC,$EC,$EC
 ; Y-Pos lo
 ;
 SCR_Y_LO_2600:	
-		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
-		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
-		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
-		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
-		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
 
 L2648		= $2648
@@ -3887,10 +3891,10 @@ L27A3:      ora (ROTATE_MY3_LO_40,X)
 L27A7:      ora (ROTATE_MY3_LO_40,X)
             bpl L27AF
 L27AB:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27B3
+            bpl L27CHUNK_LEN_B3
 L27AF:      ora (ROTATE_MY3_LO_40,X)
             bpl L27B7
-L27B3:      ora (ROTATE_MY3_LO_40,X)
+L27CHUNK_LEN_B3:      ora (ROTATE_MY3_LO_40,X)
             bpl L27BB
 L27B7:      ora (ROTATE_MY3_LO_40,X)
             bpl L27BF
@@ -4827,119 +4831,118 @@ L2F41:		adc #$DE
 L2F4D:		jmp (L3206)					;jump to it
 L2F50:		rts
 
-
-            iny
-            lda (BENSON_PTR_LO_1D),Y
-            sta L2F60+1
-            iny
-            lda (BENSON_PTR_LO_1D),Y
-            sta L2F60+2
-            iny
-            lda (BENSON_PTR_LO_1D),Y
-L2F60:      cmp L0100
-            jmp L300C
-            jsr GET_RANDOM_L53B1
-            iny
-            lda (BENSON_PTR_LO_1D),Y
-            cmp RANDOM_E8
-            jmp L300C
-L2F71:      lda TIMER_MSB_E3
-            ldx TIMER_HSB_E4
-            cmp TIMER_MSB_E3
-            bne L2F71
-            sec
-            iny
-            sbc (BENSON_PTR_LO_1D),Y
-            txa
-            iny
-            sbc (BENSON_PTR_LO_1D),Y
-            jmp L300C
-            lda L2938
-            eor #$80
-            iny
-            cmp (BENSON_PTR_LO_1D),Y
-            jmp L300C
-            iny
-            lda (BENSON_PTR_LO_1D),Y
-            cmp CRAFT_ID_WALKING_A7
-            beq L300B
-            bne L3008
-            ldx L274D+1
-            lda L274F
-            cmp L6940,X
-            beq L300B
-            bne L3008
-            lda L274F
-            cmp L00CD
-            beq L300B
-            bne L3008
-            lda L293B
-            iny
-            and (BENSON_PTR_LO_1D),Y
-            beq L3008
-            bne L300B
-            lda L274D+1
-            jsr L3890
-            bne L3008
-            beq L300B
-            jsr L30DE
-            jmp L300C
-            iny
-            lda (BENSON_PTR_LO_1D),Y
-            iny
-            cmp CUR_X_HSB_72
-            bne L3008
-            lda (BENSON_PTR_LO_1D),Y
-            cmp CUR_Z_HSB_78
-            bne L3008
-            beq L300B
-            lda L274D
-            cmp GROUND_STRUC_OBJ_TO_DRAW_B5
-            bne L3008
-            beq L300B
-            lda NEW_KEY_L00E9
-            and #$3F
-            iny
-            cmp (BENSON_PTR_LO_1D),Y
-            bne L3008
-            jsr RESET_KEY_L5AEE
-            jsr SOUND_EFFECT_L5AFB
-            jmp L300B
-            ldx L274D
-            lda L1F00,X
-            bmi L300B
-            bpl L3008
-            iny
-            lda (BENSON_PTR_LO_1D),Y
-            ldx L274D+1
-            and L69C0,X
-            bne L300B
-L3008:      sec
-            bcs L300C
-L300B:      clc
-L300C:      ror
-            eor L00E7
-            bpl L301F
-            iny
-            iny
-L3013:      iny
-            tya
-            clc
-            adc BENSON_PTR_LO_1D
-            sta BENSON_PTR_LO_1D
-            bcc L301E
-            inc BENSON_PTR_HIGH_1E
-L301E:      rts
-L301F:      lda L00E7
-            asl
-            bpl BENSON_PTR_NEXT_L3033
-L3024:      lda BENSON_PTR_LO_1D
-            clc
-            adc #$03
-            jsr L304A
-            lda BENSON_PTR_HIGH_1E
-L302E:      adc #$00
-            jsr L304A
+		iny
+		lda (BENSON_PTR_LO_1D),Y
+		sta L2F60+1
+		iny
+		lda (BENSON_PTR_LO_1D),Y
+		sta L2F60+2
+		iny
+		lda (BENSON_PTR_LO_1D),Y
+L2F60:		cmp L0100
+		jmp L300C
+		jsr GET_RANDOM_L53B1
+		iny
+		lda (BENSON_PTR_LO_1D),Y
+		cmp RANDOM_E8
+		jmp L300C
+L2F71:		lda TIMER_MSB_E3
+		ldx TIMER_HSB_E4
+		cmp TIMER_MSB_E3
+		bne L2F71
+		sec
+		iny
+		sbc (BENSON_PTR_LO_1D),Y
+		txa
+		iny
+		sbc (BENSON_PTR_LO_1D),Y
+		jmp L300C
+		lda L2938
+		eor #$80
+		iny
+		cmp (BENSON_PTR_LO_1D),Y
+		jmp L300C
+		iny
+		lda (BENSON_PTR_LO_1D),Y
+		cmp CRAFT_ID_WALKING_A7
+		beq L300B
+		bne L3008
+		ldx L274D+1
+		lda L274F
+		cmp L6940,X
+		beq L300B
+		bne L3008
+		lda L274F
+		cmp L00CD
+		beq L300B
+		bne L3008
+		lda L293B
+		iny
+		and (BENSON_PTR_LO_1D),Y
+		beq L3008
+		bne L300B
+		lda L274D+1
+		jsr L3890
+		bne L3008
+		beq L300B
+		jsr L30DE
+		jmp L300C
+		iny
+		lda (BENSON_PTR_LO_1D),Y
+		iny
+		cmp CUR_X_HSB_72
+		bne L3008
+		lda (BENSON_PTR_LO_1D),Y
+		cmp CUR_Z_HSB_78
+		bne L3008
+		beq L300B
+		lda L274D
+		cmp GROUND_STRUC_OBJ_TO_DRAW_B5
+		bne L3008
+		beq L300B
+		lda NEW_KEY_L00E9
+		and #$3F
+		iny
+		cmp (BENSON_PTR_LO_1D),Y
+		bne L3008
+		jsr RESET_KEY_L5AEE
+		jsr SOUND_EFFECT_L5AFB
+		jmp L300B
+		ldx L274D
+		lda L1F00,X
+		bmi L300B
+		bpl L3008
+		iny
+		lda (BENSON_PTR_LO_1D),Y
+		ldx L274D+1
+		and L69C0,X
+		bne L300B
+L3008:		sec
+		bcs L300C
+L300B:		clc
+L300C:		ror
+		eor L00E7
+		bpl L301F
+		iny
+		iny
+L3013:		iny
+		tya
+		clc
+		adc BENSON_PTR_LO_1D
+		sta BENSON_PTR_LO_1D
+		bcc L301E
+		inc BENSON_PTR_HIGH_1E
+L301E:		rts
+L301F:		lda L00E7
+		asl
+		bpl BENSON_PTR_NEXT_L3033
+L3024:		lda BENSON_PTR_LO_1D
+		clc
+		adc #$03
+		jsr L304A
+		lda BENSON_PTR_HIGH_1E
+L302E:		adc #$00
+		jsr L304A
 
 
 ;------------------------------------------------------------
@@ -5404,7 +5407,7 @@ L336D:      sty L00EE
             sta L33F4+1
             stx SCREEN_LINES_18
             lda #$3C
-            sta L00B3
+            sta CHUNK_LEN_B3
             lda #$02
             sta L00B4
             lda CUR_X_HSB_72
@@ -5486,14 +5489,14 @@ L3425:      tax
             rts
 L342A:     sec
             rts
-L342C:      ldx L00B3
+L342C:      ldx CHUNK_LEN_B3
 L342E:      cmp L0180,X
             beq L343F
             inx
             cpx #$40
             bne L342E
-            dec L00B3
-            ldx L00B3
+            dec CHUNK_LEN_B3
+            ldx CHUNK_LEN_B3
             sta L0180,X
 L343F:      txa
             rts
@@ -5527,7 +5530,7 @@ L3474:      pla
             rts
 L3476:      ldx L34A8,Y
             iny
-            stx L00B3
+            stx CHUNK_LEN_B3
 L347C:      lda L34A8,Y
             iny
             sta L0180,X
@@ -5569,7 +5572,7 @@ L34A8:      rol L0F00+1
             .byte $32
             rol COS_PITCH_HI_37,X
             sec
-            and L3B3A,Y
+            and L3CHUNK_LEN_B3A,Y
 DRAW_MAP_LINES_L34D2:      jsr BLACK_LINES_L53BD
             lda L00EF
             beq L34DA
@@ -5584,7 +5587,7 @@ L34DA:     lda #$00
             jsr L4283
             sta PNT_Y_LO_52
             stx PNT_Y_HI_53
-            ldy L00B3
+            ldy CHUNK_LEN_B3
             sty POINT_LINE_COUNT_17
 L34F1:      lda L0180,Y
             beq L34FC
@@ -5730,7 +5733,7 @@ L35ED:		sta GROUND_STRUCTURE_X_LSB_1D00,Y
 		dey
 		bpl L35ED
 		ldy #$0C
-L360D:		lda L37B3+2,Y
+L360D:		lda L37CHUNK_LEN_B3+2,Y
 		sta L1E7F,Y
 		lda L37C1,Y
 		sta L1EBE+1,Y
@@ -5915,8 +5918,8 @@ L3760:      cpy #$D0
 L3778:      bvc L377A
 L377A:     bvc L371C
             .byte $80
-L377D:      cpy #$B0
-            ldy #$B0
+L377D:      cpy #CHUNK_PTR_LO_B0
+            ldy #CHUNK_PTR_LO_B0
             .byte $00,$FF
             rts
             .byte $00
@@ -5949,7 +5952,7 @@ L37A6:      .byte $00,$00,$00
             .byte $5F
             pla
             .byte $73
-L37B3:      ror L9487,X
+L37CHUNK_LEN_B3:      ror L9487,X
             .byte $00
             ora (ZP_02,X)
             .byte $03,$00
@@ -5989,7 +5992,7 @@ L37ED:      lda #$00
             lda #$66
 L37F6:      sta L9AB5
             ldx L00CD
-            ldy L00B2
+            ldy CHUNK_CNT_B2
             stx TMP_04
             ldx #$00
 L3801:      lda TMP_04
@@ -6103,7 +6106,7 @@ L38AB:      clc
 L38AD:      lda L00F0
             bne L38AB
             ldy #$03
-L38B3:      iny
+L38CHUNK_LEN_B3:      iny
 L38B4:      iny
             lda (SCREEN_LINES_19),Y
             sta MUL_HI_07
@@ -6120,12 +6123,12 @@ L38B4:      iny
             adc #$00
             iny
             cmp (SCREEN_LINES_19),Y
-            bne L38B3
+            bne L38CHUNK_LEN_B3
             lda CUR_Z_LSB_76
             sec
             sbc #$40
             eor MUL_HI_07
-            bpl L38B3
+            bpl L38CHUNK_LEN_B3
             lda MUL_HI_07
             and #$80
             eor #$80
@@ -6244,12 +6247,12 @@ L399C:      sta GROUND_STRUC_OBJ_TO_DRAW_B5
 L39A3:      lda CUR_Y_HSB_75
             sta TMP_04
             cmp #$20
-            bcc L39B3
+            bcc L39CHUNK_LEN_B3
             ldy #$00
             jsr L3476
             jmp L39D1
 	    
-L39B3:      lda CUR_Y_MSB_74
+L39CHUNK_LEN_B3:      lda CUR_Y_MSB_74
             lsr TMP_04
             ror
             lsr TMP_04
@@ -6447,12 +6450,12 @@ L3B21:      lda GROUND_STRUCTURE_Y_MSB_1DC0,X
             dey
             dec GROUND_STRUCTURE_Y_MSB_1DC0,X
             lda GROUND_STRUCTURE_X_MSB_1D40,X
-            bpl L3B34
+            bpl L3CHUNK_LEN_B34
             dec GROUND_STRUCTURE_X_MSB_1D40,X
-            bne L3B37
-L3B34:      inc GROUND_STRUCTURE_X_MSB_1D40,X
-L3B37:      lda GROUND_STRUCTURE_Z_MSB_1E40,X
-L3B3A:     bpl L3B41
+            bne L3CHUNK_LEN_B37
+L3CHUNK_LEN_B34:      inc GROUND_STRUCTURE_X_MSB_1D40,X
+L3CHUNK_LEN_B37:      lda GROUND_STRUCTURE_Z_MSB_1E40,X
+L3CHUNK_LEN_B3A:     bpl L3B41
             dec GROUND_STRUCTURE_Z_MSB_1E40,X
             bne L3B44
 L3B41:      inc GROUND_STRUCTURE_Z_MSB_1E40,X
@@ -9997,10 +10000,10 @@ L55A5: 		lda VCOUNT					;wait until line 224 (2*112)
 		bne L55A5
 		
 		lda room_change_L00C8					;?
-		bpl L55B3
+		bpl L55CHUNK_LEN_B3
 		jsr L5426
 		
-L55B3: 		inc FLIP_SCREEN_22				;flip screen
+L55CHUNK_LEN_B3: 		inc FLIP_SCREEN_22				;flip screen
 		lda FLIP_SCREEN_22
 		lsr
 		bcs L55CC
@@ -10821,161 +10824,196 @@ L5B09:		.byte $08
 		.byte $06,$05,$00,$0D,$0F,$23,$88
 		.byte $08      
 
-;
+;------------------------------------------------------------
 ; load-store game
-;	    
-L5B12:      sei
-            ldx #$00
-            stx NMIEN						;disable all interrupts
+;------------------------------------------------------------
+L5B12:		sei
+		ldx #$00
+		stx NMIEN					;disable all interrupts
+			
+L5B18:		lda MEM_PTR_LO_00,X				;copy from L5B98 to zero page
+		sta ZERO_PAGE_SAVE_2100,X
+		lda L5B98,X
+		sta MEM_PTR_LO_00,X
+		inx
+		bne L5B18
+			
+		stx COLDST					;X = 0
+		stx GINTLK
+		stx BASICF
+		lda #$FD
+		sta PORTB
+		jmp WARMSV					;call reset routine
 	    
-L5B18:      lda MEM_PTR_LO_00,X					;copy from L5B98 to zero page
-            sta ZERO_PAGE_SAVE_2100,X
-            lda L5B98,X
-            sta MEM_PTR_LO_00,X
-            inx
-            bne L5B18
+L5B36:      
+		lda #$00					;and continue at $5B36
+		sta DAUX1
+		lda LOAD_SECTOR_L5BF7
+		lsr
+		lsr
+		ror DAUX1
+		lsr
+		ror DAUX1
+		lsr
+L5B48:		ror DAUX1
+		sta DAUX2
+		lda KBCODE_L5BF8
+		bne L5B80					;<>0 jump to save
 	    
-            stx COLDST						;X = 0
-            stx GINTLK
-            stx BASICF
-            lda #$FD
-            sta PORTB
-            jmp WARMSV
+;------------------------------------------------------------
+; load game, copy 10-bytes DCB-data to DDEVIC
+;------------------------------------------------------------
+		ldx #$09					;fill DCB for load
+L5B55:		lda DSK_LOAD_DAT_L5C05,X
+		sta DDEVIC,X
+		dex
+		bpl L5B55
 	    
-            lda #$00
-            sta DAUX1
-            lda LOAD_SECTOR_L5BF7
-            lsr
-            lsr
-            ror DAUX1
-            lsr
-            ror DAUX1
-            lsr
-L5B48:      ror DAUX1
-            sta DAUX2
-            lda KBCODE_L5BF8
-            bne L5B80
-            ldx #$09
-L5B55:      lda L5C05,X
-L5B58:      sta DDEVIC,X
-            dex
-            bpl L5B55
-            ldy #$00
-L5B60:      sty L00B2
-            lda L5C11,Y
-            beq L5B73
-            jsr L5BBD
-            bmi L5B73
-            ldy L00B2
-            iny
-            iny
-            iny
-            bne L5B60
-L5B73:      ldx #$16
-            lda #$A0
-L5B77:      sta L9878,X
-            dex
-            bpl L5B77
-            jmp (L21FC)
-L5B80:      ldx #$09
-L5B82:      lda L5BF9,X
-            sta DDEVIC,X
-            dex
-            bpl L5B82
-            ldy #$00
-L5B8D:      sty L00B2
-            lda L5C11,Y
-            beq L5B73
-            jsr L5BA8
-	    
-L5B97:      ;ldy L00B2
-		.byte $A4
+		ldy #$00
+L5B60:		sty CHUNK_CNT_B2
+		lda GAME_MEM_LEN_L5C11,Y			;if hi-byte ptr zero, leave
+		beq L5B73
+		jsr LOAD_CHUNK_L5BBD
+		bmi L5B73
+		ldy CHUNK_CNT_B2
+		iny
+		iny
+		iny
+		bne L5B60
+		
+L5B73:		ldx #$16
+		lda #$A0
+L5B77:		sta L9878,X
+		dex
+		bpl L5B77
+		jmp (L21FC)
 
+;------------------------------------------------------------
+; save game, copy 10-bytes DCB-data to DDEVIC
+;------------------------------------------------------------
+L5B80:		ldx #$09
+L5B82:		lda DSK_SAVE_DAT_L5BF9,X
+		sta DDEVIC,X
+		dex
+		bpl L5B82
+			
+		ldy #$00
+L5B8D:		sty CHUNK_CNT_B2
+		lda GAME_MEM_LEN_L5C11,Y
+		beq L5B73					;hi-byte ptr zero, leave
+		jsr SAVE_CHUNK_L5BA8
+	    
+L5B97:		;ldy CHUNK_CNT_B2				;actually code here
+		;iny
+		;iny
+		;iny
+		;BNE $5B8D
+		;BEQ $5B73
+
+		.byte $A4
+	
 ;
 ; 256 bytes copied into zeropage
 ;
 L5B98:		.byte $B2,$C8,$C8,$C8,$D0,$EF,$F0,$D3,$FF,$01,$36,$5B,$36,$5B,$00,$07
 
-L5BA8:		sta $B1
-		lda $5C12,Y
-		sta $B0
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+SAVE_CHUNK_L5BA8:		
+		sta CHUNK_PTR_HI_B1				;hi-byte from caller
+		lda GAME_MEM_LEN_L5C11+1,Y                      ;lo-byte ptr from table
+		sta CHUNK_PTR_LO_B0
 		ldy #$00
-L5BB1:		lda ($B0),Y
+L5BB1:		lda (CHUNK_PTR_LO_B0),Y
 		sta $8800,Y
 		iny
 		bne $5BB1
-		jsr $5BDB   
+		jsr DISKIO_5BDB   
 		rts
 
-L5BBD:		sta $B1
-		lda $5C12,Y
-		sta $B0
-		lda $5C13,Y
-		sta $B3
-		jsr $5BDB
-		bmi $5BDA
-		ldy $B3
-L5BD0:		lda $8800,Y
-		sta ($B0),Y
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+LOAD_CHUNK_L5BBD:
+		sta CHUNK_PTR_HI_B1				;hi-byte from caller
+		lda GAME_MEM_LEN_L5C11+1,Y			;lo-byte ptr from table
+		sta CHUNK_PTR_LO_B0
+		lda GAME_MEM_LEN_L5C11+2,Y
+		sta CHUNK_LEN_B3				;chunks's length in CHUNK_LEN_B3
+		jsr DISKIO_5BDB					;read 2 sectors from disk
+		bmi L5BDA					;if error exit
+		
+		ldy CHUNK_LEN_B3				
+L5BD0:		lda $8800,Y					;copy from buffer
+		sta (CHUNK_PTR_LO_B0),Y				;into memory
 		dey
 		cpy #$FF
 		bne $5BD0
-		rts
-;--------------------------------------------------
-L5BDB:		lda #$00
+		
+L5BDA:		rts
+
+;------------------------------------------------------------
+; load/save 2 sectors
+;------------------------------------------------------------
+DISKIO_5BDB:	lda #$00
 		sta DBUFLO
 		jsr DSKINV
-		bmi $5BF6
+		bmi DISKIO_5BF6
 		inc DAUX1
 		lda #$80
 		sta DBUFLO
 		jsr DSKINV
-		bmi $5BF6
+		bmi DISKIO_5BF6
 		inc DAUX1
-		lsr
-		rts
+		lsr						;clear sign
+DISKIO_5BF6:	rts
 
 L213C		= $213C
 L2120		= $2120
 L213D		= $213D
 
-
 LOAD_SECTOR_L5BF7:      
-	.byte $00
-KBCODE_L5BF8:      .byte $00
+		.byte $00
+KBCODE_L5BF8:	
+		.byte $00
 
-;
+;------------------------------------------------------------
 ; SAVE DDEVIC,X X = 0-9 values
 ;
-; 'W' DISK1 buffer $8800, length $80
-; from:	$1f00, $6480, $6500, $6880, $6900, $2740, $0600, $2100, $72c0, $7380, $97D0, $7080, $2900
-;	
-L5BF9:		.byte $30,$01,$57,$80,$00,$88,$30,$00
-L5BFC:		.byte $80,$00
+; 'W' DISK1 buffer $8800
+;------------------------------------------------------------
+DSK_SAVE_DAT_L5BF9:		
+		.byte $30,$01,'W',$80,$00,$88,$30,$00,$80,$00
+		
+		.byte $00,$00
 
-L5C01:      	.byte $80,$00,$00,$00
-
-; SAVE DDEVIC,X X = 0-9 values
+;------------------------------------------------------------
+; LOAD DDEVIC,X X = 0-9 values
 ;
-; 'R' DISK1 buffer $8800, length $80
-L5C05:		.byte $30,$01,$52
-L5C08:		.byte $40,$00,$88,$30,$00
+; 'R' D1: buffer $8800
+;------------------------------------------------------------
+DSK_LOAD_DAT_L5C05:		
+		.byte $30,$01,'R',$40,$00,$88,$30,$00,$80,$00
 
-L5C0D:      	.byte $80,$00,$00,$00
-
-L5C11:		.byte $1F,$00,$FF
-		.byte $64,$80,$7F
-		.byte $65,$00,$FF
-		.byte $68,$80,$7F
-		.byte $69,$00,$FF
-		.byte $27,$40,$0F
-		.byte $06,$00,$5F
-		.byte $21,$00,$FF
-		.byte $72,$C0,$BF
-		.byte $73,$80,$7F
-		.byte $97,$D0,$EF
-		.byte $70,$80,$7F
-		.byte $29,$00,$7F
+		.byte $00,$00
+;------------------------------------------------------------
+; Memory and length
+;------------------------------------------------------------
+GAME_MEM_LEN_L5C11:		
+		.byte $1F,$00,$FF				;$1f00, len $ff
+		.byte $64,$80,$7F                               ;$6480, len $7F		;OBJ XYZ positions
+		.byte $65,$00,$FF                               ;$6500, len $FF		;OBJ XYZ positions
+		.byte $68,$80,$7F                               ;$6880, len $7F		;OBJ XYZ positions
+		.byte $69,$00,$FF                               ;$6900, len $FF         ;OBJ XYZ positions
+		.byte $27,$40,$0F                               ;$2740, len $0F
+		.byte $06,$00,$5F                               ;$0600, len $5F
+		.byte $21,$00,$FF                               ;$2100, len $FF		;saved zero page
+		.byte $72,$C0,$BF                               ;$72C0, len $BF
+		.byte $73,$80,$7F                               ;$7380, len $7F
+		.byte $97,$D0,$EF                               ;$97D0, len $EF
+		.byte $70,$80,$7F                               ;$7080, len $7F		;charset?
+		.byte $29,$00,$7F                               ;$2900, len $7F
 		.byte $00      
 
 
@@ -11455,15 +11493,15 @@ L5FC4:      asl L7300,X
 ;------------------------------------------------------------
 ; exchange zero page by $2100
 ;------------------------------------------------------------            
-L5FDA:      ldx #$00
-L5FDC:      ldy ZERO_PAGE_SAVE_2100,X
-            lda MEM_PTR_LO_00,X
-            sta ZERO_PAGE_SAVE_2100,X
-            tya
-            sta MEM_PTR_LO_00,X
-            inx
-            bne L5FDC
-            rts
+L5FDA:		ldx #$00
+L5FDC:		ldy ZERO_PAGE_SAVE_2100,X
+		lda MEM_PTR_LO_00,X
+		sta ZERO_PAGE_SAVE_2100,X
+		tya
+		sta MEM_PTR_LO_00,X
+		inx
+		bne L5FDC
+		rts
             
 ;------------------------------------------------------------
 ; setup?
@@ -11522,7 +11560,7 @@ L603B:		lda L604F,X
 		sta AUDCTL
 		rts
 		
-L604F:		.byte $50, $70, $90, $B0 			;HPOSP0-3
+L604F:		.byte $50, $70, $90, CHUNK_PTR_LO_B0 		;HPOSP0-3
 		.byte $20, $28, $D0, $D8			;HPOSM0-3
 		.byte $03, $03, $03, $03, $FF			;quad size P&M
 		
@@ -11821,14 +11859,14 @@ L6278:      	.byte $05
 
 ROOM_STRUCT_PTR_LO_L6300:      	
 		.byte $00,$00,$12,$34,$4E,$74,$86,$9C,$A6,$B8,$C6,$DC,$EA,$FC,$0A,$18
-		.byte $22,$2C,$3E,$4C,$5A,$70,$82,$90,$9E,$B0,$C2,$D4,$E6,$F4,$02,$14
+		.byte $22,$2C,$3E,$4C,$5A,$70,$82,$90,$9E,CHUNK_PTR_LO_B0,$C2,$D4,$E6,$F4,$02,$14
 		.byte $22,$3C,$62,$74,$86,$98,$AA,$BC,$CA,$DC,$E6,$F0,$FE,$14,$22,$34
 		.byte $3E,$4C,$5E,$6C,$7A,$84,$92,$A0,$AE,$BC,$C6,$D0,$DE,$EC,$FE,$0C
 		.byte $1A,$28,$36,$44,$52,$5C,$6A,$78,$8A,$9C,$A6,$B8,$C6,$D8,$E6,$F4
-		.byte $06,$10,$1A,$24,$36,$48,$5E,$70,$82,$90,$A2,$B0,$C2,$D4,$EA,$FC
+		.byte $06,$10,$1A,$24,$36,$48,$5E,$70,$82,$90,$A2,CHUNK_PTR_LO_B0,$C2,$D4,$EA,$FC
 		.byte $16,$28,$3A,$48,$66,$74,$82,$94,$A6,$B8,$CA,$DC,$EE,$04,$12,$24
-		.byte $36,$4C,$5E,$78,$86,$94,$A2,$B0,$BE,$CC,$DA,$E8,$F6,$04,$12,$20
-		.byte $2E,$3C,$4A,$58,$66,$74,$82,$90,$9E,$B0,$BA,$C8,$D6,$E4,$FE,$0C
+		.byte $36,$4C,$5E,$78,$86,$94,$A2,CHUNK_PTR_LO_B0,$BE,$CC,$DA,$E8,$F6,$04,$12,$20
+		.byte $2E,$3C,$4A,$58,$66,$74,$82,$90,$9E,CHUNK_PTR_LO_B0,$BA,$C8,$D6,$E4,$FE,$0C
 		.byte $1A,$28,$3A,$48,$56,$68,$7A,$90,$9E,$AC,$C6,$D0,$E2,$FC,$1A,$28
 		.byte $36,$40,$5E,$68,$72,$7C,$86,$90,$9A,$A4,$C6,$D8,$EE,$04,$16,$00
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -11891,7 +11929,7 @@ L6587		= $6587
 STRUCTURE_POINTER_LO_L6600:
 		.byte $24,$CD,$EE,$A7,$34,$90,$57,$03,$8B,$6F,$EA,$EE,$81,$9A,$2F,$30
 		.byte $9A,$77,$5B,$98,$00,$55,$34,$34,$55,$06,$D4,$4D,$24,$5A,$39,$5D
-		.byte $5A,$0A,$01,$49,$74,$90,$06,$B8,$24,$6A,$FF,$25,$55,$B0,$39,$48
+		.byte $5A,$0A,$01,$49,$74,$90,$06,$B8,$24,$6A,$FF,$25,$55,CHUNK_PTR_LO_B0,$39,$48
 		.byte $5D,$E7,$72,$CD,$77,$7F,$D3,$34,$EE,$FC,$3A,$00,$73,$B8,$39,$A4
 		.byte $39,$E9,$4A,$EF,$2B,$51,$EE,$5B,$BA,$D8,$BA,$5B,$BA,$7C,$45,$06
 		.byte $9A,$77,$77,$77,$77,$26,$77,$77,$77,$A7,$77,$77,$77,$55,$00,$06
@@ -11907,26 +11945,26 @@ STRUCTURE_POINTER_LO_L6600:
 		.byte $6F,$EE,$E4,$A7,$7C,$EE,$00,$E8,$E8,$7C,$A1,$00,$90,$55,$90,$26
 		
 STRUCTURE_POINTER_HI_L6700:	
-		.byte $A4,$A3,$A4,$A9,$A5,$B1,$AF,$B0,$BA,$A0,$DA,$A4,$BC,$BD,$BE,$A1
-		.byte $A1,$A4,$B5,$BE,$D8,$A6,$A5,$BF,$A6,$FA,$B2,$B3,$A4,$B0,$A3,$B2
-		.byte $B0,$B1,$B2,$A8,$DC,$B1,$FA,$A2,$A4,$A1,$B8,$FC,$A6,$AE,$A3,$B4
-		.byte $A3,$B4,$FE,$A3,$A4,$D8,$B3,$A5,$A4,$D8,$A0,$D8,$FF,$A2,$A3,$AA
+		.byte $A4,$A3,$A4,$A9,$A5,CHUNK_PTR_HI_B1,$AF,CHUNK_PTR_LO_B0,$BA,$A0,$DA,$A4,$BC,$BD,$BE,$A1
+		.byte $A1,$A4,$B5,$BE,$D8,$A6,$A5,$BF,$A6,$FA,$B2,CHUNK_LEN_B3,$A4,CHUNK_PTR_LO_B0,$A3,$B2
+		.byte CHUNK_PTR_LO_B0,CHUNK_PTR_HI_B1,$B2,$A8,$DC,CHUNK_PTR_HI_B1,$FA,$A2,$A4,$A1,$B8,$FC,$A6,$AE,$A3,$B4
+		.byte $A3,$B4,$FE,$A3,$A4,$D8,CHUNK_LEN_B3,$A5,$A4,$D8,$A0,$D8,$FF,$A2,$A3,$AA
 		.byte $A3,$AB,$AC,$AC,$DE,$D9,$A4,$B5,$A6,$D9,$A6,$B5,$A6,$F8,$DA,$FA
 		.byte $A1,$A4,$A4,$A4,$A4,$A9,$A4,$A4,$A4,$A9,$A4,$A4,$A4,$A6,$F8,$FA
 		.byte $A3,$AD,$AE,$DC,$AB,$A5,$AA,$A0,$DE,$A9,$A6,$FC,$A6,$A1,$A3,$BB
 		.byte $A2,$BB,$BD,$A1,$B6,$A5,$DA,$AA,$DB,$A4,$B8,$A0,$A6,$DB,$A3,$DF
 		.byte $A3,$AD,$B7,$A8,$A8,$B7,$F9,$B7,$FF,$A5,$FC,$A1,$B8,$A6,$F8,$A0
 		.byte $A8,$AD,$AD,$A7,$A7,$AD,$DE,$A6,$B9,$A0,$B7,$A3,$A4,$AD,$BA,$AE
-		.byte $A3,$BB,$BB,$A4,$A4,$B7,$FC,$A4,$A2,$BD,$A0,$A3,$A2,$AD,$B0,$BD
-		.byte $A4,$AB,$A0,$A2,$A7,$DB,$A0,$A2,$A8,$A1,$A0,$B5,$F8,$A6,$B0,$AD
-		.byte $A2,$AD,$A0,$A3,$A3,$BD,$AD,$A3,$A7,$A2,$A0,$FE,$A2,$B0,$B0,$AD
-		.byte $A1,$A4,$A0,$F8,$F8,$A0,$DC,$FA,$FB,$F8,$FC,$A9,$A1,$B0,$B0,$AD
-		.byte $A3,$AD,$AD,$FE,$FE,$F9,$B0,$B0,$B0,$B0,$F9,$B0,$B0,$B0,$B0,$BB
-		.byte $FD,$DC,$DE,$A9,$F8,$DC,$F8,$F8,$F8,$F8,$DD,$F8,$B1,$A6,$B1,$A6
+		.byte $A3,$BB,$BB,$A4,$A4,$B7,$FC,$A4,$A2,$BD,$A0,$A3,$A2,$AD,CHUNK_PTR_LO_B0,$BD
+		.byte $A4,$AB,$A0,$A2,$A7,$DB,$A0,$A2,$A8,$A1,$A0,$B5,$F8,$A6,CHUNK_PTR_LO_B0,$AD
+		.byte $A2,$AD,$A0,$A3,$A3,$BD,$AD,$A3,$A7,$A2,$A0,$FE,$A2,CHUNK_PTR_LO_B0,CHUNK_PTR_LO_B0,$AD
+		.byte $A1,$A4,$A0,$F8,$F8,$A0,$DC,$FA,$FB,$F8,$FC,$A9,$A1,CHUNK_PTR_LO_B0,CHUNK_PTR_LO_B0,$AD
+		.byte $A3,$AD,$AD,$FE,$FE,$F9,CHUNK_PTR_LO_B0,CHUNK_PTR_LO_B0,CHUNK_PTR_LO_B0,CHUNK_PTR_LO_B0,$F9,CHUNK_PTR_LO_B0,CHUNK_PTR_LO_B0,CHUNK_PTR_LO_B0,CHUNK_PTR_LO_B0,$BB
+		.byte $FD,$DC,$DE,$A9,$F8,$DC,$F8,$F8,$F8,$F8,$DD,$F8,CHUNK_PTR_HI_B1,$A6,CHUNK_PTR_HI_B1,$A6
 
 OBJECT_SHAPE_POINTER_LO_L6800:		
 		.byte $25,$25,$43,$8D,$CC,$52,$F8,$15,$5C,$25,$28,$25,$CA,$25,$5C,$CC
-		.byte $82,$B1,$CE,$F4,$23,$52,$78,$B0,$E8,$06,$A6,$4C,$C4,$84,$54,$8E
+		.byte $82,CHUNK_PTR_HI_B1,$CE,$F4,$23,$52,$78,CHUNK_PTR_LO_B0,$E8,$06,$A6,$4C,$C4,$84,$54,$8E
 		.byte $91,$5D,$5A,$17,$12,$C9,$6A,$90,$80,$06,$74,$76,$E5,$28,$B8,$87
 		.byte $FA,$CF,$5E,$0C,$BE,$61,$8F,$BF,$45,$F8,$00,$00,$F8,$4A,$4A,$8D
 		
@@ -11939,7 +11977,7 @@ OBJECT_SHAPE_POINTER_HI_L6840:
 OBJ_X_LSB_L6880:		
 		.byte $41,$E4,$2E,$57,$0E,$78,$A8,$00,$7D,$9C,$00,$9C,$61,$3C,$00,$37
 		.byte $E5,$B7,$F1,$F6,$AE,$A7,$16,$C7,$1D,$28,$53,$53,$28,$53,$02,$9E
-		.byte $11,$C0,$51,$B3,$B5,$D0,$87,$20,$4F,$85,$2E,$0B,$10,$58,$60,$8C
+		.byte $11,$C0,$51,CHUNK_LEN_B3,$B5,$D0,$87,$20,$4F,$85,$2E,$0B,$10,$58,$60,$8C
 		.byte $6E,$CF,$05,$A6,$DF,$8C,$5A,$58,$DA,$00,$80,$80,$00,$00,$00,$00
 OBJ_Y_LSB_L68C0:		
 		.byte $01,$00,$00,$00,$00,$00,$00,$00,$A4,$00,$00,$00,$00,$00,$00,$E6
@@ -11948,8 +11986,8 @@ OBJ_Y_LSB_L68C0:
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$C0
 OBJ_Z_LSB_L6900:		
 		.byte $A4,$77,$44,$20,$4B,$90,$37,$00,$2C,$72,$00,$72,$D9,$FE,$00,$0A
-		.byte $65,$72,$BA,$95,$15,$B0,$8A,$74,$BA,$22,$27,$27,$22,$27,$FE,$8A
-		.byte $70,$28,$7A,$7B,$B1,$00,$A3,$67,$2B,$5E,$8E,$5D,$3E,$13,$80,$B9
+		.byte $65,$72,$BA,$95,$15,CHUNK_PTR_LO_B0,$8A,$74,$BA,$22,$27,$27,$22,$27,$FE,$8A
+		.byte $70,$28,$7A,$7B,CHUNK_PTR_HI_B1,$00,$A3,$67,$2B,$5E,$8E,$5D,$3E,$13,$80,$B9
 		.byte $AB,$B9,$58,$20,$C4,$A2,$ED,$AC,$69,$80,$00,$00,$80,$00,$00,$00
 		
 L683F		= $683F
