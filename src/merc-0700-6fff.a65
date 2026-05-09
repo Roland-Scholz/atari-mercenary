@@ -256,12 +256,12 @@ DIF_Y_HSB_DA       = $00DA
 DIF_Z_LSB_DB       = $00DB
 DIF_Z_MSB_DC       = $00DC
 DIF_Z_HSB_DD       = $00DD
-L00DE       = $00DE
-L00DF       = $00DF
-L00E0       = $00E0
-L00E1       = $00E1
+MSG_CHUNK_CNT_DE       = $00DE
+CHAR_CNT_DF       = $00DF
+JIFY_CNT_E0       = $00E0
+JIFY_MAX_E1       = $00E1
 L00E5       = $00E5
-L00E6       = $00E6
+MESSAGE_PENDING_E6       = $00E6
 L00E7       = $00E7
 
 
@@ -280,7 +280,7 @@ L00F7       = $00F7
 CRASH_F8       = $00F8
 L00F9       = $00F9
 L00FA       = $00FA
-L00FB       = $00FB
+TEXT_FILL_BYTE_FB       = $00FB
 L00FC       = $00FC
 L00FE       = $00FE
 L00FF       = $00FF
@@ -662,1876 +662,398 @@ LFFFF       = $FFFF
 ;
 ; Benson jump vectors
 ;
-L0700:      jmp (L3907)
-            ora #$01
-            ora L0E97
-            .byte $AB
-            asl L0EBF
-            .byte $D2
-            asl L0F77+1
-            .byte $13
-            asl
-            sbc APPMHI
-            .byte $04
-            ora (CRASH_F8),Y
-            asl L09E4+1
-            txs
-            .byte $0C
-            ldy P1PL,X
-            ora L0DE3
-            inc DOSINI+1,X
-            ora #$0E
-            ora L310D+1,X
-            asl L0766
-            lsr APPMHI
-            .byte $5B
-            asl L0E6F
-            .byte $83
-            asl L10F0+1
-            .byte $7C,$0B,$DF,$0B,$13
-            asl
-            ror MUL_HI_07
-            ror MUL_HI_07
-            ror MUL_HI_07
-            ror MUL_HI_07
-            cmp (ZP_0B),Y
-            cld
-            .byte $0B
-            and ZP_0A
-            rol L6D0A,X
-            asl
-            .byte $82
-            asl
-            lda (ZP_0A),Y
-            iny
-            asl
-            dec LF30A,X
-            asl
-            .byte $0B,$0B,$1C,$0B,$32,$0B,$43,$0B,$53,$0B
-            tay
-            .byte $0B
-            sty ZP_0B,X
-L0766:      ora (GRAPH_MEM_HI_23,X)
-            .byte $00
-            ora (ROTATE_MY3_LO_40),Y
-            ora APPMHI+1
-            inc L2001,X
-            .byte $04,$0F
-            inc L2006+1,X
-            .byte $04,$0F
-            inc L200C,X
-            .byte $04,$14,$32,$04
-            ;sty L0109
-	    .byte $8C, $09
-	    
-BENSON:	    .byte $01
-            cpx LFF23
-            eor #$4D
-            eor L4E48+1
-            eor ROTATE_MZ1_LO_4E
-            .byte $54
-            inc L1400
-            .byte $32,$04
-            sty L0109
-            .byte $EF,$FF,$52
-            eor PNT_Z_LO_54
-            eor PNT_Y_LO_52,X
-            lsr L4E48+1
-            .byte $C7
-            cmp ZP_0A,X
-            .byte $00
-L07A2:      ora (SPEED_FP_EC,X)
-            .byte $FF
-            eor L4E41
-            eor ROTATE_MY3_HI_41,X
-            cpy a:PITCH_LO_28
-            ora POT1,Y
-            .byte $00,$04
-            sty L1B09
-            .byte $03,$3C,$14,$32
-            ora (LINE_COLOR0_80),Y
-            ora (NUM_INVENTORY_ITEMS_EB,X)
-            .byte $C7
-            cpy #$00
-            ora (L00EF,X)
-            .byte $23
-            tya
-            .byte $04
-            lda A:DIF_X_HSB_D7
-            ora (L00EF,X)
-            .byte $FF
-            bvc L081F
-            eor PNT_Y_HI_53
-            .byte $54
-            eor #$4E
-            eor #$55
-            cmp L0430
-            .byte $00
-            ora (L00FF,X)
-            jsr L5452+1
-            eor (PNT_Z_LO_54,X)
-            eor ZP_20
-            .byte $4F
-            lsr ZP_20
-            .byte $57
-            eor (PNT_Y_LO_52,X)
-            jsr L4542
-            .byte $54,$57
-            eor ROTATE_MX2_HI_45
-            dec L0100
-            ldy ZP_02,X
-            .byte $13,$9F,$02,$00
-            ora (L00EF,X)
-            txs
-            .byte $FF
-            lsr L4145
-            .byte $52
-            jsr L4940+1
-            .byte $52,$42
-            eor (PNT_Y_HI_53,X)
-            cmp MEM_PTR_LO_00
-L0808:      ora (SPEED_FP_EC,X)
-            ora (OBJECT_NUMBER_AD),Y
-            .byte $BB,$00
-            ora (L00FF,X)
-            jsr L5953+1
-            bvc L085A
-            jsr L200C+1
-            .byte $44,$4F
-            eor L4E48+1
-            eor #$4F
-L081F:      lsr L4420
-            eor (PNT_Y_LO_52,X)
-            .byte $D4,$00
-            ora (SPEED_FP_ED,X)
-            ldy #$FF
-            .byte $52
-            eor ROTATE_MZ3_HI_43
-            eor ROTATE_MZ2_HI_49
-            lsr ROTATE_MX2_HI_45,X
-            cpy MEM_PTR_LO_00
-            ora (SPEED_FP_EC,X)
-            .byte $22,$3C
-            cpy MEM_PTR_LO_00
-            ora (L00FF,X)
-            jsr L501F+1
-            .byte $52
-            eor #$43
-            eor ZP_20
-            ora ROTATE_MZ1_HI_4F
-            .byte $4F,$CF
-            and MEM_PTR_LO_00
-            .byte $14
-            ora TMP_04,X
-            tay
-            ora #$12
-            ora (ROLL_LO_26,X)
-            ora #$01
-            .byte $C3,$FF,$54
-            pha
-            eor #$4E
-            .byte $CB
-L085A:     .byte $DC
-            dec ABUFPT
-            .byte $00,$04
-            tay
-            ora #$12
-            ora (ROLL_LO_26,X)
-            ora #$01
-            sbc LD32B
-            .byte $FF,$53
-            eor ROTATE_MZ1_LO_4E
-            .byte $53
-            eor #$42
-            jmp L00C5
-            .byte $04
-            tay
-            ora #$12
-            ora (ROLL_LO_26,X)
-            ora #$01
-            sbc LB6DC
-            cmp L00E1,X
-            .byte $00,$04
-            tay
-            ora #$12
-            ora (ROLL_LO_26,X)
-            ora #$01
-            sbc LA3DC
-            ora L43FE+1,X
-            .byte $52
-            eor (Z_ROTATION_LO_5A,X)
-            cmp L11FE+2,Y
-            .byte $80
-            ldx L1407+1
-            .byte $32,$04,$BF
-            php
-            ora (L00A9,X)
-            .byte $DC,$14
-            and A:ZP_0A
-            ora (L00EE,X)
-            .byte $C3
-            sbc L00C9
-            ora DDEVIC
-            lda L0107,Y
-            dec L1DE5
-            php
-            sta L00E1,Y
-            .byte $14,$32,$22
-            ora (SIN_DIV_COS_PITCH_HI_39,X)
-            ora #$03
-            clv
-            php
-            ora (SPEED_FP_ED,X)
-            .byte $2B,$FF
-L08C3:      eor (ROTATE_MZ1_LO_4E,X)
-            eor L4F41+1,Y
-            .byte $44
-            cmp L00D2,Y
-            .byte $04
-            sta (ZP_09,X)
-            .byte $12,$80
-            clc
-            ora #$01
-            ora #$C3
-            .byte $FF,$54
-            eor (ROTATE_MY1_LO_4C,X)
-            .byte $4B
-            eor #$4E
-            .byte $47
-            jsr L4F54
-            jsr L594D
-            .byte $53
-            eor ROTATE_MY1_LO_4C
-            dec MEM_PTR_LO_00
-            .byte $04
-            sta (ZP_09,X)
-            .byte $12,$80
-            clc
-            ora #$01
-            inc LDC14
-            .byte $FF,$53,$54
-            eor #$4C
-            jmp L4120
-            jmp L5649
-            cmp MEM_PTR_LO_00
-            .byte $04
-            sta (ZP_09,X)
-            .byte $12,$80
-            clc
-            ora #$01
-            .byte $EB
-            cpx ROLL_SIN_MUL_PITCH_SIN_LO_14
-            .byte $DC,$00,$04
-            sta (ZP_09,X)
-            .byte $12,$80
-            clc
-            ora #$03
-            asl L0109
-            sbc L41FF
-            pha
-            inc L14DC
-            .byte $1B,$00,$04
-            sty L0509
-            asl A:CRASH_F8
-            bvc L08C3+1
-            sta LEF01,Y
-            cld
-            and #$05
-            .byte $00,$14
-            ora ROLL_SIN_MUL_PITCH_SIN_LO_14,X
-            .byte $32,$03
-            clv
-            php
-            .byte $0F
-            inc L2001,X
-            .byte $F3
-            ora (ROTATE_MY3_LO_40),Y
-            .byte $12
-            ora (ZP_6E,X)
-            ora #$01
-            .byte $D3,$22,$FF,$42
-            eor ROTATE_MY1_LO_4C
-            .byte $4F
-            lsr L4547
-            cpy DIF_X_LSB_D5
-            .byte $00
-            ora (L00BC,X)
-            .byte $00
-            ora (SPEED_FP_EC,X)
-            .byte $1F,$00
-            ora (L00FF,X)
-            jsr LC548
-            .byte $2B
-            tay
-            dec L00B7,X
-            ora MEM_PTR_LO_00
-            bpl L0985+1
-            .byte $04
-            bcs L0979
-            .byte $14,$32,$03
-            ror L0409,X
-            lda (ZP_09,X)
-            txa
-            bvc L09EF
-            ora #$0F
-            .byte $FF,$00,$13
-L0979:      ror L0409
-            .byte $C2
-            ora #$03
-            ror VKEYBD+1,X
-            .byte $12,$80,$8B
-L0985:      ora #$07
-            .byte $0F,$00,$82
-            ora #$05
-            .byte $02
-L098D:      .byte $07,$02,$00
-            sta L0509
-            .byte $02,$07,$03,$00
-            sty ZP_09,X
-            ora ZP_02
-            .byte $07
-            ora (MEM_PTR_LO_00,X)
-            .byte $9B
-            ora #$05
-            .byte $02,$07,$0F,$00
-            ldx #$09
-            ora ABUFPT
-            ora (L00EE,X)
-            .byte $33,$DC
-            cmp L1CD5,Y
-            .byte $07,$00,$02,$0B,$2B,$BF
-            ora #$07
-            ora MEM_PTR_LO_00
-            .byte CHUNK_LEN_B3
-            ora #$11
-            ora (TMP_04+1,X)
-            bpl L09C1+1
-L09C1:      ora ROLL_SIN_MUL_PITCH_SIN_LO_14
-            .byte $03,$14
-            ora MEM_PTR_HI_01
-            .byte $EF,$3C,$9E
-            cmp (MEM_PTR_LO_00),Y
-            ora (COS_ROLL_LO_2E,X)
-            cmp L00D0,X
-            asl LC103,X
-            .byte $00
-            ora (L00CD,X)
-            .byte $27,$17,$9B,$FF,$4F
-            ora #$0D
-            .byte $4F
-            stx MEM_PTR_LO_00
-            .byte $14,$07,$14,$32
-L09E4:      ora TMP_04
-            txs
-            ora #$14
-            .byte $0C
-            ora (L00EF,X)
-            bne L098D
-            .byte $FF
-L09EF:      .byte $44
-            eor ROTATE_MY1_HI_4D
-            eor (ROTATE_MZ1_LO_4E,X)
-            .byte $44,$D3,$00
-            ora (L00EF,X)
-            .byte $FF,$54
-            pha
-            eor (L00D4,X)
-            .byte $DC,$FF
-            bvc L0A57
-            .byte $54
-            jsr L4948
-            eor L4420
-            .byte $4F,$57
-            dec L1400
-            .byte $32
-            ora (ROTATE_MY3_LO_40),Y
-            ora TMP_04+1
-            .byte $04
-            txs
-            ora #$01
-            .byte $E7,$FF,$42
-            eor (ROTATE_MZ1_LO_4E,X)
-            .byte $CB,$00,$14
-            ora ROLL_SIN_MUL_PITCH_SIN_LO_14,X
-            .byte $32
-            ora (ROTATE_MY3_LO_40),Y
-            ora TMP_04
-            ldx L010B,Y
-            .byte $EF,$FF
-            lsr L564E+1
-            eor (ROTATE_MZ3_LO_42,X)
-            eor #$4C
-            jmp L8D20
-            .byte $E3,$34
-            asl MEM_PTR_LO_00
-            .byte $14,$32
-            ora (ROTATE_MY3_LO_40),Y
-            ora TMP_04
-            ldx L010B,Y
-            inc L16CE+2
-            .byte $02,$FF
-            eor (ROTATE_MX2_LO_44,X)
-            lsr ROTATE_MX2_HI_45,X
-            .byte $52,$D4,$00
-            ora (L00FF,X)
-            .byte $54
-            pha
-            eor #$4E
-            .byte $47,$D3,$14
-L0A57:      rol LD503
-            ora L0100,X
-            sbc L54FF
-            .byte $4F
-            eor ROTATE_MY2_HI_47,X
-            iny
-            rol LADA9,X
-            .byte $00
-            bpl L0A72
-            .byte $03
-            cmp (ZP_0B,X)
-            .byte $04
-            ldx L010B,Y
-            nop
-L0A72:      .byte $FF,$53
-            eor (ROTATE_MZ3_LO_42,X)
-            eor #$4E
-            .byte $53
-            jsr L5541+2
-            .byte $42
-            cmp MEM_PTR_LO_00
-            .byte $03
-            cmp #$0B
-            .byte $04
-            ldx L010B,Y
-            inc LFFD0
-            .byte $57
-            eor (ROTATE_MY1_LO_4C,X)
-            .byte $54,$4F
-            lsr L4D1F+1
-            .byte $4F
-            lsr L4D55
-            eor ROTATE_MZ1_LO_4E
-            .byte $D4,$00
-            ora (DIF_X_LSB_D5,X)
-L0A9B:      bne L0A9B+1
-            lsr ROTATE_MY3_HI_41
-            eor L554E+1
-            .byte $53
-            jsr L5241
-            .byte $43
-            pha
-            eor #$54
-            eor ROTATE_MZ3_HI_43
-L0AAC:      .byte $D4,$00,$03
-            cmp (ZP_0B,X)
-            .byte $04
-            ldx L010B,Y
-            .byte $EB,$FF,$53,$54
-            asl L531F+1
-            .byte $54
-            eor (ROTATE_MY1_LO_4C,X)
-            jmp L5241
-            .byte $44,$D3,$00,$03
-            cmp (ZP_0B,X)
-            .byte $04
-            ldx L010B,Y
-            cpx LFFD0
-            eor L4F4E+1
-            .byte $52,$42
-            eor L4120,Y
-            .byte $52,$43
-            iny
-            .byte $00,$03
-            cmp #$0B
-            .byte $04
-            ldx L010B,Y
-            nop
-            .byte $FF,$54
-            eor L454B+1,Y
-            .byte $52
-            jsr L4F4E+2
-            eor #$4E
-            .byte $D4,$00,$03
-            cmp #$0B
-            .byte $04
-            ldx L010B,Y
-            cpx L42FF
-            .byte $4F,$53
-            pha
-            eor PNT_Y_LO_52
-            jsr L5452+1
-            eor (ROTATE_MX2_LO_44,X)
-            eor #$55
-            cmp DDEVIC
-L0B09:      cmp (ZP_0B,X)
-            .byte $04
-            ldx L010B,Y
-            cpx L4AFF
-            .byte $4F,$52,$44
-            eor (L00CE,X)
-            .byte $0F,$00,$03
-            cmp (ZP_0B,X)
-            .byte $04
-            ldx L010B,Y
-            .byte $EB,$FF
-            lsr ROTATE_MX2_HI_45,X
-            .byte $43,$54,$4F,$52
-            jsr L4547+1
-            lsr LC547
-            .byte $00,$03
-            cmp #$0B
-            .byte $04
-            ldx L010B,Y
-            ldy L0100,X
-            .byte $EF,$1F,$02
-            ldy MEM_PTR_LO_00
-            bpl L0B5F+1
-            .byte $03
-            cmp (ZP_0B,X)
-            .byte $04
-            ldx L010B,Y
-            inc L9FD0
-            .byte $FF
-            lsr ROTATE_MZ1_HI_4F
-            .byte $52,$D4,$00,$03
-            cmp #$0B
-            .byte $04
-            ldx L010B,Y
-            .byte $EF
-L0B58:      bne L0B58+1
-            .byte $43,$4F
-            eor (ROTATE_MZ3_HI_43,X)
-            pha
-L0B5F:      jsr L4E41
-            .byte $44
-            jsr L4F48
-            .byte $52,$53
-            eor L00D3
-            .byte $00
-            ora (DIF_Z_MSB_DC,X)
-            sbc L00A8
-            ora L50FE+1,X
-            .byte $4F
-            bvc L0BCA
-            jmp LD241
-            .byte $00,$03
-            cmp (ZP_0B,X)
-            .byte $04
-            ldx L010B,Y
-            ldy L0100,X
-            cpx CDTMV4+1
-            .byte $00
-            ora (NEW_KEY_L00E9,X)
-            .byte $FF
-            lsr LD745
-            cmp MEM_PTR_LO_00
-            bpl L0BB1
-            .byte $03
-            cmp (ZP_0B,X)
-            .byte $04
-L0B95:      txs
-            ora #$01
-            sbc #$FF
-            .byte $54,$52
-            eor (ROTATE_MZ2_HI_49,X)
-            .byte $54,$4F,$52
-            inc L1400
-L0BA4:      .byte $32
-            ora (ROTATE_MY3_LO_40),Y
-            ora TMP_04
-            txs
-L0BAA:     ora #$01
-            nop
-            .byte $FF,$47,$4F,$4F
-L0BB1:      .byte $44
-            jsr L4852+1
-            .byte $4F,$57
-            inc L1400
-            .byte $32
-            ora (ROTATE_MY3_LO_40),Y
-            ora ROLL_SIN_MUL_PITCH_SIN_LO_14
-            .byte $17
-            ora TMP_04
-            bcs L0BD4
-            .byte $14,$32
-            ora (ROTATE_MY3_LO_40),Y
-            ora TMP_04
-L0BCA:     ldy L140E+2,X
-            .byte $32
-            ora (ROTATE_MY3_LO_40),Y
-L0BD0:      ora L008A
-            bvc L0B95
-L0BD4:      .byte $0B
-            ora (ROTATE_MY3_LO_40),Y
-            ora L008A
-            bvc L0BA4
-            .byte $0B
-            ora (ROTATE_MY3_LO_40),Y
-            ora TMP_04
-            txs
-            ora #$0F
-            .byte $FF
-            and #$01
-            .byte $EF
-            ldy BENSON_PTR_HIGH_1E,X
-            .byte $03
-            cmp (MEM_PTR_LO_00,X)
-            .byte $14,$32,$93,$97,$0C
-            ora (SPEED_FP_EC,X)
-            .byte $E2
-            sbc RTCLOK
-            .byte $00
-            ora (L00EF,X)
-            .byte $FF,$44
-            eor ROTATE_MY1_LO_4C
-            eor #$56
-            eor PNT_Y_LO_52
-            cmp L0BAA,Y
-            lda ZP_02
-            .byte $00
-            ora (DIF_X_LSB_D5,X)
-            .byte $FF
-            eor (PNT_X_LO_50,X)
-            bvc L0C60
-            .byte $4F
-L0C0F:      bvc L0C63
-L0C11:      eor #$41
-            .byte $54
-            cmp L00C1
-            .byte $02
-            cmp L0100
-            bne L0BD0
-            .byte $FF,$43,$4F
-            jmp L4E4E+1
-            cmp FLIP_SCREEN_22,Y
-            .byte $14,$32,$93,$97,$0C
-            ora (L00D2,X)
-            .byte $2B
-            php
-            .byte $FF,$42
-            eor #$C7
-            and COS_YAW_LO_3C,Y
-            ora (L00EF,X)
-            php
-            .byte $FF,$43
-            eor (PNT_X_LO_50,X)
-            .byte $54
-            eor PNT_Y_LO_52,X
-            eor L00C4
-            .byte $9F,$00,$14,$32,$93,$97,$0C
-            ora (L00AE,X)
-            cpx #$DC
-            .byte $FF,$4B
-            lsr L574F
-            jsr L4F48
-            .byte $D7,$00
-            ora (DIF_X_LSB_D5,X)
-            .byte $FF,$43
-            pha
-            .byte $4F,$4F,$53
-            cmp L00CF
-L0C60:      rol A:L00DE,X
-L0C63:      ora (L00EF,X)
-            bmi L0C77
-            .byte $9F,$00
-            ora (L00FF,X)
-            .byte $4F,$43,$43
-            eor PNT_X_LO_50,X
-            eor #$45
-            cpy L009A
-            .byte $02,$3C,$00
-L0C77:      ora (L00DF,X)
-            .byte $FF,$53
-            bvc L0CC2
-            .byte $43
-            eor #$41
-            jmp L4720
-            .byte $52
-            eor (PNT_Z_LO_54,X)
-            eor #$54
-            eor ROTATE_MX2_LO_44,X
-            cmp MEM_PTR_LO_00
-            .byte $14,$32
-            ora (NUM_INVENTORY_ITEMS_EB,X)
-            asl L3803,X
-            .byte $02,$00,$14,$32
-            ora (ROTATE_MY3_LO_40),Y
-            ora TMP_04
-            txs
-            ora #$0F
-            .byte $FF
-            ror MEM_PTR_HI_01
-            .byte $9F
-            asl LC103,X
-            .byte $00,$14,$32
-            ora (LAST_KEY_L00EA,X)
-            .byte $E2
-            sbc CHUNK_LEN_B3
-            .byte $00
-            ora (COS_YAW_LO_3C,X)
-            ldy L00BF,X
-            .byte $02,$00
-            ora (L00EF,X)
-            cpx #$2F
-            .byte $04
-            cmp ZP_0B,X
-            .byte $00
-            ora (PITCH_LO_28,X)
-            cmp L27D3
-            .byte $00
-L0CC2:      .byte $14,$32,$93
-            inc L010C,X
-            inc LA2E2
-            .byte $FF
-            eor (ROTATE_MY1_LO_4C,X)
-            .byte $53,$CF,CHUNK_LEN_B3,$3C,$00
-            ora (L00FF,X)
-            .byte $44
-            eor PNT_Y_HI_53
-            .byte $54,$52
-            eor ROTATE_MZ3_HI_43,X
-            .byte $54
-            eor #$4F
-            lsr L4F20
-            lsr ZP_20
-            .byte $53
-            eor ROTATE_MY1_LO_4C
-            eor ROTATE_MZ3_HI_43
-            .byte $54
-            eor L00C4
-            .byte $00
-            ora (L00EF,X)
-            ldy L00BE,X
-            .byte $02,$00,$14,$32
-            ora (NUM_INVENTORY_ITEMS_EB,X)
-            asl L3803,X
-            .byte $02,$00,$14,$32
-            ora (ROTATE_MY3_LO_40),Y
-            ora ROLL_SIN_MUL_PITCH_SIN_LO_14
-            php
-            .byte $0F
-            inc L0F1D+1,X
-            .byte $FF
-            bpl L0D26+1
-            .byte $1A
-L0D0B:      ora L1A0C
-            ora LEB01
-            tay
-            .byte $DB,$03,$00,$14,$32
-            ora (ROTATE_MY3_LO_40),Y
-            ora MEM_PTR_HI_01
-            .byte $EB
-            ldy #$3E
-            .byte $00
-            ora (L00FF,X)
-            pha
-            eor PNT_Y_LO_52
-            .byte $54,$5A
-L0D26:      jsr L5053
-            eor (ROTATE_MZ3_HI_43,X)
-            eor PNT_Y_HI_53
-            pha
-            eor #$50
-            jsr L4552
-            lsr L4153+1
-            cpy L0100
-            cmp COS_YAW_LO_3C
-            .byte $FF
-            pha
-            eor #$52
-            eor ZP_20
-            ora #$09
-            ora #$09
-            ora #$89
-            bit MEM_PTR_LO_00
-            .byte $1C
-            ora (L00EF,X)
-            .byte $33,$DC
-            cmp JKEYON,Y
-            pha
-            eor #$52
-            eor SPEED_FP_ED
-            .byte $00,$04,$B2
-            ora #$12
-            ora (PERS_HOR_6A,X)
-            ora LEF01
-            .byte $AB,$B7
-            jsr DOSINI+1
-            .byte $14,$07
-            ora (ROTATE_MY3_LO_40),Y
-            ora SCREEN_LINES_18
-            .byte $00
-            asl MEM_PTR_LO_00
-            .byte $89
-            ora LEE01
-            .byte $FF
-            eor #$4E
-            .byte $53
-            eor ROTATE_MY2_LO_46,X
-            lsr ROTATE_MZ2_HI_49
-            .byte $43
-            eor #$45
-            lsr L3FD4
-            .byte $02,$00,$14
-            ora ROLL_SIN_MUL_PITCH_SIN_LO_14,X
-            .byte $07
-            ora (ROTATE_MY3_LO_40),Y
-            ora APPMHI
-            sed
-            ora (MEM_PTR_LO_00,X)
-            .byte $00
-            sta LEC01,Y
-            cmp L00FF
-            .byte $44
-            eor PNT_Y_HI_53
-            bvc L0DD9
-            .byte $54,$43
-            pha
-            eor L00C4
-            .byte $00
-            ora (NUM_INVENTORY_ITEMS_EB,X)
-            dec L98E5
-            .byte $00
-            ora (POINT_LINE_COUNT_17,X)
-            .byte $9B,$FF
-            php
-            ora L2008
-            eor #$4E
-            jsr LA182
-            .byte $02,$00
-            ora L297F,Y
-            .byte $FF
-            bpl L0DBD
-            ora (ROTATE_MY3_LO_40),Y
-            ora APPMHI+1
-L0DBD:      inc L0F1F,X
-            .byte $FF
-            lda LF90D
-            .byte $00,$00
-            bpl L0DC8
-L0DC8:      ora (LAST_KEY_L00EA,X)
-            .byte $AF
-            cmp (MEM_PTR_LO_00,X)
-            .byte $03
-            ora #$0F
-            .byte $0F
-            inc L0F21+1,X
-            .byte $FF,$93
-            ora A:L00F9
-L0DD9:      bvc L0DDE
-            .byte $00
-            ora (RANDOM_E8,X)
-L0DDE:      iny
-            .byte $00,$03
-            ora #$0F
-L0DE3:      .byte $0F
-            inc L0F21+2,X
-            .byte $FF,$92
-            ora A:L00F9
-            bvc L0DF4
-            .byte $00
-            ora (RANDOM_E8,X)
-            bcs L0DF3
-L0DF3:      .byte $03
-L0DF4:      ora #$0F
-            .byte $0F
-            inc L0F29+2,X
-            .byte $FF
-            bcc L0E0A
-            sbc MEM_PTR_LO_00,Y
-            bpl L0E02
-L0E02:      ora (LAST_KEY_L00EA,X)
-            lda (MEM_PTR_LO_00),Y
-            .byte $03
-            ora #$0F
-            .byte $0F
-L0E0A:     inc L0F2D,X
-            .byte $FF
-L0E0E:      tax
-L0E0F:      ora A:L00F9
-            .byte $00
-L0E13:      bpl L0E15
-L0E15:      ora (NUM_INVENTORY_ITEMS_EB,X)
-            plp
-            cmp (MEM_PTR_LO_00,X)
-            .byte $03
-            ora #$0F
-            .byte $0F
-            inc L0F0C,X
-            .byte $FF
-            txs
-            ora A:L00F9
-            .byte $00
-            and MEM_PTR_LO_00
-            ora (SPEED_FP_EC,X)
-            .byte $B2
-            cmp (MEM_PTR_LO_00,X)
-            .byte $03
-            ora #$0F
-            .byte $0F
-            inc L0F1D,X
-            .byte $FF
-            lsr DOSINI+1
-            sbc MEM_PTR_LO_00,Y
-            and MEM_PTR_LO_00
-            ora (L00EF,X)
-            .byte $9F,$3B
-            iny
-            .byte $00,$03
-            eor APPMHI+1
-            .byte $0F
-            inc L0F1F,X
-            .byte $FF,$32
-            ora A:L00F9
-            .byte $00
-            bpl L0E52
-L0E52:      ora (L00EF,X)
-            .byte $9F,$AF
-L0E56:      cmp (MEM_PTR_LO_00,X)
-            .byte $03
-            eor APPMHI+1
-            .byte $0F
-            inc L0F21+1,X
-            .byte $FF
-            bmi L0E6F
-            sbc MEM_PTR_LO_00,Y
-            php
-            .byte $00
-            ora (SPEED_FP_ED,X)
-            .byte $9F
-            iny
-            .byte $00,$03
-            eor APPMHI+1
-L0E6F:      .byte $0F
-            inc L0F21+2,X
-            .byte $FF,$22
-            ora A:L00F9
-            .byte $00,$12,$00
-            ora (SPEED_FP_ED,X)
-            .byte $9F
-            bcs L0E80
-L0E80:      .byte $03
-            eor APPMHI+1
-            .byte $0F
-            inc L0F29+2,X
-            .byte $FF,$12
-            ora A:L00F9
-            .byte $00
-            and MEM_PTR_LO_00
-            ora (L00EF,X)
-            .byte $9F
-            lda (MEM_PTR_LO_00),Y
-            .byte $03
-            eor APPMHI+1
-L0E97:      .byte $0F
-            inc L0F1D,X
-            .byte $FF
-            dey
-            ora A:L00F9
-            .byte $00
-            jsr L0100
-            nop
-            rol L00C1,X
-            .byte $00,$03
-            ora #$0F
-            .byte $0F
-            inc L0F29+1,X
-            .byte $FF,$9B
-            ora A:L00F9
-            .byte $00
-            ora MEM_PTR_LO_00
-            ora (SPEED_FP_EC,X)
-            tsx
-            cmp (MEM_PTR_LO_00,X)
-            .byte $03
-            ora #$0F
-L0EBF:      .byte $0F
-            inc L0F24+2,X
-            .byte $FF
-            ldx #$0D
-            sbc MEM_PTR_LO_00,Y
-            bpl L0ECB
-L0ECB:      ora (NEW_KEY_L00E9,X)
-            clv
-            .byte $00,$03
-            ora #$0F
-            .byte $0F
-            inc L0F2C,X
-            .byte $FF,$A3
-            ora A:L00F9
-            .byte $00
-            asl MEM_PTR_LO_00
-            ora (RANDOM_E8,X)
-            .byte $D4,$00,$03
-            ora #$0F
-            .byte $0F
-            inc L0F29,X
-            .byte $FF
-            lda DOSINI+1
-            sbc MEM_PTR_LO_00,Y
-            .byte $04,$00
-            ora (NEW_KEY_L00E9,X)
-            cpy DDEVIC
-            ora #$0F
-            .byte $04
-            txs
-            ora #$01
-L0EFC:      inx
-            .byte $FF
-            bvc L0F50+2
-L0F00:      eor #$53
-            .byte $4F
-            dec A:L00E6
-            ora (ROTATE_MY3_LO_40),Y
-            ora ZP_21
-            ora (ROTATE_MY3_LO_40,X)
-L0F0C:      .byte $0F,$0C
-L0F0E:      asl APPMHI+1,X
-            ora L0F16,X
-            .byte $03
-            rti
-            .byte $0F
-L0F16:      ora (NUM_INVENTORY_ITEMS_EB,X)
-            .byte $B7,$FF
-            jmp L4145
-L0F1D:      lsr L00C5,X
-L0F1F:      .byte $00,$14
-L0F21:      inc LEF01,X
-L0F24:      and LF93C
-            .byte $12,$00
-L0F29:      ora L0F32,X
-L0F2C:      .byte $13
-L0F2D:      and #$0F
-            .byte $03
-            rti
-            .byte $0F
-L0F32:      jsr L0111
-            inc L25F9
-            lda MEM_PTR_LO_00,X
-            ora L00F9,X
-            sed
-            sed
-            .byte $14
-            ora ROLL_SIN_MUL_PITCH_SIN_LO_14,X
-            .byte $32
-            ora (ROTATE_MY3_LO_40),Y
-            ora BENSON_PTR_HIGH_1E
-            stx L9F1E
-            .byte $0F
-            inc L0F0C,X
-            .byte $FF
-            ror NUM_ROT_POINTS_L009D
-L0F50:      eor L1E0E+1,Y
-            inx
-            asl MINTLK,X
-            ora #$0F
-            ora (L00EE,X)
-            bne L0EFC
-            .byte $02,$FF,$53
-            eor (DIF_Y_MSB_D9,X)
-            .byte $00
-            ora (L00EE,X)
-            .byte $FF
-            bvc L0FBB+2
-            .byte $D4,$1B,$0B,$FF
-            jmp L4145
-            .byte $44
-            eor L00D2
-            .byte $00,$14,$32
-            ora (ROTATE_MY3_LO_40),Y
-L0F77:      ora APPMHI+1
-            .byte $FF,$00,$0F
-            inc L0119,X
-            sbc L49FF
-            lsr L4554
-            .byte $52,$53,$54
-            eor ROTATE_MY1_LO_4C
-            jmp LD241
-            cmp MEM_PTR_LO_00
-L0F8F:      ldx #$07
-            bne L0FA2
-            .byte $93,$8F,$0F,$04
-            txs
-            ora #$12
-            .byte $04,$B2,$0F,$0C,$B2,$0F
-            ora (L00EE,X)
-L0FA2:      .byte $A7,$FF,$52
-            eor PNT_X_HI_51
-            eor ROTATE_MZ2_HI_49,X
-            .byte $52
-            eor L00C4
-            .byte $00,$14,$32
-            ora (ROTATE_MY3_LO_40),Y
-            ora ABUFPT
-            ora (SPEED_FP_ED,X)
-            .byte $FF
-            bvc L100A
-            eor PNT_Y_HI_53
-            .byte $53
-L0FBB:      jsr L2059
-            .byte $54,$4F
-            jsr L414C
-            eor ROTATE_MZ1_LO_4E,X
-            .byte $43
-            iny
-            .byte $00,$0B,$2B
-            cmp APPMHI+1,X
-            .byte $22,$07
-            iny
-            .byte $0F,$14,$32
-            ora (ROTATE_MY3_LO_40),Y
-            ora L0093
-            .byte $8F,$0F,$12,$04,$DF,$0F
-            sty L0F8F
-            .byte $0F
-            sbc L9A32,X
-            .byte $1C
-            bpl L0FE6+1
-L0FE6:      inc L16CE+2
-            .byte $FF,$57,$4F
-            lsr L546E+1
-            jsr L454B+1
-            .byte $D4,$00
-            ora (L00EE,X)
-            .byte $DC,$FF
-            jmp L4145
-            lsr ROTATE_MX2_HI_45,X
-            jsr L4E55
-            .byte $54
-L1001:      eor #$CC
-            .byte $DC,$00
-            ora (SPEED_FP_EC,X)
-            .byte $FF
-            lsr ROTATE_MZ2_HI_49
-L100A:     cli
-L100B:      jsr L4948
-L100E:      .byte $53
-            jsr L4440+1
-            lsr ROTATE_MX2_HI_45,X
-            .byte $52,$D4,$00,$14,$32
-            ora (ROTATE_MY3_LO_40),Y
-            ora SCREEN_LINES_19
-            ror L0129,X
-            .byte $04
-            sty L1909
-            sbc (MEM_PTR_LO_00,X)
-            stx MEM_PTR_HI_01,Y
-            inc L16CE+2
-            .byte $C2,$02,$DC,$00
-            ora (L00FF,X)
-            .byte $43,$4F
-            lsr L5246+1
-            eor (PNT_Z_LO_54,X)
-            eor ROTATE_MY1_LO_4C,X
-            eor (PNT_Z_LO_54,X)
-            eor #$4F
-            lsr LADD3
-            .byte $97
-L1042:      .byte $00
-            ora (SPEED_FP_EC,X)
-            .byte $FF
-            eor PNT_Y_HI_53
-            .byte $43
-            eor (PNT_X_LO_50,X)
-            cmp ROTATE_MX3_LO_3E
-            .byte $D7,$00,$14,$32,$92
-            jsr L106F
-            ora (L00BC,X)
-            .byte $00
-            ora (SPEED_FP_EC,X)
-            .byte $1F,$00
-            ora (YAW_HI_2B,X)
-            .byte $B7
-            ora L00FF
-            eor L554E+1,Y
-            ror L4555+1
-            jsr L4F46+1
-            lsr A:L00C5
-            .byte $14,$32
-L106F:      ora (L00FF,X)
-            .byte $53
-            eor (X_ROTATION_LO_56,X)
-            eor ZP_20
-            .byte $4F
-            eor L00D4,X
-            bne L1042
-            .byte $13,$00
-            ora (L00FF,X)
-            .byte $53
-            eor L00C5
-            .byte $DC
-            cmp L4DFF
-            eor PNT_Y_LO_52
-            .byte $43
-            eor ROTATE_MZ1_LO_4E
-            eor (PNT_Y_LO_52,X)
-            eor L491F+1,Y
-            cmp #$00
-            .byte $04
-            lda (ZP_09,X)
-            .byte $04
-            lda (ZP_09,X)
-            ora (NEW_KEY_L00E9,X)
-            .byte $FF,$47
-            eor (ROTATE_MY1_HI_4D,X)
-            eor ZP_20
-            .byte $4F
-            lsr ROTATE_MX2_HI_45,X
-            .byte $D2,$00
-            ora POT1,Y
-            .byte $00
-            ora POT3,Y
-            .byte $00,$03
-            sta POKMSK,X
-            ora (L00EF,X)
-            ldy L00C5,X
-            .byte $32,$03,$00
-            ora L2978,Y
-L10BA:     ora (TMP_04+1,X)
-            ora (L00EF,X)
-            .byte $9F
-            cmp COS_DIV_SIN_ROLL_LO_32
-            .byte $00
-            ora L2978,Y
-            ora (TMP_04+1,X)
-            ora (L00EE,X)
-            .byte $E2,$14
-            lda L05B7,X
-            .byte $00
-            ora (DIF_Z_MSB_DC,X)
-            .byte $3A
-            bmi L10D8
-            bpl L10D6
-L10D6:      ora (L00EF,X)
-L10D8:      .byte $FF,$4B
-            eor Y_ROTATION_HI_59
-            jsr L504D+2
-            bvc L1130
-            .byte $53
-            eor #$54
-            eor #$4F
-            lsr L531F+1
-            eor #$54
-            eor L00D3
-            .byte $00
-            bpl L10F2
-L10F0:      ora TMP_04
-L10F2:      txs
-            ora #$12
-            .byte $02
-            ora (BRKKEY,X)
-            .byte $14,$04,$04,$C7
-            bpl L1111+1
-            .byte $07,$14,$32
-            ora (ROTATE_MY3_LO_40),Y
-            ora TMP_04
-            txs
-            ora #$12
-            .byte $02,$3F
-            ora (ROLL_SIN_MUL_PITCH_SIN_LO_14),Y
-            .byte $03,$04,$C7
-            bpl L111E
-L1111:      sbc MEM_PTR_LO_00,Y
-            bvc L1116
-L1116:      .byte $0F
-            inc L0F2D+1,X
-            .byte $FF
-            bvc L10BA
-            .byte $34
-L111E:      .byte $0F
-            ora (DIF_Z_MSB_DC,X)
-            sbc COS_YAW_HI_3D
-            php
-            .byte $12,$00
-            ora (L00EF,X)
-            .byte $FF
-            eor #$4E
-            .byte $53
-            eor #$44
-            eor ZP_20
-L1130:      .byte $54
-            pha
-            eor ZP_20
-            .byte $52
-            eor L00C4
-            asl L1900
-            ror L0169
-            .byte $14,$07
-            ora (ROTATE_MY3_LO_40),Y
-            ora MEM_PTR_LO_00
-            eor L4E44+1
-            .byte $D4,$D3
-            eor #$4E
-            .byte $C7
-            eor L00C4
-            cpy L00EE
-            sbc L41C0+1
-            cmp L200C+1
-            ora L8D20
-            .byte $4F
-            eor L00D2,X
-            lsr
-            eor PNT_Y_HI_53,X
-            .byte $D4
-            eor (ROTATE_MY2_HI_47,X)
-            eor (ROTATE_MZ2_HI_49,X)
-            dec L4148
-            lsr L4547
-            .byte $D2
-            eor (ROTATE_MZ2_HI_49,X)
-            .byte $52
-            bvc L11BE
-            .byte $52,$D4
-            eor (ROTATE_MY1_LO_4C,X)
-            cpy L4940+1
-            .byte $52,$43,$52
-            eor (ROTATE_MY2_LO_46,X)
-            .byte $D4,$52
-            eor X_ROTATION_HI_57
-            eor (PNT_Y_LO_52,X)
-            cpy ROTATE_MY3_HI_41
-            lsr L41C4
-            .byte $52
-            cmp ROTATE_MY3_HI_41
-            lsr L4953+1
-            .byte $47,$52
-            eor (DIF_X_MSB_D6,X)
-            eor (PNT_Z_HI_55,X)
-            .byte $54
-            pha
-            .byte $4F,$D2
-            eor (L00D4,X)
-            eor (ROTATE_MZ1_LO_4E,X)
-            .byte $54
-            eor ROTATE_MZ1_LO_4E
-            lsr L49C0+1
-            .byte $54,$D3,$47,$4F
-            jmp L42C3+1
-            eor (ROTATE_MZ3_HI_43,X)
-            .byte $CB,$42
-            eor DIF_Y_MSB_D9,X
-            .byte $42
-            cmp ROTATE_MZ3_LO_42
-            .byte $52
-            eor #$45
-            dec ROTATE_MZ3_LO_42
-            .byte $52,$4F,$54
-            pha
-            eor PNT_Y_LO_52
-            ora L4E48+1
-L11BE:      ora L414C
-            .byte $D7,$43
-            eor (ROTATE_MY1_LO_4C,X)
-            cpy L4143
-            .byte $54
-            eor PNT_Y_LO_52
-            eor #$4E
-            .byte $C7,$43,$52
-            eor (ROTATE_MY2_LO_46,X)
-            .byte $D4,$43,$52
-            eor (PNT_Y_HI_53,X)
-            iny
-            .byte $43,$D2,$43,$52
-            eor ROTATE_MX2_LO_44
-            eor #$54
-            .byte $D3,$43,$4F
-            eor L554D
-            lsr L4348+1
-            eor (PNT_Z_LO_54,X)
-            eor #$4F
-            dec L4F43
-            eor L4C50
-            eor DIF_Y_LSB_D8
-            .byte $43,$4F
-            lsr L5254
-            .byte $4F
-            cpy L4F43
-L11FE:      eor L4C50
-            eor PNT_Z_LO_54
-L1203:      cmp ROTATE_MZ3_HI_43
-            .byte $52
-            eor L5452+1,Y
-            eor (L00CC,X)
-            eor #$D3
-            .byte $44
-            eor (PNT_Y_LO_52,X)
-            .byte $CB
-L1211:      pha
-            eor PNT_Y_LO_52
-            cmp ROTATE_MY2_HI_47
-            .byte $CF,$44
-            eor ROTATE_MY1_LO_4C
-            eor #$56
-            eor L00D2
-            .byte $44
-            eor PNT_Y_HI_53
-            .byte $54,$52,$4F
-            cmp L418D,Y
-            .byte $54,$54
-            eor (ROTATE_MZ3_HI_43,X)
-            .byte $CB,$44,$CF,$44,$4F
-            lsr L45C4+1
-            .byte $53,$53
-            eor ROTATE_MZ1_LO_4E
-            .byte $54
-            eor #$41
-            cpy L4E44+1
-            .byte $47
-            eor #$4E
-            cmp ROTATE_MX2_HI_45
-            lsr L5243+2
-            .byte $47
-            cmp L4E44+1,Y
-            cpy ROTATE_MY2_LO_46
-            eor L00C5
-            pha
-            eor (X_ROTATION_LO_56,X)
-            cmp ROTATE_MY2_LO_46
-            eor ROTATE_MX2_HI_45,X
-            cpy L4F46
-            .byte $D2
-            lsr ROTATE_MZ2_HI_49
-            lsr L46C4
-            .byte $52,$4F
-            cmp L5544+2
-            lsr L4EC3+1
-            .byte $4F
-            asl L4F20
-            ora L2008+1
-            sbc L4F59
-            eor L00D2,X
-            jmp L4E41
-            cpy ROTATE_MY1_LO_4C
-            .byte $4F
-            lsr L4CC6+1
-            .byte $4F,$43
-            eor (PNT_Z_LO_54,X)
-            eor #$4F
-            dec L4F4C
-            .byte $C3
-            eor L4445
-            eor #$43
-            eor (L00CC,X)
-            jmp L434E+1
-            .byte $4B
-            eor L00C4
-            eor L524F
-            cmp ROTATE_MY1_HI_4D
-            eor ROTATE_MZ3_HI_43
-            pha
-            eor (ROTATE_MZ1_LO_4E,X)
-            .byte $4F
-L129C:      eor #$C4
-            eor L5343+2
-            .byte $53
-            eor (ROTATE_MY2_HI_47,X)
-            cmp ROTATE_MY1_HI_4D
-            eor #$CE
-            eor LD941
-            eor L5354+1
-            .byte $D4
-            pha
-            .byte $4F
-            eor PNT_Y_HI_53,X
-            cmp ROTATE_MZ1_LO_4E
-            eor ROTATE_MX2_HI_45
-            cpy ROTATE_MZ1_LO_4E
-            eor PNT_Z_HI_55
-            .byte $54,$52,$4F
-            dec L4F4E
-            lsr ROTATE_MY3_HI_41,X
-            .byte $44,$52
-            eor #$56
-            cmp ROTATE_MZ1_LO_4E
-            .byte $4F,$D4
-            lsr LD74F
-            .byte $4F
-            dec ROTATE_MZ1_HI_4F
-            .byte $CB,$4F
-            lsr ROTATE_MY2_LO_46
-            eor L00D2
-            .byte $4F
-            dec L4E4E+1
-            jmp L50D9
-            .byte $4F,$57
-            eor L00D2
-            eor (PNT_Y_LO_52,X)
-            eor L554E+1
-            .byte $52
-            cmp L414C,Y
-            .byte $42,$4F,$52
-            eor (PNT_Z_LO_54,X)
-            .byte $4F,$52
-            cmp L4E48+1,Y
-            .byte $54
-            eor PNT_Y_LO_52
-            lsr ROTATE_MZ2_HI_49,X
-            eor DIF_X_HSB_D7
-            bvc L133D+2
-            cmp L4150,Y
-            jmp L4158+1
-            .byte $D2
-            bvc L1348
-            eor #$C4
-            bvc L1356+1
-            eor (L00CE,X)
-            bvc L135B
-            eor ROTATE_MY3_HI_41
-L1311:      .byte $53
-            cmp ROTATE_MX2_HI_45
-            cli
-            .byte $43
-            pha
-            eor PNT_X_HI_51
-            eor ROTATE_MX2_HI_45,X
-            .byte $D2
-            bvc L1370
-            .byte $4F
-            lsr ROTATE_MZ2_HI_49,X
-            .byte $53
-            eor #$4F
-            lsr L43D3
-            .byte $4F
-            lsr L4545+1
-            .byte $52
-            eor ROTATE_MZ1_LO_4E
-            .byte $43
-            cmp PNT_X_LO_50
-            eor (L00C4,X)
-            .byte $54
-            pha
-            eor ZP_20
-            bvc L1379+1
-            jmp L4158+1
-            .byte $52
-L133D:      jsr L4F43
-            eor L414C+1
-            lsr L4544
-            .byte $52,$6F
-L1348:      .byte $D3
-            eor L534F
-            .byte $D4
-            eor #$4E
-            .byte $53,$54
-            eor (ROTATE_MY1_LO_4C,X)
-            jmp L5440+1
-L1356:      eor #$4F
-            dec L4552
-L135B:      eor (PNT_Z_HI_55),Y
-            eor #$52
-            eor ROTATE_MY1_HI_4D
-            eor ROTATE_MZ1_LO_4E
-            .byte $D4,$52
-            eor PNT_X_LO_50
-            .byte $4F,$52,$D4,$52,$4F,$4F
-            cmp L4553
-L1370:      lsr LC9C4
-            .byte $53
-            eor (ROTATE_MY1_LO_4C,X)
-            cmp PNT_Y_HI_53
-            pha
-L1379:      eor #$D0
-            .byte $53
-            pha
-            .byte $4F
-            eor ROTATE_MY1_LO_4C,X
-            cpy PNT_Y_HI_53
-            .byte $54
-            eor (PNT_Z_LO_54,X)
-            eor L00D3,X
-            .byte $53,$54,$4F,$52
-            eor L00D3
-            .byte $53,$54
-            eor (PNT_Y_LO_52,X)
-            .byte $D4,$53
-            eor PNT_X_LO_50,X
-            bvc L13E3
-            eor #$45
-            .byte $D3
-            eor #$4E
-            lsr ROTATE_MZ2_HI_49
-            .byte $52
-            eor L5241
-            cmp LCE49,Y
-            eor #$D4
-            .byte $54
-            pha
-            eor L00CD
-            .byte $54
-            pha
-            cmp ROTATE_MZ2_HI_49
-            lsr L4F46
-            .byte $52
-            eor L5440+1
-            eor #$4F
-            dec L4854
-            eor PNT_Y_LO_52
-            cmp PNT_Z_LO_54
-            pha
-            eor #$D3
-            .byte $4B
-            eor #$54
-            .byte $43
-            pha
-            eor L00CE
-            .byte $54,$CF,$54,$4F,$CF,$54
-            eor (PNT_Y_LO_52,X)
-            .byte $C7,$54,$52
-            eor (ROTATE_MZ1_LO_4E,X)
-            .byte $53
-            eor (ROTATE_MZ3_HI_43,X)
-            .byte $54
-            eor #$4F
-            dec L4156+1
-            lsr L47D4
-            .byte $4F
-L13E3:      .byte $4F
-            cpy X_ROTATION_HI_57
-            .byte $4F,$52,$CB
-            eor LD54F,Y
-            lsr
-            .byte $4F,$C2
-            eor L00D3,X
-            lsr ROTATE_MX2_HI_45,X
-            .byte $52
-            cmp L4856+1,Y
-            eor L00CE
-            .byte $57
-            eor (ROTATE_MY1_LO_4C,X)
-            .byte $CB,$57
-            cmp X_ROTATION_HI_57
-L1400:      eor ROTATE_MY1_LO_4C
-            cpy L4856+1
-            eor PNT_Y_LO_52
-L1407:      cmp X_ROTATION_HI_57
-            eor #$4C
-L140B:      cpy L2020
-L140E:      jsr L2020
-            jsr L2020
-            ldy #$A0
-            jmp MEM_PTR_LO_00
-            inx
-            sta A:L00E6,X
-            .byte $EF
-            ora L2CDE+1,Y
-            cmp LE62D
-            .byte $00
-            sbc #$D6
-            .byte $FF
-            pha
-            eor ROTATE_MY3_HI_41
-            lsr DIF_Y_MSB_D9,X
-            inc MEM_PTR_LO_00
-            .byte $EF
-            ldy #$3E
-            ldy ZP_02,X
-            .byte $00
-            ldy #$3E
-            .byte $9F,$02,$00,$EF
-            asl
-            cmp L0AAC,X
-            .byte $00
-            inx
-            .byte $FF,$43
-            pha
-            eor ROTATE_MX2_HI_45
-            .byte $53
-            cmp L00E7
-            .byte $00,$EB
-            ldy #$38
-            .byte $02,$00
-            inc LC126
-            .byte $00
-            inx
-            asl A:L00E6
-            inx
-            .byte $D4,$00
-            nop
-            rol L00C1,X
-            .byte $00
-            sbc #$9F
-            sbc #$00
-            .byte $EF
-            ldy BENSON_PTR_HIGH_1E,X
-            .byte $03
-            cmp (MEM_PTR_LO_00,X)
-            cpx LC1BA
-            .byte $00
-            ldy L1FEC,X
-            .byte $02
-            cmp (L00E6,X)
-            .byte $00
-            cpx L50FE+1
-            pha
-            .byte $4F,$54,$4F
-            lsr L451F+1
-            eor L5448+1
-            .byte $54
-            eor L00D2
-            inc MEM_PTR_LO_00
-            .byte $DC,$3A
-            sed
-            and MEM_PTR_LO_00
-            sbc #$FF
-            eor Y_ROTATION_LO_58
-            .byte $43
-            pha
-            eor PNT_X_HI_51
-            eor ROTATE_MX2_HI_45,X
-            .byte $D2,$00,$DC,$3A,$0C
-            bmi L149F
-            .byte $00
-            cpx L41FF
-L149F:      lsr L4953+1
-            jsr L4953+1
-            eor L2045
-            .byte $42,$4F
-            eor LEBC2
-            .byte $00
-            sbc #$A7
-            sbc #$00
-            cpx L4DFF
-            eor PNT_Z_LO_54
-            eor (ROTATE_MY1_LO_4C,X)
-L14B9:      jsr L4544
-            .byte $54
-            eor ROTATE_MZ3_HI_43
-            .byte $54,$4F,$D2,$EB,$00
-            sbc #$15
-            inx
-            .byte $00
-            sbc #$FF
-            bvc L151B
-            .byte $57
-            eor PNT_Y_LO_52
-            eor (ROTATE_MY1_HI_4D,X)
-            bne L14B9+2
-            .byte $00,$EB
-            ldx SIN_YAW_HI_3B
-            nop
-            .byte $00
-            inx
-            clc
-            inx
-L14DC:      .byte $00
-            cpx L2A36+1
-            .byte $EB,$00
-            inx
-            .byte $FF,$43,$4F
-            lsr ROTATE_MY2_LO_46
-            eor #$CE
-            .byte $E7,$00
-            sbc #$FF
-            jmp L5241
-            .byte $47
-            eor ZP_20
-            .byte $42,$4F
-            cld
-            sbc #$00
-            cpx L55FE+1
-            .byte $53
-            eor ROTATE_MY2_LO_46
-            eor ROTATE_MY1_LO_4C,X
-L1501:      jsr L5241
-            eor L4D41
-            eor ROTATE_MZ1_LO_4E
-            .byte $D4
-            cpx LE900
-            cpy LE700
-            .byte $1A
-L1511:      inc MEM_PTR_LO_00
-            inx
-            .byte $FF,$53
-            eor #$47
-            pha
-            .byte $54,$D3
-L151B:      .byte $E7,$00
-            sbc LCA9C
-            cpx L3500
-            .byte $FF
-            ora (ZP_02,X)
-            ora #$03
-            ora #$20
-            .byte $53
-            eor PNT_X_LO_50,X
-            bvc L157B
-            cmp L00EF,Y
-            nop
-            .byte $FF,$57
-            eor #$4E
-            .byte $43
-            pha
-            eor PNT_Y_HI_53
-            .byte $54
-            eor L00D2
-            sbc #$00
-            inc LB921
-            inc LE900
-            .byte $FF,$44
-            eor (PNT_Z_LO_54,X)
-            eor (ROTATE_MZ3_LO_42,X)
-            eor (ROTATE_MZ1_LO_4E,X)
-            .byte $CB
-            inx
-            .byte $00,$E7,$FF
-            bvc L1595+1
-            .byte $53,$D3
-            inc MEM_PTR_LO_00
-            .byte $EB,$D4,$FF,$53
-            eor #$4E
-            .byte $CB
-            nop
-            .byte $00
-            cpx L30C4+1
-            .byte $04,$E7,$00,$EF,$FF
-            eor ROTATE_MZ1_LO_4E
-            eor ROTATE_MY1_HI_4D
-            cmp L30C4+1,Y
-            .byte $04,$E7
-L1573:      .byte $00
-            inc MEM_PTR_LO_00
-            .byte $FF
-            bvc L15CA+1
-            eor PNT_Y_HI_53
-L157B:      .byte $53
-            jsr L4552
-            .byte $54
-            eor PNT_Y_LO_52,X
-            lsr L571F+1
-            pha
-            eor ROTATE_MZ1_LO_4E
-            jsr L4552
-            eor (ROTATE_MX2_LO_44,X)
-            cmp LED00,Y
-            .byte $FF
-            bvc L15D4
-            .byte $53,$53
-L1595:      jsr L4F48
-            jmp L4544
-            .byte $52,$53
-            jsr L4E4E+1
-            jmp LE6D9
-            .byte $00
-            cpx L4CFE+1
-            .byte $4F
-            eor (L00C4,X)
-            stx MEM_PTR_LO_00,Y
-            cpx L53FE+1
-            eor (X_ROTATION_LO_56,X)
-            cmp L0096
-            .byte $00
-            nop
-            cpx ZP_09
-            .byte $C3,$00
-            nop
-            .byte $DC,$23,$04,$00,$EB,$DA
-            tya
-            .byte $03
-            asl MEM_PTR_LO_00
-            .byte $E7,$FF,$4F
-            eor ROTATE_MZ3_HI_43,X
-            pha
-L15CA:     inc L4BFF+1
+L0700:      	.byte $6C, $07, $39, $09, $01, $0D, $97, $0E, $AB, $0E, $BF, $0E
+		.byte $D2, $0E, $78, $0F, $13, $0A, $E5, $0E, $04, $11, $F8, $0E
+		.byte $E5, $09, $9A, $0C, $BC, $0D, $D0, $0D, $E3, $0D, $F6, $0D
+		.byte $09, $0E, $1D, $0E, $31, $0E, $66, $07, $46, $0E, $5B, $0E
+		.byte $6F, $0E, $83, $0E, $F1, $10, $7C, $0B, $DF, $0B, $13, $0A
+		.byte $66, $07, $66, $07, $66, $07, $66, $07, $D1, $0B, $D8, $0B
+		.byte $25, $0A, $3E, $0A, $6D, $0A, $82, $0A, $B1, $0A, $C8, $0A
+		.byte $DE, $0A, $F3, $0A, $0B, $0B, $1C, $0B, $32, $0B, $43, $0B
+		.byte $53, $0B, $A8, $0B, $94, $0B, $01, $23, $00, $11, $40, $05
+		.byte $0F, $FE, $01, $20, $04, $0F, $FE, $07, $20, $04, $0F, $FE
+		.byte $0C, $20, $04, $14, $32, $04, $8C, $09, $01, $EC, $23, $FF
+		.byte "IMMINENT", $EE, $00, $14, $32, $04, $8C, $09, $01, $EF, $FF, "RETURNIN", $C7
+		.byte $D5, $0A, $00, $01, $EC, $FF, "MANUA", $CC, $28, $00, $19, $01
+		.byte $D2, $00, $04, $8C, $09, $1B, $03, $3C, $14, $32, $11, $80
+		.byte $01, $EB, $C7, $C0, $00, $01, $EF, $23, $98, $04, $AD, $D7
+		.byte $00, $01, $EF, $FF, "PRESTINIU", $CD, $30, $04, $00, $01, $FF, " STATE OF WAR BETWEE", $CE
+		.byte $00, $01, $B4, $02, $13, $9F, $02, $00, $01, $EF, $9A, $FF
+		.byte "NEAR AIRBAS", $C5, $00, $01, $EC, $11, $AD, $BB, $00, $01, $FF, " TYPE ", $0D
+		.byte " DOMINION DAR", $D4, $00, $01, $ED, $A0, $FF, "RECEIVE", $C4, $00, $01, $EC
+		.byte $22, $3C, $C4, $00, $01, $FF, "  PRICE ", $05, "OO", $CF, $25, $00
+		.byte $14, $15, $04, $A8, $09, $12, $01, $26, $09, $01, $C3, $FF
+		.byte "THIN", $CB, $DC, $C6, $1C, $00, $04, $A8, $09, $12, $01, $26, $09
+		.byte $01, $ED, $2B, $D3, $FF, "SENSIBL", $C5, $00, $04, $A8, $09, $12
+		.byte $01, $26, $09, $01, $ED, $DC, $B6, $D5, $E1, $00, $04, $A8
+		.byte $09, $12, $01, $26, $09, $01, $ED, $DC, $A3, $1D, $FF, "CRAZ", $D9
+		.byte $00, $12, $80, $AE, $08, $14, $32, $04, $BF, $08, $01, $A9
+		.byte $DC, $14, $2D, $0A, $00, $01, $EE, $C3, $E5, $C9, $0D, $00
+		.byte $03, $B9, $07, $01, $CE, $E5, $1D, $08, $99, $E1, $00, $14
+		.byte $32, $22, $01, $39, $09, $03, $B8, $08, $01, $ED, $2B, $FF
+		.byte "ANYBOD", $D9, $D2, $00, $04, $81, $09, $12, $80, $18, $09, $01
+		.byte $09, $C3, $FF, "TALKING TO MYSEL", $C6, $00, $04, $81, $09, $12, $80, $18
+		.byte $09, $01, $EE, $14, $DC, $FF, "STILL ALIV", $C5, $00, $04, $81, $09
+		.byte $12, $80, $18, $09, $01, $EB, $E4, $14, $DC, $00, $04, $81
+		.byte $09, $12, $80, $18, $09, $03, $0E, $09, $01, $ED, $FF, "AH", $EE
+		.byte $DC, $14, $1B, $00, $04, $8C, $09, $05, $0E, $F8, $00, $50, $99
+		.byte $99, $01, $EF, $D8, $29, $05, $00, $14, $15, $14, $32, $03
+		.byte $B8, $08, $0F, $FE, $01, $20, $F3, $11, $40, $12, $01, $6E, $09
+		.byte $01, $D3, $22, $FF, "BELONGE", $C4, $D5, $00, $01, $BC, $00, $01
+		.byte $EC, $1F, $00, $01, $FF, " H", $C5, $2B, $A8, $D6, $B7, $05
+		.byte $00, $10, $20, $04, $B0, $10, $14, $32, $03, $7E, $09, $04
+		.byte $A1, $09, $8A, "P{", $09, $0F, $FF, $00, $13, $6E, $09, $04
+		.byte $C2, $09, $03, $7E, $09, $02, $12, $80, $8B, $09, $07, $0F
+		.byte $00, $82, $09, $05, $02, $07, $02, $00, $8D, $09, $05, $02
+		.byte $07, $03, $00, $94, $09, $05, $02, $07, $01, $00, $9B, $09
+		.byte $05, $02, $07, $0F, $00, $A2, $09, $05, $1C, $01, $EE, $33, $DC
+		.byte $D9, $D5, $1C, $07, $00, $02, $0B, $2B, $BF, $09, $07, $05
+		.byte $00, $B3, $09, $11, $01, $05, $10, $01, $05, $14, $03, $14
+		.byte $05, $01, $EF, $3C, $9E, $D1, $00, $01, $2E, $D5, $D0, $1E
+		.byte $03, $C1, $00, $01, $CD, $27, $17, $9B, $FF, $4F, $09, $0D
+		.byte $4F, $86, $00, $14, $07, $14, $32, $05, $04, $9A, $09, $14
+		.byte $0C, $01, $EF, $D0, $9F, $FF, "DEMAND", $D3, $00, $01, $EF, $FF
+		.byte "THA", $D4, $DC, $FF, "PUT HIM DOW", $CE, $00, $14, $32, $11, $40, $05
+		.byte $05, $04, $9A, $09, $01, $E7, $FF, "BAN", $CB, $00, $14, $15
+		.byte $14, $32, $11, $40, $05, $04, $BE, $0B, $01, $EF, $FF, "NOVABILL ", $8D
+		.byte $E3, $34, $06, $00, $14, $32, $11, $40, $05, $04, $BE, $0B
+		.byte $01, $EE, $D0, $16, $02, $FF, "ADVER", $D4, $00, $01, $FF, "THING", $D3
+		.byte $14, $2E, $03, $D5, $1D, $00, $01, $ED, $FF, "TOUG", $C8, $3E, $A9
+		.byte $AD, $00, $10, $08, $03, $C1, $0B, $04, $BE, $0B, $01, $EA
+		.byte $FF, "SABINS CUB", $C5, $00, $03, $C9, $0B, $04, $BE, $0B, $01, $EE
+		.byte $D0, $FF, "WALTON MONUMEN", $D4, $00, $01, $D5, $D0, $FF, "FAMOUS ARCHITEC", $D4, $00
+		.byte $03, $C1, $0B, $04, $BE, $0B, $01, $EB, $FF, "ST", $0E, " STALLARD", $D3
+		.byte $00, $03, $C1, $0B, $04, $BE, $0B, $01, $EC, $D0, $FF, "MOORBY ARC", $C8
+		.byte $00, $03, $C9, $0B, $04, $BE, $0B, $01, $EA, $FF, "TYLER POIN", $D4
+		.byte $00, $03, $C9, $0B, $04, $BE, $0B, $01, $EC, $FF, "BOSHER STADIU", $CD
+		.byte $00, $03, $C1, $0B, $04, $BE, $0B, $01, $EC, $FF, "JORDA", $CE
+		.byte $0F, $00, $03, $C1, $0B, $04, $BE, $0B, $01, $EB, $FF, "VECTOR HENG", $C5
+		.byte $00, $03, $C9, $0B, $04, $BE, $0B, $01, $BC, $00, $01, $EF
+		.byte $1F, $02, $A4, $00, $10, $20, $03, $C1, $0B, $04, $BE, $0B
+		.byte $01, $EE, $D0, $9F, $FF, "FOR", $D4, $00, $03, $C9, $0B, $04
+		.byte $BE, $0B, $01, $EF, $D0, $FF, "COACH AND HORSE", $D3, $00, $01, $DC, $E5
+		.byte $A8, $1D, $FF, "POPULA", $D2, $00, $03, $C1, $0B, $04, $BE, $0B
+		.byte $01, $BC, $00, $01, $EC, $1F, $02, $00, $01, $E9, $FF, "NE", $D7
+		.byte $C5, $00, $10, $20, $03, $C1, $0B, $04, $9A, $09, $01, $E9
+		.byte $FF, "TRAITOR", $EE, $00, $14, $32, $11, $40, $05, $04, $9A, $09
+		.byte $01, $EA, $FF, "GOOD SHOW", $EE, $00, $14, $32, $11, $40, $05, $14
+		.byte $17, $05, $04, $B0, $10, $14, $32, $11, $40, $05, $04, $BC
+		.byte $10, $14, $32, $11, $40, $05, $8A, $50, $C1, $0B, $11, $40, $05
+		.byte $8A, $50, $C9, $0B, $11, $40, $05, $04, $9A, $09, $0F, $FF
+		.byte $29, $01, $EF, $B4, $1E, $03, $C1, $00, $14, $32, $93, $97
+		.byte $0C, $01, $EC, $E2, $E5, $12, $00, $01, $EF, $FF, "DELIVER", $D9
+		.byte $AA, $0B, $A5, $02, $00, $01, $D5, $FF, "APPROPRIAT", $C5, $C1, $02
+		.byte $CD, $00, $01, $D0, $B4, $FF, "COLON", $D9, $22, $00, $14, $32, $93
+		.byte $97, $0C, $01, $D2, $2B, $08, $FF, "BI", $C7, "9<", $00, $01
+		.byte $EF, $08, $FF, "CAPTURE", $C4, $9F, $00, $14, $32, $93, $97, $0C
+		.byte $01, $AE, $E0, $DC, $FF, "KNOW HO", $D7, $00, $01, $D5, $FF, "CHOOS", $C5
+		.byte $CF, $3E, $DE, $00, $01, $EF, $30, $10, $9F, $00, $01, $FF
+		.byte "OCCUPIE", $C4, $9A, $02, $3C, $00, $01, $DF, $FF, "SPECIAL GRATITUD", $C5, $00
+		.byte $14, $32, $01, $EB, $1E, $03, $38, $02, $00, $14, $32, $11
+		.byte $40, $05, $04, $9A, $09, $0F, $FF, $66, $01, $9F, $1E, $03
+		.byte $C1, $00, $14, $32, $01, $EA, $E2, $E5, $B3, $00, $01, $3C, $B4
+		.byte $BF, $02, $00, $01, $EF, $E0, $2F, $04, $D5, $0B, $00, $01
+		.byte $28, $CD, $D3, $27, $00, $14, $32, $93, $FE, $0C, $01, $EE
+		.byte $E2, $A2, $FF, "ALS", $CF, $B3, $3C, $00, $01, $FF, "DESTRUCTION OF SELECTE", $C4
+		.byte $00, $01, $EF, $B4, $BE, $02, $00, $14, $32, $01, $EB, $1E
+		.byte $03, $38, $02, $00, $14, $32, $11, $40, $05, $14, $08, $0F
+		.byte $FE, $1E, $0F, $FF, $10, $1D, $1A, $0D, $0C, $1A, $0D, $01
+		.byte $EB, $A8, $DB, $03, $00, $14, $32, $11, $40, $05, $01, $EB
+		.byte $A0, $3E, $00, $01, $FF, "HERTZ SPACESHIP RENTA", $CC, $00, $01, $C5, $3C, $FF
+		.byte "HIRE ", $09, $09, $09, $09, $09, $89, $24, $00, $1C, $01, $EF
+		.byte $33, $DC, $D9, $D5, $FF, "HIRE", $ED, $00, $04, $B2, $09, $12
+		.byte $01, $6A, $0D, $01, $EF, $AB, $B7, $20, $0D, $00, $14, $07
+		.byte $11, $40, $05, $18, $00, $06, $00, $89, $0D, $01, $EE, $FF
+		.byte "INSUFFICIEN", $D4, $3F, $02, $00, $14, $15, $14, $07, $11, $40, $05
+		.byte $0E, $F8, $01, $00, $00, $99, $01, $EC, $C5, $FF, "DESPATCHE", $C4
+		.byte $00, $01, $EB, $CE, $E5, $98, $00, $01, $17, $9B, $FF, $08
+		.byte $0D, $08, " IN ", $82, $A1, $02, $00, $19, $7F, $29, $FF, $10
+		.byte $04, $11, $40, $05, $0F, $FE, $1F, $0F, $FF, $AD, $0D, $F9
+		.byte $00, $00, $10, $00, $01, $EA, $AF, $C1, $00, $03, $09, $0F
+		.byte $0F, $FE, $22, $0F, $FF, $93, $0D, $F9, $00, $50, $03, $00
+		.byte $01, $E8, $C8, $00, $03, $09, $0F, $0F, $FE, $23, $0F, $FF
+		.byte $92, $0D, $F9, $00, $50, $06, $00, $01, $E8, $B0, $00, $03
+		.byte $09, $0F, $0F, $FE, $2B, $0F, $FF, $90, $0D, $F9, $00, $00
+		.byte $10, $00, $01, $EA, $B1, $00, $03, $09, $0F, $0F, $FE, $2D, $0F
+		.byte $FF, $AA, $0D, $F9, $00, $00, $10, $00, $01, $EB, $28, $C1
+		.byte $00, $03, $09, $0F, $0F, $FE, $0C, $0F, $FF, $9A, $0D, $F9
+		.byte $00, $00, $25, $00, $01, $EC, $B2, $C1, $00, $03, $09, $0F
+		.byte $0F, $FE, $1D, $0F, $FF, $46, $0D, $F9, $00, $00, $25, $00
+		.byte $01, $EF, $9F, $3B, $C8, $00, $03, $45, $0F, $0F, $FE, $1F
+		.byte $0F, $FF, $32, $0D, $F9, $00, $00, $10, $00, $01, $EF, $9F
+		.byte $AF, $C1, $00, $03, $45, $0F, $0F, $FE, $22, $0F, $FF, $30, $0D
+		.byte $F9, $00, $00, $08, $00, $01, $ED, $9F, $C8, $00, $03, $45, $0F
+		.byte $0F, $FE, $23, $0F, $FF, $22, $0D, $F9, $00, $00, $12, $00
+		.byte $01, $ED, $9F, $B0, $00, $03, $45, $0F, $0F, $FE, $2B, $0F
+		.byte $FF, $12, $0D, $F9, $00, $00, $25, $00, $01, $EF, $9F, $B1
+		.byte $00, $03, $45, $0F, $0F, $FE, $1D, $0F, $FF, $88, $0D, $F9
+		.byte $00, $00, $20, $00, $01, $EA, $36, $C1, $00, $03, $09, $0F
+		.byte $0F, $FE, $2A, $0F, $FF, $9B, $0D, $F9, $00, $00, $05, $00
+		.byte $01, $EC, $BA, $C1, $00, $03, $09, $0F, $0F, $FE, $26, $0F
+		.byte $FF, $A2, $0D, $F9, $00, $00, $10, $00, $01, $E9, $B8, $00
+		.byte $03, $09, $0F, $0F, $FE, $2C, $0F, $FF, $A3, $0D, $F9, $00
+		.byte $00, $06, $00, $01, $E8, $D4, $00, $03, $09, $0F, $0F, $FE
+		.byte $29, $0F, $FF, $A5, $0D, $F9, $00, $00, $04, $00, $01, $E9
+		.byte $CC, $00, $03, $09, $0F, $04, $9A, $09, $01, $E8, $FF, "PRISO", $CE
+		.byte $E6, $00, $11, $40, $05, $21, $01, $40, $0F, $0C, $16, $0F
+		.byte $1D, $16, $0F, $03, $40, $0F, $01, $EB, $B7, $FF, "LEAV", $C5
+		.byte $00, $14, $FE, $01, $EF, "-<", $F9, $12, $00, $1D, $32, $0F
+		.byte $13, $29, $0F, $03, $40, $0F, $20, $11, $01, $EE, $F9, $25, $B5
+		.byte $00, $15, $F9, $F8, $F8, $14, $15, $14, $32, $11, $40, $05
+		.byte $1E, $8E, $1E, $9F, $0F, $FE, $0C, $0F, $FF, $66, $9D, $59, $0F
+		.byte $1E, $E8, $1E, $F9, $03, $09, $0F, $01, $EE, $D0, $9F, $02
+		.byte $FF, "SA", $D9, $00, $01, $EE, $FF, "PU", $D4, $1B, $0B, $FF
+		.byte "LEADE", $D2, $00, $14, $32, $11, $40, $05, $0F, $FF, $00, $0F
+		.byte $FE, $19, $01, $ED, $FF, "INTERSTELLA", $D2, $C5, $00, $A2, $07, $D0
+		.byte $0F, $93, $8F, $0F, $04, $9A, $09, $12, $04, $B2, $0F, $0C
+		.byte $B2, $0F, $01, $EE, $A7, $FF, "REQUIRE", $C4, $00, $14, $32, $11
+		.byte $40, $05, $1C, $01, $ED, $FF, "PRESS Y TO LAUNC", $C8, $00, $0B, $2B, $D5
+		.byte $0F, $22, $07, $C8, $0F, $14, $32, $11, $40, $05, $93, $8F
+		.byte $0F, $12, $04, $DF, $0F, $8C, $8F, $0F, $0F, $FD, $32, $9A
+		.byte $1C, $10, $01, $EE, $D0, $16, $FF, "WONoT LE", $D4, $00, $01, $EE
+		.byte $DC, $FF, "LEAVE UNTI", $CC, $DC, $00, $01, $EC, $FF, "FIX HIS ADVER", $D4, $00
+		.byte $14, $32, $11, $40, $05, $19, "~)", $01, $04, $8C, $09, $19
+		.byte $E1, $00, $96, $01, $EE, $D0, $16, $C2, $02, $DC, $00, $01
+		.byte $FF, "CONGRATULATION", $D3, $AD, $97, $00, $01, $EC, $FF, "ESCAP", $C5, $3E, $D7
+		.byte $00, $14, $32, $92, " o", $10, $01, $BC, $00, $01, $EC, $1F
+		.byte $00, $01, $2B, $B7, $05, $FF, "YOUnVE GON", $C5, $00, $14, $32, $01
+		.byte $FF, "SAVE OU", $D4, $D0, $C7, $13, $00, $01, $FF, "SE", $C5, $DC
+		.byte $CD, $FF, "MERCENARY I", $C9, $00, $04, $A1, $09, $04, $A1, $09, $01
+		.byte $E9, $FF, "GAME OVE", $D2, $00, $19, $01, $D2, $00, $19, $03, $D2
+		.byte $00, $03, $95, $10, $01, $EF, $B4, $C5, $32, $03, $00, $19
+		.byte "x)", $01, $05, $01, $EF, $9F, $C5, $32, $00, $19, "x)", $01
+		.byte $05, $01, $EE, $E2, $14, $BD, $B7, $05, $00, $01, $DC, ":0", $04
+		.byte $10, $00, $01, $EF, $FF, "KEY OPPOSITION SITE", $D3, $00, $10, $02, $05, $04
+		.byte $9A, $09, $12, $02, $01, $11, $14, $04, $04, $C7, $10, $14
+		.byte $07, $14, $32, $11, $40, $05, $04, $9A, $09, $12, $02, $3F, $11
+		.byte $14, $03, $04, $C7, $10, $0D, $F9, $00, $00, $50, $00, $0F
+		.byte $FE, $2E, $0F, $FF, $50, $9D, $34, $0F, $01, $DC, $E5, $3D, $08
+		.byte $12, $00, $01, $EF, $FF
+		.byte "INSIDE THE RE", $C4, $0E, $00, $19, "ni", $01
+		.byte $14, $07, $11, $40, $05, $00
+		.byte "MEN", $D4, $D3
+		.byte "IN", $C7, $45, $C4
+		.byte $C4, $EE, $ED, $C1, $41, $CD
+		.byte $0D, $20, $0D, $20, $8D
+		.byte "OU", $D2
+		.byte "JUS", $D4
+		.byte "AGAI", $CE
+		.byte "HANGE", $D2
+		.byte "AIRPOR", $D4
+		.byte "AL", $CC
+		.byte "AIRCRAF", $D4
+		.byte "REWAR", $C4
+		.byte "AN", $C4
+		.byte "AR", $C5
+		.byte "ANTIGRA", $D6
+		.byte "AUTHO", $D2, $41, $D4
+		.byte "ANTENN", $C1
+		.byte "IT", $D3
+		.byte "GOL", $C4
+		.byte "BAC", $CB
+		.byte "BU", $D9, $42, $C5
+		.byte "BRIE", $C6
+		.byte "BROTHER", $0D, "IN", $0D, "LA", $D7
+		.byte "CAL", $CC
+		.byte "CATERIN", $C7
+		.byte "CRAF", $D4
+		.byte "CRAS", $C8, $43, $D2
+		.byte "CREDIT", $D3
+		.byte "COMMUNICATIO", $CE
+		.byte "COMPLE", $D8
+		.byte "CONTRO", $CC
+		.byte "COMPLET", $C5
+		.byte "CRYSTA", $CC, $49, $D3
+		.byte "DAR", $CB
+		.byte "HER", $C5
+		.byte $47, $CF, "DELIVE", $D2
+		.byte "DESTRO", $D9, $8D
+		.byte "ATTAC", $CB, $44, $CF
+		.byte "DON", $C5
+		.byte "ESSENTIA", $CC
+		.byte "ENGIN", $C5
+		.byte "ENERG", $D9
+		.byte "EN", $C4
+		.byte "FE", $C5
+		.byte "HAV", $C5
+		.byte "FUE", $CC
+		.byte "FO", $D2
+		.byte "FIN", $C4
+		.byte "FRO", $CD
+		.byte "FUN", $C4
+		.byte "NO", $0E
+		.byte " O", $0D, $09, $20, $ED
+		.byte "YOU", $D2
+		.byte "LAN", $C4
+		.byte "LON", $C7
+		.byte "LOCATIO", $CE
+		.byte "LO", $C3
+		.byte "MEDICA", $CC
+		.byte "LOCKE", $C4
+		.byte "MOR", $C5
+		.byte "MECHANOI", $C4
+		.byte "MESSAG", $C5
+		.byte "MI", $CE
+		.byte "MA", $D9
+		.byte "MUS", $D4
+		.byte "HOUS", $C5
+		.byte "NEE", $C4
+		.byte "NEUTRO", $CE
+		.byte "NOVADRIV", $C5
+		.byte "NO", $D4
+		.byte "NO", $D7
+		.byte $4F, $C6, $4F, $CB
+		.byte "OFFE", $D2
+		.byte $4F, $CE
+		.byte "ONL", $D9
+		.byte "POWE", $D2
+		.byte "ARMOUR", $D9
+		.byte "LABORATOR", $D9
+		.byte "INTERVIE", $D7
+		.byte "PA", $D9
+		.byte "PALYA", $D2
+		.byte "PAI", $C4
+		.byte "PLA", $CE
+		.byte "PLEAS", $C5
+		.byte "EXCHEQUE", $D2
+		.byte "PROVISION", $D3
+		.byte "CONFERENC", $C5
+		.byte "PA", $C4
+		.byte "THE PALYAR COMMANDERo", $D3
+		.byte "MOS", $D4, "INSTALLATIO", $CE
+		.byte "REQUIREMEN", $D4
+		.byte "REPOR", $D4
+		.byte "ROO", $CD
+		.byte "SEN", $C4, $C9
+		.byte "SAL", $C5
+		.byte "SHI", $D0
+		.byte "SHOUL", $C4
+		.byte "STATU", $D3
+		.byte "STORE", $D3
+		.byte "STAR", $D4
+		.byte "SUPPLIE", $D3
+		.byte "INFIRMAR", $D9
+		.byte $49, $CE, $49, $D4
+		.byte "THE", $CD
+		.byte "TH", $C5
+		.byte "INFORMATIO", $CE
+		.byte "THER", $C5
+		.byte "THI", $D3
+		.byte "KITCHE", $CE, $54, $CF
+		.byte "TO", $CF
+		.byte "TAR", $C7
+		.byte "TRANSACTIO", $CE
+		.byte "WAN", $D4
+		.byte "GOO", $C4
+		.byte "WOR", $CB
+		.byte "YO", $D5
+		.byte "JO", $C2, $55, $D3
+		.byte "VER", $D9
+		.byte "WHE", $CE
+		.byte "WAL", $CB, $57, $C5
+		.byte "WEL", $CC
+		.byte "WHER", $C5
+		.byte "WIL", $CC
+		.byte "        ", $A0, $A0, $4C, $00
+		
+L0F00		= $0F00
+L07A2		= $07A2
+L140B		= $140B
+L0F0E		= $0F0E
+L0E0E		= $0E0E
+L0D0B		= $0D0B
+L1001		= $1001
+L1211		= $1211
+L129C		= $129C
+L0C11		= $0C11
+L0E13		= $0E13
+L0E0A		= $0E0A
+L0C0F		= $0C0F
+L0E0F		= $0E0F
+;
+; 64 word table at $7DA0 (lo) and $7DE0 (hi) point to the follwing messages
+;
+;L1418	L1472  L14E1   L1561	
+;L141C  L1484  L14EB   L1567
+;L1424  L1484  L14EB   L1573
+;L142E  L1484  L14F8   L1575
+;L1434  L1484  L150B   L1575
+;L1439  L1484  L150E   L1575
+;L143F  L1489  L150E   L1575
+;L1449  L1495  L1512   L1575
+;L144E  L149B  L1512   L1575
+;L1452  L14AD  L151C   L158E
+;L1456  L14B1  L1521   L15A3
+;L1459  L14C3  L1531   L15AB
+;L145D  L14C7  L153F   L15B3
+;L1461  L14D3  L1544   L15B8
+;L1467  L14D8  L1550   L15BD
+;L146B  L14DC  L1558   L15C3
+
+L1418:		.byte $00,$E8,$9D,$E6
+L141C:		.byte $00,$EF,$19,$DF,$2C,$CD,$2D,$E6
+L1424:		.byte $00,$E9,$D6,$FF,"HEAV",'Y'+$80,$E6
+L142E:		.byte $00,$EF,$A0,$3E,$B4,$02
+L1434:		.byte $00,$A0,$3E,$9F,$02
+L1439:		.byte $00,$EF,$0A,$DD,$AC,$0A
+L143F:		.byte $00,$E8,$FF,"CHEES",'E'+$80,$E7
+L1449:		.byte $00,$EB,$A0,$38,$02
+L144E:		.byte $00,$EE,$26,$C1
+L1452:		.byte $00,$E8,$0E,$E6
+L1456:		.byte $00,$E8,$D4
+L1459:		.byte $00,$EA,$36,$C1
+L145D:		.byte $00,$E9,$9F,$E9
+L1461:		.byte $00,$EF,$B4,$1E,$03,$C1
+L1467:		.byte $00,$EC,$BA,$C1
+L146B:		.byte $00,$BC,$EC,$1F,$02,$C1,$E6
+L1472:		.byte $00,$EC,$FF,"PHOTON EMITTE",'R'+$80,$E6
+L1484:		.byte $00,$DC,$3A,$F8,$25
+L1489:		.byte $00,$E9,$FF,"EXCHEQUE",'R'+$80
+L1495:		.byte $00,$DC,$3A,$0C,$30,$04
+L149B:		.byte $00,$EC,$FF,"ANTI TIME BOM",'B'+$80,$EB
+L14AD:		.byte $00,$E9,$A7,$E9
+L14B1:		.byte $00,$EC,$FF,"METAL DETECTO",'R'+$80,$EB
+L14C3:		.byte $00,$E9,$15,$E8
+L14C7:		.byte $00,$E9,$FF,"POWERAM",'P'+$80,$E8
+L14D3:		.byte $00,$EB,$A6,$3B,$EA
+L14D8:		.byte $00,$E8,$18,$E8
+L14DC:		.byte $00,$EC,$37,$2A,$EB
+L14E1:		.byte $00,$E8,$FF,"COFFI",'N'+$80,$E7
+L14EB:		.byte $00,$E9,$FF,"LARGE BO",'X'+$80,$E9
+L14F8:		.byte $00,$EC,$FF,"USEFUL ARMAMEN",'T'+$80,$EC
+L150B:		.byte $00,$E9,$CC
+L150E:		.byte $00,$E7,$1A,$E6
+L1512:		.byte $00,$E8,$FF,"SIGHT",'S'+$80,$E7
+L151C:		.byte $00,$ED,$9C,$CA,$EC
+L1521:		.byte $00,$35,$FF,$01,$02,$09,$03,$09,$20,"SUPPL",'Y'+$80,$EF
+L1531:		.byte $00,$EA,$FF,"WINCHESTE",'R'+$80,$E9
+L153F:		.byte $00,$EE,$21,$B9,$EE
+L1544:		.byte $00,$E9,$FF,"DATABAN",'K'+$80,$E8
+L1550:		.byte $00,$E7,$FF,"PAS",'S'+$80,$E6
+L1558:		.byte $00,$EB,$D4,$FF,"SIN",'K'+$80,$EA
+L1561:		.byte $00,$EC,$C5,$30,$04,$E7
+L1567:		.byte $00,$EF,$FF,"ENEM",'Y'+$80,$C5,$30,$04,$E7
+L1573:		.byte $00,$E6
+L1575:		.byte $00,$FF,"PRESS RETURN WHEN READ",'Y'+$80
+L158E:		.byte $00,$ED,$FF,"PASS HOLDERS ONL",'Y'+$80,$E6
+L15A3:		.byte $00,$EC,$FF,"LOA",'D'+$80,$96
+L15AB:		.byte $00,$EC,$FF,"SAV",'E'+$80,$96
+L15B3:		.byte $00,$EA,$E4,$09,$C3
+L15B8:		.byte $00,$EA,$DC,$23,$04
+L15BD:		.byte $00,$EB,$DA,$98,$03,$06
+L15C3:		.byte $00,$E7,$FF,"OUCH",$EE
+		.byte $00, $4C
+
+
+L1501		= $1501
+L1511		= $1511
+	
+    
+;.byte $06, $00
+;.byte $E7,$FF,$4F
+;eor ROTATE_MZ3_HI_43,X
+;pha
+L15CA:    ; inc L4BFF+1
             .byte $00,$00,$00,$00,$00,$00,$00
 L15D4:      .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
             .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -2822,7 +1344,7 @@ L184B:      ora (ZP_02),Y
             inc FLIP_SCREEN_22
             inc ROLL_LO_26
             .byte $E2
-            rol L00DF
+            rol CHAR_CNT_DF
             .byte $22,$DB,$1F,$DB
             ora L191E+1,Y
             .byte $22,$1F
@@ -2992,7 +1514,7 @@ L1999:      rol L3E1E+1,X
             .byte $1C,$DF,$1C
             cpx #$24
             .byte $DF
-            bit L00E0
+            bit JIFY_CNT_E0
             .byte $1F,$00,$1F,$1C,$1A,$1C,$1A,$23,$1F,$23,$1F,$3F
             and (MEM_PTR_LO_00,X)
             and (ABUFPT,X)
@@ -3162,13 +1684,13 @@ L1B24:      .byte $17,$12,$12
             .byte $13,$13
 L1B2D:      .byte $07
 L1B2E:      .byte $0C
-            bpl L1CHUNK_LEN_B3E
+            bpl L1B3E
             ora (APPMHI),Y
             .byte $14,$0F
             ora SCREEN_LINES_18,X
             ora L1A18+1,Y
             .byte $1A,$1B,$1B,$1C
-L1CHUNK_LEN_B3E:      .byte $1C
+L1B3E:      .byte $1C
             ora L1F1E,X
             .byte $1F
             jsr L2120
@@ -3410,7 +1932,7 @@ GROUND_STRUCTURE_Y_MSB_1DC0:
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		
 GROUND_STRUCTURE_Z_LSB_1E00:	
-		.byte CHUNK_LEN_B3,$04,$47,$00,$00,$00,$00,$00,$00,$00,$00,$00,$A9,$FE,$8D,$01
+		.byte $B3,$04,$47,$00,$00,$00,$00,$00,$00,$00,$00,$00,$A9,$FE,$8D,$01
 		.byte $D3,$BD,$00,$1E,$9D,$00,$C0,$E8,$D0,$F7,$EE,$13,$1E,$EE,$16,$1E
 		.byte $AD,$16,$1E,$C9,$C0,$D0,$EA,$BD,$00,$F8,$9D,$00,$B8,$E8,$D0,$F7
 		.byte $EE,$29,$1E,$EE,$2C,$1E,$AD,$2C,$1E,$C9,$B8,$D0,$EA,$4C,$00,$93
@@ -3418,7 +1940,7 @@ GROUND_STRUCTURE_Z_LSB_1E00:
 GROUND_STRUCTURE_Z_MSB_1E40:		
 		.byte $8E,$94,$8A,$8F,$82,$7E,$7E,$90,$90,$86,$86,$82,$07,$60,$BD,$00
 		.byte $9F,$F0,$25,$30,$17,$B9,$00,$9F,$F0,$12,$30,$1C,$B9,$40,$9D,$49
-		.byte $80,$85,$04,$BD,$40,$9D,$49,$80,$C5,$04,CHUNK_PTR_LO_B0,$0C,$98,$86,$04,$AA
+		.byte $80,$85,$04,$BD,$40,$9D,$49,$80,$C5,$04,$B0,$0C,$98,$86,$04,$AA
 		.byte $A4,$04,$BD,$00,$9F,$10,$01,$60,$BD,$00,$9F,$85,$6C,$30,$1E,$BD
 
 L1D44		= $1D44
@@ -3648,8 +2170,8 @@ LOG_TAB_L2200:
 		.BYTE $2C,$2D,$2E,$2F,$31,$32,$33,$34,$36,$37,$38,$39,$3B,$3C,$3D,$3E,$3F,$41,$42,$43,$44,$45,$47,$48,$49,$4A,$4B,$4D,$4E,$4F,$50,$51
 		.BYTE $52,$54,$55,$56,$57,$58,$59,$5A,$5C,$5D,$5E,$5F,$60,$61,$62,$63,$64,$66,$67,$68,$69,$6A,$6B,$6C,$6D,$6E,$6F,$70,$71,$72,$74,$75
 		.BYTE $76,$77,$78,$79,$7A,$7B,$7C,$7D,$7E,$7F,$80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8E,$8F,$90,$91,$92,$93,$94,$95
-		.BYTE $96,$97,$98,$99,$9A,$9B,$9B,$9C,$9D,$9E,$9F,$A0,$A1,$A2,$A3,$A4,$A5,$A6,$A7,$A8,$A9,$A9,$AA,$AB,$AC,$AD,$AE,$AF,CHUNK_PTR_LO_B0,CHUNK_PTR_HI_B1,$B2,$B2
-		.BYTE CHUNK_LEN_B3,$B4,$B5,$B6,$B7,$B8,$B9,$B9,$BA,$BB,$BC,$BD,$BE,$BF,$C0,$C0,$C1,$C2,$C3,$C4,$C5,$C6,$C6,$C7,$C8,$C9,$CA,$CB,$CB,$CC,$CD,$CE
+		.BYTE $96,$97,$98,$99,$9A,$9B,$9B,$9C,$9D,$9E,$9F,$A0,$A1,$A2,$A3,$A4,$A5,$A6,$A7,$A8,$A9,$A9,$AA,$AB,$AC,$AD,$AE,$AF,$B0,$B1,$B2,$B2
+		.BYTE $B3,$B4,$B5,$B6,$B7,$B8,$B9,$B9,$BA,$BB,$BC,$BD,$BE,$BF,$C0,$C0,$C1,$C2,$C3,$C4,$C5,$C6,$C6,$C7,$C8,$C9,$CA,$CB,$CB,$CC,$CD,$CE
 		.BYTE $CF,$D0,$D0,$D1,$D2,$D3,$D4,$D4,$D5,$D6,$D7,$D8,$D8,$D9,$DA,$DB,$DC,$DC,$DD,$DE,$DF,$E0,$E0,$E1,$E2,$E3,$E4,$E4,$E5,$E6,$E7,$E7
 		.BYTE $E8,$E9,$EA,$EA,$EB,$EC,$ED,$EE,$EE,$EF,$F0,$F1,$F1,$F2,$F3,$F4,$F4,$F5,$F6,$F7,$F7,$F8,$F9,$F9,$FA,$FB,$FC,$FC,$FD,$FE,$FF,$FF
 	
@@ -3664,7 +2186,7 @@ EXP_TAB_2300:	.BYTE $00,$01,$01,$02,$03,$03,$04,$05,$06,$06,$07,$08,$08,$09,$0A,
 		.BYTE $4C,$4D,$4E,$4F,$50,$51,$51,$52,$53,$54,$55,$56,$57,$58,$59,$5A,$5B,$5C,$5D,$5E,$5E,$5F,$60,$61,$62,$63,$64,$65,$66,$67,$68,$69
 		.BYTE $6A,$6B,$6C,$6D,$6E,$6F,$70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$7A,$7B,$7C,$7D,$7E,$7F,$80,$81,$82,$83,$84,$85,$87,$88,$89,$8A
 		.BYTE $8B,$8C,$8D,$8E,$8F,$90,$91,$92,$93,$95,$96,$97,$98,$99,$9A,$9B,$9C,$9D,$9F,$A0,$A1,$A2,$A3,$A4,$A5,$A6,$A8,$A9,$AA,$AB,$AC,$AD
-		.BYTE $AF,CHUNK_PTR_LO_B0,CHUNK_PTR_HI_B1,$B2,CHUNK_LEN_B3,$B4,$B6,$B7,$B8,$B9,$BA,$BC,$BD,$BE,$BF,$C0,$C2,$C3,$C4,$C5,$C6,$C8,$C9,$CA,$CB,$CD,$CE,$CF,$D0,$D2,$D3,$D4
+		.BYTE $AF,$B0,$B1,$B2,$B3,$B4,$B6,$B7,$B8,$B9,$BA,$BC,$BD,$BE,$BF,$C0,$C2,$C3,$C4,$C5,$C6,$C8,$C9,$CA,$CB,$CD,$CE,$CF,$D0,$D2,$D3,$D4
 		.BYTE $D6,$D7,$D8,$D9,$DB,$DC,$DD,$DE,$E0,$E1,$E2,$E4,$E5,$E6,$E8,$E9,$EA,$EC,$ED,$EE,$F0,$F1,$F2,$F4,$F5,$F6,$F8,$F9,$FA,$FC,$FD,$FF
 		
 L23F4		= $23F4
@@ -3699,7 +2221,7 @@ SIN_LSB:	.BYTE $92,$2E,$F7,$60,$C4,$14,$47,$79
 		.BYTE $F8,$02,$08,$0E,$14,$1A,$20,$26
 		.BYTE $2C,$32,$38,$3E,$44,$4A,$50,$56
 		.BYTE $5C,$62,$68,$6E,$73,$79,$7F,$85
-		.BYTE $8B,$91,$96,$9C,$A2,$A8,$AD,CHUNK_LEN_B3
+		.BYTE $8B,$91,$96,$9C,$A2,$A8,$AD,$B3
 		.BYTE $B9,$BE,$C4,$CA,$CF,$D5,$DA,$E0
 		.BYTE $E5,$EB,$F1,$F6,$FB,$00,$03,$06
 		.BYTE $09,$0B,$0E,$11,$13,$16,$19,$1B
@@ -3711,7 +2233,7 @@ SIN_LSB:	.BYTE $92,$2E,$F7,$60,$C4,$14,$47,$79
 		.BYTE $7C,$7F,$81,$83,$85,$87,$89,$8B
 		.BYTE $8D,$8F,$91,$93,$95,$97,$98,$9A
 		.BYTE $9C,$9E,$A0,$A2,$A4,$A5,$A7,$A9
-		.BYTE $AB,$AC,$AE,CHUNK_PTR_LO_B0,CHUNK_PTR_HI_B1,CHUNK_LEN_B3,$B5,$B6
+		.BYTE $AB,$AC,$AE,$B0,$B1,$B3,$B5,$B6
 		.BYTE $B8,$BA,$BB,$BD,$BE,$C0,$C1,$C3
 		.BYTE $C4,$C6,$C7,$C9,$CA,$CB,$CD,$CE
 		.BYTE $D0,$D1,$D2,$D3,$D5,$D6,$D7,$D8
@@ -3761,15 +2283,15 @@ SIN_HSB:	.BYTE $DC,$E4,$E4,$E8,$E8,$EC,$EC,$EC
 ; Y-Pos lo
 ;
 SCR_Y_LO_2600:	
-		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
-		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
-		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
-		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
-		.byte $10,$38,$60,$88,CHUNK_PTR_LO_B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
+		.byte $10,$38,$60,$88,$B0,$D8,$00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68
 		.byte $90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0,$E8
 
 L2648		= $2648
@@ -3891,10 +2413,10 @@ L27A3:      ora (ROTATE_MY3_LO_40,X)
 L27A7:      ora (ROTATE_MY3_LO_40,X)
             bpl L27AF
 L27AB:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27CHUNK_LEN_B3
+            bpl L27B3
 L27AF:      ora (ROTATE_MY3_LO_40,X)
             bpl L27B7
-L27CHUNK_LEN_B3:      ora (ROTATE_MY3_LO_40,X)
+L27B3:      ora (ROTATE_MY3_LO_40,X)
             bpl L27BB
 L27B7:      ora (ROTATE_MY3_LO_40,X)
             bpl L27BF
@@ -3955,7 +2477,7 @@ DSPADR1_HI:	.byte $90										;1
 		.byte $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E
 		.byte $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $8E					;9 == 152 lines
 		.byte $30
-		.byte $42, $D0, $97
+		.byte $42, $D0, $97									; gr.2 mem at $97D0
 		.byte $02, $82, $02, $02, $02								; 6x8=48
 		.byte $41, $00, $28									; == 24 + 152 + 48 = 224 lines
 
@@ -4049,7 +2571,10 @@ L28E2:      eor X_ROTATION_LO_56,X
             tax
             tax
 L292A:		tax
-L292B:      .byte $00
+
+
+INVENTORY_LIST_L292B:      
+		.byte $00
 
 ;------------------------------------------------------------
 ; 00	Flying Dart			; 10	Photon Emitter
@@ -4277,9 +2802,10 @@ L2A7C:		jsr GET_RANDOM_L53B1				;obj X HSB 0-15
 		sta OBJ_Y_LSB_L68C0,Y
 		
 		sta L6940,Y
-		lda L69C0,Y					;reset bit 7
+		
+		lda OBJECT_ATTRIBUTES_69C0,Y			;reset bit 7 (in inventory list) in obj attributes
 		and #$7F
-		sta L69C0,Y
+		sta OBJECT_ATTRIBUTES_69C0,Y
 		
 L2AAE:		ldy L292A,X					;get object from inventory list
 		dex
@@ -4447,8 +2973,8 @@ L2BFE:		ldx ZP_08
 		ldy #$0F
 		jsr L2CBA
 		bcs L2C0C
-		ldx #$31
-		jsr L322A
+		ldx #$31					;"enemy ship destroyed"
+		jsr START_MESSAGE_L322A
 L2C0C:		ldy #$00
 		jsr L2CBA
 		bcs L2C18
@@ -4643,183 +3169,187 @@ L2DA4:		lda L2978
 L2DA9:		rts
 
 
-L2DAA:     lda LIFT_UP_DOWN_CA
-            bne L2DA9
-            ldx #$0F
-            lda L70A8,X
-            bmi L2DA9
-            jsr L3DC8
-            ldx #$30
-            ldy #$00
-            jsr CALC_ABS_DIST_L3E0B
-            bcs L2E19
-            ldx #$0E
-            lda L70A8,X
-            bne L2DE6
-            lda #$13
-            sta SOUND_F5
-            lda #$20
-            sta L70A8,X
-            lda #$00
-            sta L6940,X
-            ldy #$04
-            jsr L2E30
-            jsr L2E93
-            ldy #$0F
-            jsr L2E5C
-            jmp L37ED
-L2DE6:      jsr L3DC8
-            ldx #$04
-            ldy #$00
-            jsr CALC_ABS_DIST_L3E0B
-            bcs L2DA9
-            jsr L592C
-            lda CRAFT_ID_WALKING_A7
-            bmi L2DFE
-            ldx #$30
-            jsr L322A
-L2DFE:      lda #$00
-            sta L2978
-            lda #$01
-            sta SOUND_F5
-            lda #$09
-            sta CRAFT_ID_WALKING_A7
-            jsr COPY_SHIP_DATA_L4189
-            lda #$FF
-            sta L694E
-            sta L694F
-            jmp L37ED
-L2E19:      ldx #$0F
-            ldy #$05
-            jsr L2E30
-            jsr L2E93
-            lda #$AD
-            sta L70A8,X
-            lda #$00
-            sta L6940,X
-L2E2D:      jmp L37ED
-L2E30:      lda DIF_X_HSB_D7
-            asl
-            ror DIF_X_HSB_D7
-            ror DIF_X_MSB_D6
-            ror DIF_X_LSB_D5
-            lda DIF_Y_HSB_DA
-            asl
-            ror DIF_Y_HSB_DA
-            ror DIF_Y_MSB_D9
-            ror DIF_Y_LSB_D8
-            lda DIF_Z_HSB_DD
-            asl
-            ror DIF_Z_HSB_DD
-            ror DIF_Z_MSB_DC
-            ror DIF_Z_LSB_DB
-            dey
-            bne L2E30
-            ldy #$08
-L2E50:      lda DIF_X_LSB_D5,Y
-            eor #$FF
-            sta DIF_X_LSB_D5,Y
-            dey
-            bpl L2E50
-            rts
-L2E5C:      lda OBJ_X_LSB_L6880,Y
-            sta OBJ_X_LSB_L6880,X
-            lda OBJ_X_MSB_L6480,Y
-            sta OBJ_X_MSB_L6480,X
-            lda OBJ_X_HSB_L6540,Y
-            sta OBJ_X_HSB_L6540,X
-            lda OBJ_Y_LSB_L68C0,Y
-            sta OBJ_Y_LSB_L68C0,X
-            lda OBJ_Y_MSB_L64C0,Y
-            sta OBJ_Y_MSB_L64C0,X
-            lda OBJ_Y_HSB_L6580,Y
-            sta OBJ_Y_HSB_L6580,X
-            lda OBJ_Z_LSB_L6900,Y
-            sta OBJ_Z_LSB_L6900,X
-            lda OBJ_Z_MSB_L6500,Y
-            sta OBJ_Z_MSB_L6500,X
-            lda OBJ_Z_HSB_L65C0,Y
-            sta OBJ_Z_HSB_L65C0,X
-            rts
-L2E93:      lda DIF_X_LSB_D5
-            sta L70B0,X
-            lda DIF_X_MSB_D6
-            sta L70B8,X
-            lda DIF_X_HSB_D7
-            sta L70C0,X
-            lda DIF_Y_LSB_D8
-            sta L70C8,X
-            lda DIF_Y_MSB_D9
-            sta L70D0,X
-            lda DIF_Y_HSB_DA
-            sta L70D8,X
-            lda DIF_Z_LSB_DB
-            sta L70E0,X
-            lda DIF_Z_MSB_DC
-            sta L70E8,X
-            lda DIF_Z_HSB_DD
-            sta L70F0,X
-            rts
-L2EC1:      sec
-            lda OBJ_X_LSB_L6880,X
-            sbc OBJ_X_LSB_L6880,Y
-            sta DIF_X_LSB_D5
-            lda OBJ_X_MSB_L6480,X
-            sbc OBJ_X_MSB_L6480,Y
-            sta DIF_X_MSB_D6
-            lda OBJ_X_HSB_L6540,X
-            sbc OBJ_X_HSB_L6540,Y
-            sta DIF_X_HSB_D7
-            sec
-            lda OBJ_Y_LSB_L68C0,X
-            sbc OBJ_Y_LSB_L68C0,Y
-            sta DIF_Y_LSB_D8
-            lda OBJ_Y_MSB_L64C0,X
-            sbc OBJ_Y_MSB_L64C0,Y
-            sta DIF_Y_MSB_D9
-            lda OBJ_Y_HSB_L6580,X
-            sbc OBJ_Y_HSB_L6580,Y
-            sta DIF_Y_HSB_DA
-            sec
-            lda OBJ_Z_LSB_L6900,X
-            sbc OBJ_Z_LSB_L6900,Y
-            sta DIF_Z_LSB_DB
-            lda OBJ_Z_MSB_L6500,X
-            sbc OBJ_Z_MSB_L6500,Y
-            sta DIF_Z_MSB_DC
-            lda OBJ_Z_HSB_L65C0,X
-            sbc OBJ_Z_HSB_L65C0,Y
-            sta DIF_Z_HSB_DD
-            rts
-L2F0D:      asl
-            tay
-            lda L293B
-            and #$40
-            bne L2F32
-            lda L293B
-            ora #$40
-            sta L293B
-            lda BENSON_PTR_LO_1D
-            jsr L304A
-L2F23:      lda BENSON_PTR_HIGH_1E
-            jsr L304A
-            lda L0700,Y
-            sta BENSON_PTR_LO_1D
-L2F2D:      lda L0700+1,Y
-            sta BENSON_PTR_HIGH_1E
-L2F32:      rts
+L2DAA:		lda LIFT_UP_DOWN_CA
+		bne L2DA9
+		ldx #$0F
+		lda L70A8,X
+		bmi L2DA9
+		jsr L3DC8
+		ldx #$30
+		ldy #$00
+		jsr CALC_ABS_DIST_L3E0B
+		bcs L2E19
+		ldx #$0E
+		lda L70A8,X
+		bne L2DE6
+		lda #$13
+		sta SOUND_F5
+		lda #$20
+		sta L70A8,X
+		lda #$00
+		sta L6940,X
+		ldy #$04
+		jsr L2E30
+		jsr L2E93
+		ldy #$0F
+		jsr L2E5C
+		jmp L37ED
+L2DE6:		jsr L3DC8
+		ldx #$04
+		ldy #$00
+		jsr CALC_ABS_DIST_L3E0B
+		bcs L2DA9
+		jsr L592C
+		lda CRAFT_ID_WALKING_A7
+		bmi L2DFE
+		ldx #$30						;"ship destroyed"
+		jsr START_MESSAGE_L322A
+L2DFE:		lda #$00
+		sta L2978
+		lda #$01
+		sta SOUND_F5
+		lda #$09
+		sta CRAFT_ID_WALKING_A7
+		jsr COPY_SHIP_DATA_L4189
+		lda #$FF
+		sta L694E
+		sta L694F
+		jmp L37ED
+L2E19:		ldx #$0F
+		ldy #$05
+		jsr L2E30
+		jsr L2E93
+		lda #$AD
+		sta L70A8,X
+		lda #$00
+		sta L6940,X
+L2E2D:		jmp L37ED
+L2E30:		lda DIF_X_HSB_D7
+		asl
+		ror DIF_X_HSB_D7
+		ror DIF_X_MSB_D6
+		ror DIF_X_LSB_D5
+		lda DIF_Y_HSB_DA
+		asl
+		ror DIF_Y_HSB_DA
+		ror DIF_Y_MSB_D9
+		ror DIF_Y_LSB_D8
+		lda DIF_Z_HSB_DD
+		asl
+		ror DIF_Z_HSB_DD
+		ror DIF_Z_MSB_DC
+		ror DIF_Z_LSB_DB
+		dey
+		bne L2E30
+		ldy #$08
+L2E50:		lda DIF_X_LSB_D5,Y
+		eor #$FF
+		sta DIF_X_LSB_D5,Y
+		dey
+		bpl L2E50
+		rts
+		
+L2E5C:		lda OBJ_X_LSB_L6880,Y
+		sta OBJ_X_LSB_L6880,X
+		lda OBJ_X_MSB_L6480,Y
+		sta OBJ_X_MSB_L6480,X
+		lda OBJ_X_HSB_L6540,Y
+		sta OBJ_X_HSB_L6540,X
+		lda OBJ_Y_LSB_L68C0,Y
+		sta OBJ_Y_LSB_L68C0,X
+		lda OBJ_Y_MSB_L64C0,Y
+		sta OBJ_Y_MSB_L64C0,X
+		lda OBJ_Y_HSB_L6580,Y
+		sta OBJ_Y_HSB_L6580,X
+		lda OBJ_Z_LSB_L6900,Y
+		sta OBJ_Z_LSB_L6900,X
+		lda OBJ_Z_MSB_L6500,Y
+		sta OBJ_Z_MSB_L6500,X
+		lda OBJ_Z_HSB_L65C0,Y
+		sta OBJ_Z_HSB_L65C0,X
+		rts
+		
+L2E93:		lda DIF_X_LSB_D5
+		sta L70B0,X
+		lda DIF_X_MSB_D6
+		sta L70B8,X
+		lda DIF_X_HSB_D7
+		sta L70C0,X
+		lda DIF_Y_LSB_D8
+		sta L70C8,X
+		lda DIF_Y_MSB_D9
+		sta L70D0,X
+		lda DIF_Y_HSB_DA
+		sta L70D8,X
+		lda DIF_Z_LSB_DB
+		sta L70E0,X
+		lda DIF_Z_MSB_DC
+		sta L70E8,X
+		lda DIF_Z_HSB_DD
+		sta L70F0,X
+		rts
+		
+L2EC1:		sec
+		lda OBJ_X_LSB_L6880,X
+		sbc OBJ_X_LSB_L6880,Y
+		sta DIF_X_LSB_D5
+		lda OBJ_X_MSB_L6480,X
+		sbc OBJ_X_MSB_L6480,Y
+		sta DIF_X_MSB_D6
+		lda OBJ_X_HSB_L6540,X
+		sbc OBJ_X_HSB_L6540,Y
+		sta DIF_X_HSB_D7
+		sec
+		lda OBJ_Y_LSB_L68C0,X
+		sbc OBJ_Y_LSB_L68C0,Y
+		sta DIF_Y_LSB_D8
+		lda OBJ_Y_MSB_L64C0,X
+		sbc OBJ_Y_MSB_L64C0,Y
+		sta DIF_Y_MSB_D9
+		lda OBJ_Y_HSB_L6580,X
+		sbc OBJ_Y_HSB_L6580,Y
+		sta DIF_Y_HSB_DA
+		sec
+		lda OBJ_Z_LSB_L6900,X
+		sbc OBJ_Z_LSB_L6900,Y
+		sta DIF_Z_LSB_DB
+		lda OBJ_Z_MSB_L6500,X
+		sbc OBJ_Z_MSB_L6500,Y
+		sta DIF_Z_MSB_DC
+		lda OBJ_Z_HSB_L65C0,X
+		sbc OBJ_Z_HSB_L65C0,Y
+		sta DIF_Z_HSB_DD
+		rts
+		
+L2F0D:		asl
+		tay
+		lda L293B
+		and #$40
+		bne L2F32
+		lda L293B
+		ora #$40
+		sta L293B
+		lda BENSON_PTR_LO_1D
+		jsr L304A
+L2F23:		lda BENSON_PTR_HIGH_1E
+		jsr L304A
+		lda L0700,Y
+		sta BENSON_PTR_LO_1D
+L2F2D:		lda L0700+1,Y
+		sta BENSON_PTR_HIGH_1E
+L2F32:		rts
 
 
 ;------------------------------------------------------------
 ; BENSON_L2F33
 ;------------------------------------------------------------    
 BENSON_L2F33:
-		lda L00E6
+		lda MESSAGE_PENDING_E6
 		bne L2F50
 		
 		ldy #$FF
 		iny
-		lda (BENSON_PTR_LO_1D),Y				;load byte from BENSON_PTR
+		lda (BENSON_PTR_LO_1D),Y			;load byte from BENSON_PTR
 		sta L00E7					;store it
 		and #$3F					;make pointer to jumptable
 		asl
@@ -4915,7 +3445,7 @@ L2F71:		lda TIMER_MSB_E3
 		iny
 		lda (BENSON_PTR_LO_1D),Y
 		ldx L274D+1
-		and L69C0,X
+		and OBJECT_ATTRIBUTES_69C0,X
 		bne L300B
 L3008:		sec
 		bcs L300C
@@ -4982,11 +3512,11 @@ L3053:		ldx L00E5
 		iny
 		lda (BENSON_PTR_LO_1D),Y
 		bmi L306D
-		ora L69C0,X
-		sta L69C0,X
+		ora OBJECT_ATTRIBUTES_69C0,X
+		sta OBJECT_ATTRIBUTES_69C0,X
 		jmp L3013
-L306D:		and L69C0,X
-		sta L69C0,X
+L306D:		and OBJECT_ATTRIBUTES_69C0,X
+		sta OBJECT_ATTRIBUTES_69C0,X
 		jmp L3013
 		iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -5032,9 +3562,9 @@ L30A4:		tax
 L30C1:		iny
 		lda (BENSON_PTR_LO_1D),Y
 L30C4:		bne L30C1
-		dec L00E6
-		sta L00DF
-		sta L00DE
+		dec MESSAGE_PENDING_E6
+		sta CHAR_CNT_DF
+		sta MSG_CHUNK_CNT_DE
 		jmp L3013
 		lda #$00
 		sta TIMER_MSB_E3
@@ -5157,7 +3687,7 @@ L319D:		sta AUDC1
 		tax
 		lda L2740,X
 L31AE:		tax
-		jsr L322A
+		jsr START_MESSAGE_L322A
 L31B2:		jmp L3013
 		jsr GET_RANDOM_L53B1
 		iny
@@ -5220,60 +3750,72 @@ L3218:      tya
 L321E:      .byte $5C
             bmi L321E
             .byte $2F,$8F,$2F
-L3224:      lda L00E6
-            bne L3242
-L3228:      inc L00E0
 
-;
-;
-;
-L322A:		lda L00E6					;exit if L00E6 not zero
+L3224:		lda MESSAGE_PENDING_E6
+		bne L3242
+L3228:		inc JIFY_CNT_E0
+
+;------------------------------------------------------------
+; issue a message if e6 zero
+;------------------------------------------------------------
+START_MESSAGE_L322A:		
+		lda MESSAGE_PENDING_E6				;exit if MESSAGE_PENDING_E6 not zero, message pending?
 		bne L3242
 		
 L322E:		lda L7DE0,X					;CTRL-S = $3B
-		sta L32A4+2
-		lda L7DA0,X
+		sta L32A4+2					;copy pointer to msg structure, high byte
+		lda L7DA0,X					;lo byte
 		sta L32A4+1
 		lda #$00
-		sta L00DE
-		sta L00DF
-		dec L00E6
+		sta MSG_CHUNK_CNT_DE
+		sta CHAR_CNT_DF
+		dec MESSAGE_PENDING_E6				;e6 non zero
 L3242:		rts
 
-L3243:		inc L00E0
-		lda L00E0
-		cmp #$1A
+;------------------------------------------------------------
+; called from VBI proc if MESSAGE_PENDING_E6 <> zero
+;------------------------------------------------------------
+L3243:		inc JIFY_CNT_E0					;jiffy count
+		lda JIFY_CNT_E0
+		cmp #$1A					;<26 jiffys, shift text left
 		bcc L3259
-		cmp L00E1
-		bcc L3298
-		lda #$00
-		sta L00E0
-		dec L00E6
-		beq L3298
-		inc L00E0
-L3259:		ldx #$EA
+		
+		cmp JIFY_MAX_E1					;max jiffys
+		bcc L3298					;all chars shifted, exit
+		
+		lda #$00					;reset jiffy_cnt
+		sta JIFY_CNT_E0
+		dec MESSAGE_PENDING_E6				
+		beq L3298					;branch if 1
+		inc JIFY_CNT_E0
+
+L3259:		ldx #$EA					;shift chars to left
 L325B:		lda L978F,X
 		sta L978E,X
 		inx
 		bne L325B
-		lda L00FB
-		sta L988E
-		lda L00E6
+
+		lda TEXT_FILL_BYTE_FB				;fill byte?
+		sta L988E					;rightmost textfield on screen
+		lda MESSAGE_PENDING_E6
 		bmi L3272
-		lda #$A0
-		sta L00FB
+		
+		lda #$A0					;SPACE
+		sta TEXT_FILL_BYTE_FB
 		rts
-L3272:		ldx L00DF
-		beq L329C
-L3276:		lda L140B,X					;updated by L32BB and others
+
+L3272:		ldx CHAR_CNT_DF
+		beq L329C					;insert new message
+		
+L3276:		lda L140B,X					;get a message-text byte, updated by L32BB and others
 		tax
 		asl
 		cmp #$14
 		ror
-		sta L00FB
+		sta TEXT_FILL_BYTE_FB
 		cmp #$A0
 		beq L3291
-		and #$3F
+		and #$3F					;make R2-D2 beeps
 		clc
 		adc #$10
 		sta AUDF4
@@ -5282,277 +3824,293 @@ L3276:		lda L140B,X					;updated by L32BB and others
 L3291:		txa
 		bpl L3299
 L3294:		lda #$00
-		sta L00DF
+		sta CHAR_CNT_DF
 L3298:		rts
-L3299:		inc L00DF
+
+L3299:		inc CHAR_CNT_DF
 		rts
 	    
-;
-;
-;
-L329C:      lda #$A0
-            sta L00FB
-            inc L00DE
-            ldx L00DE
-L32A4:      ldy L1573,X						;updated by L322E and other locations
-            beq L32CE
-            cpy #$EF
-            bcc L32BB
-            beq L3294
-            cpy #$FF
-            beq L32D3
-            cpy #$F8
-            bcs L32F2
-            lda L2648,Y
-            tay
-L32BB:      lda L7E20,Y
-            sta L3276+1
-            lda L7F10,Y
-            sta L3276+2
-            inc L00DF
-            cpy #$08
-            bcc L3272
-            rts
+;------------------------------------------------------------
+; insert new message
+;------------------------------------------------------------
+L329C:		lda #$A0					;space
+		sta TEXT_FILL_BYTE_FB
+		
+		inc MSG_CHUNK_CNT_DE
+		ldx MSG_CHUNK_CNT_DE
+L32A4:		ldy L1573,X					;updated by L322E (START_MESSAGE_L322A) and other locations
+		beq L32CE					;get byte of message-structure, e.g. $E9
+		
+		cpy #$EF
+		bcc L32BB
+		beq L3294
+		cpy #$FF
+		beq L32D3
+		cpy #$F8
+		bcs L32F2
+		lda L2648,Y
+		tay
+		
+L32BB:		lda L7E20,Y					;copy pointer to msg-text to $L3276+1/2
+		sta L3276+1
+		lda L7F10,Y
+		sta L3276+2
+		inc CHAR_CNT_DF
+		cpy #$08
+		bcc L3272
+		rts
 
-L32CE:      ldy #$01
-            sty L00E6
-            rts
+;------------------------------------------------------------
+; 
+;------------------------------------------------------------
+L32CE:		ldy #$01					;signal display clear?
+		sty MESSAGE_PENDING_E6
+		rts
 	    
 	    
-L32D3:      lda L32A4+1
-            sta L3276+1
-            sta L32EA+1
-            lda L32A4+2
-            sta L3276+2
-            sta L32EA+2
-            inx
-            stx L00DF
-            dex
-L32E9:      inx
-L32EA:     lda L07A2,X
-            bpl L32E9
-            stx L00DE
-            rts
-L32F2:      tya
-            and #$07
-            asl
-            asl
-            tax
-            asl
-            tay
-            adc #$1F
-            sta L3276+1
-            lda #$06
-            adc #$00
-            sta L3276+2
-            lda #$04
-            sta TMP_04
-L330A:     lda L0600,X
-            and #$F0
-            bne L3323
-            lda L0600,X
-            and #$0F
-            bne L3330
-            inx
-            dec TMP_04
-            bne L330A
-            beq L3338
-L331F:      lda L0600,X
-            iny
-L3323:      lsr
-            lsr
-            lsr
-            lsr
-            sta L0620,Y
-            lda L0600,X
-            iny
-            and #$0F
-L3330:      sta L0620,Y
-            inx
-            dec TMP_04
-            bne L331F
-L3338:      ora #$80
-            sta L0620,Y
-            inc L00DF
-            rts
-L3340:      sta MUL_LO_06
-            sec
-            rol
-            sta MUL_HI_07
-            lda CUR_X_HSB_72
-            jsr L33FD
-            ror ZP_08
-            sta TMP_04
-            stx POINT_LINE_COUNT_17
-            lda CUR_Z_HSB_78
-            jsr L33FD
-            ror ZP_08
-            asl
-            asl
-            asl
-            asl
-            ora TMP_04
-            ldy #$FF
-            cpx #$10
-            bne L336D
-            cpx POINT_LINE_COUNT_17
-            bne L336D
-            ldy L00EE
-            beq L33C4
-            tay
-L336D:      sty L00EE
-            sta L33E4+1
-            sta L33E9+1
-            sta L33EF+1
-            sta L33F4+1
-            stx SCREEN_LINES_18
-            lda #$3C
-            sta CHUNK_LEN_B3
-            lda #$02
-            sta L00B4
-            lda CUR_X_HSB_72
-            and #$F0
-            bne L3391
-            lda CUR_Z_HSB_78
-            and #$F0
-            beq L33A0
-L3391:      lda #$00
-            sta L01BC
-            sta L01BD
-            sta L01BF
-            sta GROUND_STRUC_OBJ_TO_DRAW_B5
-            beq L33B7
-L33A0:      ldy GROUND_STRUC_OBJ_TO_DRAW_B5
-            lda GROUND_STRUCTURES_LIST_L6C00,Y
-            sta L01BD
-            lda GROUND_STRUCTURES_LIST_L6D00,Y
-            sta L01BC
-            lda GROUND_STRUCTURES_LIST_L6E00,Y
-            sta L01BF
-            lda GROUND_STRUCTURES_LIST_L6F00,Y
-L33B7:      sta L01BE
-            lda ZP_08
-            and #$C0
-            bne L33C4
-            lda MUL_LO_06
-            bne L33C5
-L33C4:      rts
-L33C5:      ldy #$FF
-L33C7:      iny
-            cpy POINT_LINE_COUNT_17
-            bne L33E4
-            dec SCREEN_LINES_18
-            beq L33C4
-            lda L33E4+1
-            clc
-            adc #$10
-            sta L33E4+1
-            sta L33E9+1
-            sta L33EF+1
-            sta L33F4+1
-            ldy #$00
-L33E4:      ldx L6C88,Y
-            beq L33EF
-L33E9:      lda L6D88,Y
-            jsr L3441
-L33EF:      ldx L6E88,Y
-            beq L33C7
-L33F4:      lda L6F88,Y
-            jsr L3441
-            jmp L33C7
-L33FD:      sec
-            sbc MUL_LO_06
-            bpl L3414
-            clc
-            adc MUL_HI_07
-            bmi L342A
-            beq L342A
-            cmp #$11
-            bcc L340F
-            lda #$10
-L340F:      tax
-            lda #$00
-            clc
-            rts
-L3414:      cmp #$10
-            bcs L342A
-            sta TMP_04+1
-            lda #$10
-            sec
-            sbc TMP_04+1
-            cmp MUL_HI_07
-            bcc L3425
-            lda MUL_HI_07
-L3425:      tax
-            lda TMP_04+1
-            clc
-            rts
-L342A:     sec
-            rts
-L342C:      ldx CHUNK_LEN_B3
-L342E:      cmp L0180,X
-            beq L343F
-            inx
-            cpx #$40
-            bne L342E
-            dec CHUNK_LEN_B3
-            ldx CHUNK_LEN_B3
-            sta L0180,X
-L343F:      txa
-            rts
-L3441:      cmp GROUND_STRUC_OBJ_TO_DRAW_B5
-            beq L3473
-            cpx GROUND_STRUC_OBJ_TO_DRAW_B5
-            beq L3473
-            pha
-            txa
-            jsr L342C
-            sta TMP_04
-            pla
-            jsr L342C
-            ldx L00B4
-L3456:      cmp L0100,X
-            bne L3464
-            pha
-            lda TMP_04
-            cmp L0140,X
-            beq L3474
-            pla
-L3464:      dex
-            bne L3456
-            inc L00B4
-            ldx L00B4
-            sta L0100,X
-            lda TMP_04
-            sta L0140,X
-L3473:      rts
-L3474:      pla
-            rts
-L3476:      ldx L34A8,Y
-            iny
-            stx CHUNK_LEN_B3
-L347C:      lda L34A8,Y
-            iny
-            sta L0180,X
-            inx
-            cpx #$40
-            bne L347C
-            stx L00B7
-            stx L00EE
-            ldx L34A8,Y
-            iny
-            stx L00B4
-            ldx #$02
-L3494:      inx
-            lda L34A8,Y
-            iny
-            sta L0100,X
-            lda L34A8,Y
-            iny
-            sta L0140,X
-            cpx L00B4
-            bne L3494
-L34A7:      rts
+L32D3:		lda L32A4+1
+		sta L3276+1
+		sta L32EA+1
+		lda L32A4+2
+		sta L3276+2
+		sta L32EA+2
+		inx
+		stx CHAR_CNT_DF
+		dex
+L32E9:		inx
+L32EA:		lda L07A2,X
+		bpl L32E9
+		stx MSG_CHUNK_CNT_DE
+		rts
+
+L32F2:		tya
+		and #$07
+		asl
+		asl
+		tax
+		asl
+		tay
+		adc #$1F
+		sta L3276+1
+		lda #$06
+		adc #$00
+		sta L3276+2
+		lda #$04
+		sta TMP_04
+L330A:		lda L0600,X
+		and #$F0
+		bne L3323
+		lda L0600,X
+		and #$0F
+		bne L3330
+		inx
+		dec TMP_04
+		bne L330A
+		beq L3338
+L331F:		lda L0600,X
+		iny
+L3323:		lsr
+		lsr
+		lsr
+		lsr
+		sta L0620,Y
+		lda L0600,X
+		iny
+		and #$0F
+L3330:		sta L0620,Y
+		inx
+		dec TMP_04
+		bne L331F
+L3338:		ora #$80
+		sta L0620,Y
+		inc CHAR_CNT_DF
+		rts
+L3340:		sta MUL_LO_06
+		sec
+		rol
+		sta MUL_HI_07
+		lda CUR_X_HSB_72
+		jsr L33FD
+		ror ZP_08
+		sta TMP_04
+		stx POINT_LINE_COUNT_17
+		lda CUR_Z_HSB_78
+		jsr L33FD
+		ror ZP_08
+		asl
+		asl
+		asl
+		asl
+		ora TMP_04
+		ldy #$FF
+		cpx #$10
+		bne L336D
+		cpx POINT_LINE_COUNT_17
+		bne L336D
+		ldy L00EE
+		beq L33C4
+		tay
+L336D:		sty L00EE
+		sta L33E4+1
+		sta L33E9+1
+		sta L33EF+1
+		sta L33F4+1
+		stx SCREEN_LINES_18
+		lda #$3C
+		sta CHUNK_LEN_B3
+		lda #$02
+		sta L00B4
+		lda CUR_X_HSB_72
+		and #$F0
+		bne L3391
+		lda CUR_Z_HSB_78
+		and #$F0
+		beq L33A0
+L3391:		lda #$00
+		sta L01BC
+		sta L01BD
+		sta L01BF
+		sta GROUND_STRUC_OBJ_TO_DRAW_B5
+		beq L33B7
+L33A0:		ldy GROUND_STRUC_OBJ_TO_DRAW_B5
+		lda GROUND_STRUCTURES_LIST_L6C00,Y
+		sta L01BD
+		lda GROUND_STRUCTURES_LIST_L6D00,Y
+		sta L01BC
+		lda GROUND_STRUCTURES_LIST_L6E00,Y
+		sta L01BF
+		lda GROUND_STRUCTURES_LIST_L6F00,Y
+L33B7:		sta L01BE
+		lda ZP_08
+		and #$C0
+		bne L33C4
+		lda MUL_LO_06
+		bne L33C5
+L33C4:		rts
+L33C5:		ldy #$FF
+L33C7:		iny
+		cpy POINT_LINE_COUNT_17
+		bne L33E4
+		dec SCREEN_LINES_18
+		beq L33C4
+		lda L33E4+1
+		clc
+		adc #$10
+		sta L33E4+1
+		sta L33E9+1
+		sta L33EF+1
+		sta L33F4+1
+		ldy #$00
+L33E4:		ldx L6C88,Y
+		beq L33EF
+L33E9:		lda L6D88,Y
+		jsr L3441
+L33EF:		ldx L6E88,Y
+		beq L33C7
+L33F4:		lda L6F88,Y
+		jsr L3441
+		jmp L33C7
+L33FD:		sec
+		sbc MUL_LO_06
+		bpl L3414
+		clc
+		adc MUL_HI_07
+		bmi L342A
+		beq L342A
+		cmp #$11
+		bcc L340F
+		lda #$10
+L340F:		tax
+		lda #$00
+		clc
+		rts
+		
+L3414:		cmp #$10
+		bcs L342A
+		sta TMP_04+1
+		lda #$10
+		sec
+		sbc TMP_04+1
+		cmp MUL_HI_07
+		bcc L3425
+		lda MUL_HI_07
+L3425:		tax
+		lda TMP_04+1
+		clc
+		rts
+		
+L342A:		sec
+		rts
+		
+L342C:		ldx CHUNK_LEN_B3
+L342E:		cmp L0180,X
+		beq L343F
+		inx
+		cpx #$40
+		bne L342E
+		dec CHUNK_LEN_B3
+		ldx CHUNK_LEN_B3
+		sta L0180,X
+L343F:		txa
+		rts
+		
+L3441:		cmp GROUND_STRUC_OBJ_TO_DRAW_B5
+		beq L3473
+		cpx GROUND_STRUC_OBJ_TO_DRAW_B5
+		beq L3473
+		pha
+		txa
+		jsr L342C
+		sta TMP_04
+		pla
+		jsr L342C
+		ldx L00B4
+L3456:		cmp L0100,X
+		bne L3464
+		pha
+		lda TMP_04
+		cmp L0140,X
+		beq L3474
+		pla
+L3464:		dex
+		bne L3456
+		inc L00B4
+		ldx L00B4
+		sta L0100,X
+		lda TMP_04
+		sta L0140,X
+L3473:		rts
+
+L3474:		pla
+		rts
+		
+L3476:		ldx L34A8,Y
+		iny
+		stx CHUNK_LEN_B3
+L347C:		lda L34A8,Y
+		iny
+		sta L0180,X
+		inx
+		cpx #$40
+		bne L347C
+		stx L00B7
+		stx L00EE
+		ldx L34A8,Y
+		iny
+		stx L00B4
+		ldx #$02
+L3494:		inx
+		lda L34A8,Y
+		iny
+		sta L0100,X
+		lda L34A8,Y
+		iny
+		sta L0140,X
+		cpx L00B4
+		bne L3494
+L34A7:		rts
+
+
 L34A8:      rol L0F00+1
             .byte $FF
             sbc (COS_DIV_SIN_ROLL_HI_33),Y
@@ -5972,10 +4530,10 @@ L37CE:      lda SPECIAL_VIEW_FLAG_F1
             sta SPECIAL_VIEW_FLAG_F1
             ldx NUM_INVENTORY_ITEMS_EB
             beq L37E6
-L37D8:      ldy L292B,X
-            lda L69C0,X
+L37D8:      ldy INVENTORY_LIST_L292B,X
+            lda OBJECT_ATTRIBUTES_69C0,X
             eor #$40
-            sta L69C0,X
+            sta OBJECT_ATTRIBUTES_69C0,X
             dex
             bne L37D8
 L37E6:      ldx #$7F
@@ -6085,20 +4643,20 @@ L389A:      rts
 ;------------------------------------------------------------
 ; check if object number in A is in the object-to-draw-list
 ;------------------------------------------------------------
-L389B:      ldx NUM_OBJS_TO_DRAW_B0
-L389D:      dex
-            bmi L38A5
-            cmp OBJ_TO_DRAW_LIST_L6981,X
-            bne L389D
-L38A5:      rts
+L389B:		ldx NUM_OBJS_TO_DRAW_B0
+L389D:		dex
+		bmi L38A5
+		cmp OBJ_TO_DRAW_LIST_L6981,X
+		bne L389D
+L38A5:		rts
 
 ;------------------------------------------------------------
-; 
+; "locked" message
 ;------------------------------------------------------------
-L38A6:      ldx #$00
-            jsr L322A
-L38AB:      clc
-            rts
+L38A6:		ldx #$00					;"locked"
+		jsr START_MESSAGE_L322A
+L38AB:		clc
+		rts
 	    
 ;------------------------------------------------------------
 ; 
@@ -6106,7 +4664,7 @@ L38AB:      clc
 L38AD:      lda L00F0
             bne L38AB
             ldy #$03
-L38CHUNK_LEN_B3:      iny
+L38B3:      iny
 L38B4:      iny
             lda (SCREEN_LINES_19),Y
             sta MUL_HI_07
@@ -6123,12 +4681,12 @@ L38B4:      iny
             adc #$00
             iny
             cmp (SCREEN_LINES_19),Y
-            bne L38CHUNK_LEN_B3
+            bne L38B3
             lda CUR_Z_LSB_76
             sec
             sbc #$40
             eor MUL_HI_07
-            bpl L38CHUNK_LEN_B3
+            bpl L38B3
             lda MUL_HI_07
             and #$80
             eor #$80
@@ -6620,48 +5178,55 @@ L3C52:		ldy L00AB
 ;
 ;
 ;	
-L3C6B:      lda L00B6
-            cmp #$2D						; 'T' Take
-            bne PLOT_POINT_POSSIBLY_L3CC0
-	    
-            ldx #$01
-            ldy #$00
-            jsr CALC_ABS_DIST_L3E0B
-            bcs L3CBE
-            ldx OBJECT_NUMBER_AD
-            lda L69EF
-            bmi L3C94
-            lda L69C0,X
-            and #$10
-            bne L3CBE
-            lda L69DB
-            bmi L3C94
-            lda L69C0,X
-            and #$20
-            bne L3CB9
-L3C94:      txa
-            ldx NUM_INVENTORY_ITEMS_EB
-            inx
-            cpx #$0B
-            bcs L3CBE
-            stx NUM_INVENTORY_ITEMS_EB
-            sta L292B,X
-            tax
-            lda L69C0,X
-            ora #$80
-            sta L69C0,X
-            jsr L3D22
-L3CAD:      lda #$FF
-            sta L00B6
-            sta L6940,X
-            jsr L37ED
-            clc
-            rts
-	    
-L3CB9:      ldx #$02
-            jsr L322A
-L3CBE:      sec
-            rts
+L3C6B:		lda L00B6
+		cmp #$2D					;'T' Take
+		bne PLOT_POINT_POSSIBLY_L3CC0
+			
+		ldx #$01					;object in range?
+		ldy #$00
+		jsr CALC_ABS_DIST_L3E0B
+		bcs L3CBE					;no
+			
+		ldx OBJECT_NUMBER_AD
+		lda L69EF					;kitchen sink in inventory?
+		bmi L3C94					;yes, take it
+		
+		lda OBJECT_ATTRIBUTES_69C0,X			;check if takeable at all?
+		and #$10
+		bne L3CBE					;bit4 set, not takeable
+			
+		lda L69DB					;Anti Grav?
+		bmi L3C94					;yes, take it
+			
+		lda OBJECT_ATTRIBUTES_69C0,X
+		and #$20
+		bne L3CB9					;bit5 set, too heavy
+			
+L3C94:		txa
+		ldx NUM_INVENTORY_ITEMS_EB
+		inx
+		cpx #$0B
+		bcs L3CBE
+		stx NUM_INVENTORY_ITEMS_EB
+		sta INVENTORY_LIST_L292B,X			;store object number in inventory list
+		tax
+		lda OBJECT_ATTRIBUTES_69C0,X			;mark in object attributes
+		ora #$80
+		sta OBJECT_ATTRIBUTES_69C0,X
+		
+		jsr L3D22
+		
+L3CAD:		lda #$FF
+		sta L00B6
+		sta L6940,X
+		jsr L37ED
+		clc
+		rts
+			
+L3CB9:		ldx #$02					;issue "too heavy" message? $1424 in $32A5/6
+		jsr START_MESSAGE_L322A
+L3CBE:		sec
+		rts
 	    
 	    
 PLOT_POINT_POSSIBLY_L3CC0:      
@@ -6677,7 +5242,7 @@ PLOT_POINT_POSSIBLY_L3CC0:
 		jsr CALC_ABS_DIST_L3E0B
 		bcs L3CBE
 		ldx OBJECT_NUMBER_AD
-		lda L69C0,X
+		lda OBJECT_ATTRIBUTES_69C0,X
 		jsr L3D22
 		ldx OBJECT_NUMBER_AD
 		lda OBJ_X_LSB_L6880,X
@@ -6711,16 +5276,20 @@ L3D17:		jsr SETUP_ROTATION_MATRIX_L4708
 		jsr L3DC1
 		ldx OBJECT_NUMBER_AD
 L3D1F:		jmp L3CAD
-L3D22:		and #$0C
-		beq L3D34
-		lsr
+
+L3D22:		and #$0C					;mask out bit 3/2 of object attributes
+		beq L3D34					;if both zero, 
+
+		lsr						;bit 4 sero?
 		lsr
 		lsr
 		beq L3D30
+		
 		jsr L3224
 		bcc L3D34
 L3D30:		txa
 		jsr L2F0D
+
 L3D34:		ldx OBJECT_NUMBER_AD
 		jmp SOUND_EFFECT_L5AFB
 L3D39:		ldy CRAFT_ID_WALKING_A7
@@ -6761,10 +5330,10 @@ L3D6F:		lda L69F8
 L3D78:		ldx NUM_INVENTORY_ITEMS_EB
 		beq L3D3D
 		dec NUM_INVENTORY_ITEMS_EB
-		ldy L292B,X
-		lda L69C0,Y
+		ldy INVENTORY_LIST_L292B,X
+		lda OBJECT_ATTRIBUTES_69C0,Y
 		and #$7F
-		sta L69C0,Y
+		sta OBJECT_ATTRIBUTES_69C0,Y
 		jsr SOUND_EFFECT_L5AFB
 		
 L3D8C:		lda L00CD
@@ -9863,7 +8432,7 @@ L546E:		lda POINT_LINE_COUNT_17
 		sta COLPF2S_A4
 L5485:		ldx L00F6
 		beq L548C
-		jsr L322A
+		jsr START_MESSAGE_L322A
 		
 L548C:		ldy #$00
 		sty L00F6
@@ -10639,25 +9208,26 @@ L59C3:		lda NEW_KEY_L00E9
 		sta LOAD_SECTOR_L5BF7				;load-sector
 		jsr RESET_KEY_L5AEE
 		jsr SOUND_EFFECT_L5AFB
-		ldx #$38
+		ldx #$38					;"PRESS RETURN WHEN READY"
 		jsr L59F8
 L59E6:		lda NEW_KEY_L00E9
 		cmp #$04					;'F2'-loop?
 		beq L59E6
-		cmp #$0C					; 'Return' after Load
+		cmp #$0C					;'Return' after load/save
 		bne L59F3
 		jmp L5B12
 		
-L59F3:		ldx #$32
+L59F3:		ldx #$32					;clear message
 		jmp L59F8
-;
-;
-;
-L59F8:		lda L00E6					;loop until E6 zero
+
+;------------------------------------------------------------
+; wait until no message pending and start a new one
+;------------------------------------------------------------
+L59F8:		lda MESSAGE_PENDING_E6				;loop until no message pending
 		bne L59F8
-		jsr L322A
+		jsr START_MESSAGE_L322A
 		
-L59FF:		lda L00E0
+L59FF:		lda JIFY_CNT_E0					;loop until JIFY_CNT_E0 > #$20
 		cmp #$1E
 		bcc L59FF
 		rts
@@ -10713,8 +9283,8 @@ L5A52:		cpx #$05					;are we at 03-15?
 		bne L5A60
 		lda L69EE					;pass available?
 		bmi L5A60
-		ldx #$39
-L5A5D:		jmp L322A
+		ldx #$39					;"pass holders only"
+L5A5D:		jmp START_MESSAGE_L322A
 L5A60:		jsr SOUND_EFFECT_L5AFB
 		stx L00CD
 		ldx #$03
@@ -10831,10 +9401,10 @@ L5B12:		sei
 		ldx #$00
 		stx NMIEN					;disable all interrupts
 			
-L5B18:		lda MEM_PTR_LO_00,X				;copy from L5B98 to zero page
-		sta ZERO_PAGE_SAVE_2100,X
+L5B18:		lda MEM_PTR_LO_00,X				
+		sta ZERO_PAGE_SAVE_2100,X			;save zero-page
 		lda L5B98,X
-		sta MEM_PTR_LO_00,X
+		sta MEM_PTR_LO_00,X				;and copy from L5B98 to zero page
 		inx
 		bne L5B18
 			
@@ -11714,11 +10284,12 @@ L6161:		lda SKSTAT						;key still pressed?
 		sta NEW_KEY_L00E9					;also store in NEW_KEY_L00E9
 L6171:		sta LAST_KEY_L00EA
 		
-		lda L00E6
-		beq L617F
+		lda MESSAGE_PENDING_E6					;is a message pending?
+		beq L617F						;no
+		
 		lda #$A0
 		sta AUDC4
-		jsr L3243
+		jsr L3243						;otherwise call 
 		
 L617F:		lda LIFT_UP_DOWN_CA
 		bmi L61A6
@@ -12014,7 +10585,16 @@ OBJECT_DRAW_LIST_6980:
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
-L69C0:		.byte   $30,$24,$20,$20,$20,$20,$08,$24
+;bit 7: is in inventory?
+;bit 6: unused?
+;bit 5: heavy object, kitchen sink or antigrav required
+;bit 4: is it takeable at all? kitchen sink required
+;bit 3: ?
+;bit 2: ?
+;bit 1: unused?
+;bit 0: unused?
+OBJECT_ATTRIBUTES_69C0:		
+		.byte   $30,$24,$20,$20,$20,$20,$08,$24
 L69C8:		.byte   $10,$10,$10,$10,$04,$10,$10,$10,$08,$00,$00,$00,$00,$00,$00,$00
 L69D8:		.byte   $08,$08
 L69DA:		.byte   $08

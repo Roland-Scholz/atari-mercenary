@@ -1,0 +1,220 @@
+.byte $6C, $07, $39, $09, $01, $0D, $97, $0E, $AB, $0E, $BF, $0E
+.byte $D2, $0E, $78, $0F, $13, $0A, $E5, $0E, $04, $11, $F8, $0E
+.byte $E5, $09, $9A, $0C, $BC, $0D, $D0, $0D, $E3, $0D, $F6, $0D
+.byte $09, $0E, $1D, $0E, $31, $0E, $66, $07, $46, $0E, $5B, $0E
+.byte $6F, $0E, $83, $0E, $F1, $10, $7C, $0B, $DF, $0B, $13, $0A
+.byte $66, $07, $66, $07, $66, $07, $66, $07, $D1, $0B, $D8, $0B
+.byte $25, $0A, $3E, $0A, $6D, $0A, $82, $0A, $B1, $0A, $C8, $0A
+.byte $DE, $0A, $F3, $0A, $0B, $0B, $1C, $0B, $32, $0B, $43, $0B
+.byte $53, $0B, $A8, $0B, $94, $0B, $01, $23, $00, $11, $40, $05
+.byte $0F, $FE, $01, $20, $04, $0F, $FE, $07, $20, $04, $0F, $FE
+.byte $0C, $20, $04, $14, $32, $04, $8C, $09, $01, $EC, $23, $FF
+.byte "IMMINENT", $EE, $00, $14, $32, $04, $8C, $09, $01, $EF, $FF, "RETURNIN", $C7
+.byte $D5, $0A, $00, $01, $EC, $FF, "MANUA", $CC, $28, $00, $19, $01
+.byte $D2, $00, $04, $8C, $09, $1B, $03, $3C, $14, $32, $11, $80
+.byte $01, $EB, $C7, $C0, $00, $01, $EF, $23, $98, $04, $AD, $D7
+.byte $00, $01, $EF, $FF, "PRESTINIU", $CD, $30, $04, $00, $01, $FF, " STATE OF WAR BETWEE", $CE
+.byte $00, $01, $B4, $02, $13, $9F, $02, $00, $01, $EF, $9A, $FF
+.byte "NEAR AIRBAS", $C5, $00, $01, $EC, $11, $AD, $BB, $00, $01, $FF, " TYPE ", $0D
+.byte " DOMINION DAR", $D4, $00, $01, $ED, $A0, $FF, "RECEIVE", $C4, $00, $01, $EC
+.byte $22, $3C, $C4, $00, $01, $FF, "  PRICE ", $05, "OO", $CF, $25, $00
+.byte $14, $15, $04, $A8, $09, $12, $01, $26, $09, $01, $C3, $FF
+.byte "THIN", $CB, $DC, $C6, $1C, $00, $04, $A8, $09, $12, $01, $26, $09
+.byte $01, $ED, $2B, $D3, $FF, "SENSIBL", $C5, $00, $04, $A8, $09, $12
+.byte $01, $26, $09, $01, $ED, $DC, $B6, $D5, $E1, $00, $04, $A8
+.byte $09, $12, $01, $26, $09, $01, $ED, $DC, $A3, $1D, $FF, "CRAZ", $D9
+.byte $00, $12, $80, $AE, $08, $14, $32, $04, $BF, $08, $01, $A9
+.byte $DC, $14, $2D, $0A, $00, $01, $EE, $C3, $E5, $C9, $0D, $00
+.byte $03, $B9, $07, $01, $CE, $E5, $1D, $08, $99, $E1, $00, $14
+.byte $32, $22, $01, $39, $09, $03, $B8, $08, $01, $ED, $2B, $FF
+.byte "ANYBOD", $D9, $D2, $00, $04, $81, $09, $12, $80, $18, $09, $01
+.byte $09, $C3, $FF, "TALKING TO MYSEL", $C6, $00, $04, $81, $09, $12, $80, $18
+.byte $09, $01, $EE, $14, $DC, $FF, "STILL ALIV", $C5, $00, $04, $81, $09
+.byte $12, $80, $18, $09, $01, $EB, $E4, $14, $DC, $00, $04, $81
+.byte $09, $12, $80, $18, $09, $03, $0E, $09, $01, $ED, $FF, "AH", $EE
+.byte $DC, $14, $1B, $00, $04, $8C, $09, $05, $0E, $F8, $00, $50, $99
+.byte $99, $01, $EF, $D8, $29, $05, $00, $14, $15, $14, $32, $03
+.byte $B8, $08, $0F, $FE, $01, $20, $F3, $11, $40, $12, $01, $6E, $09
+.byte $01, $D3, $22, $FF, "BELONGE", $C4, $D5, $00, $01, $BC, $00, $01
+.byte $EC, $1F, $00, $01, $FF, " H", $C5, $2B, $A8, $D6, $B7, $05
+.byte $00, $10, $20, $04, $B0, $10, $14, $32, $03, $7E, $09, $04
+.byte $A1, $09, $8A, "P{", $09, $0F, $FF, $00, $13, $6E, $09, $04
+.byte $C2, $09, $03, $7E, $09, $02, $12, $80, $8B, $09, $07, $0F
+.byte $00, $82, $09, $05, $02, $07, $02, $00, $8D, $09, $05, $02
+.byte $07, $03, $00, $94, $09, $05, $02, $07, $01, $00, $9B, $09
+.byte $05, $02, $07, $0F, $00, $A2, $09, $05, $1C, $01, $EE, $33, $DC
+.byte $D9, $D5, $1C, $07, $00, $02, $0B, $2B, $BF, $09, $07, $05
+.byte $00, $B3, $09, $11, $01, $05, $10, $01, $05, $14, $03, $14
+.byte $05, $01, $EF, $3C, $9E, $D1, $00, $01, $2E, $D5, $D0, $1E
+.byte $03, $C1, $00, $01, $CD, $27, $17, $9B, $FF, $4F, $09, $0D
+.byte $4F, $86, $00, $14, $07, $14, $32, $05, $04, $9A, $09, $14
+.byte $0C, $01, $EF, $D0, $9F, $FF, "DEMAND", $D3, $00, $01, $EF, $FF
+.byte "THA", $D4, $DC, $FF, "PUT HIM DOW", $CE, $00, $14, $32, $11, $40, $05
+.byte $05, $04, $9A, $09, $01, $E7, $FF, "BAN", $CB, $00, $14, $15
+.byte $14, $32, $11, $40, $05, $04, $BE, $0B, $01, $EF, $FF, "NOVABILL ", $8D
+.byte $E3, $34, $06, $00, $14, $32, $11, $40, $05, $04, $BE, $0B
+.byte $01, $EE, $D0, $16, $02, $FF, "ADVER", $D4, $00, $01, $FF, "THING", $D3
+.byte $14, $2E, $03, $D5, $1D, $00, $01, $ED, $FF, "TOUG", $C8, $3E, $A9
+.byte $AD, $00, $10, $08, $03, $C1, $0B, $04, $BE, $0B, $01, $EA
+.byte $FF, "SABINS CUB", $C5, $00, $03, $C9, $0B, $04, $BE, $0B, $01, $EE
+.byte $D0, $FF, "WALTON MONUMEN", $D4, $00, $01, $D5, $D0, $FF, "FAMOUS ARCHITEC", $D4, $00
+.byte $03, $C1, $0B, $04, $BE, $0B, $01, $EB, $FF, "ST", $0E, " STALLARD", $D3
+.byte $00, $03, $C1, $0B, $04, $BE, $0B, $01, $EC, $D0, $FF, "MOORBY ARC", $C8
+.byte $00, $03, $C9, $0B, $04, $BE, $0B, $01, $EA, $FF, "TYLER POIN", $D4
+.byte $00, $03, $C9, $0B, $04, $BE, $0B, $01, $EC, $FF, "BOSHER STADIU", $CD
+.byte $00, $03, $C1, $0B, $04, $BE, $0B, $01, $EC, $FF, "JORDA", $CE
+.byte $0F, $00, $03, $C1, $0B, $04, $BE, $0B, $01, $EB, $FF, "VECTOR HENG", $C5
+.byte $00, $03, $C9, $0B, $04, $BE, $0B, $01, $BC, $00, $01, $EF
+.byte $1F, $02, $A4, $00, $10, $20, $03, $C1, $0B, $04, $BE, $0B
+.byte $01, $EE, $D0, $9F, $FF, "FOR", $D4, $00, $03, $C9, $0B, $04
+.byte $BE, $0B, $01, $EF, $D0, $FF, "COACH AND HORSE", $D3, $00, $01, $DC, $E5
+.byte $A8, $1D, $FF, "POPULA", $D2, $00, $03, $C1, $0B, $04, $BE, $0B
+.byte $01, $BC, $00, $01, $EC, $1F, $02, $00, $01, $E9, $FF, "NE", $D7
+.byte $C5, $00, $10, $20, $03, $C1, $0B, $04, $9A, $09, $01, $E9
+.byte $FF, "TRAITOR", $EE, $00, $14, $32, $11, $40, $05, $04, $9A, $09
+.byte $01, $EA, $FF, "GOOD SHOW", $EE, $00, $14, $32, $11, $40, $05, $14
+.byte $17, $05, $04, $B0, $10, $14, $32, $11, $40, $05, $04, $BC
+.byte $10, $14, $32, $11, $40, $05, $8A, $50, $C1, $0B, $11, $40, $05
+.byte $8A, $50, $C9, $0B, $11, $40, $05, $04, $9A, $09, $0F, $FF
+.byte $29, $01, $EF, $B4, $1E, $03, $C1, $00, $14, $32, $93, $97
+.byte $0C, $01, $EC, $E2, $E5, $12, $00, $01, $EF, $FF, "DELIVER", $D9
+.byte $AA, $0B, $A5, $02, $00, $01, $D5, $FF, "APPROPRIAT", $C5, $C1, $02
+.byte $CD, $00, $01, $D0, $B4, $FF, "COLON", $D9, $22, $00, $14, $32, $93
+.byte $97, $0C, $01, $D2, $2B, $08, $FF, "BI", $C7, "9<", $00, $01
+.byte $EF, $08, $FF, "CAPTURE", $C4, $9F, $00, $14, $32, $93, $97, $0C
+.byte $01, $AE, $E0, $DC, $FF, "KNOW HO", $D7, $00, $01, $D5, $FF, "CHOOS", $C5
+.byte $CF, $3E, $DE, $00, $01, $EF, $30, $10, $9F, $00, $01, $FF
+.byte "OCCUPIE", $C4, $9A, $02, $3C, $00, $01, $DF, $FF, "SPECIAL GRATITUD", $C5, $00
+.byte $14, $32, $01, $EB, $1E, $03, $38, $02, $00, $14, $32, $11
+.byte $40, $05, $04, $9A, $09, $0F, $FF, $66, $01, $9F, $1E, $03
+.byte $C1, $00, $14, $32, $01, $EA, $E2, $E5, $B3, $00, $01, $3C, $B4
+.byte $BF, $02, $00, $01, $EF, $E0, $2F, $04, $D5, $0B, $00, $01
+.byte $28, $CD, $D3, $27, $00, $14, $32, $93, $FE, $0C, $01, $EE
+.byte $E2, $A2, $FF, "ALS", $CF, $B3, $3C, $00, $01, $FF, "DESTRUCTION OF SELECTE", $C4
+.byte $00, $01, $EF, $B4, $BE, $02, $00, $14, $32, $01, $EB, $1E
+.byte $03, $38, $02, $00, $14, $32, $11, $40, $05, $14, $08, $0F
+.byte $FE, $1E, $0F, $FF, $10, $1D, $1A, $0D, $0C, $1A, $0D, $01
+.byte $EB, $A8, $DB, $03, $00, $14, $32, $11, $40, $05, $01, $EB
+.byte $A0, $3E, $00, $01, $FF, "HERTZ SPACESHIP RENTA", $CC, $00, $01, $C5, $3C, $FF
+.byte "HIRE ", $09, $09, $09, $09, $09, $89, $24, $00, $1C, $01, $EF
+.byte $33, $DC, $D9, $D5, $FF, "HIRE", $ED, $00, $04, $B2, $09, $12
+.byte $01, $6A, $0D, $01, $EF, $AB, $B7, $20, $0D, $00, $14, $07
+.byte $11, $40, $05, $18, $00, $06, $00, $89, $0D, $01, $EE, $FF
+.byte "INSUFFICIEN", $D4, $3F, $02, $00, $14, $15, $14, $07, $11, $40, $05
+.byte $0E, $F8, $01, $00, $00, $99, $01, $EC, $C5, $FF, "DESPATCHE", $C4
+.byte $00, $01, $EB, $CE, $E5, $98, $00, $01, $17, $9B, $FF, $08
+.byte $0D, $08, " IN ", $82, $A1, $02, $00, $19, $7F, $29, $FF, $10
+.byte $04, $11, $40, $05, $0F, $FE, $1F, $0F, $FF, $AD, $0D, $F9
+.byte $00, $00, $10, $00, $01, $EA, $AF, $C1, $00, $03, $09, $0F
+.byte $0F, $FE, $22, $0F, $FF, $93, $0D, $F9, $00, $50, $03, $00
+.byte $01, $E8, $C8, $00, $03, $09, $0F, $0F, $FE, $23, $0F, $FF
+.byte $92, $0D, $F9, $00, $50, $06, $00, $01, $E8, $B0, $00, $03
+.byte $09, $0F, $0F, $FE, $2B, $0F, $FF, $90, $0D, $F9, $00, $00
+.byte $10, $00, $01, $EA, $B1, $00, $03, $09, $0F, $0F, $FE, $2D, $0F
+.byte $FF, $AA, $0D, $F9, $00, $00, $10, $00, $01, $EB, $28, $C1
+.byte $00, $03, $09, $0F, $0F, $FE, $0C, $0F, $FF, $9A, $0D, $F9
+.byte $00, $00, $25, $00, $01, $EC, $B2, $C1, $00, $03, $09, $0F
+.byte $0F, $FE, $1D, $0F, $FF, $46, $0D, $F9, $00, $00, $25, $00
+.byte $01, $EF, $9F, $3B, $C8, $00, $03, $45, $0F, $0F, $FE, $1F
+.byte $0F, $FF, $32, $0D, $F9, $00, $00, $10, $00, $01, $EF, $9F
+.byte $AF, $C1, $00, $03, $45, $0F, $0F, $FE, $22, $0F, $FF, $30, $0D
+.byte $F9, $00, $00, $08, $00, $01, $ED, $9F, $C8, $00, $03, $45, $0F
+.byte $0F, $FE, $23, $0F, $FF, $22, $0D, $F9, $00, $00, $12, $00
+.byte $01, $ED, $9F, $B0, $00, $03, $45, $0F, $0F, $FE, $2B, $0F
+.byte $FF, $12, $0D, $F9, $00, $00, $25, $00, $01, $EF, $9F, $B1
+.byte $00, $03, $45, $0F, $0F, $FE, $1D, $0F, $FF, $88, $0D, $F9
+.byte $00, $00, $20, $00, $01, $EA, $36, $C1, $00, $03, $09, $0F
+.byte $0F, $FE, $2A, $0F, $FF, $9B, $0D, $F9, $00, $00, $05, $00
+.byte $01, $EC, $BA, $C1, $00, $03, $09, $0F, $0F, $FE, $26, $0F
+.byte $FF, $A2, $0D, $F9, $00, $00, $10, $00, $01, $E9, $B8, $00
+.byte $03, $09, $0F, $0F, $FE, $2C, $0F, $FF, $A3, $0D, $F9, $00
+.byte $00, $06, $00, $01, $E8, $D4, $00, $03, $09, $0F, $0F, $FE
+.byte $29, $0F, $FF, $A5, $0D, $F9, $00, $00, $04, $00, $01, $E9
+.byte $CC, $00, $03, $09, $0F, $04, $9A, $09, $01, $E8, $FF, "PRISO", $CE
+.byte $E6, $00, $11, $40, $05, $21, $01, $40, $0F, $0C, $16, $0F
+.byte $1D, $16, $0F, $03, $40, $0F, $01, $EB, $B7, $FF, "LEAV", $C5
+.byte $00, $14, $FE, $01, $EF, "-<", $F9, $12, $00, $1D, $32, $0F
+.byte $13, $29, $0F, $03, $40, $0F, $20, $11, $01, $EE, $F9, $25, $B5
+.byte $00, $15, $F9, $F8, $F8, $14, $15, $14, $32, $11, $40, $05
+.byte $1E, $8E, $1E, $9F, $0F, $FE, $0C, $0F, $FF, $66, $9D, $59, $0F
+.byte $1E, $E8, $1E, $F9, $03, $09, $0F, $01, $EE, $D0, $9F, $02
+.byte $FF, "SA", $D9, $00, $01, $EE, $FF, "PU", $D4, $1B, $0B, $FF
+.byte "LEADE", $D2, $00, $14, $32, $11, $40, $05, $0F, $FF, $00, $0F
+.byte $FE, $19, $01, $ED, $FF, "INTERSTELLA", $D2, $C5, $00, $A2, $07, $D0
+.byte $0F, $93, $8F, $0F, $04, $9A, $09, $12, $04, $B2, $0F, $0C
+.byte $B2, $0F, $01, $EE, $A7, $FF, "REQUIRE", $C4, $00, $14, $32, $11
+.byte $40, $05, $1C, $01, $ED, $FF, "PRESS Y TO LAUNC", $C8, $00, $0B, $2B, $D5
+.byte $0F, $22, $07, $C8, $0F, $14, $32, $11, $40, $05, $93, $8F
+.byte $0F, $12, $04, $DF, $0F, $8C, $8F, $0F, $0F, $FD, $32, $9A
+.byte $1C, $10, $01, $EE, $D0, $16, $FF, "WONoT LE", $D4, $00, $01, $EE
+.byte $DC, $FF, "LEAVE UNTI", $CC, $DC, $00, $01, $EC, $FF, "FIX HIS ADVER", $D4, $00
+.byte $14, $32, $11, $40, $05, $19, "~)", $01, $04, $8C, $09, $19
+.byte $E1, $00, $96, $01, $EE, $D0, $16, $C2, $02, $DC, $00, $01
+.byte $FF, "CONGRATULATION", $D3, $AD, $97, $00, $01, $EC, $FF, "ESCAP", $C5, $3E, $D7
+.byte $00, $14, $32, $92, " o", $10, $01, $BC, $00, $01, $EC, $1F
+.byte $00, $01, $2B, $B7, $05, $FF, "YOUnVE GON", $C5, $00, $14, $32, $01
+.byte $FF, "SAVE OU", $D4, $D0, $C7, $13, $00, $01, $FF, "SE", $C5, $DC
+.byte $CD, $FF, "MERCENARY I", $C9, $00, $04, $A1, $09, $04, $A1, $09, $01
+.byte $E9, $FF, "GAME OVE", $D2, $00, $19, $01, $D2, $00, $19, $03, $D2
+.byte $00, $03, $95, $10, $01, $EF, $B4, $C5, $32, $03, $00, $19
+.byte "x)", $01, $05, $01, $EF, $9F, $C5, $32, $00, $19, "x)", $01
+.byte $05, $01, $EE, $E2, $14, $BD, $B7, $05, $00, $01, $DC, ":0", $04
+.byte $10, $00, $01, $EF, $FF, "KEY OPPOSITION SITE", $D3, $00, $10, $02, $05, $04
+.byte $9A, $09, $12, $02, $01, $11, $14, $04, $04, $C7, $10, $14
+.byte $07, $14, $32, $11, $40, $05, $04, $9A, $09, $12, $02, $3F, $11
+.byte $14, $03, $04, $C7, $10, $0D, $F9, $00, $00, $50, $00, $0F
+.byte $FE, $2E, $0F, $FF, $50, $9D, $34, $0F, $01, $DC, $E5, $3D, $08
+.byte $12, $00, $01, $EF, $FF, "INSIDE THE RE", $C4, $0E, $00, $19, "ni", $01
+.byte $14, $07, $11, $40, $05, $00, "MEN", $D4, $D3, "IN", $C7, $45, $C4
+.byte $C4, $EE, $ED, $C1, $41, $CD, $0D, $20, $0D, $20, $8D, "OU", $D2
+.byte "JUS", $D4, "AGAI", $CE, "HANGE", $D2, "AIRPOR", $D4, "AL", $CC, "AIRCRAF", $D4
+.byte "REWAR", $C4, "AN", $C4, "AR", $C5, "ANTIGRA", $D6, "AUTHO", $D2, $41, $D4
+.byte "ANTENN", $C1, "IT", $D3, "GOL", $C4, "BAC", $CB, "BU", $D9, $42, $C5
+.byte "BRIE", $C6, "BROTHER", $0D, "IN", $0D, "LA", $D7, "CAL", $CC, "CATERIN", $C7
+.byte "CRAF", $D4, "CRAS", $C8, $43, $D2, "CREDIT", $D3, "COMMUNICATIO", $CE, "COMPLE", $D8
+.byte "CONTRO", $CC, "COMPLET", $C5, "CRYSTA", $CC, $49, $D3, "DAR", $CB, "HER", $C5
+.byte $47, $CF, "DELIVE", $D2, "DESTRO", $D9, $8D, "ATTAC", $CB, $44, $CF, "DON", $C5
+.byte "ESSENTIA", $CC, "ENGIN", $C5, "ENERG", $D9, "EN", $C4, "FE", $C5, "HAV", $C5
+.byte "FUE", $CC, "FO", $D2, "FIN", $C4, "FRO", $CD, "FUN", $C4, "NO", $0E
+.byte " O", $0D, $09, $20, $ED, "YOU", $D2, "LAN", $C4, "LON", $C7, "LOCATIO", $CE
+.byte "LO", $C3, "MEDICA", $CC, "LOCKE", $C4, "MOR", $C5, "MECHANOI", $C4, "MESSAG", $C5
+.byte "MI", $CE, "MA", $D9, "MUS", $D4, "HOUS", $C5, "NEE", $C4, "NEUTRO", $CE
+.byte "NOVADRIV", $C5, "NO", $D4, "NO", $D7, $4F, $C6, $4F, $CB, "OFFE", $D2
+.byte $4F, $CE, "ONL", $D9, "POWE", $D2, "ARMOUR", $D9, "LABORATOR", $D9, "INTERVIE", $D7
+.byte "PA", $D9, "PALYA", $D2, "PAI", $C4, "PLA", $CE, "PLEAS", $C5, "EXCHEQUE", $D2
+.byte "PROVISION", $D3, "CONFERENC", $C5, "PA", $C4, "THE PALYAR COMMANDERo", $D3, "MOS", $D4, "INSTALLATIO", $CE
+.byte "REQUIREMEN", $D4, "REPOR", $D4, "ROO", $CD, "SEN", $C4, $C9, "SAL", $C5, "SHI", $D0
+.byte "SHOUL", $C4, "STATU", $D3, "STORE", $D3, "STAR", $D4, "SUPPLIE", $D3, "INFIRMAR", $D9
+.byte $49, $CE, $49, $D4, "THE", $CD, "TH", $C5, "INFORMATIO", $CE, "THER", $C5
+.byte "THI", $D3, "KITCHE", $CE, $54, $CF, "TO", $CF, "TAR", $C7, "TRANSACTIO", $CE
+.byte "WAN", $D4, "GOO", $C4, "WOR", $CB, "YO", $D5, "JO", $C2, $55, $D3
+.byte "VER", $D9, "WHE", $CE, "WAL", $CB, $57, $C5, "WEL", $CC, "WHER", $C5
+.byte "WIL", $CC, "        ", $A0, $A0, $4C, $00, $00, $E8, $9D, $E6, $00
+.byte $EF, $19, $DF, $2C, $CD, $2D, $E6, $00, $E9, $D6, $FF, "HEAV", $D9
+.byte $E6, $00, $EF, $A0, $3E, $B4, $02, $00, $A0, $3E, $9F, $02
+.byte $00, $EF, $0A, $DD, $AC, $0A, $00, $E8, $FF, "CHEES", $C5, $E7
+.byte $00, $EB, $A0, $38, $02, $00, $EE, $26, $C1, $00, $E8, $0E
+.byte $E6, $00, $E8, $D4, $00, $EA, $36, $C1, $00, $E9, $9F, $E9
+.byte $00, $EF, $B4, $1E, $03, $C1, $00, $EC, $BA, $C1, $00, $BC
+.byte $EC, $1F, $02, $C1, $E6, $00, $EC, $FF, "PHOTON EMITTE", $D2, $E6, $00
+.byte $DC, $3A, $F8, $25, $00, $E9, $FF, "EXCHEQUE", $D2, $00, $DC, $3A, $0C
+.byte $30, $04, $00, $EC, $FF, "ANTI TIME BOM", $C2, $EB, $00, $E9, $A7, $E9
+.byte $00, $EC, $FF, "METAL DETECTO", $D2, $EB, $00, $E9, $15, $E8, $00, $E9
+.byte $FF, "POWERAM", $D0, $E8, $00, $EB, $A6, $3B, $EA, $00, $E8, $18
+.byte $E8, $00, $EC, "7*", $EB, $00, $E8, $FF, "COFFI", $CE, $E7, $00
+.byte $E9, $FF, "LARGE BO", $D8, $E9, $00, $EC, $FF, "USEFUL ARMAMEN", $D4, $EC, $00
+.byte $E9, $CC, $00, $E7, $1A, $E6, $00, $E8, $FF, "SIGHT", $D3, $E7
+.byte $00, $ED, $9C, $CA, $EC, $00, $35, $FF, $01, $02, $09, $03
+.byte $09, " SUPPL", $D9, $EF, $00, $EA, $FF, "WINCHESTE", $D2, $E9, $00, $EE
+.byte $21, $B9, $EE, $00, $E9, $FF, "DATABAN", $CB, $E8, $00, $E7, $FF
+.byte "PAS", $D3, $E6, $00, $EB, $D4, $FF, "SIN", $CB, $EA, $00, $EC
+.byte $C5, $30, $04, $E7, $00, $EF, $FF, "ENEM", $D9, $C5, $30, $04
+.byte $E7, $00, $E6, $00, $FF, "PRESS RETURN WHEN READ", $D9, $00, $ED, $FF, "PASS HOLDERS ONL", $D9
+.byte $E6, $00, $EC, $FF, "LOA", $C4, $96, $00, $EC, $FF, "SAV", $C5
+.byte $96, $00, $EA, $E4, $09, $C3, $00, $EA, $DC, $23, $04, $00
+.byte $EB, $DA, $98, $03, $06, $00, $E7, $FF, "OUCH", $EE, $00, $4C, $00
+.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+.byte $00, $00
