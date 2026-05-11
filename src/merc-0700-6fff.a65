@@ -653,6 +653,59 @@ LFFFA       = $FFFA
 LFFFB       = $FFFB
 LFFFE       = $FFFE
 LFFFF       = $FFFF
+L0F00		= $0F00
+L07A2		= $07A2
+L140B		= $140B
+L0F0E		= $0F0E
+L0E0E		= $0E0E
+L0D0B		= $0D0B
+L1001		= $1001
+L1211		= $1211
+L129C		= $129C
+L0C11		= $0C11
+L0E13		= $0E13
+L0E0A		= $0E0A
+L0C0F		= $0C0F
+L0E0F		= $0E0F
+L1501		= $1501
+L1511		= $1511
+L1A1A		= $1A1A
+L1919		= $1919	
+L1D44		= $1D44
+L1D41		= $1D41
+L1D24		= $1D24
+L1D1C		= $1D1C
+L1D3E		= $1D3E
+L1D1B		= $1D1B
+L1D1E		= $1D1E
+L1D13		= $1D13
+L1DC3		= $1DC3
+L1DC2		= $1DC2
+L1DBF		= $1DBF
+L1DD0		= $1DD0
+L1DE5		= $1DE5	
+L1EC0		= $1EC0
+L1EBE		= $1EBE
+L1F2E		= $1F2E
+L1F63		= $1F63
+L1F00		= $1F00
+L1EE0		= $1EE0
+L1F1E		= $1F1E
+L1F1F		= $1F1F
+L2082		= $2082
+L2086		= $2086
+L208E		= $208E
+L2002		= $2002
+L201F		= $201F
+L2028		= $2028
+L2045		= $2045
+L2020		= $2020
+L2059		= $2059
+L2008		= $2008 
+L200C		= $200C
+L2006		= $2006
+L2001		= $2001
+L2004		= $2004
 ; 
             .include "merc-0700-6fff.inc"
 ;
@@ -956,20 +1009,7 @@ L0700:      	.byte $6C, $07, $39, $09, $01, $0D, $97, $0E, $AB, $0E, $BF, $0E
 		.byte "WIL", $CC
 		.byte "        ", $A0, $A0, $4C, $00
 		
-L0F00		= $0F00
-L07A2		= $07A2
-L140B		= $140B
-L0F0E		= $0F0E
-L0E0E		= $0E0E
-L0D0B		= $0D0B
-L1001		= $1001
-L1211		= $1211
-L129C		= $129C
-L0C11		= $0C11
-L0E13		= $0E13
-L0E0A		= $0E0A
-L0C0F		= $0C0F
-L0E0F		= $0E0F
+
 ;
 ; 64 word table at $7DA0 (lo) and $7DE0 (hi) point to the follwing messages
 ;
@@ -1043,12 +1083,6 @@ L15B9:		.byte $EA,$DC,$23,$04,$00
 L15BE:		.byte $EB,$DA,$98,$03,$06,$00
 L15C4:		.byte $E7,$FF,"OUCH",$EE,$00
 		.byte $4C
-
-
-L1501		= $1501
-L1511		= $1511
-L1A1A		= $1A1A
-L1919		= $1919
     
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -1201,20 +1235,6 @@ GROUND_STRUCTURE_Z_MSB_1E40:
 		.byte $9F,$F0,$25,$30,$17,$B9,$00,$9F,$F0,$12,$30,$1C,$B9,$40,$9D,$49
 		.byte $80,$85,$04,$BD,$40,$9D,$49,$80,$C5,$04,$B0,$0C,$98,$86,$04,$AA
 		.byte $A4,$04,$BD,$00,$9F,$10,$01,$60,$BD,$00,$9F,$85,$6C,$30,$1E,$BD
-
-L1D44		= $1D44
-L1D41		= $1D41
-L1D24		= $1D24
-L1D1C		= $1D1C
-L1D3E		= $1D3E
-L1D1B		= $1D1B
-L1D1E		= $1D1E
-L1D13		= $1D13
-L1DC3		= $1DC3
-L1DC2		= $1DC2
-L1DBF		= $1DBF
-L1DD0		= $1DD0
-L1DE5		= $1DE5
 		
 		.byte $00,$01,$02,$00,$01,$02,$04,$05,$06,$07,$08,$09,$0A,$0B,$BD,$80
 		.byte $9D,$85,$5D,$BD,$00,$9E,$85,$5E,$BD,$40,$9E,$85,$5F,$BD,$00,$9C
@@ -1240,15 +1260,8 @@ L1DE5		= $1DE5
 		.byte $20,$02,$20,$11,$02,$20,$02,$02,$02,$11,$02,$02,$0C,$43,$43,$43
 		.byte $02,$02,$02,$20,$20,$02,$02,$02,$02,$02,$02,$02,$02,$43,$43,$43
 		.byte $02,$02,$02,$02,$11,$02,$12,$02,$02,$11,$02,$12,$02,$43,$43,$02
-	 
-L1EC0		= $1EC0
-L1EBE		= $1EBE
-L1F2E		= $1F2E
-L1F63		= $1F63
-L1F00		= $1F00
-L1EE0		= $1EE0
-L1F1E		= $1F1E
-L1F1F		= $1F1F
+	
+
 	 
 ;
 ; Y-Pos Hi
@@ -1263,21 +1276,6 @@ SCR_Y_HI_2000:	.byte $00,$00,$00,$00,$00,$00,$01,$01,$01,$01,$01,$01,$01,$02,$02
 		.byte $11,$11,$11,$12,$12,$12,$12,$12,$12,$12,$13,$13,$13,$13,$13,$13
 		.byte $14,$14,$14,$14,$14,$14,$15,$15,$15,$15,$15,$15,$15,$16,$16,$16
 		.byte $16,$16,$16,$17,$17,$17,$17,$17,$17,$17,$18,$18,$18,$18,$18,$18
-	
-L2082		= $2082
-L2086		= $2086
-L208E		= $208E
-L2002		= $2002
-L201F		= $201F
-L2028		= $2028
-L2045		= $2045
-L2020		= $2020
-L2059		= $2059
-L2008		= $2008 
-L200C		= $200C
-L2006		= $2006
-L2001		= $2001
-L2004		= $2004
 
 L20A0:      	.byte $00
 L20A1:      	.byte $00,$00,$00,$80
@@ -1450,166 +1448,34 @@ SCR_Y_LO_2600:
 L2648		= $2648
 L2670		= $2670
 
-L26A0:      .byte $00,$00
-L26A2:      .byte $00,$00
-            ora (MEM_PTR_HI_01,X)
-L26A6:      ora (MEM_PTR_HI_01,X)
-            .byte $02,$02,$02,$02,$03,$03
-L26AE:      .byte $03,$03,$04,$04,$04,$04
-            ora TMP_04+1
-            ora TMP_04+1
-            asl MUL_LO_06
-L26BA:     asl MUL_LO_06
-            .byte $07,$07,$07,$07
-            php
-            php
-L26C2:      php
-            php
-            ora #$09
-            ora #$09
-            asl
-            asl
-            asl
-            asl
-            .byte $0B,$0B
-L26CE:      .byte $0B,$0B,$0C,$0C,$0C,$0C
-            ora L0D0B+2
-            ora L0E0E
-            asl L0F0E
-            .byte $0F,$0F,$0F
-            bpl L26F2
-L26E2:      bpl L26F4
-            ora (BRKKEY),Y
-            ora (BRKKEY),Y
-            .byte $12,$12,$12,$12,$13,$13
-L26EE:      .byte $13,$13,$14,$14
-L26F2:      .byte $14,$14
-L26F4:      ora ROLL_SIN_MUL_PITCH_SIN_HI_15,X
-            ora ROLL_SIN_MUL_PITCH_SIN_HI_15,X
-            asl ROLL_SIN_MUL_PITCH_SIN_HI_15+1,X
-            asl ROLL_SIN_MUL_PITCH_SIN_HI_15+1,X
-            .byte $17,$17,$17,$17
-            clc
-            clc
-L2702:      clc
-            clc
-            ora L1919,Y
-            ora L1A1A,Y
-            .byte $1A,$1A,$1B,$1B,$1B,$1B,$1C,$1C,$1C,$1C
-            ora L1D1C+1,X
-L2717:      ora L1E1D+1,X
-            asl L1F1E,X
-            .byte $1F,$1F,$1F
-            jsr L2020
-            jsr L2120+1
-            and (ZP_21,X)
-            .byte $22,$22,$22,$22,$23,$23,$23,$23
-            bit ICBALZ
-            bit ICBALZ
-            and ZP_25
-            and ZP_25
-            rol ROLL_LO_26
-            rol ROLL_LO_26
-            .byte $27,$27,$27,$27
-L2740:      rti
-            bpl L2747
-            ora (ROTATE_MY3_LO_40,X)
-            bpl L274B
-L2747:      ora (ROTATE_MY3_LO_40,X)
-            bpl L274F
-L274B:      ora (ROTATE_MY3_LO_40,X)
-L274D:      bpl L275B
-L274F:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2757
-            ora (ROTATE_MY3_LO_40,X)
-            bpl L275B
-L2757:      ora (ROTATE_MY3_LO_40,X)
-            bpl L275F
-L275B:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2763
-L275F:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2767
-L2763:      ora (ROTATE_MY3_LO_40,X)
-            bpl L276B
-L2767:      ora (ROTATE_MY3_LO_40,X)
-            bpl L276F
-L276B:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2773
-L276F:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2777
-L2773:      ora (ROTATE_MY3_LO_40,X)
-            bpl L277B
-L2777:      ora (ROTATE_MY3_LO_40,X)
-            bpl L277F
-L277B:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2783
-L277F:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2787
-L2783:      ora (ROTATE_MY3_LO_40,X)
-            bpl L278B
-L2787:      ora (ROTATE_MY3_LO_40,X)
-            bpl L278F
-L278B:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2793
-L278F:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2797
-L2793:      ora (ROTATE_MY3_LO_40,X)
-            bpl L279B
-L2797:      ora (ROTATE_MY3_LO_40,X)
-            bpl L279F
-L279B:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27A3
-L279F:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27A7
-L27A3:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27AB
-L27A7:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27AF
-L27AB:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27B3
-L27AF:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27B7
-L27B3:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27BB
-L27B7:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27BF
-L27BB:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27C3
-L27BF:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27C7
-L27C3:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27CB
-L27C7:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27CF
-L27CB:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27D3
-L27CF:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27D7
-L27D3:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27DB
-L27D7:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27DF
-L27DB:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27E3
-L27DF:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27E7
-L27E3:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27EB
-L27E7:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27EF
-L27EB:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27F3
-L27EF:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27F7
-L27F3:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27FB
-L27F7:      ora (ROTATE_MY3_LO_40,X)
-            bpl L27FF
-L27FB:      ora (ROTATE_MY3_LO_40,X)
-            bpl L2803
-L27FF:      ;ora (CUR_X_LSB_70,X)
-            ;bvs L27F3
-		.byte $01 
+		.byte $00,$00,$00,$00,$01,$01,$01,$01,$02,$02,$02,$02,$03,$03,$03,$03
+		.byte $04,$04,$04,$04,$05,$05,$05,$05,$06,$06,$06,$06,$07,$07,$07,$07
+		.byte $08,$08,$08,$08,$09,$09,$09,$09,$0A,$0A,$0A,$0A,$0B,$0B,$0B,$0B
+		.byte $0C,$0C,$0C,$0C,$0D,$0D,$0D,$0D,$0E,$0E,$0E,$0E,$0F,$0F,$0F,$0F
+		.byte $10,$10,$10,$10,$11,$11,$11,$11,$12,$12,$12,$12,$13,$13,$13,$13
+		.byte $14,$14,$14,$14,$15,$15,$15,$15,$16,$16,$16,$16,$17,$17,$17,$17
+		.byte $18,$18,$18,$18,$19,$19,$19,$19,$1A,$1A,$1A,$1A,$1B,$1B,$1B,$1B
+		.byte $1C,$1C,$1C,$1C,$1D,$1D,$1D,$1D,$1E,$1E,$1E,$1E,$1F,$1F,$1F,$1F
+		.byte $20,$20,$20,$20,$21,$21,$21,$21,$22,$22,$22,$22,$23,$23,$23,$23
+		.byte $24,$24,$24,$24,$25,$25,$25,$25,$26,$26,$26,$26,$27,$27,$27,$27
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$0C,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
+		
+L275F		= $275F
+L26A0		= $26A0
+L2740		= $2740
+L274F		= $274F
+L274D		= $274D
 ;------------------------------------------------------------
 ; DISPLAY LIST
 ;------------------------------------------------------------
