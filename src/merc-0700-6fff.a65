@@ -743,7 +743,9 @@ L0700:      	.byte $6C, $07, $39, $09, $01, $0D, $97, $0E, $AB, $0E, $BF, $0E
 		.byte $00, $12, $80, $AE, $08, $14, $32, $04, $BF, $08, $01, $A9
 		.byte $DC, $14, $2D, $0A, $00, $01, $EE, $C3, $E5, $C9, $0D, $00
 		.byte $03, $B9, $07, $01, $CE, $E5, $1D, $08, $99, $E1, $00, $14
-		.byte $32, $22, $01, $39, $09, $03, $B8, $08, $01, $ED, $2B, $FF
+		.byte $32
+
+L08B8:		.byte $22, $01, $39, $09, $03, $B8, $08, $01, $ED, $2B, $FF
 		.byte "ANYBOD", $D9, $D2, $00, $04, $81, $09, $12, $80, $18, $09, $01
 		.byte $09, $C3, $FF, "TALKING TO MYSEL", $C6, $00, $04, $81, $09, $12, $80, $18
 		.byte $09, $01, $EE, $14, $DC, $FF, "STILL ALIV", $C5, $00, $04, $81, $09
@@ -1637,38 +1639,43 @@ INVENTORY_LIST_L292C:
 L2934:      	.byte $00,$00
 
 
-L2936:      .byte $00
-L2937:      .byte $00
-L2938:      .byte $00
-L2939:      .byte $00
-L293A:     .byte $00
-L293B:      .byte $00,$00
-L293D:      ldy MUL_HI_07,X
-            lsr L8793,X
-            .byte $00
-            cpy L6E19
-            ror L7272
-            ror L726E
-            .byte $72
-            ror L706E
-            .byte $72,$72
-            bvs L29C1+1
-            .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-            .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-            .byte $00,$00,$00,$00
-L2978:      .byte $00
-L2979:      .byte $00,$00
-            ora A:MEM_PTR_LO_00
-L297E:      .byte $00
-L297F:      .byte $00
-            jsr L5FEB
-            lda L00CD
-            beq L298D
-            jsr L35E0
-            jmp MAIN_LOOP_L29DF
-L298D:      jsr L397E
-            jmp MAIN_LOOP_L29DF
-            jsr L5FEB
+L2936:		.byte $00
+L2937:		.byte $00
+L2938:		.byte $00
+L2939:		.byte $00
+L293A:		.byte $00
+L293B:		.byte $00
+L293C:		.byte $00
+
+;
+; Benson?
+;
+L293D:      	ldy MUL_HI_07,X
+		lsr L8793,X
+		.byte $00
+		cpy L6E19
+		ror L7272
+		ror L726E
+		.byte $72
+		ror L706E
+		.byte $72,$72
+		bvs L29C1+1
+		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+		.byte $00,$00,$00,$00
+L2978:      	.byte $00
+L2979:      	.byte $00,$00
+		ora A:MEM_PTR_LO_00
+L297E:      	.byte $00
+L297F:      	.byte $00
+		jsr L5FEB
+		lda L00CD
+		beq L298D
+		jsr L35E0
+		jmp MAIN_LOOP_L29DF
+L298D:      	jsr L397E
+		jmp MAIN_LOOP_L29DF
+		jsr L5FEB
 	    
 	    
 ;------------------------------------------------------------
@@ -1682,7 +1689,7 @@ L298D:      jsr L397E
 ; - set players X and Z pos to Targ bounds 15-15
 ; - set speed to zero
 ;------------------------------------------------------------	    
-L2996:		jsr SCATTER_INVENTORY_L2A75
+RESTART_L2996:	jsr SCATTER_INVENTORY_L2A75
 		lda #$80
 		sta L0083
 		lda #$80
@@ -1726,7 +1733,7 @@ L29C1:		and #$0F
 ; MAIN_LOOP_L29DF
 ;------------------------------------------------------------
 MAIN_LOOP_L29DF:
-		jsr BENSON_L2F33				; process benson messages
+		jsr BENSON_2F33					; process benson messages
 		jsr INTERSTELLAR_SHIP_DELIVERY_L2AB7            ; has the interstellar ship been delivered
 		lda PLANET_UNDERGROUND_A6                    	; is the player above or below ground
 		beq OUTSIDE_L2A24                               ; player is above ground
@@ -1998,7 +2005,7 @@ L2C0C:		ldy #$00
 		jsr L2CBA
 		bcs L2C18
 		lda #$1B
-		jsr L2F0D
+		jsr BENSON_2F0D
 L2C18:		rts
 L2C19:		ldx L00F3
 L2C1B:		beq L2C18
@@ -2058,7 +2065,7 @@ L2C83:		cmp #$69
 		and #$E0
 		sta L1F00,Y
 L2C99:		txa
-		jmp L2F0D
+		jmp BENSON_2F0D
 L2C9D:		lda L00FA
 		php
 		and #$7F
@@ -2340,7 +2347,10 @@ L2EC1:		sec
 		sta DIF_Z_HSB_DD
 		rts
 		
-L2F0D:		asl
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2F0D:	asl
 		tay
 		lda L293B
 		and #$40
@@ -2349,20 +2359,19 @@ L2F0D:		asl
 		ora #$40
 		sta L293B
 		lda BENSON_PTR_LO_1D
-		jsr L304A
+		jsr BENSON_304A
 L2F23:		lda BENSON_PTR_HIGH_1E
-		jsr L304A
+		jsr BENSON_304A
 		lda L0700,Y
 		sta BENSON_PTR_LO_1D
 L2F2D:		lda L0700+1,Y
 		sta BENSON_PTR_HIGH_1E
 L2F32:		rts
 
-
 ;------------------------------------------------------------
 ; BENSON_L2F33
 ;------------------------------------------------------------    
-BENSON_L2F33:
+BENSON_2F33:
 		lda MESSAGE_PENDING_E6
 		bne L2F50
 		
@@ -2380,7 +2389,11 @@ L2F41:		adc #$DE
 L2F4D:		jmp (L3206)					;jump to it
 L2F50:		rts
 
-		iny
+L3206	= 	$3206
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2F51:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		sta L2F60+1
 		iny
@@ -2390,15 +2403,23 @@ L2F50:		rts
 		lda (BENSON_PTR_LO_1D),Y
 L2F60:		cmp L0100
 		jmp L300C
-		jsr GET_RANDOM_L53B1
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2F66:	jsr GET_RANDOM_L53B1
 		iny
 		lda (BENSON_PTR_LO_1D),Y
 		cmp RANDOM_E8
 		jmp L300C
-L2F71:		lda TIMER_MSB_E3
+
+;------------------------------------------------------------
+; Benson waits for timer
+;------------------------------------------------------------
+BENSON_2F71:	lda TIMER_MSB_E3
 		ldx TIMER_HSB_E4
 		cmp TIMER_MSB_E3
-		bne L2F71
+		bne BENSON_2F71
 		sec
 		iny
 		sbc (BENSON_PTR_LO_1D),Y
@@ -2406,37 +2427,69 @@ L2F71:		lda TIMER_MSB_E3
 		iny
 		sbc (BENSON_PTR_LO_1D),Y
 		jmp L300C
-		lda L2938
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2F84:	lda L2938
 		eor #$80
 		iny
 		cmp (BENSON_PTR_LO_1D),Y
 		jmp L300C
-		iny
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2F8F:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		cmp CRAFT_ID_WALKING_A7
 		beq L300B
 		bne L3008
-		ldx L274D+1
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2F98:	ldx L274D+1
 		lda L274F
 		cmp L6940,X
 		beq L300B
 		bne L3008
-		lda L274F
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2FA5:	lda L274F
 		cmp L00CD
 		beq L300B
 		bne L3008
-		lda L293B
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2FAE:	lda L293B
 		iny
 		and (BENSON_PTR_LO_1D),Y
 		beq L3008
 		bne L300B
-		lda L274D+1
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2FB8:	lda L274D+1
 		jsr L3890
 		bne L3008
 		beq L300B
-		jsr L30DE
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2FC2:	jsr BENSON_30DE
 		jmp L300C
-		iny
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------		
+BENSON_2FC8:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		iny
 		cmp CUR_X_HSB_72
@@ -2445,11 +2498,16 @@ L2F71:		lda TIMER_MSB_E3
 		cmp CUR_Z_HSB_78
 		bne L3008
 		beq L300B
-		lda L274D
+		
+BENSON_2FD8:	lda L274D
 		cmp GROUND_STRUC_OBJ_TO_DRAW_B5
 		bne L3008
 		beq L300B
-		lda NEW_KEY_L00E9
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2FE1:	lda NEW_KEY_L00E9
 		and #$3F
 		iny
 		cmp (BENSON_PTR_LO_1D),Y
@@ -2457,17 +2515,33 @@ L2F71:		lda TIMER_MSB_E3
 		jsr RESET_KEY_L5AEE
 		jsr SOUND_EFFECT_L5AFB
 		jmp L300B
-		ldx L274D
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2FF3:	ldx L274D
 		lda L1F00,X
 		bmi L300B
 		bpl L3008
-		iny
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_2FFD:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		ldx L274D+1
 		and OBJECT_ATTRIBUTES_69C0,X
 		bne L300B
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
 L3008:		sec
 		bcs L300C
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
 L300B:		clc
 L300C:		ror
 		eor L00E7
@@ -2482,24 +2556,27 @@ L3013:		iny
 		bcc L301E
 		inc BENSON_PTR_HIGH_1E
 L301E:		rts
+
 L301F:		lda L00E7
 		asl
-		bpl BENSON_PTR_NEXT_L3033
-L3024:		lda BENSON_PTR_LO_1D
+		bpl BENSON_3033
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_3024:	lda BENSON_PTR_LO_1D
 		clc
 		adc #$03
-		jsr L304A
+		jsr BENSON_304A
 		lda BENSON_PTR_HIGH_1E
 L302E:		adc #$00
-		jsr L304A
-
+		jsr BENSON_304A
 
 ;------------------------------------------------------------
 ; BENSON_PTR_NEXT
 ; Get next pointer from benson state machine
 ;------------------------------------------------------------    
-BENSON_PTR_NEXT_L3033:
-		iny
+BENSON_3033:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		tax
 		iny
@@ -2508,26 +2585,37 @@ BENSON_PTR_NEXT_L3033:
 		stx BENSON_PTR_LO_1D
 		rts
 		
-		jsr L3053
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_303F:	jsr BENSON_3053
 		sta BENSON_PTR_HIGH_1E
-		jsr L3053
+		jsr BENSON_3053
 		sta BENSON_PTR_LO_1D
 		rts
 		
-		
-L304A:		ldx L00E5
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_304A:	ldx L00E5
 		sta L293D,X
 		inx
 		stx L00E5
 		rts
-	    
-L3053:		ldx L00E5
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_3053:	ldx L00E5
 		dex
 		lda L293D,X
 		stx L00E5
 		rts
 
-		ldx L274D+1
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_305C:	ldx L274D+1
 		iny
 		lda (BENSON_PTR_LO_1D),Y
 		bmi L306D
@@ -2537,7 +2625,11 @@ L3053:		ldx L00E5
 L306D:		and OBJECT_ATTRIBUTES_69C0,X
 		sta OBJECT_ATTRIBUTES_69C0,X
 		jmp L3013
-		iny
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_3076:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		and #$0F
 		tax
@@ -2550,7 +2642,7 @@ L306D:		and OBJECT_ATTRIBUTES_69C0,X
 		ldy #$00
 		pha
 		and #$0F
-		jsr L30A4
+		jsr BENSON_30A4
 		pla
 		lsr
 		lsr
@@ -2558,12 +2650,16 @@ L306D:		and OBJECT_ATTRIBUTES_69C0,X
 		lsr
 		iny
 		iny
-		jsr L30A4
+		jsr BENSON_30A4
 		ora #$80
 		sta L2979,Y
 		ldy TMP_04
 		jmp L3013
-L30A4:		tax
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_30A4:	tax
 		lda L28AB,X
 		lsr
 		lsr
@@ -2574,7 +2670,11 @@ L30A4:		tax
 		iny
 		sta L2979,Y
 		rts
-		lda BENSON_PTR_LO_1D
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_30B7:	lda BENSON_PTR_LO_1D
 		sta L32A4+1
 		lda BENSON_PTR_HIGH_1E
 		sta L32A4+2
@@ -2585,23 +2685,44 @@ L30C4:		bne L30C1
 		sta CHAR_CNT_DF
 		sta MSG_CHUNK_CNT_DE
 		jmp L3013
-		lda #$00
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_30CF:	lda #$00
 		sta TIMER_MSB_E3
 		sta TIMER_HSB_E4
 		jmp L3013
-		jsr L30DE
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_30D8:	jsr BENSON_30DE
 		jmp L3013
-L30DE:		iny
+		
+;------------------------------------------------------------
+; Dynamically call a subroutine
+;------------------------------------------------------------
+BENSON_30DE:	
+		iny
 		lda (BENSON_PTR_LO_1D),Y
 		sta L30EA+1
 		iny
 		lda (BENSON_PTR_LO_1D),Y
 		sta L30EA+2
 L30EA:		jsr L30EA
-		lda #$2C
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_30ED:	lda #$2C
 		sta L310A
 		bne L30F9
-		lda #$7D
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_30F4:	lda #$7D
 		sta L310A
 L30F9:		iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2622,7 +2743,11 @@ L310D:		sta L05E3,X
 		bne L3107
 		cld
 		jmp L3013
-		iny
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_3119:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		and #$0F
 		asl
@@ -2663,7 +2788,11 @@ L3131:		lda L05E3,X
 		sta L05E3,X
 		cld
 		jmp L3013
-		iny
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_315C:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		and #$0F
 		tax
@@ -2678,18 +2807,30 @@ L3131:		lda L05E3,X
 		pla
 		sta L2740,X
 		jmp L3013
-		iny
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_3174:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		ora L293B
 		sta L293B
 		jmp L3013
-		iny
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_3180:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		eor #$FF
 		and L293B
 		sta L293B
 		jmp L3013
-		iny
+		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_318E:	iny
 		lda (BENSON_PTR_LO_1D),Y
 		sta L319D+1
 		iny
@@ -2699,25 +2840,41 @@ L3131:		lda L05E3,X
 		lda (BENSON_PTR_LO_1D),Y
 L319D:		sta AUDC1
 		jmp L3013
-		iny
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_31A3:	iny
 		lda (BENSON_PTR_LO_1D),Y
-		bpl L31AE
+		bpl BENSON_31AE
 		and #$0F
 		tax
 		lda L2740,X
-L31AE:		tax
+BENSON_31AE:	tax
 		jsr START_MESSAGE_L322A
 L31B2:		jmp L3013
-		jsr GET_RANDOM_L53B1
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_31B5:	jsr GET_RANDOM_L53B1
 		iny
 		and (BENSON_PTR_LO_1D),Y
 		clc
 		iny
 		adc (BENSON_PTR_LO_1D),Y
-		bne L31AE
-		jsr RESET_KEY_L5AEE
+		bne BENSON_31AE
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_31C1:	jsr RESET_KEY_L5AEE
 		jmp L3013
-		lda L2938
+
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+BENSON_31C7:	lda L2938
 		iny
 		clc
 		adc (BENSON_PTR_LO_1D),Y
@@ -2729,47 +2886,45 @@ L31D6:		lda #$7F
 L31D8:		sta L2938
 		jmp L3013
 		
+;------------------------------------------------------------
+;
+;------------------------------------------------------------
+L31DE:		.byte $00,$00
+L31E0:		.word BENSON_30B7
+		.word BENSON_30CF
+L31E4:		.word BENSON_3033
+		.word BENSON_3024
+		.word BENSON_303F
+		.word BENSON_2FC8
+L31EC:		.word BENSON_2F71
+		.word BENSON_30D8
+		.word BENSON_2FC2
+		.word BENSON_2F66
+		.word BENSON_2FE1
+		.word BENSON_2FB8
+		.word BENSON_30ED
+		.word BENSON_30F4
+		.word BENSON_3076
+		.word BENSON_3174
+		.word BENSON_3180
+		.word BENSON_2FAE
+		.word BENSON_2FA5
+		.word BENSON_31A3
+		.word BENSON_3119
+		.word BENSON_31C7
+		.word BENSON_2F84
+		.word BENSON_2F51
+		.word BENSON_318E
+		.word BENSON_2FF3
+		.word BENSON_31B5
+		.word BENSON_31C1
+		.word BENSON_2F98
+		.word BENSON_315C
+		.word BENSON_2FD8
+		.word BENSON_305C
+		.word BENSON_2FFD
+L3222:		.word BENSON_2F8F
 		
-            .byte $00,$00,$B7
-            bmi L31B2
-            bmi L3218
-            bmi L320B
-            bmi L3228
-            bmi L31B2+1
-            .byte $2F
-            adc (COS_ROLL_HI_2F),Y
-            cld
-            bmi L31B2+1
-            .byte $2F
-            ror COS_ROLL_HI_2F
-            sbc (COS_ROLL_HI_2F,X)
-            clv
-            .byte $2F
-            sbc LF430
-            bmi L3272+1
-            bmi L3272+1
-            and (LINE_COLOR0_80),Y
-            and (L00AE),Y
-            .byte $2F
-            lda COS_ROLL_HI_2F
-L3206:      .byte $A3
-            and (SCREEN_LINES_19),Y
-            and (L00C7),Y
-L320B:      and (L0084),Y
-            .byte $2F
-            eor (COS_ROLL_HI_2F),Y
-            stx LF331
-            .byte $2F
-            lda SIN_DIV_COS_ROLL_HI_31,X
-            cmp (SIN_DIV_COS_ROLL_HI_31,X)
-L3218:      tya
-            .byte $2F,$5C
-            and (DIF_Y_LSB_D8),Y
-            .byte $2F
-L321E:      .byte $5C
-            bmi L321E
-            .byte $2F,$8F,$2F
-
 L3224:		lda MESSAGE_PENDING_E6
 		bne L3242
 L3228:		inc JIFY_CNT_E0
@@ -3376,7 +3531,7 @@ L3683:		lda #$FF
 		lda (SCREEN_LINES_19),Y
 		bpl L369D
 		txa
-		jsr L2F0D
+		jsr BENSON_2F0D
 		jmp L369F
 L369D:		stx L00F6
 L369F:		jsr L3817
@@ -4307,7 +4462,7 @@ L3D22:		and #$0C					;mask out bit 3/2 of object attributes
 		jsr L3224
 		bcc L3D34
 L3D30:		txa
-		jsr L2F0D
+		jsr BENSON_2F0D
 
 L3D34:		ldx OBJECT_NUMBER_AD
 		jmp SOUND_EFFECT_L5AFB
@@ -6944,7 +7099,7 @@ L5053:		sta HOR_SCREEN_POS_9E80,X
 		jsr L5551
 		jmp L50B8
 		
-L5062:		jsr BENSON_L2F33
+L5062:		jsr BENSON_2F33
 		jsr JOYSTICK_L5957
 		jsr L51F2
 L506B:		lda VCOUNT
@@ -8260,7 +8415,7 @@ L5A06:		nop
 		ldx #$FF
 		txs
 		cld
-		jmp L2996
+		jmp RESTART_L2996
 		
 ;------------------------------------------------------------
 ;

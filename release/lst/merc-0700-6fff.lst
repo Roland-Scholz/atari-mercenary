@@ -2893,42 +2893,47 @@ Current file: ..\src\merc-0700-6fff.a65
 002934  1  00 00        L2934:      	.byte $00,$00
 002936  1               
 002936  1               
-002936  1  00           L2936:      .byte $00
-002937  1  00           L2937:      .byte $00
-002938  1  00           L2938:      .byte $00
-002939  1  00           L2939:      .byte $00
-00293A  1  00           L293A:     .byte $00
-00293B  1  00 00        L293B:      .byte $00,$00
-00293D  1  B4 07        L293D:      ldy MUL_HI_07,X
-00293F  1  5E 93 87                 lsr L8793,X
-002942  1  00                       .byte $00
-002943  1  CC 19 6E                 cpy L6E19
-002946  1  6E 72 72                 ror L7272
-002949  1  6E 6E 72                 ror L726E
-00294C  1  72                       .byte $72
-00294D  1  6E 6E 70                 ror L706E
-002950  1  72 72                    .byte $72,$72
-002952  1  70 6E                    bvs L29C1+1
-002954  1  00 00 00 00              .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+002936  1  00           L2936:		.byte $00
+002937  1  00           L2937:		.byte $00
+002938  1  00           L2938:		.byte $00
+002939  1  00           L2939:		.byte $00
+00293A  1  00           L293A:		.byte $00
+00293B  1  00           L293B:		.byte $00
+00293C  1  00           L293C:		.byte $00
+00293D  1               
+00293D  1               ;
+00293D  1               ; Benson?
+00293D  1               ;
+00293D  1  B4 07        L293D:      	ldy MUL_HI_07,X
+00293F  1  5E 93 87     		lsr L8793,X
+002942  1  00           		.byte $00
+002943  1  CC 19 6E     		cpy L6E19
+002946  1  6E 72 72     		ror L7272
+002949  1  6E 6E 72     		ror L726E
+00294C  1  72           		.byte $72
+00294D  1  6E 6E 70     		ror L706E
+002950  1  72 72        		.byte $72,$72
+002952  1  70 6E        		bvs L29C1+1
+002954  1  00 00 00 00  		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 002958  1  00 00 00 00  
 00295C  1  00 00 00 00  
-002964  1  00 00 00 00              .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+002964  1  00 00 00 00  		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 002968  1  00 00 00 00  
 00296C  1  00 00 00 00  
-002974  1  00 00 00 00              .byte $00,$00,$00,$00
-002978  1  00           L2978:      .byte $00
-002979  1  00 00        L2979:      .byte $00,$00
-00297B  1  0D 00 00                 ora A:MEM_PTR_LO_00
-00297E  1  00           L297E:      .byte $00
-00297F  1  00           L297F:      .byte $00
-002980  1  20 EB 5F                 jsr L5FEB
-002983  1  A5 CD                    lda L00CD
-002985  1  F0 06                    beq L298D
-002987  1  20 E0 35                 jsr L35E0
-00298A  1  4C DF 29                 jmp MAIN_LOOP_L29DF
-00298D  1  20 7E 39     L298D:      jsr L397E
-002990  1  4C DF 29                 jmp MAIN_LOOP_L29DF
-002993  1  20 EB 5F                 jsr L5FEB
+002974  1  00 00 00 00  		.byte $00,$00,$00,$00
+002978  1  00           L2978:      	.byte $00
+002979  1  00 00        L2979:      	.byte $00,$00
+00297B  1  0D 00 00     		ora A:MEM_PTR_LO_00
+00297E  1  00           L297E:      	.byte $00
+00297F  1  00           L297F:      	.byte $00
+002980  1  20 EB 5F     		jsr L5FEB
+002983  1  A5 CD        		lda L00CD
+002985  1  F0 06        		beq L298D
+002987  1  20 E0 35     		jsr L35E0
+00298A  1  4C DF 29     		jmp MAIN_LOOP_L29DF
+00298D  1  20 7E 39     L298D:      	jsr L397E
+002990  1  4C DF 29     		jmp MAIN_LOOP_L29DF
+002993  1  20 EB 5F     		jsr L5FEB
 002996  1               
 002996  1               
 002996  1               ;------------------------------------------------------------
@@ -2942,7 +2947,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002996  1               ; - set players X and Z pos to Targ bounds 15-15
 002996  1               ; - set speed to zero
 002996  1               ;------------------------------------------------------------
-002996  1  20 75 2A     L2996:		jsr SCATTER_INVENTORY_L2A75
+002996  1  20 75 2A     RESTART_L2996:	jsr SCATTER_INVENTORY_L2A75
 002999  1  A9 80        		lda #$80
 00299B  1  85 83        		sta L0083
 00299D  1  A9 80        		lda #$80
@@ -2986,7 +2991,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0029DF  1               ; MAIN_LOOP_L29DF
 0029DF  1               ;------------------------------------------------------------
 0029DF  1               MAIN_LOOP_L29DF:
-0029DF  1  20 33 2F     		jsr BENSON_L2F33				; process benson messages
+0029DF  1  20 33 2F     		jsr BENSON_2F33					; process benson messages
 0029E2  1  20 B7 2A     		jsr INTERSTELLAR_SHIP_DELIVERY_L2AB7            ; has the interstellar ship been delivered
 0029E5  1  A5 A6        		lda PLANET_UNDERGROUND_A6                    	; is the player above or below ground
 0029E7  1  F0 3B        		beq OUTSIDE_L2A24                               ; player is above ground
@@ -3258,7 +3263,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002C0E  1  20 BA 2C     		jsr L2CBA
 002C11  1  B0 05        		bcs L2C18
 002C13  1  A9 1B        		lda #$1B
-002C15  1  20 0D 2F     		jsr L2F0D
+002C15  1  20 0D 2F     		jsr BENSON_2F0D
 002C18  1  60           L2C18:		rts
 002C19  1  A6 F3        L2C19:		ldx L00F3
 002C1B  1  F0 FB        L2C1B:		beq L2C18
@@ -3318,7 +3323,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002C94  1  29 E0        		and #$E0
 002C96  1  99 00 1F     		sta L1F00,Y
 002C99  1  8A           L2C99:		txa
-002C9A  1  4C 0D 2F     		jmp L2F0D
+002C9A  1  4C 0D 2F     		jmp BENSON_2F0D
 002C9D  1  A5 FA        L2C9D:		lda L00FA
 002C9F  1  08           		php
 002CA0  1  29 7F        		and #$7F
@@ -3600,7 +3605,10 @@ Current file: ..\src\merc-0700-6fff.a65
 002F0A  1  85 DD        		sta DIF_Z_HSB_DD
 002F0C  1  60           		rts
 002F0D  1               
-002F0D  1  0A           L2F0D:		asl
+002F0D  1               ;------------------------------------------------------------
+002F0D  1               ;
+002F0D  1               ;------------------------------------------------------------
+002F0D  1  0A           BENSON_2F0D:	asl
 002F0E  1  A8           		tay
 002F0F  1  AD 3B 29     		lda L293B
 002F12  1  29 40        		and #$40
@@ -3609,20 +3617,19 @@ Current file: ..\src\merc-0700-6fff.a65
 002F19  1  09 40        		ora #$40
 002F1B  1  8D 3B 29     		sta L293B
 002F1E  1  A5 1D        		lda BENSON_PTR_LO_1D
-002F20  1  20 4A 30     		jsr L304A
+002F20  1  20 4A 30     		jsr BENSON_304A
 002F23  1  A5 1E        L2F23:		lda BENSON_PTR_HIGH_1E
-002F25  1  20 4A 30     		jsr L304A
+002F25  1  20 4A 30     		jsr BENSON_304A
 002F28  1  B9 00 07     		lda L0700,Y
 002F2B  1  85 1D        		sta BENSON_PTR_LO_1D
 002F2D  1  B9 01 07     L2F2D:		lda L0700+1,Y
 002F30  1  85 1E        		sta BENSON_PTR_HIGH_1E
 002F32  1  60           L2F32:		rts
 002F33  1               
-002F33  1               
 002F33  1               ;------------------------------------------------------------
 002F33  1               ; BENSON_L2F33
 002F33  1               ;------------------------------------------------------------
-002F33  1               BENSON_L2F33:
+002F33  1               BENSON_2F33:
 002F33  1  A5 E6        		lda MESSAGE_PENDING_E6
 002F35  1  D0 19        		bne L2F50
 002F37  1               
@@ -3640,7 +3647,11 @@ Current file: ..\src\merc-0700-6fff.a65
 002F4D  1  6C 06 32     L2F4D:		jmp (L3206)					;jump to it
 002F50  1  60           L2F50:		rts
 002F51  1               
-002F51  1  C8           		iny
+002F51  1               L3206	= 	$3206
+002F51  1               ;------------------------------------------------------------
+002F51  1               ;
+002F51  1               ;------------------------------------------------------------
+002F51  1  C8           BENSON_2F51:	iny
 002F52  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 002F54  1  8D 61 2F     		sta L2F60+1
 002F57  1  C8           		iny
@@ -3650,15 +3661,23 @@ Current file: ..\src\merc-0700-6fff.a65
 002F5E  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 002F60  1  CD 00 01     L2F60:		cmp L0100
 002F63  1  4C 0C 30     		jmp L300C
-002F66  1  20 B1 53     		jsr GET_RANDOM_L53B1
+002F66  1               
+002F66  1               ;------------------------------------------------------------
+002F66  1               ;
+002F66  1               ;------------------------------------------------------------
+002F66  1  20 B1 53     BENSON_2F66:	jsr GET_RANDOM_L53B1
 002F69  1  C8           		iny
 002F6A  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 002F6C  1  C5 E8        		cmp RANDOM_E8
 002F6E  1  4C 0C 30     		jmp L300C
-002F71  1  A5 E3        L2F71:		lda TIMER_MSB_E3
+002F71  1               
+002F71  1               ;------------------------------------------------------------
+002F71  1               ;
+002F71  1               ;------------------------------------------------------------
+002F71  1  A5 E3        BENSON_2F71:	lda TIMER_MSB_E3
 002F73  1  A6 E4        		ldx TIMER_HSB_E4
 002F75  1  C5 E3        		cmp TIMER_MSB_E3
-002F77  1  D0 F8        		bne L2F71
+002F77  1  D0 F8        		bne BENSON_2F71
 002F79  1  38           		sec
 002F7A  1  C8           		iny
 002F7B  1  F1 1D        		sbc (BENSON_PTR_LO_1D),Y
@@ -3666,37 +3685,68 @@ Current file: ..\src\merc-0700-6fff.a65
 002F7E  1  C8           		iny
 002F7F  1  F1 1D        		sbc (BENSON_PTR_LO_1D),Y
 002F81  1  4C 0C 30     		jmp L300C
-002F84  1  AD 38 29     		lda L2938
+002F84  1               
+002F84  1               ;------------------------------------------------------------
+002F84  1               ;
+002F84  1               ;------------------------------------------------------------
+002F84  1  AD 38 29     BENSON_2F84:	lda L2938
 002F87  1  49 80        		eor #$80
 002F89  1  C8           		iny
 002F8A  1  D1 1D        		cmp (BENSON_PTR_LO_1D),Y
 002F8C  1  4C 0C 30     		jmp L300C
-002F8F  1  C8           		iny
+002F8F  1               
+002F8F  1               ;------------------------------------------------------------
+002F8F  1               ;
+002F8F  1               ;------------------------------------------------------------
+002F8F  1  C8           BENSON_2F8F:	iny
 002F90  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 002F92  1  C5 A7        		cmp CRAFT_ID_WALKING_A7
 002F94  1  F0 75        		beq L300B
 002F96  1  D0 70        		bne L3008
-002F98  1  AE 4E 27     		ldx L274D+1
+002F98  1               ;------------------------------------------------------------
+002F98  1               ;
+002F98  1               ;------------------------------------------------------------
+002F98  1  AE 4E 27     BENSON_2F98:	ldx L274D+1
 002F9B  1  AD 4F 27     		lda L274F
 002F9E  1  DD 40 69     		cmp L6940,X
 002FA1  1  F0 68        		beq L300B
 002FA3  1  D0 63        		bne L3008
-002FA5  1  AD 4F 27     		lda L274F
+002FA5  1               
+002FA5  1               ;------------------------------------------------------------
+002FA5  1               ;
+002FA5  1               ;------------------------------------------------------------
+002FA5  1  AD 4F 27     BENSON_2FA5:	lda L274F
 002FA8  1  C5 CD        		cmp L00CD
 002FAA  1  F0 5F        		beq L300B
 002FAC  1  D0 5A        		bne L3008
-002FAE  1  AD 3B 29     		lda L293B
+002FAE  1               
+002FAE  1               ;------------------------------------------------------------
+002FAE  1               ;
+002FAE  1               ;------------------------------------------------------------
+002FAE  1  AD 3B 29     BENSON_2FAE:	lda L293B
 002FB1  1  C8           		iny
 002FB2  1  31 1D        		and (BENSON_PTR_LO_1D),Y
 002FB4  1  F0 52        		beq L3008
 002FB6  1  D0 53        		bne L300B
-002FB8  1  AD 4E 27     		lda L274D+1
+002FB8  1               
+002FB8  1               ;------------------------------------------------------------
+002FB8  1               ;
+002FB8  1               ;------------------------------------------------------------
+002FB8  1  AD 4E 27     BENSON_2FB8:	lda L274D+1
 002FBB  1  20 90 38     		jsr L3890
 002FBE  1  D0 48        		bne L3008
 002FC0  1  F0 49        		beq L300B
-002FC2  1  20 DE 30     		jsr L30DE
+002FC2  1               
+002FC2  1               ;------------------------------------------------------------
+002FC2  1               ;
+002FC2  1               ;------------------------------------------------------------
+002FC2  1  20 DE 30     BENSON_2FC2:	jsr BENSON_30DE
 002FC5  1  4C 0C 30     		jmp L300C
-002FC8  1  C8           		iny
+002FC8  1               
+002FC8  1               ;------------------------------------------------------------
+002FC8  1               ;
+002FC8  1               ;------------------------------------------------------------
+002FC8  1  C8           BENSON_2FC8:	iny
 002FC9  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 002FCB  1  C8           		iny
 002FCC  1  C5 72        		cmp CUR_X_HSB_72
@@ -3705,11 +3755,16 @@ Current file: ..\src\merc-0700-6fff.a65
 002FD2  1  C5 78        		cmp CUR_Z_HSB_78
 002FD4  1  D0 32        		bne L3008
 002FD6  1  F0 33        		beq L300B
-002FD8  1  AD 4D 27     		lda L274D
+002FD8  1               
+002FD8  1  AD 4D 27     BENSON_2FD8:	lda L274D
 002FDB  1  C5 B5        		cmp GROUND_STRUC_OBJ_TO_DRAW_B5
 002FDD  1  D0 29        		bne L3008
 002FDF  1  F0 2A        		beq L300B
-002FE1  1  A5 E9        		lda NEW_KEY_L00E9
+002FE1  1               
+002FE1  1               ;------------------------------------------------------------
+002FE1  1               ;
+002FE1  1               ;------------------------------------------------------------
+002FE1  1  A5 E9        BENSON_2FE1:	lda NEW_KEY_L00E9
 002FE3  1  29 3F        		and #$3F
 002FE5  1  C8           		iny
 002FE6  1  D1 1D        		cmp (BENSON_PTR_LO_1D),Y
@@ -3717,11 +3772,19 @@ Current file: ..\src\merc-0700-6fff.a65
 002FEA  1  20 EE 5A     		jsr RESET_KEY_L5AEE
 002FED  1  20 FB 5A     		jsr SOUND_EFFECT_L5AFB
 002FF0  1  4C 0B 30     		jmp L300B
-002FF3  1  AE 4D 27     		ldx L274D
+002FF3  1               
+002FF3  1               ;------------------------------------------------------------
+002FF3  1               ;
+002FF3  1               ;------------------------------------------------------------
+002FF3  1  AE 4D 27     BENSON_2FF3:	ldx L274D
 002FF6  1  BD 00 1F     		lda L1F00,X
 002FF9  1  30 10        		bmi L300B
 002FFB  1  10 0B        		bpl L3008
-002FFD  1  C8           		iny
+002FFD  1               
+002FFD  1               ;------------------------------------------------------------
+002FFD  1               ;
+002FFD  1               ;------------------------------------------------------------
+002FFD  1  C8           BENSON_2FFD:	iny
 002FFE  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 003000  1  AE 4E 27     		ldx L274D+1
 003003  1  3D C0 69     		and OBJECT_ATTRIBUTES_69C0,X
@@ -3744,21 +3807,22 @@ Current file: ..\src\merc-0700-6fff.a65
 00301E  1  60           L301E:		rts
 00301F  1  A5 E7        L301F:		lda L00E7
 003021  1  0A           		asl
-003022  1  10 0F        		bpl BENSON_PTR_NEXT_L3033
-003024  1  A5 1D        L3024:		lda BENSON_PTR_LO_1D
+003022  1  10 0F        		bpl BENSON_3033
+003024  1               
+003024  1  A5 1D        BENSON_3024:	lda BENSON_PTR_LO_1D
 003026  1  18           		clc
 003027  1  69 03        		adc #$03
-003029  1  20 4A 30     		jsr L304A
+003029  1  20 4A 30     		jsr BENSON_304A
 00302C  1  A5 1E        		lda BENSON_PTR_HIGH_1E
 00302E  1  69 00        L302E:		adc #$00
-003030  1  20 4A 30     		jsr L304A
+003030  1  20 4A 30     		jsr BENSON_304A
 003033  1               
 003033  1               
 003033  1               ;------------------------------------------------------------
 003033  1               ; BENSON_PTR_NEXT
 003033  1               ; Get next pointer from benson state machine
 003033  1               ;------------------------------------------------------------
-003033  1               BENSON_PTR_NEXT_L3033:
+003033  1               BENSON_3033:
 003033  1  C8           		iny
 003034  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 003036  1  AA           		tax
@@ -3768,26 +3832,37 @@ Current file: ..\src\merc-0700-6fff.a65
 00303C  1  86 1D        		stx BENSON_PTR_LO_1D
 00303E  1  60           		rts
 00303F  1               
-00303F  1  20 53 30     		jsr L3053
+00303F  1               ;------------------------------------------------------------
+00303F  1               ;
+00303F  1               ;------------------------------------------------------------
+00303F  1  20 53 30     BENSON_303F:	jsr BENSON_3053
 003042  1  85 1E        		sta BENSON_PTR_HIGH_1E
-003044  1  20 53 30     		jsr L3053
+003044  1  20 53 30     		jsr BENSON_3053
 003047  1  85 1D        		sta BENSON_PTR_LO_1D
 003049  1  60           		rts
 00304A  1               
-00304A  1               
-00304A  1  A6 E5        L304A:		ldx L00E5
+00304A  1               ;------------------------------------------------------------
+00304A  1               ;
+00304A  1               ;------------------------------------------------------------
+00304A  1  A6 E5        BENSON_304A:	ldx L00E5
 00304C  1  9D 3D 29     		sta L293D,X
 00304F  1  E8           		inx
 003050  1  86 E5        		stx L00E5
 003052  1  60           		rts
 003053  1               
-003053  1  A6 E5        L3053:		ldx L00E5
+003053  1               ;------------------------------------------------------------
+003053  1               ;
+003053  1               ;------------------------------------------------------------
+003053  1  A6 E5        BENSON_3053:	ldx L00E5
 003055  1  CA           		dex
 003056  1  BD 3D 29     		lda L293D,X
 003059  1  86 E5        		stx L00E5
 00305B  1  60           		rts
 00305C  1               
-00305C  1  AE 4E 27     		ldx L274D+1
+00305C  1               ;------------------------------------------------------------
+00305C  1               ;
+00305C  1               ;------------------------------------------------------------
+00305C  1  AE 4E 27     BENSON_305C:	ldx L274D+1
 00305F  1  C8           		iny
 003060  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 003062  1  30 09        		bmi L306D
@@ -3797,7 +3872,11 @@ Current file: ..\src\merc-0700-6fff.a65
 00306D  1  3D C0 69     L306D:		and OBJECT_ATTRIBUTES_69C0,X
 003070  1  9D C0 69     		sta OBJECT_ATTRIBUTES_69C0,X
 003073  1  4C 13 30     		jmp L3013
-003076  1  C8           		iny
+003076  1               
+003076  1               ;------------------------------------------------------------
+003076  1               ;
+003076  1               ;------------------------------------------------------------
+003076  1  C8           BENSON_3076:	iny
 003077  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 003079  1  29 0F        		and #$0F
 00307B  1  AA           		tax
@@ -3810,7 +3889,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003088  1  A0 00        		ldy #$00
 00308A  1  48           		pha
 00308B  1  29 0F        		and #$0F
-00308D  1  20 A4 30     		jsr L30A4
+00308D  1  20 A4 30     		jsr BENSON_30A4
 003090  1  68           		pla
 003091  1  4A           		lsr
 003092  1  4A           		lsr
@@ -3818,12 +3897,16 @@ Current file: ..\src\merc-0700-6fff.a65
 003094  1  4A           		lsr
 003095  1  C8           		iny
 003096  1  C8           		iny
-003097  1  20 A4 30     		jsr L30A4
+003097  1  20 A4 30     		jsr BENSON_30A4
 00309A  1  09 80        		ora #$80
 00309C  1  99 79 29     		sta L2979,Y
 00309F  1  A4 04        		ldy TMP_04
 0030A1  1  4C 13 30     		jmp L3013
-0030A4  1  AA           L30A4:		tax
+0030A4  1               
+0030A4  1               ;------------------------------------------------------------
+0030A4  1               ;
+0030A4  1               ;------------------------------------------------------------
+0030A4  1  AA           BENSON_30A4:	tax
 0030A5  1  BD AB 28     		lda L28AB,X
 0030A8  1  4A           		lsr
 0030A9  1  4A           		lsr
@@ -3834,7 +3917,11 @@ Current file: ..\src\merc-0700-6fff.a65
 0030B2  1  C8           		iny
 0030B3  1  99 79 29     		sta L2979,Y
 0030B6  1  60           		rts
-0030B7  1  A5 1D        		lda BENSON_PTR_LO_1D
+0030B7  1               
+0030B7  1               ;------------------------------------------------------------
+0030B7  1               ;
+0030B7  1               ;------------------------------------------------------------
+0030B7  1  A5 1D        BENSON_30B7:	lda BENSON_PTR_LO_1D
 0030B9  1  8D A5 32     		sta L32A4+1
 0030BC  1  A5 1E        		lda BENSON_PTR_HIGH_1E
 0030BE  1  8D A6 32     		sta L32A4+2
@@ -3845,23 +3932,44 @@ Current file: ..\src\merc-0700-6fff.a65
 0030C8  1  85 DF        		sta CHAR_CNT_DF
 0030CA  1  85 DE        		sta MSG_CHUNK_CNT_DE
 0030CC  1  4C 13 30     		jmp L3013
-0030CF  1  A9 00        		lda #$00
+0030CF  1               
+0030CF  1               ;------------------------------------------------------------
+0030CF  1               ;
+0030CF  1               ;------------------------------------------------------------
+0030CF  1  A9 00        BENSON_30CF:	lda #$00
 0030D1  1  85 E3        		sta TIMER_MSB_E3
 0030D3  1  85 E4        		sta TIMER_HSB_E4
 0030D5  1  4C 13 30     		jmp L3013
-0030D8  1  20 DE 30     		jsr L30DE
+0030D8  1               
+0030D8  1               ;------------------------------------------------------------
+0030D8  1               ;
+0030D8  1               ;------------------------------------------------------------
+0030D8  1  20 DE 30     BENSON_30D8:	jsr BENSON_30DE
 0030DB  1  4C 13 30     		jmp L3013
-0030DE  1  C8           L30DE:		iny
+0030DE  1               
+0030DE  1               ;------------------------------------------------------------
+0030DE  1               ; Dynamically call a subroutine
+0030DE  1               ;------------------------------------------------------------
+0030DE  1               BENSON_30DE:
+0030DE  1  C8           		iny
 0030DF  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 0030E1  1  8D EB 30     		sta L30EA+1
 0030E4  1  C8           		iny
 0030E5  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 0030E7  1  8D EC 30     		sta L30EA+2
 0030EA  1  20 EA 30     L30EA:		jsr L30EA
-0030ED  1  A9 2C        		lda #$2C
+0030ED  1               
+0030ED  1               ;------------------------------------------------------------
+0030ED  1               ;
+0030ED  1               ;------------------------------------------------------------
+0030ED  1  A9 2C        BENSON_30ED:	lda #$2C
 0030EF  1  8D 0A 31     		sta L310A
 0030F2  1  D0 05        		bne L30F9
-0030F4  1  A9 7D        		lda #$7D
+0030F4  1               
+0030F4  1               ;------------------------------------------------------------
+0030F4  1               ;
+0030F4  1               ;------------------------------------------------------------
+0030F4  1  A9 7D        BENSON_30F4:	lda #$7D
 0030F6  1  8D 0A 31     		sta L310A
 0030F9  1  C8           L30F9:		iny
 0030FA  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
@@ -3882,7 +3990,11 @@ Current file: ..\src\merc-0700-6fff.a65
 003113  1  D0 F2        		bne L3107
 003115  1  D8           		cld
 003116  1  4C 13 30     		jmp L3013
-003119  1  C8           		iny
+003119  1               
+003119  1               ;------------------------------------------------------------
+003119  1               ;
+003119  1               ;------------------------------------------------------------
+003119  1  C8           BENSON_3119:	iny
 00311A  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 00311C  1  29 0F        		and #$0F
 00311E  1  0A           		asl
@@ -3923,7 +4035,11 @@ Current file: ..\src\merc-0700-6fff.a65
 003155  1  9D E3 05     		sta L05E3,X
 003158  1  D8           		cld
 003159  1  4C 13 30     		jmp L3013
-00315C  1  C8           		iny
+00315C  1               
+00315C  1               ;------------------------------------------------------------
+00315C  1               ;
+00315C  1               ;------------------------------------------------------------
+00315C  1  C8           BENSON_315C:	iny
 00315D  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 00315F  1  29 0F        		and #$0F
 003161  1  AA           		tax
@@ -3938,18 +4054,30 @@ Current file: ..\src\merc-0700-6fff.a65
 00316D  1  68           		pla
 00316E  1  9D 40 27     		sta L2740,X
 003171  1  4C 13 30     		jmp L3013
-003174  1  C8           		iny
+003174  1               
+003174  1               ;------------------------------------------------------------
+003174  1               ;
+003174  1               ;------------------------------------------------------------
+003174  1  C8           BENSON_3174:	iny
 003175  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 003177  1  0D 3B 29     		ora L293B
 00317A  1  8D 3B 29     		sta L293B
 00317D  1  4C 13 30     		jmp L3013
-003180  1  C8           		iny
+003180  1               
+003180  1               ;------------------------------------------------------------
+003180  1               ;
+003180  1               ;------------------------------------------------------------
+003180  1  C8           BENSON_3180:	iny
 003181  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 003183  1  49 FF        		eor #$FF
 003185  1  2D 3B 29     		and L293B
 003188  1  8D 3B 29     		sta L293B
 00318B  1  4C 13 30     		jmp L3013
-00318E  1  C8           		iny
+00318E  1               
+00318E  1               ;------------------------------------------------------------
+00318E  1               ;
+00318E  1               ;------------------------------------------------------------
+00318E  1  C8           BENSON_318E:	iny
 00318F  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 003191  1  8D 9E 31     		sta L319D+1
 003194  1  C8           		iny
@@ -3959,25 +4087,41 @@ Current file: ..\src\merc-0700-6fff.a65
 00319B  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 00319D  1  8D 01 D2     L319D:		sta AUDC1
 0031A0  1  4C 13 30     		jmp L3013
-0031A3  1  C8           		iny
+0031A3  1               
+0031A3  1               ;------------------------------------------------------------
+0031A3  1               ;
+0031A3  1               ;------------------------------------------------------------
+0031A3  1  C8           BENSON_31A3:	iny
 0031A4  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
-0031A6  1  10 06        		bpl L31AE
+0031A6  1  10 06        		bpl BENSON_31AE
 0031A8  1  29 0F        		and #$0F
 0031AA  1  AA           		tax
 0031AB  1  BD 40 27     		lda L2740,X
-0031AE  1  AA           L31AE:		tax
+0031AE  1  AA           BENSON_31AE:	tax
 0031AF  1  20 2A 32     		jsr START_MESSAGE_L322A
 0031B2  1  4C 13 30     L31B2:		jmp L3013
-0031B5  1  20 B1 53     		jsr GET_RANDOM_L53B1
+0031B5  1               
+0031B5  1               ;------------------------------------------------------------
+0031B5  1               ;
+0031B5  1               ;------------------------------------------------------------
+0031B5  1  20 B1 53     BENSON_31B5:	jsr GET_RANDOM_L53B1
 0031B8  1  C8           		iny
 0031B9  1  31 1D        		and (BENSON_PTR_LO_1D),Y
 0031BB  1  18           		clc
 0031BC  1  C8           		iny
 0031BD  1  71 1D        		adc (BENSON_PTR_LO_1D),Y
-0031BF  1  D0 ED        		bne L31AE
-0031C1  1  20 EE 5A     		jsr RESET_KEY_L5AEE
+0031BF  1  D0 ED        		bne BENSON_31AE
+0031C1  1               
+0031C1  1               ;------------------------------------------------------------
+0031C1  1               ;
+0031C1  1               ;------------------------------------------------------------
+0031C1  1  20 EE 5A     BENSON_31C1:	jsr RESET_KEY_L5AEE
 0031C4  1  4C 13 30     		jmp L3013
-0031C7  1  AD 38 29     		lda L2938
+0031C7  1               
+0031C7  1               ;------------------------------------------------------------
+0031C7  1               ;
+0031C7  1               ;------------------------------------------------------------
+0031C7  1  AD 38 29     BENSON_31C7:	lda L2938
 0031CA  1  C8           		iny
 0031CB  1  18           		clc
 0031CC  1  71 1D        		adc (BENSON_PTR_LO_1D),Y
@@ -3989,46 +4133,44 @@ Current file: ..\src\merc-0700-6fff.a65
 0031D8  1  8D 38 29     L31D8:		sta L2938
 0031DB  1  4C 13 30     		jmp L3013
 0031DE  1               
-0031DE  1               
-0031DE  1  00 00 B7                 .byte $00,$00,$B7
-0031E1  1  30 CF                    bmi L31B2
-0031E3  1  30 33                    bmi L3218
-0031E5  1  30 24                    bmi L320B
-0031E7  1  30 3F                    bmi L3228
-0031E9  1  30 C8                    bmi L31B2+1
-0031EB  1  2F                       .byte $2F
-0031EC  1  71 2F                    adc (COS_ROLL_HI_2F),Y
-0031EE  1  D8                       cld
-0031EF  1  30 C2                    bmi L31B2+1
-0031F1  1  2F                       .byte $2F
-0031F2  1  66 2F                    ror COS_ROLL_HI_2F
-0031F4  1  E1 2F                    sbc (COS_ROLL_HI_2F,X)
-0031F6  1  B8                       clv
-0031F7  1  2F                       .byte $2F
-0031F8  1  ED 30 F4                 sbc LF430
-0031FB  1  30 76                    bmi L3272+1
-0031FD  1  30 74                    bmi L3272+1
-0031FF  1  31 80                    and (LINE_COLOR0_80),Y
-003201  1  31 AE                    and (L00AE),Y
-003203  1  2F                       .byte $2F
-003204  1  A5 2F                    lda COS_ROLL_HI_2F
-003206  1  A3           L3206:      .byte $A3
-003207  1  31 19                    and (SCREEN_LINES_19),Y
-003209  1  31 C7                    and (L00C7),Y
-00320B  1  31 84        L320B:      and (L0084),Y
-00320D  1  2F                       .byte $2F
-00320E  1  51 2F                    eor (COS_ROLL_HI_2F),Y
-003210  1  8E 31 F3                 stx LF331
-003213  1  2F                       .byte $2F
-003214  1  B5 31                    lda SIN_DIV_COS_ROLL_HI_31,X
-003216  1  C1 31                    cmp (SIN_DIV_COS_ROLL_HI_31,X)
-003218  1  98           L3218:      tya
-003219  1  2F 5C                    .byte $2F,$5C
-00321B  1  31 D8                    and (DIF_Y_LSB_D8),Y
-00321D  1  2F                       .byte $2F
-00321E  1  5C           L321E:      .byte $5C
-00321F  1  30 FD                    bmi L321E
-003221  1  2F 8F 2F                 .byte $2F,$8F,$2F
+0031DE  1               ;------------------------------------------------------------
+0031DE  1               ;
+0031DE  1               ;------------------------------------------------------------
+0031DE  1  00 00        L31DE:		.byte $00,$00
+0031E0  1  B7 30        		.word BENSON_30B7
+0031E2  1  CF 30        		.word BENSON_30CF
+0031E4  1  33 30        		.word BENSON_3033
+0031E6  1  24 30        		.word BENSON_3024
+0031E8  1  3F 30        		.word BENSON_303F
+0031EA  1  C8 2F        		.word BENSON_2FC8
+0031EC  1  71 2F        		.word BENSON_2F71
+0031EE  1  D8 30        		.word BENSON_30D8
+0031F0  1  C2 2F        		.word BENSON_2FC2
+0031F2  1  66 2F        		.word BENSON_2F66
+0031F4  1  E1 2F        		.word BENSON_2FE1
+0031F6  1  B8 2F        		.word BENSON_2FB8
+0031F8  1  ED 30        		.word BENSON_30ED
+0031FA  1  F4 30        		.word BENSON_30F4
+0031FC  1  76 30        		.word BENSON_3076
+0031FE  1  74 31        		.word BENSON_3174
+003200  1  80 31        		.word BENSON_3180
+003202  1  AE 2F        		.word BENSON_2FAE
+003204  1  A5 2F        		.word BENSON_2FA5
+003206  1  A3 31        		.word BENSON_31A3
+003208  1  19 31        		.word BENSON_3119
+00320A  1  C7 31        		.word BENSON_31C7
+00320C  1  84 2F        		.word BENSON_2F84
+00320E  1  51 2F        		.word BENSON_2F51
+003210  1  8E 31        		.word BENSON_318E
+003212  1  F3 2F        		.word BENSON_2FF3
+003214  1  B5 31        		.word BENSON_31B5
+003216  1  C1 31        		.word BENSON_31C1
+003218  1  98 2F        		.word BENSON_2F98
+00321A  1  5C 31        		.word BENSON_315C
+00321C  1  D8 2F        		.word BENSON_2FD8
+00321E  1  5C 30        		.word BENSON_305C
+003220  1  FD 2F        		.word BENSON_2FFD
+003222  1  8F 2F        		.word BENSON_2F8F
 003224  1               
 003224  1  A5 E6        L3224:		lda MESSAGE_PENDING_E6
 003226  1  D0 1A        		bne L3242
@@ -4637,7 +4779,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003692  1  B1 19        		lda (SCREEN_LINES_19),Y
 003694  1  10 07        		bpl L369D
 003696  1  8A           		txa
-003697  1  20 0D 2F     		jsr L2F0D
+003697  1  20 0D 2F     		jsr BENSON_2F0D
 00369A  1  4C 9F 36     		jmp L369F
 00369D  1  86 F6        L369D:		stx L00F6
 00369F  1  20 17 38     L369F:		jsr L3817
@@ -5568,7 +5710,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003D2B  1  20 24 32     		jsr L3224
 003D2E  1  90 04        		bcc L3D34
 003D30  1  8A           L3D30:		txa
-003D31  1  20 0D 2F     		jsr L2F0D
+003D31  1  20 0D 2F     		jsr BENSON_2F0D
 003D34  1               
 003D34  1  A6 AD        L3D34:		ldx OBJECT_NUMBER_AD
 003D36  1  4C FB 5A     		jmp SOUND_EFFECT_L5AFB
@@ -8241,7 +8383,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00505C  1  20 51 55     		jsr L5551
 00505F  1  4C B8 50     		jmp L50B8
 005062  1               
-005062  1  20 33 2F     L5062:		jsr BENSON_L2F33
+005062  1  20 33 2F     L5062:		jsr BENSON_2F33
 005065  1  20 57 59     		jsr JOYSTICK_L5957
 005068  1  20 F2 51     		jsr L51F2
 00506B  1  AD 0B D4     L506B:		lda VCOUNT
@@ -9557,7 +9699,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005A11  1  A2 FF        		ldx #$FF
 005A13  1  9A           		txs
 005A14  1  D8           		cld
-005A15  1  4C 96 29     		jmp L2996
+005A15  1  4C 96 29     		jmp RESTART_L2996
 005A18  1               
 005A18  1               ;------------------------------------------------------------
 005A18  1               ;
