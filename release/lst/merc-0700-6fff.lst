@@ -26,7 +26,8 @@ Current file: ..\src\merc-0700-6fff.a65
 000000r 1               ROLL_SIN_MUL_PITCH_SIN_HI_15	= $15
 000000r 1               POINT_LINE_COUNT_17		= $17
 000000r 1               SCREEN_LINES_18			= $18
-000000r 1               SCREEN_LINES_19			= $19
+000000r 1               PTR_LO_19			= $19
+000000r 1               PTR_HI_1A			= $1A
 000000r 1               OBJ_SHAPE_PTR_LO_1B		= $1B
 000000r 1               OBJ_SHAPE_PTR_HI_1C		= $1C
 000000r 1               BENSON_PTR_LO_1D		= $1D
@@ -3034,7 +3035,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002A9D  1  99 C0 64     		sta OBJ_Y_MSB_L64C0,Y
 002AA0  1  99 C0 68     		sta OBJ_Y_LSB_L68C0,Y
 002AA3  1               
-002AA3  1  99 40 69     		sta L6940,Y
+002AA3  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
 002AA6  1               
 002AA6  1  B9 C0 69     		lda OBJECT_ATTRIBUTES_69C0,Y			;reset bit 7 (in inventory list) in obj attributes
 002AA9  1  29 7F        		and #$7F
@@ -3161,7 +3162,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002B8E  1  D0 85        		bne L2B15
 002B90  1  60           		rts
 002B91  1  A9 FF        L2B91:		lda #$FF
-002B93  1  9D 40 69     		sta L6940,X
+002B93  1  9D 40 69     		sta OBJECT_VISIBILITY_6940,X
 002B96  1  A9 00        		lda #$00
 002B98  1  9D A8 70     		sta L70A8,X
 002B9B  1  4C ED 37     		jmp L37ED
@@ -3326,7 +3327,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002CBA  1  86 08        L2CBA:		stx ZP_08
 002CBC  1  84 09        		sty ZP_09
 002CBE  1  38           		sec
-002CBF  1  B9 40 69     		lda L6940,Y
+002CBF  1  B9 40 69     		lda OBJECT_VISIBILITY_6940,Y
 002CC2  1  D0 25        		bne L2CE9
 002CC4  1  20 C1 2E     		jsr L2EC1
 002CC7  1  A2 04        		ldx #$04
@@ -3340,7 +3341,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002CD8  1  8D 78 29     		sta L2978
 002CDB  1  99 A8 70     		sta L70A8,Y
 002CDE  1  A9 FF        L2CDE:		lda #$FF
-002CE0  1  99 40 69     		sta L6940,Y
+002CE0  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
 002CE3  1  A6 08        		ldx ZP_08
 002CE5  1  20 91 2B     		jsr L2B91
 002CE8  1  18           		clc
@@ -3369,7 +3370,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002D04  1  A9 0F        		lda #$0F
 002D06  1  85 F5        		sta SOUND_F5
 002D08  1  A5 CD        		lda L00CD
-002D0A  1  99 40 69     		sta L6940,Y
+002D0A  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
 002D0D  1  A9 10        		lda #$10
 002D0F  1  99 A8 70     		sta L70A8,Y
 002D12  1  84 AB        		sty L00AB
@@ -3469,7 +3470,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002DCC  1  A9 20        		lda #$20
 002DCE  1  9D A8 70     		sta L70A8,X
 002DD1  1  A9 00        		lda #$00
-002DD3  1  9D 40 69     		sta L6940,X
+002DD3  1  9D 40 69     		sta OBJECT_VISIBILITY_6940,X
 002DD6  1  A0 04        		ldy #$04
 002DD8  1  20 30 2E     		jsr L2E30
 002DDB  1  20 93 2E     		jsr L2E93
@@ -3512,7 +3513,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002E23  1  A9 AD        		lda #$AD
 002E25  1  9D A8 70     		sta L70A8,X
 002E28  1  A9 00        		lda #$00
-002E2A  1  9D 40 69     		sta L6940,X
+002E2A  1  9D 40 69     		sta OBJECT_VISIBILITY_6940,X
 002E2D  1  4C ED 37     L2E2D:		jmp L37ED
 002E30  1               
 002E30  1               ;------------------------------------------------------------
@@ -3728,7 +3729,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002F98  1               ;------------------------------------------------------------
 002F98  1  AE 4E 27     BENSON_2F98:	ldx L274D+1
 002F9B  1  AD 4F 27     		lda L274F
-002F9E  1  DD 40 69     		cmp L6940,X
+002F9E  1  DD 40 69     		cmp OBJECT_VISIBILITY_6940,X
 002FA1  1  F0 68        		beq L300B
 002FA3  1  D0 63        		bne L3008
 002FA5  1               
@@ -4694,11 +4695,11 @@ Current file: ..\src\merc-0700-6fff.a65
 003574  1  A9 E0        L3574:		lda #$E0
 003576  1  85 8B        		sta L008B
 003578  1  BD 00 63     		lda ROOM_STRUCT_PTR_LO_L6300,X
-00357B  1  85 19        L357B:		sta SCREEN_LINES_19
+00357B  1  85 19        L357B:		sta PTR_LO_19
 00357D  1  BD C0 63     		lda ROOM_STRUCT_PTR_HI_L63C0,X
-003580  1  85 1A        		sta DSKUTL
+003580  1  85 1A        		sta PTR_HI_1A
 003582  1  A0 00        		ldy #$00
-003584  1  B1 19        		lda (SCREEN_LINES_19),Y
+003584  1  B1 19        		lda (PTR_LO_19),Y
 003586  1  10 3E        		bpl L35C6
 003588  1  E0 72        		cpx #$72
 00358A  1  D0 0B        		bne L3597
@@ -4710,41 +4711,42 @@ Current file: ..\src\merc-0700-6fff.a65
 003595  1  D0 0E        		bne L35A5
 003597  1  A5 CD        L3597:		lda L00CD
 003599  1  A0 0A        		ldy #$0A
-00359B  1  D1 19        		cmp (SCREEN_LINES_19),Y
+00359B  1  D1 19        		cmp (PTR_LO_19),Y
 00359D  1  D0 06        		bne L35A5
 00359F  1  C8           		iny
 0035A0  1  C8           		iny
-0035A1  1  D1 19        		cmp (SCREEN_LINES_19),Y
+0035A1  1  D1 19        		cmp (PTR_LO_19),Y
 0035A3  1  F0 21        		beq L35C6
-0035A5  1  B1 19        L35A5:		lda (SCREEN_LINES_19),Y
+0035A5  1               
+0035A5  1  B1 19        L35A5:		lda (PTR_LO_19),Y
 0035A7  1  48           		pha
 0035A8  1  C8           		iny
-0035A9  1  B1 19        		lda (SCREEN_LINES_19),Y
+0035A9  1  B1 19        		lda (PTR_LO_19),Y
 0035AB  1  85 04        		sta TMP_04
 0035AD  1  A0 05        		ldy #$05
-0035AF  1  B1 19        		lda (SCREEN_LINES_19),Y
+0035AF  1  B1 19        		lda (PTR_LO_19),Y
 0035B1  1  29 8F        		and #$8F
 0035B3  1  05 04        		ora TMP_04
-0035B5  1  91 19        		sta (SCREEN_LINES_19),Y
+0035B5  1  91 19        		sta (PTR_LO_19),Y
 0035B7  1  C8           		iny
 0035B8  1  68           		pla
-0035B9  1  91 19        		sta (SCREEN_LINES_19),Y
-0035BB  1  A9 1F        		lda #$1F
+0035B9  1  91 19        		sta (PTR_LO_19),Y
+0035BB  1  A9 1F        		lda #$1F					;laboratory teleporter
 0035BD  1  85 F0        		sta L00F0
-0035BF  1  E0 7F        		cpx #$7F
+0035BF  1  E0 7F        		cpx #$7F					;laboratory
 0035C1  1  D0 03        		bne L35C6
-0035C3  1  20 CE 37     		jsr L37CE
+0035C3  1  20 CE 37     		jsr FLIP_VIEW_FLAG_37CE
 0035C6  1  A4 07        L35C6:		ldy MUL_HI_07
 0035C8  1  86 CD        		stx L00CD
-0035CA  1  B1 19        		lda (SCREEN_LINES_19),Y
+0035CA  1  B1 19        		lda (PTR_LO_19),Y
 0035CC  1  85 71        		sta CUR_X_MSB_71
 0035CE  1  C8           		iny
-0035CF  1  B1 19        		lda (SCREEN_LINES_19),Y
+0035CF  1  B1 19        		lda (PTR_LO_19),Y
 0035D1  1  85 77        		sta CUR_Z_MSB_77
 0035D3  1  88           		dey
 0035D4  1  88           		dey
 0035D5  1  88           		dey
-0035D6  1  B1 19        		lda (SCREEN_LINES_19),Y
+0035D6  1  B1 19        		lda (PTR_LO_19),Y
 0035D8  1  29 80        		and #$80
 0035DA  1  85 76        		sta CUR_Z_LSB_76
 0035DC  1  49 80        		eor #$80
@@ -4773,21 +4775,21 @@ Current file: ..\src\merc-0700-6fff.a65
 003616  1  99 BF 1E     		sta L1EBE+1,Y
 003619  1  88           		dey
 00361A  1  D0 F1        		bne L360D
-00361C  1  B1 19        		lda (SCREEN_LINES_19),Y
+00361C  1  B1 19        		lda (PTR_LO_19),Y
 00361E  1  29 7F        		and #$7F
 003620  1  8D 40 1D     		sta GROUND_STRUCTURE_X_MSB_1D40
 003623  1  8D 41 1D     		sta L1D41
 003626  1  8D 44 1D     		sta L1D44
 003629  1  8D 45 1D     		sta L1D44+1
 00362C  1  C8           		iny
-00362D  1  B1 19        		lda (SCREEN_LINES_19),Y
+00362D  1  B1 19        		lda (PTR_LO_19),Y
 00362F  1  29 07        		and #$07
 003631  1  8D C0 1D     		sta GROUND_STRUCTURE_Y_MSB_1DC0
 003634  1  8D C1 1D     		sta L1DBF+2
 003637  1  8D C2 1D     		sta L1DC2
 00363A  1  8D C3 1D     		sta L1DC3
 00363D  1  C8           		iny
-00363E  1  B1 19        		lda (SCREEN_LINES_19),Y
+00363E  1  B1 19        		lda (PTR_LO_19),Y
 003640  1  29 7F        		and #$7F
 003642  1  8D 40 1E     		sta GROUND_STRUCTURE_Z_MSB_1E40
 003645  1  8D 43 1E     		sta L1E43
@@ -4798,13 +4800,13 @@ Current file: ..\src\merc-0700-6fff.a65
 003652  1  A9 07        		lda #$07
 003654  1  85 6E        		sta ZP_6E
 003656  1  C8           		iny
-003657  1  B1 19        		lda (SCREEN_LINES_19),Y
+003657  1  B1 19        		lda (PTR_LO_19),Y
 003659  1  85 C2        		sta L00C2
 00365B  1  C8           		iny
-00365C  1  B1 19        		lda (SCREEN_LINES_19),Y
+00365C  1  B1 19        		lda (PTR_LO_19),Y
 00365E  1  85 C3        		sta L00C3
 003660  1  C8           L3660:		iny
-003661  1  B1 19        		lda (SCREEN_LINES_19),Y
+003661  1  B1 19        		lda (PTR_LO_19),Y
 003663  1  F0 1E        		beq L3683
 003665  1  10 43        		bpl L36AA
 003667  1  C9 80        		cmp #$80
@@ -4823,14 +4825,14 @@ Current file: ..\src\merc-0700-6fff.a65
 003683  1  A9 FF        L3683:		lda #$FF
 003685  1  85 96        		sta L0096
 003687  1  A0 01        		ldy #$01
-003689  1  B1 19        		lda (SCREEN_LINES_19),Y
+003689  1  B1 19        		lda (PTR_LO_19),Y
 00368B  1  4A           		lsr
 00368C  1  4A           		lsr
 00368D  1  4A           		lsr
 00368E  1  AA           		tax
 00368F  1  F0 0E        		beq L369F
 003691  1  C8           		iny
-003692  1  B1 19        		lda (SCREEN_LINES_19),Y
+003692  1  B1 19        		lda (PTR_LO_19),Y
 003694  1  10 07        		bpl L369D
 003696  1  8A           		txa
 003697  1  20 0D 2F     		jsr BENSON_2F0D
@@ -4855,10 +4857,10 @@ Current file: ..\src\merc-0700-6fff.a65
 0036B9  1  AA           		tax
 0036BA  1  C8           		iny
 0036BB  1  C8           		iny
-0036BC  1  B1 19        		lda (SCREEN_LINES_19),Y
+0036BC  1  B1 19        		lda (PTR_LO_19),Y
 0036BE  1  85 06        		sta MUL_LO_06
 0036C0  1  C8           		iny
-0036C1  1  B1 19        		lda (SCREEN_LINES_19),Y
+0036C1  1  B1 19        		lda (PTR_LO_19),Y
 0036C3  1  85 07        		sta MUL_HI_07
 0036C5  1  84 AB        		sty L00AB
 0036C7  1  A4 6E        		ldy ZP_6E
@@ -4942,15 +4944,17 @@ Current file: ..\src\merc-0700-6fff.a65
 0037CE  1               L37B3		= $37B3
 0037CE  1               
 0037CE  1               ;------------------------------------------------------------
-0037CE  1               ;
+0037CE  1               ; Laboratory Teleporter taken
 0037CE  1               ;------------------------------------------------------------
-0037CE  1  A5 F1        L37CE:		lda SPECIAL_VIEW_FLAG_F1
+0037CE  1               FLIP_VIEW_FLAG_37CE:
+0037CE  1  A5 F1        		lda SPECIAL_VIEW_FLAG_F1
 0037D0  1  49 01        		eor #$01
 0037D2  1  85 F1        		sta SPECIAL_VIEW_FLAG_F1
-0037D4  1  A6 EB        		ldx NUM_INVENTORY_ITEMS_EB
+0037D4  1               
+0037D4  1  A6 EB        		ldx NUM_INVENTORY_ITEMS_EB			;flip bit 6 of all items
 0037D6  1  F0 0E        		beq L37E6
-0037D8  1  BC 2B 29     L37D8:		ldy INVENTORY_LIST_L292B,X
-0037DB  1  BD C0 69     		lda OBJECT_ATTRIBUTES_69C0,X
+0037D8  1  BC 2B 29     L37D8:		ldy INVENTORY_LIST_L292B,X			;at least it was intended to do so
+0037DB  1  BD C0 69     		lda OBJECT_ATTRIBUTES_69C0,X			;should by Y?
 0037DE  1  49 40        		eor #$40
 0037E0  1  9D C0 69     		sta OBJECT_ATTRIBUTES_69C0,X
 0037E3  1  CA           		dex
@@ -4961,7 +4965,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0037EC  1  60           		rts
 0037ED  1               
 0037ED  1               ;------------------------------------------------------------
-0037ED  1               ;
+0037ED  1               ; Fill object_to_draw list
 0037ED  1               ;------------------------------------------------------------
 0037ED  1  A9 00        L37ED:		lda #$00
 0037EF  1  AE E8 69     		ldx L69E8
@@ -4969,11 +4973,11 @@ Current file: ..\src\merc-0700-6fff.a65
 0037F4  1  A9 66        		lda #$66
 0037F6  1  8D B5 9A     L37F6:		sta L9AB5
 0037F9  1  A6 CD        		ldx L00CD
-0037FB  1  A4 B2        		ldy CHUNK_CNT_B2
+0037FB  1  A4 B2        		ldy CHUNK_CNT_B2				;$3F normally?
 0037FD  1  86 04        		stx TMP_04
 0037FF  1  A2 00        		ldx #$00
 003801  1  A5 04        L3801:		lda TMP_04
-003803  1  D9 40 69     L3803:		cmp L6940,Y
+003803  1  D9 40 69     L3803:		cmp OBJECT_VISIBILITY_6940,Y
 003806  1  D0 05        		bne L380D
 003808  1  E8           		inx
 003809  1  98           		tya
@@ -5087,12 +5091,12 @@ Current file: ..\src\merc-0700-6fff.a65
 0038B1  1  A0 03        		ldy #$03
 0038B3  1  C8           L38B3:      	iny
 0038B4  1  C8           L38B4:      	iny
-0038B5  1  B1 19        		lda (SCREEN_LINES_19),Y
+0038B5  1  B1 19        		lda (PTR_LO_19),Y
 0038B7  1  85 07        		sta MUL_HI_07
 0038B9  1  0A           		asl
 0038BA  1  F0 EF        		beq L38AB
 0038BC  1  C8           		iny
-0038BD  1  B1 19        		lda (SCREEN_LINES_19),Y
+0038BD  1  B1 19        		lda (PTR_LO_19),Y
 0038BF  1  85 06        		sta MUL_LO_06
 0038C1  1  A5 07        		lda MUL_HI_07
 0038C3  1  29 80        		and #$80
@@ -5101,7 +5105,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0038C8  1  A5 71        		lda CUR_X_MSB_71
 0038CA  1  69 00        		adc #$00
 0038CC  1  C8           		iny
-0038CD  1  D1 19        		cmp (SCREEN_LINES_19),Y
+0038CD  1  D1 19        		cmp (PTR_LO_19),Y
 0038CF  1  D0 E2        		bne L38B3
 0038D1  1  A5 76        		lda CUR_Z_LSB_76
 0038D3  1  38           		sec
@@ -5116,7 +5120,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0038E3  1  A5 77        		lda CUR_Z_MSB_77
 0038E5  1  69 00        		adc #$00
 0038E7  1  C8           		iny
-0038E8  1  D1 19        		cmp (SCREEN_LINES_19),Y
+0038E8  1  D1 19        		cmp (PTR_LO_19),Y
 0038EA  1  D0 C8        		bne L38B4
 0038EC  1  A5 70        		lda CUR_X_LSB_70
 0038EE  1  38           		sec
@@ -5701,7 +5705,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003CAD  1               
 003CAD  1  A9 FF        L3CAD:		lda #$FF
 003CAF  1  85 B6        		sta L00B6
-003CB1  1  9D 40 69     		sta L6940,X
+003CB1  1  9D 40 69     		sta OBJECT_VISIBILITY_6940,X
 003CB4  1  20 ED 37     		jsr L37ED
 003CB7  1  18           		clc
 003CB8  1  60           		rts
@@ -5830,7 +5834,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003D89  1  20 FB 5A     		jsr SOUND_EFFECT_L5AFB
 003D8C  1               
 003D8C  1  A5 CD        L3D8C:		lda L00CD
-003D8E  1  99 40 69     		sta L6940,Y
+003D8E  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
 003D91  1  A5 70        		lda CUR_X_LSB_70
 003D93  1  99 80 68     		sta OBJ_X_LSB_L6880,Y
 003D96  1  A5 71        		lda CUR_X_MSB_71
@@ -11628,7 +11632,11 @@ Current file: ..\src\merc-0700-6fff.a65
 006940  1               L6887		= $6887
 006940  1               L68C7		= $68C7
 006940  1               
-006940  1  00           L6940:		.byte $00
+006940  1               ;
+006940  1               ; $00 = visible from afar
+006940  1               ;
+006940  1               OBJECT_VISIBILITY_6940:
+006940  1  00           		.byte $00
 006941  1  00 00 07 03  L6941:		.byte $00,$00,$07,$03,$02,$36
 006945  1  02 36        
 006947  1  05 FF FF 00  L6947:		.byte $05,$FF,$FF,$00,$FF,$66,$FF

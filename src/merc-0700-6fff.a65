@@ -22,7 +22,8 @@ ROLL_SIN_MUL_PITCH_SIN_LO_14	= $14
 ROLL_SIN_MUL_PITCH_SIN_HI_15	= $15
 POINT_LINE_COUNT_17		= $17
 SCREEN_LINES_18			= $18
-SCREEN_LINES_19			= $19
+PTR_LO_19			= $19
+PTR_HI_1A			= $1A
 OBJ_SHAPE_PTR_LO_1B		= $1B
 OBJ_SHAPE_PTR_HI_1C		= $1C
 BENSON_PTR_LO_1D		= $1D
@@ -1758,7 +1759,7 @@ L2A7C:		jsr GET_RANDOM_L53B1				;obj X HSB 0-15
 		sta OBJ_Y_MSB_L64C0,Y
 		sta OBJ_Y_LSB_L68C0,Y
 		
-		sta L6940,Y
+		sta OBJECT_VISIBILITY_6940,Y
 		
 		lda OBJECT_ATTRIBUTES_69C0,Y			;reset bit 7 (in inventory list) in obj attributes
 		and #$7F
@@ -1885,7 +1886,7 @@ L2B8B:		dex
 		bne L2B15
 		rts
 L2B91:		lda #$FF
-		sta L6940,X
+		sta OBJECT_VISIBILITY_6940,X
 		lda #$00
 		sta L70A8,X
 		jmp L37ED
@@ -2050,7 +2051,7 @@ L2CB2:		jsr L3B1D
 L2CBA:		stx ZP_08
 		sty ZP_09
 		sec
-		lda L6940,Y
+		lda OBJECT_VISIBILITY_6940,Y
 		bne L2CE9
 		jsr L2EC1
 		ldx #$04
@@ -2064,7 +2065,7 @@ L2CBA:		stx ZP_08
 		sta L2978
 		sta L70A8,Y
 L2CDE:		lda #$FF
-		sta L6940,Y
+		sta OBJECT_VISIBILITY_6940,Y
 		ldx ZP_08
 		jsr L2B91
 		clc
@@ -2093,7 +2094,7 @@ L2CF5:		lda CRAFT_ID_WALKING_A7
 		lda #$0F
 		sta SOUND_F5
 		lda L00CD
-		sta L6940,Y
+		sta OBJECT_VISIBILITY_6940,Y
 		lda #$10
 		sta L70A8,Y
 		sty L00AB
@@ -2193,7 +2194,7 @@ L2DAA:		lda LIFT_UP_DOWN_CA
 		lda #$20
 		sta L70A8,X
 		lda #$00
-		sta L6940,X
+		sta OBJECT_VISIBILITY_6940,X
 		ldy #$04
 		jsr L2E30
 		jsr L2E93
@@ -2236,7 +2237,7 @@ L2E19:		ldx #$0F
 		lda #$AD
 		sta L70A8,X
 		lda #$00
-		sta L6940,X
+		sta OBJECT_VISIBILITY_6940,X
 L2E2D:		jmp L37ED
 
 ;------------------------------------------------------------
@@ -2452,7 +2453,7 @@ BENSON_2F8F:	iny
 ;------------------------------------------------------------
 BENSON_2F98:	ldx L274D+1
 		lda L274F
-		cmp L6940,X
+		cmp OBJECT_VISIBILITY_6940,X
 		beq L300B
 		bne L3008
 		
@@ -3410,11 +3411,11 @@ L356B:		.byte $C0,$67,$08,$80,$F4,$40,$00,$70,$08
 L3574:		lda #$E0
 		sta L008B
 		lda ROOM_STRUCT_PTR_LO_L6300,X
-L357B:		sta SCREEN_LINES_19
+L357B:		sta PTR_LO_19
 		lda ROOM_STRUCT_PTR_HI_L63C0,X
-		sta DSKUTL
+		sta PTR_HI_1A
 		ldy #$00
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		bpl L35C6
 		cpx #$72
 		bne L3597
@@ -3426,41 +3427,42 @@ L357B:		sta SCREEN_LINES_19
 		bne L35A5
 L3597:		lda L00CD
 		ldy #$0A
-		cmp (SCREEN_LINES_19),Y
+		cmp (PTR_LO_19),Y
 		bne L35A5
 		iny
 		iny
-		cmp (SCREEN_LINES_19),Y
+		cmp (PTR_LO_19),Y
 		beq L35C6
-L35A5:		lda (SCREEN_LINES_19),Y
+		
+L35A5:		lda (PTR_LO_19),Y
 		pha
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		sta TMP_04
 		ldy #$05
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		and #$8F
 		ora TMP_04
-		sta (SCREEN_LINES_19),Y
+		sta (PTR_LO_19),Y
 		iny
 		pla
-		sta (SCREEN_LINES_19),Y
-		lda #$1F
+		sta (PTR_LO_19),Y
+		lda #$1F					;laboratory teleporter
 		sta L00F0
-		cpx #$7F
+		cpx #$7F					;laboratory
 		bne L35C6
-		jsr L37CE
+		jsr FLIP_VIEW_FLAG_37CE
 L35C6:		ldy MUL_HI_07
 		stx L00CD
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		sta CUR_X_MSB_71
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		sta CUR_Z_MSB_77
 		dey
 		dey
 		dey
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		and #$80
 		sta CUR_Z_LSB_76
 		eor #$80
@@ -3489,21 +3491,21 @@ L360D:		lda L37B3+2,Y
 		sta L1EBE+1,Y
 		dey
 		bne L360D
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		and #$7F
 		sta GROUND_STRUCTURE_X_MSB_1D40
 		sta L1D41
 		sta L1D44
 		sta L1D44+1
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		and #$07
 		sta GROUND_STRUCTURE_Y_MSB_1DC0
 		sta L1DBF+2
 		sta L1DC2
 		sta L1DC3
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		and #$7F
 		sta GROUND_STRUCTURE_Z_MSB_1E40
 		sta L1E43
@@ -3514,13 +3516,13 @@ L360D:		lda L37B3+2,Y
 		lda #$07
 		sta ZP_6E
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		sta L00C2
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		sta L00C3
 L3660:		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		beq L3683
 		bpl L36AA
 		cmp #$80
@@ -3539,14 +3541,14 @@ L3660:		iny
 L3683:		lda #$FF
 		sta L0096
 		ldy #$01
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		lsr
 		lsr
 		lsr
 		tax
 		beq L369F
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		bpl L369D
 		txa
 		jsr BENSON_2F0D
@@ -3571,10 +3573,10 @@ L36B0: 		stx L36D1+2
 		tax
 		iny
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		sta MUL_LO_06
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		sta MUL_HI_07
 		sty L00AB
 		ldy ZP_6E
@@ -3632,15 +3634,17 @@ L37C1		= $37C1
 L37B3		= $37B3    
 
 ;------------------------------------------------------------
-; 
+; Laboratory Teleporter taken
 ;------------------------------------------------------------
-L37CE:		lda SPECIAL_VIEW_FLAG_F1
+FLIP_VIEW_FLAG_37CE:		
+		lda SPECIAL_VIEW_FLAG_F1
 		eor #$01
 		sta SPECIAL_VIEW_FLAG_F1
-		ldx NUM_INVENTORY_ITEMS_EB
+
+		ldx NUM_INVENTORY_ITEMS_EB			;flip bit 6 of all items
 		beq L37E6
-L37D8:		ldy INVENTORY_LIST_L292B,X
-		lda OBJECT_ATTRIBUTES_69C0,X
+L37D8:		ldy INVENTORY_LIST_L292B,X			;at least it was intended to do so
+		lda OBJECT_ATTRIBUTES_69C0,X			;should by Y?
 		eor #$40
 		sta OBJECT_ATTRIBUTES_69C0,X
 		dex
@@ -3651,7 +3655,7 @@ L37E6:		ldx #$7F
 		rts
 
 ;------------------------------------------------------------
-; 
+; Fill object_to_draw list
 ;------------------------------------------------------------
 L37ED:		lda #$00
 		ldx L69E8
@@ -3659,11 +3663,11 @@ L37ED:		lda #$00
 		lda #$66
 L37F6:		sta L9AB5
 		ldx L00CD
-		ldy CHUNK_CNT_B2
+		ldy CHUNK_CNT_B2				;$3F normally?
 		stx TMP_04
 		ldx #$00
 L3801:		lda TMP_04
-L3803:		cmp L6940,Y
+L3803:		cmp OBJECT_VISIBILITY_6940,Y
 		bne L380D
 		inx
 		tya
@@ -3777,12 +3781,12 @@ L38AD:      	lda L00F0
 		ldy #$03
 L38B3:      	iny
 L38B4:      	iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		sta MUL_HI_07
 		asl
 		beq L38AB
 		iny
-		lda (SCREEN_LINES_19),Y
+		lda (PTR_LO_19),Y
 		sta MUL_LO_06
 		lda MUL_HI_07
 		and #$80
@@ -3791,7 +3795,7 @@ L38B4:      	iny
 		lda CUR_X_MSB_71
 		adc #$00
 		iny
-		cmp (SCREEN_LINES_19),Y
+		cmp (PTR_LO_19),Y
 		bne L38B3
 		lda CUR_Z_LSB_76
 		sec
@@ -3806,7 +3810,7 @@ L38B4:      	iny
 		lda CUR_Z_MSB_77
 		adc #$00
 		iny
-		cmp (SCREEN_LINES_19),Y
+		cmp (PTR_LO_19),Y
 		bne L38B4
 		lda CUR_X_LSB_70
 		sec
@@ -4390,7 +4394,7 @@ L3C94:		txa
 		
 L3CAD:		lda #$FF
 		sta L00B6
-		sta L6940,X
+		sta OBJECT_VISIBILITY_6940,X
 		jsr L37ED
 		clc
 		rts
@@ -4519,7 +4523,7 @@ L3D78:		ldx NUM_INVENTORY_ITEMS_EB
 		jsr SOUND_EFFECT_L5AFB
 		
 L3D8C:		lda L00CD
-		sta L6940,Y
+		sta OBJECT_VISIBILITY_6940,Y
 		lda CUR_X_LSB_70
 		sta OBJ_X_LSB_L6880,Y
 		lda CUR_X_MSB_71
@@ -10054,8 +10058,12 @@ OBJ_Z_LSB_L6900:
 L6907		= $6907
 L6887		= $6887
 L68C7		= $68C7
-		
-L6940:		.byte $00
+
+;		
+; $00 = visible from afar
+;
+OBJECT_VISIBILITY_6940:		
+		.byte $00
 L6941:		.byte $00,$00,$07,$03,$02,$36
 L6947:		.byte $05,$FF,$FF,$00,$FF,$66,$FF
 		
