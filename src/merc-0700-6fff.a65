@@ -112,7 +112,7 @@ PERS_HOR_6A			= $6A
 PERS_VER_6B			= $6B
 POINT_CLASSIFY_ST_6C		= $6C
 POINT_CLASSIFY_EN_6D		= $6D
-
+LINE_CNT_6F			= $6F
 
 ZP_6E				= $6E
 	
@@ -230,10 +230,10 @@ L00BC       = $00BC
 L00BD       = $00BD
 L00BE       = $00BE
 L00BF       = $00BF
-L00C0       = $00C0
+BACKGND_COLOR_C0       = $00C0
 L00C1       = $00C1
-L00C2       = $00C2
-L00C3       = $00C3
+ROOM_COLOR_C2       = $00C2
+LINE_COLOR_C3       = $00C3
 L00C4       = $00C4
 L00C5       = $00C5
 L00C6       = $00C6
@@ -278,7 +278,7 @@ L00F2       = $00F2
 L00F3       = $00F3
 L00F4       = $00F4
 SOUND_F5       = $00F5
-L00F6       = $00F6
+MESSAGE_TO_SEND_F6       = $00F6
 ONLY_ONCE_F7       = $00F7
 CRASH_F8       = $00F8
 L00F9       = $00F9
@@ -1242,14 +1242,18 @@ GROUND_STRUCTURE_Z_MSB_1E40:
 		.byte $80,$85,$04,$BD,$40,$9D,$49,$80,$C5,$04,$B0,$0C,$98,$86,$04,$AA
 		.byte $A4,$04,$BD,$00,$9F,$10,$01,$60,$BD,$00,$9F,$85,$6C,$30,$1E,$BD
 		
+ROOM_DATA_1E80:
 		.byte $00,$01,$02,$00,$01,$02,$04,$05,$06,$07,$08,$09,$0A,$0B,$BD,$80
 		.byte $9D,$85,$5D,$BD,$00,$9E,$85,$5E,$BD,$40,$9E,$85,$5F,$BD,$00,$9C
 		.byte $85,$50,$BD,$40,$9C,$85,$51,$BD,$80,$9C,$85,$52,$BD,$C0,$9C,$85
 		.byte $53,$BD,$00,$9D,$85,$54,$BD,$40,$9D,$85,$55,$B9,$00,$9F,$85,$6D
+
+ROOM_DATA_1EC0:
 		.byte $01,$02,$00,$03,$03,$03,$05,$06,$07,$08,$09,$0A,$0B,$04,$9D,$85
 		.byte $60,$B9,$80,$9D,$85,$61,$B9,$00,$9E,$85,$62,$B9,$40,$9E,$85,$63
 		.byte $B9,$00,$9C,$85,$56,$B9,$40,$9C,$85,$57,$B9,$80,$9C,$85,$58,$B9
 		.byte $C0,$9C,$85,$59,$B9,$00,$9D,$85,$5A,$B9,$40,$9D,$85,$5B,$A5,$6D
+
 		.byte $20,$43,$43,$43,$43,$02,$07,$4A,$43,$20,$43,$43,$43,$43,$02,$20
 		.byte $20,$43,$43,$43,$43,$02,$02,$43,$43,$43,$49,$43,$43,$43,$02,$02
 		.byte $43,$43,$02,$02,$02,$02,$02,$43,$02,$20,$02,$02,$43,$43,$02,$10
@@ -1660,7 +1664,7 @@ L29C1:		and #$0F
 		jsr L3DC1						; set speed?
 		lda #$FF
 		sta L6941						;
-		jsr L37ED
+		jsr OBJ_DRAW_LIST_37ED
 		jmp MAIN_LOOP_L29DF
 
 ;------------------------------------------------------------
@@ -1891,7 +1895,7 @@ L2B91:		lda #$FF
 		sta OBJECT_VISIBILITY_6940,X
 		lda #$00
 		sta L70A8,X
-		jmp L37ED
+		jmp OBJ_DRAW_LIST_37ED
 
 ;------------------------------------------------------------
 ;
@@ -2166,7 +2170,7 @@ L2D71:		sta L70F0,Y
 		sta OBJ_Z_MSB_L6500,Y
 		lda CUR_Z_HSB_78
 		sta OBJ_Z_HSB_L65C0,Y
-		jmp L37ED
+		jmp OBJ_DRAW_LIST_37ED
 		
 ;------------------------------------------------------------
 ;
@@ -2202,7 +2206,7 @@ L2DAA:		lda LIFT_UP_DOWN_CA
 		jsr L2E93
 		ldy #$0F
 		jsr L2E5C
-		jmp L37ED
+		jmp OBJ_DRAW_LIST_37ED
 
 ;------------------------------------------------------------
 ;
@@ -2227,7 +2231,7 @@ L2DFE:		lda #$00
 		lda #$FF
 		sta L694E
 		sta L694F
-		jmp L37ED
+		jmp OBJ_DRAW_LIST_37ED
 
 ;------------------------------------------------------------
 ;
@@ -2240,7 +2244,7 @@ L2E19:		ldx #$0F
 		sta L70A8,X
 		lda #$00
 		sta OBJECT_VISIBILITY_6940,X
-L2E2D:		jmp L37ED
+L2E2D:		jmp OBJ_DRAW_LIST_37ED
 
 ;------------------------------------------------------------
 ;
@@ -2480,7 +2484,7 @@ BENSON_2FAE:	lda L293B
 ;
 ;------------------------------------------------------------
 BENSON_2FB8:	lda L274E
-		jsr L3890
+		jsr CHECK_INVENTORY_3890
 		bne L3008
 		beq L300B
 
@@ -3386,7 +3390,7 @@ SETUP_ROOM_L353C:
 		bne L3574
 		stx PLANET_UNDERGROUND_A6
 		stx ROOM_NO_CD
-		jsr L37ED
+		jsr OBJ_DRAW_LIST_37ED
 		lda #$09					;Prestinium
 		sta CRAFT_ID_WALKING_A7
 		jsr COPY_SHIP_DATA_L4189
@@ -3455,30 +3459,52 @@ L35A5:		lda (PTR_LO_19),Y
 		cpx #$7F					;laboratory
 		bne L35C6
 		jsr FLIP_VIEW_FLAG_37CE
-		
-;
-L35C6:		ldy MUL_HI_07
+
+
+; room 1
+; 10 4c 10 30 3a 82 58 10 0c 02 09 0b 10 02 59 05
+; 00 00
+; room 2
+; 10 4c 10 22 28 06 75 08 00 83 96 10 04 82 98 10
+; 01 82 97 10 06 22 71 04 10 99 4A 00 06 09 48 04
+; 00 00
+
+
+; 0  1  2  3  4  5  6  7  8  9  a  b  d  d
+; 08 a2 84 8a 00 22 03 04 00 12 20 04 04 00
+;			  	
+; 00	width (X)
+; 01	bit0-2 = height (Y)
+; 02	bit(0-6) = depth (Z); bit7=1 send message?
+; 03	room color
+; 04	line color
+; 05	bit7 CUR_Z_LSB, !bit7 CUR_X_LSB
+; 07	CUR_X_MSB
+; 08	CUR_Z_MSB
+
+L35C6:		ldy MUL_HI_07					;Y=7
 		stx ROOM_NO_CD
 		lda (PTR_LO_19),Y
 		sta CUR_X_MSB_71
-		iny
+		iny						;Y=8
 		lda (PTR_LO_19),Y
 		sta CUR_Z_MSB_77
 		dey
 		dey
 		dey
-		lda (PTR_LO_19),Y
+		lda (PTR_LO_19),Y				;Y=5
 		and #$80
 		sta CUR_Z_LSB_76
 		eor #$80
 		sta CUR_X_LSB_70
-L35E0:		jsr L37ED
+L35E0:		jsr OBJ_DRAW_LIST_37ED				;fill object-to-draw list for room
+
 		lda #$00
 		sta CUR_X_HSB_72
 		sta CUR_Z_HSB_78
-		sta L00F6
+		sta MESSAGE_TO_SEND_F6
 		ldy #$3F
-L35ED:		sta GROUND_STRUCTURE_X_LSB_1D00,Y
+L35ED:		sta GROUND_STRUCTURE_X_LSB_1D00,Y		;clear all struct positions
 		sta GROUND_STRUCTURE_X_MSB_1D40,Y
 		sta GROUND_STRUCTURE_X_HSB_9F40,Y
 		sta GROUND_STRUCTURE_Y_LSB_1D80,Y
@@ -3491,75 +3517,86 @@ L35ED:		sta GROUND_STRUCTURE_X_LSB_1D00,Y
 		bpl L35ED
 		
 		ldy #$0C
-L360D:		lda L37B3+2,Y
-		sta L1E7F,Y
-		lda L37C1,Y
-		sta L1EBE+1,Y
+L360D:		lda L37B6-1,Y
+		sta ROOM_DATA_1E80-1,Y
+		lda L37C2-1,Y
+		sta ROOM_DATA_1EC0-1,Y
 		dey
 		bne L360D
-		lda (PTR_LO_19),Y
+		
+		lda (PTR_LO_19),Y				;Y=0
 		and #$7F
 		sta GROUND_STRUCTURE_X_MSB_1D40
-		sta L1D41
-		sta L1D44
-		sta L1D44+1
-		iny
+		sta GROUND_STRUCTURE_X_MSB_1D40+1
+		sta GROUND_STRUCTURE_X_MSB_1D40+4
+		sta GROUND_STRUCTURE_X_MSB_1D40+5
+		
+		iny						;Y=1
 		lda (PTR_LO_19),Y
 		and #$07
 		sta GROUND_STRUCTURE_Y_MSB_1DC0
-		sta L1DBF+2
-		sta L1DC2
-		sta L1DC3
-		iny
+		sta GROUND_STRUCTURE_Y_MSB_1DC0+1
+		sta GROUND_STRUCTURE_Y_MSB_1DC0+2
+		sta GROUND_STRUCTURE_Y_MSB_1DC0+3
+		
+		iny						;Y=2
 		lda (PTR_LO_19),Y
 		and #$7F
 		sta GROUND_STRUCTURE_Z_MSB_1E40
-		sta L1E43
-		sta L1E44
-		sta L1E45+2
-		lda #$0B
-		sta SHFAMT
+		sta GROUND_STRUCTURE_Z_MSB_1E40+3
+		sta GROUND_STRUCTURE_Z_MSB_1E40+4
+		sta GROUND_STRUCTURE_Z_MSB_1E40+7
+		
+		lda #$0B					;12 lines?
+		sta LINE_CNT_6F
 		lda #$07
 		sta ZP_6E
-		iny
+
+		iny						;Y=3
 		lda (PTR_LO_19),Y
-		sta L00C2
-		iny
+		sta ROOM_COLOR_C2				;room color
+		iny						;Y=4
 		lda (PTR_LO_19),Y
-		sta L00C3
-L3660:		iny
+		sta LINE_COLOR_C3				;line color
+		
+L3660:		iny						;Y=5
 		lda (PTR_LO_19),Y
 		beq L3683
 		bpl L36AA
 		cmp #$80
 		bne L36AE
-		lda #$10						;obj 16 photon emitter?
-		jsr L3890
-		beq L3683						;in inventory
-		jsr L389B						;or in to-draw list? 
-		beq L3683						;yes
-		lda #$00						;otherwise make room dark, no photon emitter
-		sta L00C0
-		sta L00C2
-		sta L00C3
+		
+		lda #$10					;obj 16 photon emitter
+		jsr CHECK_INVENTORY_3890
+		beq L3683					;yes, in inventory
+		
+		jsr L389B					;or in to-draw list? 
+		beq L3683					;yes
+		
+		lda #$00					;otherwise make room dark, no photon emitter
+		sta BACKGND_COLOR_C0
+		sta ROOM_COLOR_C2
+		sta LINE_COLOR_C3
+		
 		lda #$01
-		sta L00F6
+		sta MESSAGE_TO_SEND_F6
+		
 L3683:		lda #$FF
 		sta L0096
-		ldy #$01
+		ldy #$01					;Y=1
 		lda (PTR_LO_19),Y
 		lsr
 		lsr
 		lsr
 		tax
 		beq L369F
-		iny
+		iny						;Y=2
 		lda (PTR_LO_19),Y
-		bpl L369D
+		bpl L369D					;bit7 set = send message?
 		txa
 		jsr BENSON_2F0D
 		jmp L369F
-L369D:		stx L00F6
+L369D:		stx MESSAGE_TO_SEND_F6
 L369F:		jsr L3817
 		lda #$00
 		sta SOUND_F5
@@ -3567,11 +3604,12 @@ L369F:		jsr L3817
 		rts
 
 ;------------------------------------------------------------
-; 
+; set room vertices?
 ;------------------------------------------------------------
 L36AA:		ldx #$1D
 		bne L36B0
-L36AE: 		ldx #$1E
+		
+L36AE: 		ldx #$1E					;set hi-byte
 L36B0: 		stx L36D1+2
 		and #$0F
 		tax
@@ -3604,25 +3642,26 @@ L36E5: 		inx
 ;------------------------------------------------------------
 ; 
 ;------------------------------------------------------------
-L36E9: 		ldx SHFAMT
+L36E9: 		ldx LINE_CNT_6F
 		inc ZP_6E
 		lda ZP_6E
 L36EF: 		inx
-		sta L1E7F+1,X
+		sta ROOM_DATA_1E80,X
 		inc ZP_6E
 L36F5: 		lda ZP_6E
-L36F7: 		sta L1EC0,X
+L36F7: 		sta ROOM_DATA_1EC0,X
 		cpy ZP_6E
 		bne L36EF
 		ldy L00AB
-		stx SHFAMT
+		stx LINE_CNT_6F
 L3702: 		jmp L3660
 
 ;------------------------------------------------------------
 ; 
 ;------------------------------------------------------------
-L3705: 		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$FF,$50,$00,$50,$C0,$B0,$C0,$B0 
-		.byte $00,$B0,$60,$80,$A0,$50,$60,$B0,$60,$FF,$50,$00,$50,$C0,$B0,$C0 
+L3705: 		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$FF
+		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$B0,$60,$80,$A0,$50,$60,$B0,$60,$FF
+		.byte $50,$00,$50,$C0,$B0,$C0 
 		.byte $B0,$00,$80,$00,$80,$A0,$70,$80,$90,$80,$80,$A0,$FF,$50,$00,$50 
 		.byte $C0,$B0,$C0,$B0,$00,$80,$00,$70,$20,$90,$20,$80,$00,$80,$A0,$FF 
 		.byte $50,$C0,$B0,$00,$B0,$C0,$50,$C0,$50,$00,$B0,$C0,$FF,$50,$00,$50 
@@ -3631,11 +3670,13 @@ L3705: 		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$FF,$50,$00,$50,$C0,$B0,$C0,$B0
 		.byte $B8,$00,$FF,$50,$00,$50,$A0,$80,$C0,$B0,$A0,$B0,$00,$FF,$60,$00
 		.byte $40,$C0,$C0,$C0,$A0,$00,$FF,$60,$00,$40,$60,$60,$C0,$A0,$C0,$C0 
 		.byte $60,$A0,$00,$FF,$50,$00,$50,$80,$70,$C0,$90,$C0,$B0,$80,$B0,$00 
-		.byte $FF,$00,$00,$00,$09,$1A,$2D,$40,$4D,$00,$58,$5F,$68,$73,$7E,$87 
-		.byte $94,$00,$01,$02,$03,$00,$01,$02,$03,$04,$05,$06,$07,$01,$02,$03 
-		.byte $00,$04,$05,$06,$07,$05,$06,$07,$04
+		.byte $FF
 
-L37A6		= $37A6
+L37A6:		.byte $00,$00,$00,$09,$1A,$2D,$40,$4D,$00,$58,$5F,$68,$73,$7E,$87,$94
+		
+L37B6:		.byte $00,$01,$02,$03,$00,$01,$02,$03,$04,$05,$06,$07
+L37C2:		.byte $01,$02,$03,$00,$04,$05,$06,$07,$05,$06,$07,$04
+
 L37C1		= $37C1
 L37B3		= $37B3    
 
@@ -3664,11 +3705,13 @@ L37E6:		ldx #$7F
 ; Fill object_to_draw list at ground?
 ; board, land, crash
 ;------------------------------------------------------------
-L37ED:		lda #$00
-		ldx L69E8
-		bpl L37F6
+OBJ_DRAW_LIST_37ED:		
+		lda #$00
+		ldx L69E8					;Sights attributes
+		bpl L37F6					;not active
 		lda #$66
 L37F6:		sta L9AB5
+
 		ldx ROOM_NO_CD
 		ldy CHUNK_CNT_B2				;$3F normally?
 		stx TMP_04
@@ -3683,7 +3726,7 @@ L380D:		dey
 		bpl L3801
 		stx NUM_OBJS_TO_DRAW_B0
 		lda #$0E
-		sta L00C0
+		sta BACKGND_COLOR_C0
 		rts
 
 ;------------------------------------------------------------
@@ -3755,7 +3798,7 @@ L388D:		sta ONLY_ONCE_F7
 ;------------------------------------------------------------
 ; check if object number in A is in inventory list
 ;------------------------------------------------------------
-L3890:		ldx NUM_INVENTORY_ITEMS_EB
+CHECK_INVENTORY_3890:		ldx NUM_INVENTORY_ITEMS_EB
 L3892:		dex
 		bmi L389A
 		cmp INVENTORY_LIST_L292C,X
@@ -3969,7 +4012,7 @@ L39C4:      	tax
 L39D1:      	lda L0087
 		sta ZP_6E
 		lda L0089
-		sta SHFAMT
+		sta LINE_CNT_6F
 		lda CUR_X_HSB_72
 		sta L0083
 		lda CUR_Y_HSB_75
@@ -4198,7 +4241,7 @@ L3B4D:		jsr TRANSLATE_GROUND_STRUCTURE_POINT_L49B6
 ; 
 ;------------------------------------------------------------
 DRAW_STRUCTURE_L3B58:
-		lda SHFAMT
+		lda LINE_CNT_6F
 		sta POINT_LINE_COUNT_17
 		jsr BLACK_LINES_L53BD
 L3B5F:		ldy POINT_LINE_COUNT_17
@@ -4402,7 +4445,7 @@ L3C94:		txa
 L3CAD:		lda #$FF
 		sta L00B6
 		sta OBJECT_VISIBILITY_6940,X
-		jsr L37ED
+		jsr OBJ_DRAW_LIST_37ED
 		clc
 		rts
 			
@@ -4549,7 +4592,7 @@ L3D8C:		lda ROOM_NO_CD
 		sta OBJ_Y_MSB_L64C0,Y
 		lda CUR_Y_HSB_75
 		sta OBJ_Y_HSB_L6580,Y
-		jmp L37ED
+		jmp OBJ_DRAW_LIST_37ED
 
 ;------------------------------------------------------------
 ; 
@@ -5732,7 +5775,7 @@ L467E:		lda PLANET_UNDERGROUND_A6
 		jsr L397E
 		lda #$00
 		sta ROOM_NO_CD
-		jsr L37ED
+		jsr OBJ_DRAW_LIST_37ED
 		jmp L58FF
 
 ;------------------------------------------------------------
@@ -7773,7 +7816,7 @@ L5440:		sta L00C5
 		sta L00C6
 		lda COLPF2S_A4
 L5448:		sta L00C7
-		lda L00C2
+		lda ROOM_COLOR_C2
 		sta COLBAKS_A1
 		sta COLPF0S_A2
 		sta COLPF1S_A3
@@ -7796,18 +7839,18 @@ L546E:		lda POINT_LINE_COUNT_17
 		cmp #$94
 		bcc L545D
 		
-		lda L00C0
+		lda BACKGND_COLOR_C0
 		sta COLBAKS_A1
 		lda L00C1
 		sta COLPF0S_A2
-		lda L00C3
+		lda LINE_COLOR_C3
 		sta COLPF2S_A4
-L5485:		ldx L00F6
+L5485:		ldx MESSAGE_TO_SEND_F6
 		beq L548C
 		jsr START_MESSAGE_L322A
 		
 L548C:		ldy #$00
-		sty L00F6
+		sty MESSAGE_TO_SEND_F6
 		sty room_change_L00C8
 		sty AUDC1
 		dey
@@ -7816,13 +7859,13 @@ L548C:		ldy #$00
 ;------------------------------------------------------------
 ; 
 ;------------------------------------------------------------
-L5499:		lda L00C0
+L5499:		lda BACKGND_COLOR_C0
 		sta L00C4
 		lda L00C1
 		sta L00C5
-		lda L00C2
+		lda ROOM_COLOR_C2
 		sta L00C6
-		lda L00C3
+		lda LINE_COLOR_C3
 		sta L00C7
 		lda COLPF1S_A3
 		sta COLBAKS_A1
@@ -7848,13 +7891,13 @@ L54C3:		lda VCOUNT
 		sbc #$04
 		sta POINT_LINE_COUNT_17
 		bcs L54BF
-		lda L00C2
+		lda ROOM_COLOR_C2
 		sta COLPF1S_A3
-		lda L00C0
+		lda BACKGND_COLOR_C0
 		sta COLBAKS_A1
 		lda L00C1
 		sta COLPF0S_A2
-		lda L00C3
+		lda LINE_COLOR_C3
 		sta COLPF2S_A4
 		lda #$01
 		sta AUDF1
@@ -8471,7 +8514,7 @@ L58FC: 		jmp L586F
 ;------------------------------------------------------------
 L58FF: 		ldx #$03
 L5901: 		lda L5953,X
-		sta L00C0,X
+		sta BACKGND_COLOR_C0,X
 		dex
 		bpl L5901
 		rts
@@ -8704,7 +8747,7 @@ L5A60:		jsr SOUND_EFFECT_L5AFB
 L5A67:		lda L6B56
 		sta L00C4,X
 		lda L6B54+1
-		sta L00C0,X
+		sta BACKGND_COLOR_C0,X
 		dex
 		bpl L5A67
 		lda #$0D
@@ -8720,10 +8763,10 @@ L5A7C:		ldx #$00
 L5A87:		stx L00F9
 		jsr SOUND_EFFECT_L5AFB
 		lda L6B51
-		sta L00C0
+		sta BACKGND_COLOR_C0
 		sta L00C1
-		sta L00C2
-		sta L00C3
+		sta ROOM_COLOR_C2
+		sta LINE_COLOR_C3
 		lda #$00
 		ldx #$4A
 		ldy #$01
@@ -9835,10 +9878,10 @@ L61CC:		lda L00C4,Y
 		sta COLPM3,Y
 L61D2:		lda L00C4,Y
 		sta COLBAKS_A1,Y
-		lda L00C0,Y
+		lda BACKGND_COLOR_C0,Y
 		sta L00C4,Y
 		lda L6B48,X
-		sta L00C0,Y
+		sta BACKGND_COLOR_C0,Y
 		dey
 		beq L61D2
 		bpl L61CC
@@ -9881,14 +9924,14 @@ L6205:		ldx L00CC
 		cpx #$0E
 		beq L61FA
 		ldy #$03
-L6231:		lda L00C0,Y
+L6231:		lda BACKGND_COLOR_C0,Y
 		sta COLPM3,Y
 L6237:		lda COLBAKS_A1,Y
 		sta L00C4,Y
-		lda L00C0,Y
+		lda BACKGND_COLOR_C0,Y
 		sta COLBAKS_A1,Y
 		lda L6B49+2,X
-		sta L00C0,Y
+		sta BACKGND_COLOR_C0,Y
 		dey
 		beq L6237
 		bpl L6231
@@ -10001,8 +10044,9 @@ R40		= $C428
 R41		= $C436
 R42		= $C444
 R43		= $C452
-R44		= $C45C
-R45		= $C46A
+R44		= $C45C		; 0  1  2  3  4  5  6  7  8  9  a  b  d  d
+R45		= $C46A		;08 a2 84 8a 00 22 03 04 00 12 20 04 04 00
+				;			  
 R46		= $C478
 R47		= $C48A
 R48		= $C49C
@@ -10131,18 +10175,18 @@ ROOM_STRUCT_PTR_LO_L6300:
 		.byte <R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00
 
 ROOM_STRUCT_PTR_HI_L63C0:		
-		.byte >R00,>R00,>R01,>R02,>R03,>R04,>R05,>R06,>R07,>R08,>R09,>R0A,>R0B,>R0C,>R0D,>R0E
-		.byte >R0F,>R10,>R11,>R12,>R13,>R14,>R15,>R16,>R17,>R18,>R19,>R1A,>R1B,>R1C,>R1D,>R1E
-		.byte >R1F,>R20,>R21,>R22,>R23,>R24,>R25,>R26,>R27,>R28,>R29,>R2A,>R2B,>R2C,>R2D,>R2E
-		.byte >R2F,>R30,>R31,>R32,>R33,>R34,>R35,>R36,>R37,>R38,>R39,>R3A,>R3B,>R3C,>R3D,>R3E
-		.byte >R3F,>R40,>R41,>R42,>R43,>R44,>R45,>R46,>R47,>R48,>R49,>R4A,>R4B,>R4C,>R4D,>R4E
-		.byte >R4F,>R50,>R51,>R52,>R53,>R54,>R55,>R56,>R57,>R58,>R59,>R5A,>R5B,>R5C,>R5D,>R5E
-		.byte >R5F,>R60,>R61,>R62,>R63,>R64,>R65,>R66,>R67,>R68,>R69,>R6A,>R6B,>R6C,>R6D,>R6E
-		.byte >R6F,>R70,>R71,>R72,>R73,>R74,>R75,>R76,>R77,>R78,>R79,>R7A,>R7B,>R7C,>R7D,>R7E
-		.byte >R7F,>R80,>R81,>R82,>R83,>R84,>R85,>R86,>R87,>R88,>R89,>R8A,>R8B,>R8C,>R8D,>R8E
-		.byte >R8F,>R90,>R91,>R92,>R93,>R94,>R95,>R96,>R97,>R98,>R99,>R9A,>R9B,>R9C,>R9D,>R9E
-		.byte >R9F,>RA0,>RA1,>RA2,>RA3,>RA4,>RA5,>RA6,>RA7,>RA8,>RA9,>RAA,>RAB,>RAC,>RAD,>R00
-		.byte >R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00
+		.byte >R00,>R00,>R01,>R02,>R03,>R04,>R05,>R06,>R07,>R08,>R09,>R0A,>R0B,>R0C,>R0D,>R0E	;0
+		.byte >R0F,>R10,>R11,>R12,>R13,>R14,>R15,>R16,>R17,>R18,>R19,>R1A,>R1B,>R1C,>R1D,>R1E	;1
+		.byte >R1F,>R20,>R21,>R22,>R23,>R24,>R25,>R26,>R27,>R28,>R29,>R2A,>R2B,>R2C,>R2D,>R2E	;2
+		.byte >R2F,>R30,>R31,>R32,>R33,>R34,>R35,>R36,>R37,>R38,>R39,>R3A,>R3B,>R3C,>R3D,>R3E	;3
+		.byte >R3F,>R40,>R41,>R42,>R43,>R44,>R45,>R46,>R47,>R48,>R49,>R4A,>R4B,>R4C,>R4D,>R4E	;4
+		.byte >R4F,>R50,>R51,>R52,>R53,>R54,>R55,>R56,>R57,>R58,>R59,>R5A,>R5B,>R5C,>R5D,>R5E	;5
+		.byte >R5F,>R60,>R61,>R62,>R63,>R64,>R65,>R66,>R67,>R68,>R69,>R6A,>R6B,>R6C,>R6D,>R6E	;6
+		.byte >R6F,>R70,>R71,>R72,>R73,>R74,>R75,>R76,>R77,>R78,>R79,>R7A,>R7B,>R7C,>R7D,>R7E	;7
+		.byte >R7F,>R80,>R81,>R82,>R83,>R84,>R85,>R86,>R87,>R88,>R89,>R8A,>R8B,>R8C,>R8D,>R8E	;8
+		.byte >R8F,>R90,>R91,>R92,>R93,>R94,>R95,>R96,>R97,>R98,>R99,>R9A,>R9B,>R9C,>R9D,>R9E	;9
+		.byte >R9F,>RA0,>RA1,>RA2,>RA3,>RA4,>RA5,>RA6,>RA7,>RA8,>RA9,>RAA,>RAB,>RAC,>RAD,>R00	;A
+		.byte >R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00	;B
 
 L6320		= $6320
 
@@ -10254,8 +10298,8 @@ L6887		= $6887
 L68C7		= $68C7
 
 ;		
-; $00 = visible from afar
-;
+; $00 = visible from afar?
+; room-no!
 OBJECT_VISIBILITY_6940:		
 		.byte $00
 L6941:		.byte $00,$00,$07,$03,$02,$36
