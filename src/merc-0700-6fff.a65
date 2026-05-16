@@ -211,7 +211,7 @@ L00A8       = $00A8
 L00A9       = $00A9
 YAW_WALK_AA       = $00AA
 L00AB       = $00AB
-L00AC       = $00AC
+WALL_COLLISION_AC       = $00AC
 OBJECT_NUMBER_AD       = $00AD
 L00AE       = $00AE
 L00AF       = $00AF
@@ -242,7 +242,7 @@ room_change_L00C8       = $00C8
 L00C9       = $00C9
 L00CB       = $00CB
 L00CC       = $00CC
-L00CD       = $00CD
+ROOM_NO_CD       = $00CD
 L00CE       = $00CE
 L00CF       = $00CF
 L00D0       = $00D0
@@ -279,7 +279,7 @@ L00F3       = $00F3
 L00F4       = $00F4
 SOUND_F5       = $00F5
 L00F6       = $00F6
-L00F7       = $00F7
+ONLY_ONCE_F7       = $00F7
 CRASH_F8       = $00F8
 L00F9       = $00F9
 L00FA       = $00FA
@@ -1211,6 +1211,7 @@ GROUND_STRUCTURE_X_LSB_1D00:
 		.byte $56,$69,$4F,$35,$1D,$08,$46,$79,$25,$6C,$3C,$18,$24,$1E,$24,$9E
 		.byte $24,$A2,$24,$22,$24,$28,$24,$E8,$00,$21,$20,$21,$3F,$21,$00,$1F
 		.byte $20,$1F,$3F,$1F,$23,$31,$23,$00,$01,$12,$23,$34,$45,$56,$67,$78
+		
 GROUND_STRUCTURE_X_MSB_1D40:
 		.byte $6F,$77,$75,$74,$61,$61,$9E,$9E,$94,$94,$9A,$9A,$F9,$00,$0F,$10
 		.byte $10,$11,$11,$12,$12,$13,$13,$14,$14,$15,$15,$16,$16,$17,$17,$00
@@ -1480,6 +1481,7 @@ L275F		= $275F
 L26A0		= $26A0
 L2740		= $2740
 L274F		= $274F
+L274E		= $274E
 L274D		= $274D
 ;------------------------------------------------------------
 ; DISPLAY LIST
@@ -1601,7 +1603,7 @@ L297F:      	.byte $00
 ;
 ;------------------------------------------------------------
 		jsr L5FEB
-		lda L00CD
+		lda ROOM_NO_CD
 		beq L298D
 		jsr L35E0
 		jmp MAIN_LOOP_L29DF
@@ -1630,7 +1632,7 @@ RESTART_L2996:	jsr SCATTER_INVENTORY_L2A75
 		sta CUR_Y_MSB_74
 		sta CUR_Y_HSB_75
 		sta PLANET_UNDERGROUND_A6				;outddors
-		sta L00CD
+		sta ROOM_NO_CD
 		lda #$01						;set Dominion Dart
 		sta CRAFT_ID_WALKING_A7
 		jsr COPY_SHIP_DATA_L4189				;copy ship data
@@ -1759,7 +1761,7 @@ L2A7C:		jsr GET_RANDOM_L53B1				;obj X HSB 0-15
 		sta OBJ_Y_MSB_L64C0,Y
 		sta OBJ_Y_LSB_L68C0,Y
 		
-		sta OBJECT_VISIBILITY_6940,Y
+		sta OBJECT_VISIBILITY_6940,Y			;set to visible from afar
 		
 		lda OBJECT_ATTRIBUTES_69C0,Y			;reset bit 7 (in inventory list) in obj attributes
 		and #$7F
@@ -2093,7 +2095,7 @@ L2CF5:		lda CRAFT_ID_WALKING_A7
 		bne L2CF4
 		lda #$0F
 		sta SOUND_F5
-		lda L00CD
+		lda ROOM_NO_CD
 		sta OBJECT_VISIBILITY_6940,Y
 		lda #$10
 		sta L70A8,Y
@@ -2451,7 +2453,7 @@ BENSON_2F8F:	iny
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
-BENSON_2F98:	ldx L274D+1
+BENSON_2F98:	ldx L274E
 		lda L274F
 		cmp OBJECT_VISIBILITY_6940,X
 		beq L300B
@@ -2461,7 +2463,7 @@ BENSON_2F98:	ldx L274D+1
 ;
 ;------------------------------------------------------------
 BENSON_2FA5:	lda L274F
-		cmp L00CD
+		cmp ROOM_NO_CD
 		beq L300B
 		bne L3008
 		
@@ -2477,7 +2479,7 @@ BENSON_2FAE:	lda L293B
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
-BENSON_2FB8:	lda L274D+1
+BENSON_2FB8:	lda L274E
 		jsr L3890
 		bne L3008
 		beq L300B
@@ -2531,7 +2533,7 @@ BENSON_2FF3:	ldx L274D
 ;------------------------------------------------------------
 BENSON_2FFD:	iny
 		lda (BENSON_PTR_LO_1D),Y
-		ldx L274D+1
+		ldx L274E
 		and OBJECT_ATTRIBUTES_69C0,X
 		bne L300B
 		
@@ -2617,7 +2619,7 @@ BENSON_3053:	ldx L00E5
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
-BENSON_305C:	ldx L274D+1
+BENSON_305C:	ldx L274E
 		iny
 		lda (BENSON_PTR_LO_1D),Y
 		bmi L306D
@@ -3380,10 +3382,10 @@ L3530:		ldx L01BE
 ; 
 ;------------------------------------------------------------
 SETUP_ROOM_L353C:      
-		ldx MUL_LO_06
+		ldx MUL_LO_06					;room number
 		bne L3574
 		stx PLANET_UNDERGROUND_A6
-		stx L00CD
+		stx ROOM_NO_CD
 		jsr L37ED
 		lda #$09					;Prestinium
 		sta CRAFT_ID_WALKING_A7
@@ -3417,6 +3419,7 @@ L357B:		sta PTR_LO_19
 		ldy #$00
 		lda (PTR_LO_19),Y
 		bpl L35C6
+		
 		cpx #$72
 		bne L3597
 		jsr GET_RANDOM_L53B1
@@ -3425,7 +3428,7 @@ L357B:		sta PTR_LO_19
 		adc #$0A
 		tay
 		bne L35A5
-L3597:		lda L00CD
+L3597:		lda ROOM_NO_CD
 		ldy #$0A
 		cmp (PTR_LO_19),Y
 		bne L35A5
@@ -3452,8 +3455,10 @@ L35A5:		lda (PTR_LO_19),Y
 		cpx #$7F					;laboratory
 		bne L35C6
 		jsr FLIP_VIEW_FLAG_37CE
+		
+;
 L35C6:		ldy MUL_HI_07
-		stx L00CD
+		stx ROOM_NO_CD
 		lda (PTR_LO_19),Y
 		sta CUR_X_MSB_71
 		iny
@@ -3484,6 +3489,7 @@ L35ED:		sta GROUND_STRUCTURE_X_LSB_1D00,Y
 		sta GROUND_STRUCTURE_Z_HSB_9FC0,Y
 		dey
 		bpl L35ED
+		
 		ldy #$0C
 L360D:		lda L37B3+2,Y
 		sta L1E7F,Y
@@ -3655,14 +3661,15 @@ L37E6:		ldx #$7F
 		rts
 
 ;------------------------------------------------------------
-; Fill object_to_draw list
+; Fill object_to_draw list at ground?
+; board, land, crash
 ;------------------------------------------------------------
 L37ED:		lda #$00
 		ldx L69E8
 		bpl L37F6
 		lda #$66
 L37F6:		sta L9AB5
-		ldx L00CD
+		ldx ROOM_NO_CD
 		ldy CHUNK_CNT_B2				;$3F normally?
 		stx TMP_04
 		ldx #$00
@@ -3683,7 +3690,7 @@ L380D:		dey
 ; 
 ;------------------------------------------------------------
 L3817:		lda #$00
-		sta L00AC
+		sta WALL_COLLISION_AC				;clear collision
 		ldx CUR_X_MSB_71
 		bmi L3827
 		bne L3834
@@ -3696,7 +3703,7 @@ L3827:		lda #$20
 		sta CUR_X_MSB_71
 		sta CUR_X_HSB_72
 		tax
-		dec L00AC
+		dec WALL_COLLISION_AC
 L3834:		ldy CUR_Z_MSB_77
 		bmi L3840
 		bne L384D
@@ -3709,7 +3716,7 @@ L3840:		lda #$20
 		sta CUR_Z_MSB_77
 		sta CUR_Z_HSB_78
 		tay
-		dec L00AC
+		dec WALL_COLLISION_AC
 L384D:		inx
 		cpx GROUND_STRUCTURE_X_MSB_1D40
 		bcc L3867
@@ -3722,7 +3729,7 @@ L385B:		ldx GROUND_STRUCTURE_X_MSB_1D40
 		stx CUR_X_MSB_71
 		lda #$DF
 		sta CUR_X_LSB_70
-		dec L00AC
+		dec WALL_COLLISION_AC
 L3867:		iny
 		cpy GROUND_STRUCTURE_Z_MSB_1E40
 		bcc L3881
@@ -3735,14 +3742,14 @@ L3875:		ldy GROUND_STRUCTURE_Z_MSB_1E40
 		sty CUR_Z_MSB_77
 		lda #$DF
 		sta CUR_Z_LSB_76
-		dec L00AC
-L3881:		lda L00AC
+		dec WALL_COLLISION_AC
+L3881:		lda WALL_COLLISION_AC
 		beq L388D
-		ldx L00F7
+		ldx ONLY_ONCE_F7
 		bne L388D
 		ldx #$37
 		stx SOUND_F5
-L388D:		sta L00F7
+L388D:		sta ONLY_ONCE_F7
 		rts
 	    
 ;------------------------------------------------------------
@@ -4522,7 +4529,7 @@ L3D78:		ldx NUM_INVENTORY_ITEMS_EB
 		sta OBJECT_ATTRIBUTES_69C0,Y
 		jsr SOUND_EFFECT_L5AFB
 		
-L3D8C:		lda L00CD
+L3D8C:		lda ROOM_NO_CD
 		sta OBJECT_VISIBILITY_6940,Y
 		lda CUR_X_LSB_70
 		sta OBJ_X_LSB_L6880,Y
@@ -5717,14 +5724,14 @@ L467E:		lda PLANET_UNDERGROUND_A6
 		lda #$71
 		sta CUR_X_MSB_71
 		sta CUR_Z_MSB_77
-		ldx L00CD
+		ldx ROOM_NO_CD
 		lda HANGAR_POS_5B02-1,X
 		sta CUR_X_HSB_72
 		lda L5B09,X
 		sta CUR_Z_HSB_78
 		jsr L397E
 		lda #$00
-		sta L00CD
+		sta ROOM_NO_CD
 		jsr L37ED
 		jmp L58FF
 
@@ -5745,7 +5752,7 @@ L46C0:		lda PLANET_UNDERGROUND_A6
 		bne L46E2
 L46C4:		cpx #$08
 		bne L46F2
-		ldx L00CD
+		ldx ROOM_NO_CD
 		ldy #$07
 		stx MUL_LO_06
 		sty MUL_HI_07
@@ -8692,7 +8699,7 @@ L5A52:		cpx #$05					;are we at 03-15?
 		ldx #$39					;"pass holders only"
 L5A5D:		jmp START_MESSAGE_L322A
 L5A60:		jsr SOUND_EFFECT_L5AFB
-		stx L00CD
+		stx ROOM_NO_CD
 		ldx #$03
 L5A67:		lda L6B56
 		sta L00C4,X
@@ -8706,7 +8713,7 @@ L5A67:		lda L6B56
 		bmi L5A9D
 L5A7C:		ldx #$00
 		lda #$08
-		cmp L00CD
+		cmp ROOM_NO_CD
 		bcc L5A51
 		bne L5A87
 		dex
@@ -9012,7 +9019,7 @@ L5C39:		lda LIFT_UP_DOWN_CA
 		
 L5C3E:		lda L69DA
 		bpl L5C5F
-		lda L00CD
+		lda ROOM_NO_CD
 		bne L5C5F
 		lda GROUND_STRUC_OBJ_TO_DRAW_B5
 		beq L5C5F
@@ -9922,33 +9929,220 @@ L6278:      	.byte $05
 		.byte $0A,$0C,$0F,$00,$16,$19,$1A,$1C,$1D,$1F,$20,$3D,$3D,$3C,$3C,$3F
 		.byte $3F,$3F,$3F,$3C,$3C,$3E,$3F,$3F
 
+R00		= $C000
+R01		= $C012
+R02		= $C034
+R03		= $C04E
+R04		= $C074
+R05		= $C086
+R06		= $C09C
+R07		= $C0A6
+R08		= $C0B8
+R09		= $C0C6
+R0A		= $C0DC
+R0B		= $C0EA
+R0C		= $C0FC
+R0D		= $C10A
+R0E		= $C118
+R0F		= $C122
+
+R10		= $C12C
+R11		= $C13E
+R12		= $C14C
+R13		= $C15A
+R14		= $C170
+R15		= $C182
+R16		= $C190
+R17		= $C19E
+R18		= $C1B0
+R19		= $C1C2
+R1A		= $C1D4
+R1B		= $C1E6
+R1C		= $C1F4
+R1D		= $C202
+R1E		= $C214
+R1F		= $C222
+
+R20		= $C23C
+R21		= $C262
+R22		= $C274
+R23		= $C286
+R24		= $C298
+R25		= $C2AA
+R26		= $C2BC
+R27		= $C2CA
+R28		= $C2DC
+R29		= $C2E6
+R2A		= $C2F0
+R2B		= $C2FE
+R2C		= $C314
+R2D		= $C322
+R2E		= $C334
+R2F		= $C33E
+
+R30		= $C34C
+R31		= $C35E
+R32		= $C36C
+R33		= $C37A
+R34		= $C384
+R35		= $C392
+R36		= $C3A0
+R37		= $C3AE
+R38		= $C3BC
+R39		= $C3C6
+R3A		= $C3D0
+R3B		= $C3DE
+R3C		= $C3EC
+R3D		= $C3FE
+R3E		= $C40C	
+R3F		= $C41A
+
+R40		= $C428
+R41		= $C436
+R42		= $C444
+R43		= $C452
+R44		= $C45C
+R45		= $C46A
+R46		= $C478
+R47		= $C48A
+R48		= $C49C
+R49		= $C4A6
+R4A		= $C4B8
+R4B		= $C4C6
+R4C		= $C4D8
+R4D		= $C4E6
+R4E		= $C4F4
+R4F		= $C506
+
+R50		= $C510
+R51		= $C51A
+R52		= $C524
+R53		= $C536
+R54		= $C548
+R55		= $C55E
+R56		= $C570
+R57		= $C582
+R58		= $C590
+R59		= $C5A2
+R5A		= $C5B0
+R5B		= $C5C2
+R5C		= $C5D4
+R5D		= $C5EA
+R5E		= $C5FC
+R5F		= $C616
+
+R60		= $C628
+R61		= $C63A
+R62		= $C648
+R63		= $C666
+R64		= $C674
+R65		= $C682
+R66		= $C694
+R67		= $C6A6
+R68		= $C6B8
+R69		= $C6CA
+R6A		= $C6DC
+R6B		= $C6EE
+R6C		= $C704
+R6D		= $C712
+R6E		= $C724
+R6F		= $C736
+
+R70		= $C74C
+R71		= $C75E
+R72		= $C778
+R73		= $C786
+R74		= $C794
+R75		= $C7A2
+R76		= $C7B0
+R77		= $C7BE
+R78		= $C7CC
+R79		= $C7DA
+R7A		= $C7E8
+R7B		= $C7F6
+R7C		= $C804
+R7D		= $C812
+R7E		= $C820
+R7F		= $C82E
+
+R80		= $C83C
+R81		= $C84A
+R82		= $C858
+R83		= $C866
+R84		= $C874
+R85		= $C882
+R86		= $C890
+R87		= $C89E
+R88		= $C8B0
+R89		= $C8BA
+R8A		= $C8C8
+R8B		= $C8D6
+R8C		= $C8E4
+R8D		= $C8FE
+R8E		= $C90C
+R8F		= $C91A
+
+R90		= $C928
+R91		= $C93A
+R92		= $C948
+R93		= $C956
+R94		= $C968
+R95		= $C97A
+R96		= $C990
+R97		= $C99E
+R98		= $C9AC
+R99		= $C9C6
+R9A		= $C9D0
+R9B		= $C9E2
+R9C		= $C9FC
+R9D		= $CA1A
+R9E		= $CA28
+R9F		= $CA36
+
+RA0		= $CA40
+RA1		= $CA5E
+RA2		= $CA68
+RA3		= $CA72
+RA4		= $CA7C
+RA5		= $CA86
+RA6		= $CA90
+RA7		= $CA9A
+RA8		= $CAA4
+RA9		= $CAC6
+RAA		= $CAD8
+RAB		= $CAEE
+RAC		= $CB04
+RAD		= $CB16
+
+;12 * 16 rooms = 192
+
 ROOM_STRUCT_PTR_LO_L6300:      	
-		.byte $00,$00,$12,$34,$4E,$74,$86,$9C,$A6,$B8,$C6,$DC,$EA,$FC,$0A,$18
-		.byte $22,$2C,$3E,$4C,$5A,$70,$82,$90,$9E,$B0,$C2,$D4,$E6,$F4,$02,$14
-		.byte $22,$3C,$62,$74,$86,$98,$AA,$BC,$CA,$DC,$E6,$F0,$FE,$14,$22,$34
-		.byte $3E,$4C,$5E,$6C,$7A,$84,$92,$A0,$AE,$BC,$C6,$D0,$DE,$EC,$FE,$0C
-		.byte $1A,$28,$36,$44,$52,$5C,$6A,$78,$8A,$9C,$A6,$B8,$C6,$D8,$E6,$F4
-		.byte $06,$10,$1A,$24,$36,$48,$5E,$70,$82,$90,$A2,$B0,$C2,$D4,$EA,$FC
-		.byte $16,$28,$3A,$48,$66,$74,$82,$94,$A6,$B8,$CA,$DC,$EE,$04,$12,$24
-		.byte $36,$4C,$5E,$78,$86,$94,$A2,$B0,$BE,$CC,$DA,$E8,$F6,$04,$12,$20
-		.byte $2E,$3C,$4A,$58,$66,$74,$82,$90,$9E,$B0,$BA,$C8,$D6,$E4,$FE,$0C
-		.byte $1A,$28,$3A,$48,$56,$68,$7A,$90,$9E,$AC,$C6,$D0,$E2,$FC,$1A,$28
-		.byte $36,$40,$5E,$68,$72,$7C,$86,$90,$9A,$A4,$C6,$D8,$EE,$04,$16,$00
-		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-		
+		.byte <R00,<R00,<R01,<R02,<R03,<R04,<R05,<R06,<R07,<R08,<R09,<R0A,<R0B,<R0C,<R0D,<R0E
+		.byte <R0F,<R10,<R11,<R12,<R13,<R14,<R15,<R16,<R17,<R18,<R19,<R1A,<R1B,<R1C,<R1D,<R1E
+		.byte <R1F,<R20,<R21,<R22,<R23,<R24,<R25,<R26,<R27,<R28,<R29,<R2A,<R2B,<R2C,<R2D,<R2E
+		.byte <R2F,<R30,<R31,<R32,<R33,<R34,<R35,<R36,<R37,<R38,<R39,<R3A,<R3B,<R3C,<R3D,<R3E
+		.byte <R3F,<R40,<R41,<R42,<R43,<R44,<R45,<R46,<R47,<R48,<R49,<R4A,<R4B,<R4C,<R4D,<R4E
+		.byte <R4F,<R50,<R51,<R52,<R53,<R54,<R55,<R56,<R57,<R58,<R59,<R5A,<R5B,<R5C,<R5D,<R5E
+		.byte <R5F,<R60,<R61,<R62,<R63,<R64,<R65,<R66,<R67,<R68,<R69,<R6A,<R6B,<R6C,<R6D,<R6E
+		.byte <R6F,<R70,<R71,<R72,<R73,<R74,<R75,<R76,<R77,<R78,<R79,<R7A,<R7B,<R7C,<R7D,<R7E
+		.byte <R7F,<R80,<R81,<R82,<R83,<R84,<R85,<R86,<R87,<R88,<R89,<R8A,<R8B,<R8C,<R8D,<R8E
+		.byte <R8F,<R90,<R91,<R92,<R93,<R94,<R95,<R96,<R97,<R98,<R99,<R9A,<R9B,<R9C,<R9D,<R9E
+		.byte <R9F,<RA0,<RA1,<RA2,<RA3,<RA4,<RA5,<RA6,<RA7,<RA8,<RA9,<RAA,<RAB,<RAC,<RAD,<R00
+		.byte <R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00
+
 ROOM_STRUCT_PTR_HI_L63C0:		
-		.byte $C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C1,$C1
-		.byte $C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C2,$C2
-		.byte $C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C3,$C3,$C3
-		.byte $C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C4
-		.byte $C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4
-		.byte $C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5
-		.byte $C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C7,$C7,$C7
-		.byte $C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C8,$C8,$C8
-		.byte $C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C9
-		.byte $C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$CA,$CA
-		.byte $CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CB,$CB,$C0
-		.byte $C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0
+		.byte >R00,>R00,>R01,>R02,>R03,>R04,>R05,>R06,>R07,>R08,>R09,>R0A,>R0B,>R0C,>R0D,>R0E
+		.byte >R0F,>R10,>R11,>R12,>R13,>R14,>R15,>R16,>R17,>R18,>R19,>R1A,>R1B,>R1C,>R1D,>R1E
+		.byte >R1F,>R20,>R21,>R22,>R23,>R24,>R25,>R26,>R27,>R28,>R29,>R2A,>R2B,>R2C,>R2D,>R2E
+		.byte >R2F,>R30,>R31,>R32,>R33,>R34,>R35,>R36,>R37,>R38,>R39,>R3A,>R3B,>R3C,>R3D,>R3E
+		.byte >R3F,>R40,>R41,>R42,>R43,>R44,>R45,>R46,>R47,>R48,>R49,>R4A,>R4B,>R4C,>R4D,>R4E
+		.byte >R4F,>R50,>R51,>R52,>R53,>R54,>R55,>R56,>R57,>R58,>R59,>R5A,>R5B,>R5C,>R5D,>R5E
+		.byte >R5F,>R60,>R61,>R62,>R63,>R64,>R65,>R66,>R67,>R68,>R69,>R6A,>R6B,>R6C,>R6D,>R6E
+		.byte >R6F,>R70,>R71,>R72,>R73,>R74,>R75,>R76,>R77,>R78,>R79,>R7A,>R7B,>R7C,>R7D,>R7E
+		.byte >R7F,>R80,>R81,>R82,>R83,>R84,>R85,>R86,>R87,>R88,>R89,>R8A,>R8B,>R8C,>R8D,>R8E
+		.byte >R8F,>R90,>R91,>R92,>R93,>R94,>R95,>R96,>R97,>R98,>R99,>R9A,>R9B,>R9C,>R9D,>R9E
+		.byte >R9F,>RA0,>RA1,>RA2,>RA3,>RA4,>RA5,>RA6,>RA7,>RA8,>RA9,>RAA,>RAB,>RAC,>RAD,>R00
+		.byte >R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00
 
 L6320		= $6320
 

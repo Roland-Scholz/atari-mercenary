@@ -215,7 +215,7 @@ Current file: ..\src\merc-0700-6fff.a65
 000000r 1               L00A9       = $00A9
 000000r 1               YAW_WALK_AA       = $00AA
 000000r 1               L00AB       = $00AB
-000000r 1               L00AC       = $00AC
+000000r 1               WALL_COLLISION_AC       = $00AC
 000000r 1               OBJECT_NUMBER_AD       = $00AD
 000000r 1               L00AE       = $00AE
 000000r 1               L00AF       = $00AF
@@ -246,7 +246,7 @@ Current file: ..\src\merc-0700-6fff.a65
 000000r 1               L00C9       = $00C9
 000000r 1               L00CB       = $00CB
 000000r 1               L00CC       = $00CC
-000000r 1               L00CD       = $00CD
+000000r 1               ROOM_NO_CD       = $00CD
 000000r 1               L00CE       = $00CE
 000000r 1               L00CF       = $00CF
 000000r 1               L00D0       = $00D0
@@ -283,7 +283,7 @@ Current file: ..\src\merc-0700-6fff.a65
 000000r 1               L00F4       = $00F4
 000000r 1               SOUND_F5       = $00F5
 000000r 1               L00F6       = $00F6
-000000r 1               L00F7       = $00F7
+000000r 1               ONLY_ONCE_F7       = $00F7
 000000r 1               CRASH_F8       = $00F8
 000000r 1               L00F9       = $00F9
 000000r 1               L00FA       = $00FA
@@ -2136,6 +2136,7 @@ Current file: ..\src\merc-0700-6fff.a65
 001D30  1  20 1F 3F 1F  		.byte $20,$1F,$3F,$1F,$23,$31,$23,$00,$01,$12,$23,$34,$45,$56,$67,$78
 001D34  1  23 31 23 00  
 001D38  1  01 12 23 34  
+001D40  1               
 001D40  1               GROUND_STRUCTURE_X_MSB_1D40:
 001D40  1  6F 77 75 74  		.byte $6F,$77,$75,$74,$61,$61,$9E,$9E,$94,$94,$9A,$9A,$F9,$00,$0F,$10
 001D44  1  61 61 9E 9E  
@@ -2714,6 +2715,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002800  1               L26A0		= $26A0
 002800  1               L2740		= $2740
 002800  1               L274F		= $274F
+002800  1               L274E		= $274E
 002800  1               L274D		= $274D
 002800  1               ;------------------------------------------------------------
 002800  1               ; DISPLAY LIST
@@ -2877,7 +2879,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002980  1               ;
 002980  1               ;------------------------------------------------------------
 002980  1  20 EB 5F     		jsr L5FEB
-002983  1  A5 CD        		lda L00CD
+002983  1  A5 CD        		lda ROOM_NO_CD
 002985  1  F0 06        		beq L298D
 002987  1  20 E0 35     		jsr L35E0
 00298A  1  4C DF 29     		jmp MAIN_LOOP_L29DF
@@ -2906,7 +2908,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0029A3  1  85 74        		sta CUR_Y_MSB_74
 0029A5  1  85 75        		sta CUR_Y_HSB_75
 0029A7  1  85 A6        		sta PLANET_UNDERGROUND_A6				;outddors
-0029A9  1  85 CD        		sta L00CD
+0029A9  1  85 CD        		sta ROOM_NO_CD
 0029AB  1  A9 01        		lda #$01						;set Dominion Dart
 0029AD  1  85 A7        		sta CRAFT_ID_WALKING_A7
 0029AF  1  20 89 41     		jsr COPY_SHIP_DATA_L4189				;copy ship data
@@ -3035,7 +3037,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002A9D  1  99 C0 64     		sta OBJ_Y_MSB_L64C0,Y
 002AA0  1  99 C0 68     		sta OBJ_Y_LSB_L68C0,Y
 002AA3  1               
-002AA3  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
+002AA3  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y			;set to visible from afar
 002AA6  1               
 002AA6  1  B9 C0 69     		lda OBJECT_ATTRIBUTES_69C0,Y			;reset bit 7 (in inventory list) in obj attributes
 002AA9  1  29 7F        		and #$7F
@@ -3369,7 +3371,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002D02  1  D0 F0        		bne L2CF4
 002D04  1  A9 0F        		lda #$0F
 002D06  1  85 F5        		sta SOUND_F5
-002D08  1  A5 CD        		lda L00CD
+002D08  1  A5 CD        		lda ROOM_NO_CD
 002D0A  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
 002D0D  1  A9 10        		lda #$10
 002D0F  1  99 A8 70     		sta L70A8,Y
@@ -3727,7 +3729,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002F98  1               ;------------------------------------------------------------
 002F98  1               ;
 002F98  1               ;------------------------------------------------------------
-002F98  1  AE 4E 27     BENSON_2F98:	ldx L274D+1
+002F98  1  AE 4E 27     BENSON_2F98:	ldx L274E
 002F9B  1  AD 4F 27     		lda L274F
 002F9E  1  DD 40 69     		cmp OBJECT_VISIBILITY_6940,X
 002FA1  1  F0 68        		beq L300B
@@ -3737,7 +3739,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002FA5  1               ;
 002FA5  1               ;------------------------------------------------------------
 002FA5  1  AD 4F 27     BENSON_2FA5:	lda L274F
-002FA8  1  C5 CD        		cmp L00CD
+002FA8  1  C5 CD        		cmp ROOM_NO_CD
 002FAA  1  F0 5F        		beq L300B
 002FAC  1  D0 5A        		bne L3008
 002FAE  1               
@@ -3753,7 +3755,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002FB8  1               ;------------------------------------------------------------
 002FB8  1               ;
 002FB8  1               ;------------------------------------------------------------
-002FB8  1  AD 4E 27     BENSON_2FB8:	lda L274D+1
+002FB8  1  AD 4E 27     BENSON_2FB8:	lda L274E
 002FBB  1  20 90 38     		jsr L3890
 002FBE  1  D0 48        		bne L3008
 002FC0  1  F0 49        		beq L300B
@@ -3807,7 +3809,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002FFD  1               ;------------------------------------------------------------
 002FFD  1  C8           BENSON_2FFD:	iny
 002FFE  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
-003000  1  AE 4E 27     		ldx L274D+1
+003000  1  AE 4E 27     		ldx L274E
 003003  1  3D C0 69     		and OBJECT_ATTRIBUTES_69C0,X
 003006  1  D0 03        		bne L300B
 003008  1               
@@ -3893,7 +3895,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00305C  1               ;------------------------------------------------------------
 00305C  1               ;
 00305C  1               ;------------------------------------------------------------
-00305C  1  AE 4E 27     BENSON_305C:	ldx L274D+1
+00305C  1  AE 4E 27     BENSON_305C:	ldx L274E
 00305F  1  C8           		iny
 003060  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
 003062  1  30 09        		bmi L306D
@@ -4662,10 +4664,10 @@ Current file: ..\src\merc-0700-6fff.a65
 00353C  1               ;
 00353C  1               ;------------------------------------------------------------
 00353C  1               SETUP_ROOM_L353C:
-00353C  1  A6 06        		ldx MUL_LO_06
+00353C  1  A6 06        		ldx MUL_LO_06					;room number
 00353E  1  D0 34        		bne L3574
 003540  1  86 A6        		stx PLANET_UNDERGROUND_A6
-003542  1  86 CD        		stx L00CD
+003542  1  86 CD        		stx ROOM_NO_CD
 003544  1  20 ED 37     		jsr L37ED
 003547  1  A9 09        		lda #$09					;Prestinium
 003549  1  85 A7        		sta CRAFT_ID_WALKING_A7
@@ -4701,6 +4703,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003582  1  A0 00        		ldy #$00
 003584  1  B1 19        		lda (PTR_LO_19),Y
 003586  1  10 3E        		bpl L35C6
+003588  1               
 003588  1  E0 72        		cpx #$72
 00358A  1  D0 0B        		bne L3597
 00358C  1  20 B1 53     		jsr GET_RANDOM_L53B1
@@ -4709,7 +4712,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003592  1  69 0A        		adc #$0A
 003594  1  A8           		tay
 003595  1  D0 0E        		bne L35A5
-003597  1  A5 CD        L3597:		lda L00CD
+003597  1  A5 CD        L3597:		lda ROOM_NO_CD
 003599  1  A0 0A        		ldy #$0A
 00359B  1  D1 19        		cmp (PTR_LO_19),Y
 00359D  1  D0 06        		bne L35A5
@@ -4736,8 +4739,10 @@ Current file: ..\src\merc-0700-6fff.a65
 0035BF  1  E0 7F        		cpx #$7F					;laboratory
 0035C1  1  D0 03        		bne L35C6
 0035C3  1  20 CE 37     		jsr FLIP_VIEW_FLAG_37CE
+0035C6  1               
+0035C6  1               ;
 0035C6  1  A4 07        L35C6:		ldy MUL_HI_07
-0035C8  1  86 CD        		stx L00CD
+0035C8  1  86 CD        		stx ROOM_NO_CD
 0035CA  1  B1 19        		lda (PTR_LO_19),Y
 0035CC  1  85 71        		sta CUR_X_MSB_71
 0035CE  1  C8           		iny
@@ -4768,6 +4773,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003605  1  99 C0 9F     		sta GROUND_STRUCTURE_Z_HSB_9FC0,Y
 003608  1  88           		dey
 003609  1  10 E2        		bpl L35ED
+00360B  1               
 00360B  1  A0 0C        		ldy #$0C
 00360D  1  B9 B5 37     L360D:		lda L37B3+2,Y
 003610  1  99 7F 1E     		sta L1E7F,Y
@@ -4965,14 +4971,15 @@ Current file: ..\src\merc-0700-6fff.a65
 0037EC  1  60           		rts
 0037ED  1               
 0037ED  1               ;------------------------------------------------------------
-0037ED  1               ; Fill object_to_draw list
+0037ED  1               ; Fill object_to_draw list at ground?
+0037ED  1               ; board, land, crash
 0037ED  1               ;------------------------------------------------------------
 0037ED  1  A9 00        L37ED:		lda #$00
 0037EF  1  AE E8 69     		ldx L69E8
 0037F2  1  10 02        		bpl L37F6
 0037F4  1  A9 66        		lda #$66
 0037F6  1  8D B5 9A     L37F6:		sta L9AB5
-0037F9  1  A6 CD        		ldx L00CD
+0037F9  1  A6 CD        		ldx ROOM_NO_CD
 0037FB  1  A4 B2        		ldy CHUNK_CNT_B2				;$3F normally?
 0037FD  1  86 04        		stx TMP_04
 0037FF  1  A2 00        		ldx #$00
@@ -4993,7 +5000,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003817  1               ;
 003817  1               ;------------------------------------------------------------
 003817  1  A9 00        L3817:		lda #$00
-003819  1  85 AC        		sta L00AC
+003819  1  85 AC        		sta WALL_COLLISION_AC				;clear collision
 00381B  1  A6 71        		ldx CUR_X_MSB_71
 00381D  1  30 08        		bmi L3827
 00381F  1  D0 13        		bne L3834
@@ -5006,7 +5013,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00382D  1  85 71        		sta CUR_X_MSB_71
 00382F  1  85 72        		sta CUR_X_HSB_72
 003831  1  AA           		tax
-003832  1  C6 AC        		dec L00AC
+003832  1  C6 AC        		dec WALL_COLLISION_AC
 003834  1  A4 77        L3834:		ldy CUR_Z_MSB_77
 003836  1  30 08        		bmi L3840
 003838  1  D0 13        		bne L384D
@@ -5019,7 +5026,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003846  1  85 77        		sta CUR_Z_MSB_77
 003848  1  85 78        		sta CUR_Z_HSB_78
 00384A  1  A8           		tay
-00384B  1  C6 AC        		dec L00AC
+00384B  1  C6 AC        		dec WALL_COLLISION_AC
 00384D  1  E8           L384D:		inx
 00384E  1  EC 40 1D     		cpx GROUND_STRUCTURE_X_MSB_1D40
 003851  1  90 14        		bcc L3867
@@ -5032,7 +5039,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00385F  1  86 71        		stx CUR_X_MSB_71
 003861  1  A9 DF        		lda #$DF
 003863  1  85 70        		sta CUR_X_LSB_70
-003865  1  C6 AC        		dec L00AC
+003865  1  C6 AC        		dec WALL_COLLISION_AC
 003867  1  C8           L3867:		iny
 003868  1  CC 40 1E     		cpy GROUND_STRUCTURE_Z_MSB_1E40
 00386B  1  90 14        		bcc L3881
@@ -5045,14 +5052,14 @@ Current file: ..\src\merc-0700-6fff.a65
 003879  1  84 77        		sty CUR_Z_MSB_77
 00387B  1  A9 DF        		lda #$DF
 00387D  1  85 76        		sta CUR_Z_LSB_76
-00387F  1  C6 AC        		dec L00AC
-003881  1  A5 AC        L3881:		lda L00AC
+00387F  1  C6 AC        		dec WALL_COLLISION_AC
+003881  1  A5 AC        L3881:		lda WALL_COLLISION_AC
 003883  1  F0 08        		beq L388D
-003885  1  A6 F7        		ldx L00F7
+003885  1  A6 F7        		ldx ONLY_ONCE_F7
 003887  1  D0 04        		bne L388D
 003889  1  A2 37        		ldx #$37
 00388B  1  86 F5        		stx SOUND_F5
-00388D  1  85 F7        L388D:		sta L00F7
+00388D  1  85 F7        L388D:		sta ONLY_ONCE_F7
 00388F  1  60           		rts
 003890  1               
 003890  1               ;------------------------------------------------------------
@@ -5833,7 +5840,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003D86  1  99 C0 69     		sta OBJECT_ATTRIBUTES_69C0,Y
 003D89  1  20 FB 5A     		jsr SOUND_EFFECT_L5AFB
 003D8C  1               
-003D8C  1  A5 CD        L3D8C:		lda L00CD
+003D8C  1  A5 CD        L3D8C:		lda ROOM_NO_CD
 003D8E  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
 003D91  1  A5 70        		lda CUR_X_LSB_70
 003D93  1  99 80 68     		sta OBJ_X_LSB_L6880,Y
@@ -7064,14 +7071,14 @@ Current file: ..\src\merc-0700-6fff.a65
 00468E  1  A9 71        		lda #$71
 004690  1  85 71        		sta CUR_X_MSB_71
 004692  1  85 77        		sta CUR_Z_MSB_77
-004694  1  A6 CD        		ldx L00CD
+004694  1  A6 CD        		ldx ROOM_NO_CD
 004696  1  BD 01 5B     		lda HANGAR_POS_5B02-1,X
 004699  1  85 72        		sta CUR_X_HSB_72
 00469B  1  BD 09 5B     		lda L5B09,X
 00469E  1  85 78        		sta CUR_Z_HSB_78
 0046A0  1  20 7E 39     		jsr L397E
 0046A3  1  A9 00        		lda #$00
-0046A5  1  85 CD        		sta L00CD
+0046A5  1  85 CD        		sta ROOM_NO_CD
 0046A7  1  20 ED 37     		jsr L37ED
 0046AA  1  4C FF 58     		jmp L58FF
 0046AD  1               
@@ -7092,7 +7099,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0046C2  1  D0 1E        		bne L46E2
 0046C4  1  E0 08        L46C4:		cpx #$08
 0046C6  1  D0 2A        		bne L46F2
-0046C8  1  A6 CD        		ldx L00CD
+0046C8  1  A6 CD        		ldx ROOM_NO_CD
 0046CA  1  A0 07        		ldy #$07
 0046CC  1  86 06        		stx MUL_LO_06
 0046CE  1  84 07        		sty MUL_HI_07
@@ -10039,7 +10046,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005A5B  1  A2 39        		ldx #$39					;"pass holders only"
 005A5D  1  4C 2A 32     L5A5D:		jmp START_MESSAGE_L322A
 005A60  1  20 FB 5A     L5A60:		jsr SOUND_EFFECT_L5AFB
-005A63  1  86 CD        		stx L00CD
+005A63  1  86 CD        		stx ROOM_NO_CD
 005A65  1  A2 03        		ldx #$03
 005A67  1  AD 56 6B     L5A67:		lda L6B56
 005A6A  1  95 C4        		sta L00C4,X
@@ -10053,7 +10060,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005A7A  1  30 21        		bmi L5A9D
 005A7C  1  A2 00        L5A7C:		ldx #$00
 005A7E  1  A9 08        		lda #$08
-005A80  1  C5 CD        		cmp L00CD
+005A80  1  C5 CD        		cmp ROOM_NO_CD
 005A82  1  90 CD        		bcc L5A51
 005A84  1  D0 01        		bne L5A87
 005A86  1  CA           		dex
@@ -10367,7 +10374,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005C3E  1               
 005C3E  1  AD DA 69     L5C3E:		lda L69DA
 005C41  1  10 1C        		bpl L5C5F
-005C43  1  A5 CD        		lda L00CD
+005C43  1  A5 CD        		lda ROOM_NO_CD
 005C45  1  D0 18        		bne L5C5F
 005C47  1  A5 B5        		lda GROUND_STRUC_OBJ_TO_DRAW_B5
 005C49  1  F0 14        		beq L5C5F
@@ -11295,79 +11302,266 @@ Current file: ..\src\merc-0700-6fff.a65
 0062F8  1  3F 3F 3F 3C  		.byte $3F,$3F,$3F,$3C,$3C,$3E,$3F,$3F
 0062FC  1  3C 3E 3F 3F  
 006300  1               
+006300  1               R00		= $C000
+006300  1               R01		= $C012
+006300  1               R02		= $C034
+006300  1               R03		= $C04E
+006300  1               R04		= $C074
+006300  1               R05		= $C086
+006300  1               R06		= $C09C
+006300  1               R07		= $C0A6
+006300  1               R08		= $C0B8
+006300  1               R09		= $C0C6
+006300  1               R0A		= $C0DC
+006300  1               R0B		= $C0EA
+006300  1               R0C		= $C0FC
+006300  1               R0D		= $C10A
+006300  1               R0E		= $C118
+006300  1               R0F		= $C122
+006300  1               
+006300  1               R10		= $C12C
+006300  1               R11		= $C13E
+006300  1               R12		= $C14C
+006300  1               R13		= $C15A
+006300  1               R14		= $C170
+006300  1               R15		= $C182
+006300  1               R16		= $C190
+006300  1               R17		= $C19E
+006300  1               R18		= $C1B0
+006300  1               R19		= $C1C2
+006300  1               R1A		= $C1D4
+006300  1               R1B		= $C1E6
+006300  1               R1C		= $C1F4
+006300  1               R1D		= $C202
+006300  1               R1E		= $C214
+006300  1               R1F		= $C222
+006300  1               
+006300  1               R20		= $C23C
+006300  1               R21		= $C262
+006300  1               R22		= $C274
+006300  1               R23		= $C286
+006300  1               R24		= $C298
+006300  1               R25		= $C2AA
+006300  1               R26		= $C2BC
+006300  1               R27		= $C2CA
+006300  1               R28		= $C2DC
+006300  1               R29		= $C2E6
+006300  1               R2A		= $C2F0
+006300  1               R2B		= $C2FE
+006300  1               R2C		= $C314
+006300  1               R2D		= $C322
+006300  1               R2E		= $C334
+006300  1               R2F		= $C33E
+006300  1               
+006300  1               R30		= $C34C
+006300  1               R31		= $C35E
+006300  1               R32		= $C36C
+006300  1               R33		= $C37A
+006300  1               R34		= $C384
+006300  1               R35		= $C392
+006300  1               R36		= $C3A0
+006300  1               R37		= $C3AE
+006300  1               R38		= $C3BC
+006300  1               R39		= $C3C6
+006300  1               R3A		= $C3D0
+006300  1               R3B		= $C3DE
+006300  1               R3C		= $C3EC
+006300  1               R3D		= $C3FE
+006300  1               R3E		= $C40C
+006300  1               R3F		= $C41A
+006300  1               
+006300  1               R40		= $C428
+006300  1               R41		= $C436
+006300  1               R42		= $C444
+006300  1               R43		= $C452
+006300  1               R44		= $C45C
+006300  1               R45		= $C46A
+006300  1               R46		= $C478
+006300  1               R47		= $C48A
+006300  1               R48		= $C49C
+006300  1               R49		= $C4A6
+006300  1               R4A		= $C4B8
+006300  1               R4B		= $C4C6
+006300  1               R4C		= $C4D8
+006300  1               R4D		= $C4E6
+006300  1               R4E		= $C4F4
+006300  1               R4F		= $C506
+006300  1               
+006300  1               R50		= $C510
+006300  1               R51		= $C51A
+006300  1               R52		= $C524
+006300  1               R53		= $C536
+006300  1               R54		= $C548
+006300  1               R55		= $C55E
+006300  1               R56		= $C570
+006300  1               R57		= $C582
+006300  1               R58		= $C590
+006300  1               R59		= $C5A2
+006300  1               R5A		= $C5B0
+006300  1               R5B		= $C5C2
+006300  1               R5C		= $C5D4
+006300  1               R5D		= $C5EA
+006300  1               R5E		= $C5FC
+006300  1               R5F		= $C616
+006300  1               
+006300  1               R60		= $C628
+006300  1               R61		= $C63A
+006300  1               R62		= $C648
+006300  1               R63		= $C666
+006300  1               R64		= $C674
+006300  1               R65		= $C682
+006300  1               R66		= $C694
+006300  1               R67		= $C6A6
+006300  1               R68		= $C6B8
+006300  1               R69		= $C6CA
+006300  1               R6A		= $C6DC
+006300  1               R6B		= $C6EE
+006300  1               R6C		= $C704
+006300  1               R6D		= $C712
+006300  1               R6E		= $C724
+006300  1               R6F		= $C736
+006300  1               
+006300  1               R70		= $C74C
+006300  1               R71		= $C75E
+006300  1               R72		= $C778
+006300  1               R73		= $C786
+006300  1               R74		= $C794
+006300  1               R75		= $C7A2
+006300  1               R76		= $C7B0
+006300  1               R77		= $C7BE
+006300  1               R78		= $C7CC
+006300  1               R79		= $C7DA
+006300  1               R7A		= $C7E8
+006300  1               R7B		= $C7F6
+006300  1               R7C		= $C804
+006300  1               R7D		= $C812
+006300  1               R7E		= $C820
+006300  1               R7F		= $C82E
+006300  1               
+006300  1               R80		= $C83C
+006300  1               R81		= $C84A
+006300  1               R82		= $C858
+006300  1               R83		= $C866
+006300  1               R84		= $C874
+006300  1               R85		= $C882
+006300  1               R86		= $C890
+006300  1               R87		= $C89E
+006300  1               R88		= $C8B0
+006300  1               R89		= $C8BA
+006300  1               R8A		= $C8C8
+006300  1               R8B		= $C8D6
+006300  1               R8C		= $C8E4
+006300  1               R8D		= $C8FE
+006300  1               R8E		= $C90C
+006300  1               R8F		= $C91A
+006300  1               
+006300  1               R90		= $C928
+006300  1               R91		= $C93A
+006300  1               R92		= $C948
+006300  1               R93		= $C956
+006300  1               R94		= $C968
+006300  1               R95		= $C97A
+006300  1               R96		= $C990
+006300  1               R97		= $C99E
+006300  1               R98		= $C9AC
+006300  1               R99		= $C9C6
+006300  1               R9A		= $C9D0
+006300  1               R9B		= $C9E2
+006300  1               R9C		= $C9FC
+006300  1               R9D		= $CA1A
+006300  1               R9E		= $CA28
+006300  1               R9F		= $CA36
+006300  1               
+006300  1               RA0		= $CA40
+006300  1               RA1		= $CA5E
+006300  1               RA2		= $CA68
+006300  1               RA3		= $CA72
+006300  1               RA4		= $CA7C
+006300  1               RA5		= $CA86
+006300  1               RA6		= $CA90
+006300  1               RA7		= $CA9A
+006300  1               RA8		= $CAA4
+006300  1               RA9		= $CAC6
+006300  1               RAA		= $CAD8
+006300  1               RAB		= $CAEE
+006300  1               RAC		= $CB04
+006300  1               RAD		= $CB16
+006300  1               
+006300  1               ;12 * 16 rooms = 192
+006300  1               
 006300  1               ROOM_STRUCT_PTR_LO_L6300:
-006300  1  00 00 12 34  		.byte $00,$00,$12,$34,$4E,$74,$86,$9C,$A6,$B8,$C6,$DC,$EA,$FC,$0A,$18
+006300  1  00 00 12 34  		.byte <R00,<R00,<R01,<R02,<R03,<R04,<R05,<R06,<R07,<R08,<R09,<R0A,<R0B,<R0C,<R0D,<R0E
 006304  1  4E 74 86 9C  
 006308  1  A6 B8 C6 DC  
-006310  1  22 2C 3E 4C  		.byte $22,$2C,$3E,$4C,$5A,$70,$82,$90,$9E,$B0,$C2,$D4,$E6,$F4,$02,$14
+006310  1  22 2C 3E 4C  		.byte <R0F,<R10,<R11,<R12,<R13,<R14,<R15,<R16,<R17,<R18,<R19,<R1A,<R1B,<R1C,<R1D,<R1E
 006314  1  5A 70 82 90  
 006318  1  9E B0 C2 D4  
-006320  1  22 3C 62 74  		.byte $22,$3C,$62,$74,$86,$98,$AA,$BC,$CA,$DC,$E6,$F0,$FE,$14,$22,$34
+006320  1  22 3C 62 74  		.byte <R1F,<R20,<R21,<R22,<R23,<R24,<R25,<R26,<R27,<R28,<R29,<R2A,<R2B,<R2C,<R2D,<R2E
 006324  1  86 98 AA BC  
 006328  1  CA DC E6 F0  
-006330  1  3E 4C 5E 6C  		.byte $3E,$4C,$5E,$6C,$7A,$84,$92,$A0,$AE,$BC,$C6,$D0,$DE,$EC,$FE,$0C
+006330  1  3E 4C 5E 6C  		.byte <R2F,<R30,<R31,<R32,<R33,<R34,<R35,<R36,<R37,<R38,<R39,<R3A,<R3B,<R3C,<R3D,<R3E
 006334  1  7A 84 92 A0  
 006338  1  AE BC C6 D0  
-006340  1  1A 28 36 44  		.byte $1A,$28,$36,$44,$52,$5C,$6A,$78,$8A,$9C,$A6,$B8,$C6,$D8,$E6,$F4
+006340  1  1A 28 36 44  		.byte <R3F,<R40,<R41,<R42,<R43,<R44,<R45,<R46,<R47,<R48,<R49,<R4A,<R4B,<R4C,<R4D,<R4E
 006344  1  52 5C 6A 78  
 006348  1  8A 9C A6 B8  
-006350  1  06 10 1A 24  		.byte $06,$10,$1A,$24,$36,$48,$5E,$70,$82,$90,$A2,$B0,$C2,$D4,$EA,$FC
+006350  1  06 10 1A 24  		.byte <R4F,<R50,<R51,<R52,<R53,<R54,<R55,<R56,<R57,<R58,<R59,<R5A,<R5B,<R5C,<R5D,<R5E
 006354  1  36 48 5E 70  
 006358  1  82 90 A2 B0  
-006360  1  16 28 3A 48  		.byte $16,$28,$3A,$48,$66,$74,$82,$94,$A6,$B8,$CA,$DC,$EE,$04,$12,$24
+006360  1  16 28 3A 48  		.byte <R5F,<R60,<R61,<R62,<R63,<R64,<R65,<R66,<R67,<R68,<R69,<R6A,<R6B,<R6C,<R6D,<R6E
 006364  1  66 74 82 94  
 006368  1  A6 B8 CA DC  
-006370  1  36 4C 5E 78  		.byte $36,$4C,$5E,$78,$86,$94,$A2,$B0,$BE,$CC,$DA,$E8,$F6,$04,$12,$20
+006370  1  36 4C 5E 78  		.byte <R6F,<R70,<R71,<R72,<R73,<R74,<R75,<R76,<R77,<R78,<R79,<R7A,<R7B,<R7C,<R7D,<R7E
 006374  1  86 94 A2 B0  
 006378  1  BE CC DA E8  
-006380  1  2E 3C 4A 58  		.byte $2E,$3C,$4A,$58,$66,$74,$82,$90,$9E,$B0,$BA,$C8,$D6,$E4,$FE,$0C
+006380  1  2E 3C 4A 58  		.byte <R7F,<R80,<R81,<R82,<R83,<R84,<R85,<R86,<R87,<R88,<R89,<R8A,<R8B,<R8C,<R8D,<R8E
 006384  1  66 74 82 90  
 006388  1  9E B0 BA C8  
-006390  1  1A 28 3A 48  		.byte $1A,$28,$3A,$48,$56,$68,$7A,$90,$9E,$AC,$C6,$D0,$E2,$FC,$1A,$28
+006390  1  1A 28 3A 48  		.byte <R8F,<R90,<R91,<R92,<R93,<R94,<R95,<R96,<R97,<R98,<R99,<R9A,<R9B,<R9C,<R9D,<R9E
 006394  1  56 68 7A 90  
 006398  1  9E AC C6 D0  
-0063A0  1  36 40 5E 68  		.byte $36,$40,$5E,$68,$72,$7C,$86,$90,$9A,$A4,$C6,$D8,$EE,$04,$16,$00
+0063A0  1  36 40 5E 68  		.byte <R9F,<RA0,<RA1,<RA2,<RA3,<RA4,<RA5,<RA6,<RA7,<RA8,<RA9,<RAA,<RAB,<RAC,<RAD,<R00
 0063A4  1  72 7C 86 90  
 0063A8  1  9A A4 C6 D8  
-0063B0  1  00 00 00 00  		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+0063B0  1  00 00 00 00  		.byte <R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00,<R00
 0063B4  1  00 00 00 00  
 0063B8  1  00 00 00 00  
 0063C0  1               
 0063C0  1               ROOM_STRUCT_PTR_HI_L63C0:
-0063C0  1  C0 C0 C0 C0  		.byte $C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C1,$C1
+0063C0  1  C0 C0 C0 C0  		.byte >R00,>R00,>R01,>R02,>R03,>R04,>R05,>R06,>R07,>R08,>R09,>R0A,>R0B,>R0C,>R0D,>R0E
 0063C4  1  C0 C0 C0 C0  
 0063C8  1  C0 C0 C0 C0  
-0063D0  1  C1 C1 C1 C1  		.byte $C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C1,$C2,$C2
+0063D0  1  C1 C1 C1 C1  		.byte >R0F,>R10,>R11,>R12,>R13,>R14,>R15,>R16,>R17,>R18,>R19,>R1A,>R1B,>R1C,>R1D,>R1E
 0063D4  1  C1 C1 C1 C1  
 0063D8  1  C1 C1 C1 C1  
-0063E0  1  C2 C2 C2 C2  		.byte $C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C2,$C3,$C3,$C3
+0063E0  1  C2 C2 C2 C2  		.byte >R1F,>R20,>R21,>R22,>R23,>R24,>R25,>R26,>R27,>R28,>R29,>R2A,>R2B,>R2C,>R2D,>R2E
 0063E4  1  C2 C2 C2 C2  
 0063E8  1  C2 C2 C2 C2  
-0063F0  1  C3 C3 C3 C3  		.byte $C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C3,$C4
+0063F0  1  C3 C3 C3 C3  		.byte >R2F,>R30,>R31,>R32,>R33,>R34,>R35,>R36,>R37,>R38,>R39,>R3A,>R3B,>R3C,>R3D,>R3E
 0063F4  1  C3 C3 C3 C3  
 0063F8  1  C3 C3 C3 C3  
-006400  1  C4 C4 C4 C4  		.byte $C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4,$C4
+006400  1  C4 C4 C4 C4  		.byte >R3F,>R40,>R41,>R42,>R43,>R44,>R45,>R46,>R47,>R48,>R49,>R4A,>R4B,>R4C,>R4D,>R4E
 006404  1  C4 C4 C4 C4  
 006408  1  C4 C4 C4 C4  
-006410  1  C5 C5 C5 C5  		.byte $C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5,$C5
+006410  1  C5 C5 C5 C5  		.byte >R4F,>R50,>R51,>R52,>R53,>R54,>R55,>R56,>R57,>R58,>R59,>R5A,>R5B,>R5C,>R5D,>R5E
 006414  1  C5 C5 C5 C5  
 006418  1  C5 C5 C5 C5  
-006420  1  C6 C6 C6 C6  		.byte $C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C6,$C7,$C7,$C7
+006420  1  C6 C6 C6 C6  		.byte >R5F,>R60,>R61,>R62,>R63,>R64,>R65,>R66,>R67,>R68,>R69,>R6A,>R6B,>R6C,>R6D,>R6E
 006424  1  C6 C6 C6 C6  
 006428  1  C6 C6 C6 C6  
-006430  1  C7 C7 C7 C7  		.byte $C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C7,$C8,$C8,$C8
+006430  1  C7 C7 C7 C7  		.byte >R6F,>R70,>R71,>R72,>R73,>R74,>R75,>R76,>R77,>R78,>R79,>R7A,>R7B,>R7C,>R7D,>R7E
 006434  1  C7 C7 C7 C7  
 006438  1  C7 C7 C7 C7  
-006440  1  C8 C8 C8 C8  		.byte $C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C8,$C9
+006440  1  C8 C8 C8 C8  		.byte >R7F,>R80,>R81,>R82,>R83,>R84,>R85,>R86,>R87,>R88,>R89,>R8A,>R8B,>R8C,>R8D,>R8E
 006444  1  C8 C8 C8 C8  
 006448  1  C8 C8 C8 C8  
-006450  1  C9 C9 C9 C9  		.byte $C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$C9,$CA,$CA
+006450  1  C9 C9 C9 C9  		.byte >R8F,>R90,>R91,>R92,>R93,>R94,>R95,>R96,>R97,>R98,>R99,>R9A,>R9B,>R9C,>R9D,>R9E
 006454  1  C9 C9 C9 C9  
 006458  1  C9 C9 C9 C9  
-006460  1  CA CA CA CA  		.byte $CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CA,$CB,$CB,$C0
+006460  1  CA CA CA CA  		.byte >R9F,>RA0,>RA1,>RA2,>RA3,>RA4,>RA5,>RA6,>RA7,>RA8,>RA9,>RAA,>RAB,>RAC,>RAD,>R00
 006464  1  CA CA CA CA  
 006468  1  CA CA CA CA  
-006470  1  C0 C0 C0 C0  		.byte $C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0,$C0
+006470  1  C0 C0 C0 C0  		.byte >R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00,>R00
 006474  1  C0 C0 C0 C0  
 006478  1  C0 C0 C0 C0  
 006480  1               
