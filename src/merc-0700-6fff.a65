@@ -878,7 +878,7 @@ L0FC8:		.byte $0B, $2B, $D5, $0F
 
 L0FCC:		.byte $22, $07, $C8, $0F, $14, $32, $11, $40, $05
 
-; check room
+; check room ($13)
 L0FD5:		.byte $93, $8F
 		.byte $0F, $12, $04, $DF, $0F, $8C, $8F, $0F, $0F, $FD, $32, $9A
 		.byte $1C, $10, $01, $EE, $D0, $16, $FF, "WONoT LE", $D4, $00, $01, $EE
@@ -2935,7 +2935,7 @@ L31F4:		.word BENSON_2FE1				;$0B, check pressed key
 		.word BENSON_3174				;$10
 		.word BENSON_3180				;$11
 		.word BENSON_2FAE				;$12
-		.word BENSON_2FA5				;$13
+		.word BENSON_2FA5				;$13, send message
 		.word BENSON_31A3				;$14
 		.word BENSON_3119				;$15
 		.word BENSON_31C7				;$16

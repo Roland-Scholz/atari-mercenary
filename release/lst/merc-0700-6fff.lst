@@ -1377,7 +1377,7 @@ Current file: ..\src\merc-0700-6fff.a65
 000FD0  1  14 32 11 40  
 000FD4  1  05           
 000FD5  1               
-000FD5  1               ; check room
+000FD5  1               ; check room ($13)
 000FD5  1  93 8F        L0FD5:		.byte $93, $8F
 000FD7  1  0F 12 04 DF  		.byte $0F, $12, $04, $DF, $0F, $8C, $8F, $0F, $0F, $FD, $32, $9A
 000FDB  1  0F 8C 8F 0F  
@@ -4211,7 +4211,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0031FE  1  74 31        		.word BENSON_3174				;$10
 003200  1  80 31        		.word BENSON_3180				;$11
 003202  1  AE 2F        		.word BENSON_2FAE				;$12
-003204  1  A5 2F        		.word BENSON_2FA5				;$13
+003204  1  A5 2F        		.word BENSON_2FA5				;$13, send message
 003206  1  A3 31        		.word BENSON_31A3				;$14
 003208  1  19 31        		.word BENSON_3119				;$15
 00320A  1  C7 31        		.word BENSON_31C7				;$16
