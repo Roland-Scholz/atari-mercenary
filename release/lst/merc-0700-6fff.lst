@@ -37,6 +37,7 @@ Current file: ..\src\merc-0700-6fff.a65
 000000r 1               ZP_21				= $21
 000000r 1               FLIP_SCREEN_22			= $22
 000000r 1               GRAPH_MEM_HI_23			= $23
+000000r 1               ZP_24				= $24
 000000r 1               ZP_25				= $25
 000000r 1               ROLL_LO_26			= $26
 000000r 1               ROLL_HI_27			= $27
@@ -132,8 +133,8 @@ Current file: ..\src\merc-0700-6fff.a65
 000000r 1               
 000000r 1               SLOPE_FRACTION_79		= $79
 000000r 1               SLOPE_WHOLE_7A			= $7A
-000000r 1               
 000000r 1               MINUS_COTA_ROLL_7B		= $7B
+000000r 1               L007D				= $7D
 000000r 1               JOYA_7E				= $7E
 000000r 1               FIRE_7F				= $7F
 000000r 1               
@@ -235,15 +236,15 @@ Current file: ..\src\merc-0700-6fff.a65
 000000r 1               L00BE       = $00BE
 000000r 1               L00BF       = $00BF
 000000r 1               BACKGND_COLOR_C0       = $00C0
-000000r 1               L00C1       = $00C1
+000000r 1               OBJECT_COLOR_c1       = $00C1
 000000r 1               ROOM_COLOR_C2       = $00C2
 000000r 1               LINE_COLOR_C3       = $00C3
-000000r 1               L00C4       = $00C4
-000000r 1               L00C5       = $00C5
-000000r 1               L00C6       = $00C6
-000000r 1               L00C7       = $00C7
+000000r 1               COLBAK_SAVE_C4       = $00C4
+000000r 1               COLPF1_SAVE_C5       = $00C5
+000000r 1               COLPF2_SAVE_C6       = $00C6
+000000r 1               COLPF3_SAVE_C7       = $00C7
 000000r 1               room_change_L00C8       = $00C8
-000000r 1               L00C9       = $00C9
+000000r 1               LIFT_DLI_LINE_C9       = $00C9
 000000r 1               L00CB       = $00CB
 000000r 1               L00CC       = $00CC
 000000r 1               ROOM_NO_CD       = $00CD
@@ -279,13 +280,13 @@ Current file: ..\src\merc-0700-6fff.a65
 000000r 1               L00EF       = $00EF
 000000r 1               L00F0       = $00F0
 000000r 1               L00F2       = $00F2
-000000r 1               L00F3       = $00F3
-000000r 1               L00F4       = $00F4
+000000r 1               CRUMBLE_CNT_F3       = $00F3
+000000r 1               CRUMBLE_POS_F4       = $00F4
 000000r 1               SOUND_F5       = $00F5
 000000r 1               MESSAGE_TO_SEND_F6       = $00F6
 000000r 1               ONLY_ONCE_F7       = $00F7
 000000r 1               CRASH_F8       = $00F8
-000000r 1               L00F9       = $00F9
+000000r 1               AT_COLONY_CRAFT_00F9       = $00F9
 000000r 1               L00FA       = $00FA
 000000r 1               TEXT_FILL_BYTE_FB       = $00FB
 000000r 1               L00FC       = $00FC
@@ -695,7 +696,6 @@ Current file: ..\src\merc-0700-6fff.a65
 000000r 1               L1EBE		= $1EBE
 000000r 1               L1F2E		= $1F2E
 000000r 1               L1F63		= $1F63
-000000r 1               L1F00		= $1F00
 000000r 1               L1EE0		= $1EE0
 000000r 1               L1F1E		= $1F1E
 000000r 1               L1F1F		= $1F1F
@@ -1351,21 +1351,34 @@ Current file: ..\src\merc-0700-6fff.a65
 000F6C  1  4C 45 41 44  		.byte "LEADE", $D2, $00, $14, $32, $11, $40, $05, $0F, $FF, $00, $0F
 000F70  1  45 D2 00 14  
 000F74  1  32 11 40 05  
-000F7C  1  FE 19 01 ED  		.byte $FE, $19, $01, $ED, $FF, "INTERSTELLA", $D2, $C5, $00, $A2, $07, $D0
+000F7C  1  FE 19 01 ED  		.byte $FE, $19, $01, $ED, $FF, "INTERSTELLA", $D2, $C5, $00
 000F80  1  FF 49 4E 54  
 000F84  1  45 52 53 54  
+000F8F  1               
+000F8F  1  A2 07 D0     L0F8F:		.byte $A2, $07, $D0
 000F92  1  0F 93 8F 0F  		.byte $0F, $93, $8F, $0F, $04, $9A, $09, $12, $04, $B2, $0F, $0C
 000F96  1  04 9A 09 12  
 000F9A  1  04 B2 0F 0C  
 000F9E  1  B2 0F 01 EE  		.byte $B2, $0F, $01, $EE, $A7, $FF, "REQUIRE", $C4, $00, $14, $32, $11
 000FA2  1  A7 FF 52 45  
 000FA6  1  51 55 49 52  
-000FB0  1  40 05 1C 01  		.byte $40, $05, $1C, $01, $ED, $FF, "PRESS Y TO LAUNC", $C8, $00, $0B, $2B, $D5
-000FB4  1  ED FF 50 52  
-000FB8  1  45 53 53 20  
-000FCB  1  0F 22 07 C8  		.byte $0F, $22, $07, $C8, $0F, $14, $32, $11, $40, $05, $93, $8F
-000FCF  1  0F 14 32 11  
-000FD3  1  40 05 93 8F  
+000FB0  1  40 05        		.byte $40, $05
+000FB2  1  1C 01 ED FF  L0FB2:		.byte $1C, $01, $ED, $FF, "PRESS Y TO LAUNC", $C8, $00
+000FB6  1  50 52 45 53  
+000FBA  1  53 20 59 20  
+000FC8  1               
+000FC8  1               
+000FC8  1               ; check 'Y' ($2B) pressed, if yes, jmp $0FD5
+000FC8  1  0B 2B D5 0F  L0FC8:		.byte $0B, $2B, $D5, $0F
+000FCC  1               
+000FCC  1               ; check prestinium ($07), if yes, jump $0FC8, if no function $14 send message, value $32 (clear)
+000FCC  1               
+000FCC  1  22 07 C8 0F  L0FCC:		.byte $22, $07, $C8, $0F, $14, $32, $11, $40, $05
+000FD0  1  14 32 11 40  
+000FD4  1  05           
+000FD5  1               
+000FD5  1               ; check room
+000FD5  1  93 8F        L0FD5:		.byte $93, $8F
 000FD7  1  0F 12 04 DF  		.byte $0F, $12, $04, $DF, $0F, $8C, $8F, $0F, $0F, $FD, $32, $9A
 000FDB  1  0F 8C 8F 0F  
 000FDF  1  0F FD 32 9A  
@@ -2235,7 +2248,7 @@ Current file: ..\src\merc-0700-6fff.a65
 001EF4  1  B9 00 9D 85  
 001EF8  1  5A B9 40 9D  
 001F00  1               
-001F00  1  20 43 43 43  		.byte $20,$43,$43,$43,$43,$02,$07,$4A,$43,$20,$43,$43,$43,$43,$02,$20
+001F00  1  20 43 43 43  L1F00:		.byte $20,$43,$43,$43,$43,$02,$07,$4A,$43,$20,$43,$43,$43,$43,$02,$20
 001F04  1  43 02 07 4A  
 001F08  1  43 20 43 43  
 001F10  1  20 43 43 43  		.byte $20,$43,$43,$43,$43,$02,$02,$43,$43,$43,$49,$43,$43,$43,$02,$02
@@ -2678,7 +2691,8 @@ Current file: ..\src\merc-0700-6fff.a65
 002730  1  24 24 24 24  		.byte $24,$24,$24,$24,$25,$25,$25,$25,$26,$26,$26,$26,$27,$27,$27,$27
 002734  1  25 25 25 25  
 002738  1  26 26 26 26  
-002740  1  40 10 04 01  		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$0C,$01
+002740  1               
+002740  1  40 10 04 01  L2740:		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$0C,$01
 002744  1  40 10 04 01  
 002748  1  40 10 04 01  
 002750  1  40 10 04 01  		.byte $40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01,$40,$10,$04,$01
@@ -2717,7 +2731,6 @@ Current file: ..\src\merc-0700-6fff.a65
 002800  1               
 002800  1               L275F		= $275F
 002800  1               L26A0		= $26A0
-002800  1               L2740		= $2740
 002800  1               L274F		= $274F
 002800  1               L274E		= $274E
 002800  1               L274D		= $274D
@@ -2727,7 +2740,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002800  1  70 70 F0     DSPLIST_2800:	.byte $70, $70, $F0									;24 lines space and 1st DLI
 002803  1  4E 10        		.byte $4E, $10										;$8010 oer $E010
 002805  1  80           DSPADR0_HI:	.byte $80										;1
-002806  1  0E 0E 0E 0E  		.byte $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E	;6*16 = 96
+002806  1  0E 0E 0E 0E  L2806:		.byte $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E	;6*16 = 96
 00280A  1  0E 0E 0E 0E  
 00280E  1  0E 0E 0E 0E  
 002816  1  0E 0E 0E 0E  		.byte $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E, $0E
@@ -2766,10 +2779,6 @@ Current file: ..\src\merc-0700-6fff.a65
 0028A7  1  02           
 0028A8  1  41 00 28     		.byte $41, $00, $28									; == 24 + 152 + 48 = 224 lines
 0028AB  1               
-0028AB  1               L2803		= $2803
-0028AB  1               L2806		= $2806
-0028AB  1               L286D		= $286D
-0028AB  1               L2896		= $2896
 0028AB  1               
 0028AB  1  00 01 02 03  L28AB:		.byte $00,$01,$02,$03,$04,$05,$06,$07,$08,$09,$10,$11,$12,$13,$14,$15
 0028AF  1  04 05 06 07  
@@ -2809,7 +2818,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00292C  1               ; 04	Saucer                          ; 14	key 5 corner small
 00292C  1               ; 05	Speed Car                       ; 15	key reverse frustrum
 00292C  1               ; 06	Cheese                          ; 16	key Diamond
-00292C  1               ; 07	Pfestinum                       ; 17	key 6 corner
+00292C  1               ; 07	Prestinium                      ; 17	key 6 corner
 00292C  1               ; 08	shot                            ; 18	Anti Time Bomb
 00292C  1               ; 09	Dominion Dart                   ; 19	Novadrive
 00292C  1               ; 0a	Destroyed Prestinium            ; 1a	Metal Detector
@@ -2917,7 +2926,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0029AD  1  85 A7        		sta CRAFT_ID_WALKING_A7
 0029AF  1  20 89 41     		jsr COPY_SHIP_DATA_L4189				;copy ship data
 0029B2  1               
-0029B2  1  A9 10        		lda #$10
+0029B2  1  A9 10        		lda #$10						;yaw increment
 0029B4  1  85 AA        		sta YAW_WALK_AA
 0029B6  1               
 0029B6  1  20 21 59     		jsr SET_COLORS_L5921
@@ -2937,7 +2946,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0029CD  1  85 2B        		sta YAW_HI_2B
 0029CF  1  85 29        		sta PITCH_HI_29
 0029D1  1               
-0029D1  1  20 C1 3D     		jsr L3DC1						; set speed?
+0029D1  1  20 C1 3D     		jsr SET_SPEED_ZERO_3DC1						; set speed?
 0029D4  1  A9 FF        		lda #$FF
 0029D6  1  8D 41 69     		sta L6941						;
 0029D9  1  20 ED 37     		jsr OBJ_DRAW_LIST_37ED
@@ -2998,12 +3007,14 @@ Current file: ..\src\merc-0700-6fff.a65
 002A40  1  D0 06        		bne L2A48                                       ; then
 002A42  1  20 49 3B     L2A42:		jsr ROTATE_GROUND_STRUCTURE_L3B49               ; rotate ground structure
 002A45  1  20 58 3B     		jsr DRAW_STRUCTURE_L3B58                        ; draw ground structure
+002A48  1               
 002A48  1  EE 00 65     L2A48:		inc OBJ_Z_MSB_L6500                             ; flying ship at edge of city
 002A4B  1  D0 0B        		bne L2A58
 002A4D  1  EE C0 65     		inc OBJ_Z_HSB_L65C0                             ; flying ship at edge of city
 002A50  1  AD C0 65     		lda OBJ_Z_HSB_L65C0                             ; flying ship at edge of city
 002A53  1  29 0F        		and #$0F                                        ; flying ship at edge of city
 002A55  1  8D C0 65     		sta OBJ_Z_HSB_L65C0                             ; flying ship at edge of city
+002A58  1               
 002A58  1  20 B7 53     L2A58:		jsr WHITE_LINES_L53B7                           ; setup white lines
 002A5B  1  20 77 3B     		jsr DRAW_OBJECTS_L3B77                          ; draw objects
 002A5E  1  20 57 59     		jsr JOYSTICK_L5957
@@ -3022,7 +3033,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002A75  1  A6 EB        		ldx NUM_INVENTORY_ITEMS_EB
 002A77  1  E8           		inx
 002A78  1  A4 A7        		ldy CRAFT_ID_WALKING_A7
-002A7A  1  30 32        		bmi L2AAE
+002A7A  1  30 32        		bmi L2AAE					;walking
 002A7C  1               
 002A7C  1  20 B1 53     L2A7C:		jsr GET_RANDOM_L53B1				;obj X HSB 0-15
 002A7F  1  29 0F        		and #$0F
@@ -3040,14 +3051,13 @@ Current file: ..\src\merc-0700-6fff.a65
 002A9A  1  99 80 65     		sta OBJ_Y_HSB_L6580,Y
 002A9D  1  99 C0 64     		sta OBJ_Y_MSB_L64C0,Y
 002AA0  1  99 C0 68     		sta OBJ_Y_LSB_L68C0,Y
-002AA3  1               
-002AA3  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y			;set to visible from afar
+002AA3  1  99 40 69     		sta OBJECT_ROOM_6940,Y				;room = outside
 002AA6  1               
 002AA6  1  B9 C0 69     		lda OBJECT_ATTRIBUTES_69C0,Y			;reset bit 7 (in inventory list) in obj attributes
 002AA9  1  29 7F        		and #$7F
 002AAB  1  99 C0 69     		sta OBJECT_ATTRIBUTES_69C0,Y
 002AAE  1               
-002AAE  1  BC 2A 29     L2AAE:		ldy INVENTORY_LIST_L292A,X					;get object from inventory list
+002AAE  1  BC 2A 29     L2AAE:		ldy INVENTORY_LIST_L292A,X			;get object from inventory list
 002AB1  1  CA           		dex
 002AB2  1  D0 C8        		bne L2A7C
 002AB4  1  86 EB        		stx NUM_INVENTORY_ITEMS_EB
@@ -3059,12 +3069,13 @@ Current file: ..\src\merc-0700-6fff.a65
 002AB7  1               INTERSTELLAR_SHIP_DELIVERY_L2AB7:
 002AB7  1               
 002AB7  1  AD 7F 29     		lda L297F
-002ABA  1  F0 2A        		beq L2AE6
+002ABA  1  F0 2A        		beq L2AE6					;rts
 002ABC  1  30 29        		bmi L2AE7
-002ABE  1  AD 87 65     		lda L6587
+002ABE  1               
+002ABE  1  AD 87 65     		lda INT_SHIP_Y_HSB_6587
 002AC1  1  85 07        		sta MUL_HI_07
 002AC3  1  A8           		tay
-002AC4  1  AD C7 64     		lda L64C7
+002AC4  1  AD C7 64     		lda INT_SHIP_Y_MSB_64C7
 002AC7  1  85 06        		sta MUL_LO_06
 002AC9  1  A2 07        		ldx #$07
 002ACB  1  46 07        L2ACB:		lsr MUL_HI_07
@@ -3073,11 +3084,11 @@ Current file: ..\src\merc-0700-6fff.a65
 002AD0  1  D0 F9        		bne L2ACB
 002AD2  1  18           		clc
 002AD3  1  E5 06        		sbc MUL_LO_06
-002AD5  1  8D C7 64     		sta L64C7
+002AD5  1  8D C7 64     		sta INT_SHIP_Y_MSB_64C7
 002AD8  1  98           		tya
 002AD9  1  E5 07        		sbc MUL_HI_07
-002ADB  1  8D 87 65     		sta L6587
-002ADE  1  0D C7 64     		ora L64C7
+002ADB  1  8D 87 65     		sta INT_SHIP_Y_HSB_6587
+002ADE  1  0D C7 64     		ora INT_SHIP_Y_MSB_64C7
 002AE1  1  D0 03        		bne L2AE6
 002AE3  1  8D 7F 29     		sta L297F
 002AE6  1  60           L2AE6:		rts
@@ -3086,21 +3097,21 @@ Current file: ..\src\merc-0700-6fff.a65
 002AE7  1               ;
 002AE7  1               ;------------------------------------------------------------
 002AE7  1  A9 7F        L2AE7:		lda #$7F
-002AE9  1  8D 87 65     		sta L6587
+002AE9  1  8D 87 65     		sta INT_SHIP_Y_HSB_6587
 002AEC  1  8D 7F 29     		sta L297F
 002AEF  1  A9 00        		lda #$00
-002AF1  1  8D 47 69     		sta L6946+1
-002AF4  1  8D C7 64     		sta L64C7
-002AF7  1  8D C7 68     		sta L68C7
-002AFA  1  8D 87 68     		sta L6887
-002AFD  1  8D 07 69     		sta L6907
+002AF1  1  8D 47 69     		sta INT_SHIP_ROOM_6947
+002AF4  1  8D C7 64     		sta INT_SHIP_Y_MSB_64C7
+002AF7  1  8D C7 68     		sta INT_SHIP_Y_LSB_68C7
+002AFA  1  8D 87 68     		sta INT_SHIP_X_LSB_6887
+002AFD  1  8D 07 69     		sta INT_SHIP_Z_LSB_6907
 002B00  1  A9 08        		lda #$08
-002B02  1  8D 47 65     		sta L6547
-002B05  1  8D C7 65     		sta L65C7
+002B02  1  8D 47 65     		sta INT_SHIP_X_HSB_6547
+002B05  1  8D C7 65     		sta INT_SHIP_Z_HSB_65C7
 002B08  1  A9 99        		lda #$99
-002B0A  1  8D 87 64     		sta L6486+1
+002B0A  1  8D 87 64     		sta INT_SHIP_X_MSB_6487
 002B0D  1  A9 8B        		lda #$8B
-002B0F  1  8D 07 65     		sta L6507
+002B0F  1  8D 07 65     		sta INT_SHIP_Z_MSB_6507
 002B12  1  60           		rts
 002B13  1               
 002B13  1               ;------------------------------------------------------------
@@ -3143,7 +3154,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002B5D  1               
 002B5D  1  A9 FF        		lda #$FF
 002B5F  1  9D 80 65     		sta OBJ_Y_HSB_L6580,X
-002B62  1  9D C0 64     L2B62:		sta OBJ_Y_MSB_L64C0,X
+002B62  1  9D C0 64     		sta OBJ_Y_MSB_L64C0,X
 002B65  1  9D C0 68     		sta OBJ_Y_LSB_L68C0,X
 002B68  1               
 002B68  1  BD 00 69     L2B68:		lda OBJ_Z_LSB_L6900,X
@@ -3167,8 +3178,9 @@ Current file: ..\src\merc-0700-6fff.a65
 002B8C  1  E0 07        		cpx #$07
 002B8E  1  D0 85        		bne L2B15
 002B90  1  60           		rts
+002B91  1               
 002B91  1  A9 FF        L2B91:		lda #$FF
-002B93  1  9D 40 69     		sta OBJECT_VISIBILITY_6940,X
+002B93  1  9D 40 69     		sta OBJECT_ROOM_6940,X
 002B96  1  A9 00        		lda #$00
 002B98  1  9D A8 70     		sta L70A8,X
 002B9B  1  4C ED 37     		jmp OBJ_DRAW_LIST_37ED
@@ -3206,14 +3218,14 @@ Current file: ..\src\merc-0700-6fff.a65
 002BD7  1  BD 40 65     		lda OBJ_X_HSB_L6540,X
 002BDA  1  29 0F        		and #$0F
 002BDC  1  05 04        		ora TMP_04
-002BDE  1  85 F4        		sta L00F4
+002BDE  1  85 F4        		sta CRUMBLE_POS_F4
 002BE0  1  A8           		tay
 002BE1  1  B9 00 1F     		lda L1F00,Y
 002BE4  1  85 FA        		sta L00FA
 002BE6  1  09 80        		ora #$80
 002BE8  1  99 00 1F     		sta L1F00,Y
 002BEB  1  A9 10        		lda #$10
-002BED  1  85 F3        		sta L00F3
+002BED  1  85 F3        		sta CRUMBLE_CNT_F3
 002BEF  1  20 91 2B     		jsr L2B91
 002BF2  1  A9 0F        		lda #$0F
 002BF4  1  D0 2B        		bne L2C21
@@ -3236,17 +3248,17 @@ Current file: ..\src\merc-0700-6fff.a65
 002C13  1  A9 1B        		lda #$1B
 002C15  1  20 0D 2F     		jsr BENSON_2F0D
 002C18  1  60           L2C18:		rts
-002C19  1  A6 F3        L2C19:		ldx L00F3
+002C19  1  A6 F3        L2C19:		ldx CRUMBLE_CNT_F3
 002C1B  1  F0 FB        L2C1B:		beq L2C18
 002C1D  1  CA           		dex
-002C1E  1  86 F3        		stx L00F3
+002C1E  1  86 F3        		stx CRUMBLE_CNT_F3
 002C20  1  8A           		txa
 002C21  1  09 80        L2C21:		ora #$80
 002C23  1  8D 01 D2     L2C23:		sta AUDC1
 002C26  1  A9 20        L2C26:		lda #$20
 002C28  1  8D 00 D2     		sta AUDF1
 002C2B  1  A4 B5        L2C2B:		ldy GROUND_STRUC_OBJ_TO_DRAW_B5
-002C2D  1  C4 F4        		cpy L00F4
+002C2D  1  C4 F4        		cpy CRUMBLE_POS_F4
 002C2F  1  D0 E7        		bne L2C18
 002C31  1  B9 00 1F     		lda L1F00,Y
 002C34  1  85 F2        		sta L00F2
@@ -3254,13 +3266,13 @@ Current file: ..\src\merc-0700-6fff.a65
 002C39  1  30 62        		bmi L2C9D
 002C3B  1  20 1D 3B     		jsr L3B1D
 002C3E  1  D0 07        		bne L2C47
-002C40  1  A5 F3        L2C40:		lda L00F3
+002C40  1  A5 F3        L2C40:		lda CRUMBLE_CNT_F3
 002C42  1  F0 04        		beq L2C48
 002C44  1  4A           		lsr
 002C45  1  B0 D2        		bcs L2C19
 002C47  1  60           L2C47:		rts
 002C48  1  A5 FA        L2C48:		lda L00FA
-002C4A  1  A4 F4        		ldy L00F4
+002C4A  1  A4 F4        		ldy CRUMBLE_POS_F4
 002C4C  1  59 00 1F     		eor L1F00,Y
 002C4F  1  10 F6        		bpl L2C47
 002C51  1  B9 00 1F     		lda L1F00,Y
@@ -3319,7 +3331,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002CA6  1  10 98        		bpl L2C40
 002CA8  1  98           		tya
 002CA9  1  20 E6 39     		jsr L39E6
-002CAC  1  A5 F3        		lda L00F3
+002CAC  1  A5 F3        		lda CRUMBLE_CNT_F3
 002CAE  1  F0 97        		beq L2C47
 002CB0  1  85 06        		sta MUL_LO_06
 002CB2  1  20 1D 3B     L2CB2:		jsr L3B1D
@@ -3333,7 +3345,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002CBA  1  86 08        L2CBA:		stx ZP_08
 002CBC  1  84 09        		sty ZP_09
 002CBE  1  38           		sec
-002CBF  1  B9 40 69     		lda OBJECT_VISIBILITY_6940,Y
+002CBF  1  B9 40 69     		lda OBJECT_ROOM_6940,Y
 002CC2  1  D0 25        		bne L2CE9
 002CC4  1  20 C1 2E     		jsr L2EC1
 002CC7  1  A2 04        		ldx #$04
@@ -3347,7 +3359,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002CD8  1  8D 78 29     		sta L2978
 002CDB  1  99 A8 70     		sta L70A8,Y
 002CDE  1  A9 FF        L2CDE:		lda #$FF
-002CE0  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
+002CE0  1  99 40 69     		sta OBJECT_ROOM_6940,Y
 002CE3  1  A6 08        		ldx ZP_08
 002CE5  1  20 91 2B     		jsr L2B91
 002CE8  1  18           		clc
@@ -3367,16 +3379,21 @@ Current file: ..\src\merc-0700-6fff.a65
 002CF5  1               ;
 002CF5  1               ;------------------------------------------------------------
 002CF5  1  A5 A7        L2CF5:		lda CRAFT_ID_WALKING_A7
-002CF7  1  30 FB        		bmi L2CF4
-002CF9  1  A5 F3        		lda L00F3
-002CFB  1  D0 F7        		bne L2CF4
+002CF7  1  30 FB        		bmi L2CF4					;walking, rts
+002CF9  1               
+002CF9  1  A5 F3        		lda CRUMBLE_CNT_F3				;flying
+002CFB  1  D0 F7        		bne L2CF4					;rts
+002CFD  1               
 002CFD  1  A0 08        		ldy #$08
 002CFF  1  B9 A8 70     		lda L70A8,Y
-002D02  1  D0 F0        		bne L2CF4
+002D02  1  D0 F0        		bne L2CF4					;rts
+002D04  1               
 002D04  1  A9 0F        		lda #$0F
 002D06  1  85 F5        		sta SOUND_F5
+002D08  1               
 002D08  1  A5 CD        		lda ROOM_NO_CD
-002D0A  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
+002D0A  1  99 40 69     		sta OBJECT_ROOM_6940,Y
+002D0D  1               
 002D0D  1  A9 10        		lda #$10
 002D0F  1  99 A8 70     		sta L70A8,Y
 002D12  1  84 AB        		sty L00AB
@@ -3476,7 +3493,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002DCC  1  A9 20        		lda #$20
 002DCE  1  9D A8 70     		sta L70A8,X
 002DD1  1  A9 00        		lda #$00
-002DD3  1  9D 40 69     		sta OBJECT_VISIBILITY_6940,X
+002DD3  1  9D 40 69     		sta OBJECT_ROOM_6940,X
 002DD6  1  A0 04        		ldy #$04
 002DD8  1  20 30 2E     		jsr L2E30
 002DDB  1  20 93 2E     		jsr L2E93
@@ -3494,14 +3511,15 @@ Current file: ..\src\merc-0700-6fff.a65
 002DF0  1  B0 B7        		bcs L2DA9
 002DF2  1  20 2C 59     		jsr L592C
 002DF5  1  A5 A7        		lda CRAFT_ID_WALKING_A7
-002DF7  1  30 05        		bmi L2DFE
+002DF7  1  30 05        		bmi L2DFE						;walking
+002DF9  1               
 002DF9  1  A2 30        		ldx #$30						;"ship destroyed"
 002DFB  1  20 2A 32     		jsr START_MESSAGE_L322A
 002DFE  1  A9 00        L2DFE:		lda #$00
 002E00  1  8D 78 29     		sta L2978
 002E03  1  A9 01        		lda #$01
 002E05  1  85 F5        		sta SOUND_F5
-002E07  1  A9 09        		lda #$09
+002E07  1  A9 09        		lda #$09						;falling
 002E09  1  85 A7        		sta CRAFT_ID_WALKING_A7
 002E0B  1  20 89 41     		jsr COPY_SHIP_DATA_L4189
 002E0E  1  A9 FF        		lda #$FF
@@ -3519,7 +3537,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002E23  1  A9 AD        		lda #$AD
 002E25  1  9D A8 70     		sta L70A8,X
 002E28  1  A9 00        		lda #$00
-002E2A  1  9D 40 69     		sta OBJECT_VISIBILITY_6940,X
+002E2A  1  9D 40 69     		sta OBJECT_ROOM_6940,X
 002E2D  1  4C ED 37     L2E2D:		jmp OBJ_DRAW_LIST_37ED
 002E30  1               
 002E30  1               ;------------------------------------------------------------
@@ -3665,9 +3683,9 @@ Current file: ..\src\merc-0700-6fff.a65
 002F3C  1  85 E7        		sta L00E7					;store it
 002F3E  1  29 3F        		and #$3F					;make pointer to jumptable
 002F40  1  0A           		asl
-002F41  1  69 DE        L2F41:		adc #$DE
+002F41  1  69 DE        L2F41:		adc #<BENSON_JMP_TAB
 002F43  1  8D 4E 2F     		sta L2F4D+1
-002F46  1  A9 31        		lda #$31
+002F46  1  A9 31        		lda #>BENSON_JMP_TAB
 002F48  1  69 00        		adc #$00
 002F4A  1  8D 4F 2F     		sta L2F4D+2
 002F4D  1  6C 06 32     L2F4D:		jmp (L3206)					;jump to it
@@ -3722,7 +3740,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002F8C  1  4C 0C 30     		jmp L300C
 002F8F  1               
 002F8F  1               ;------------------------------------------------------------
-002F8F  1               ;
+002F8F  1               ; $22 check aircraft / walking
 002F8F  1               ;------------------------------------------------------------
 002F8F  1  C8           BENSON_2F8F:	iny
 002F90  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
@@ -3735,12 +3753,12 @@ Current file: ..\src\merc-0700-6fff.a65
 002F98  1               ;------------------------------------------------------------
 002F98  1  AE 4E 27     BENSON_2F98:	ldx L274E
 002F9B  1  AD 4F 27     		lda L274F
-002F9E  1  DD 40 69     		cmp OBJECT_VISIBILITY_6940,X
+002F9E  1  DD 40 69     		cmp OBJECT_ROOM_6940,X
 002FA1  1  F0 68        		beq L300B
 002FA3  1  D0 63        		bne L3008
 002FA5  1               
 002FA5  1               ;------------------------------------------------------------
-002FA5  1               ;
+002FA5  1               ; check room
 002FA5  1               ;------------------------------------------------------------
 002FA5  1  AD 4F 27     BENSON_2FA5:	lda L274F
 002FA8  1  C5 CD        		cmp ROOM_NO_CD
@@ -3789,7 +3807,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002FDF  1  F0 2A        		beq L300B
 002FE1  1               
 002FE1  1               ;------------------------------------------------------------
-002FE1  1               ;
+002FE1  1               ; read key
 002FE1  1               ;------------------------------------------------------------
 002FE1  1  A5 E9        BENSON_2FE1:	lda NEW_KEY_L00E9
 002FE3  1  29 3F        		and #$3F
@@ -4126,7 +4144,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0031A0  1  4C 13 30     		jmp L3013
 0031A3  1               
 0031A3  1               ;------------------------------------------------------------
-0031A3  1               ;
+0031A3  1               ; start a message
 0031A3  1               ;------------------------------------------------------------
 0031A3  1  C8           BENSON_31A3:	iny
 0031A4  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
@@ -4173,41 +4191,42 @@ Current file: ..\src\merc-0700-6fff.a65
 0031DE  1               ;------------------------------------------------------------
 0031DE  1               ;
 0031DE  1               ;------------------------------------------------------------
-0031DE  1  00 00        L31DE:		.byte $00,$00
-0031E0  1  B7 30        L31E0:		.word BENSON_30B7
-0031E2  1  CF 30        		.word BENSON_30CF
-0031E4  1  33 30        L31E4:		.word BENSON_3033
-0031E6  1  24 30        		.word BENSON_3024
-0031E8  1  3F 30        		.word BENSON_303F
-0031EA  1  C8 2F        		.word BENSON_2FC8
-0031EC  1  71 2F        L31EC:		.word BENSON_2F71
-0031EE  1  D8 30        		.word BENSON_30D8
-0031F0  1  C2 2F        		.word BENSON_2FC2
-0031F2  1  66 2F        		.word BENSON_2F66
-0031F4  1  E1 2F        		.word BENSON_2FE1
-0031F6  1  B8 2F        		.word BENSON_2FB8
-0031F8  1  ED 30        		.word BENSON_30ED
-0031FA  1  F4 30        		.word BENSON_30F4
-0031FC  1  76 30        		.word BENSON_3076
-0031FE  1  74 31        		.word BENSON_3174
-003200  1  80 31        		.word BENSON_3180
-003202  1  AE 2F        		.word BENSON_2FAE
-003204  1  A5 2F        		.word BENSON_2FA5
-003206  1  A3 31        		.word BENSON_31A3
-003208  1  19 31        		.word BENSON_3119
-00320A  1  C7 31        		.word BENSON_31C7
-00320C  1  84 2F        		.word BENSON_2F84
-00320E  1  51 2F        		.word BENSON_2F51
-003210  1  8E 31        		.word BENSON_318E
-003212  1  F3 2F        		.word BENSON_2FF3
-003214  1  B5 31        		.word BENSON_31B5
-003216  1  C1 31        		.word BENSON_31C1
-003218  1  98 2F        		.word BENSON_2F98
-00321A  1  5C 31        		.word BENSON_315C
-00321C  1  D8 2F        		.word BENSON_2FD8
-00321E  1  5C 30        		.word BENSON_305C
-003220  1  FD 2F        		.word BENSON_2FFD
-003222  1  8F 2F        L3222:		.word BENSON_2F8F
+0031DE  1               BENSON_JMP_TAB:
+0031DE  1  00 00        		.byte $00,$00					;$00
+0031E0  1  B7 30        L31E0:		.word BENSON_30B7				;$01
+0031E2  1  CF 30        		.word BENSON_30CF				;$02
+0031E4  1  33 30        L31E4:		.word BENSON_3033				;$03 get next pointer?
+0031E6  1  24 30        		.word BENSON_3024				;$04
+0031E8  1  3F 30        		.word BENSON_303F				;$05
+0031EA  1  C8 2F        		.word BENSON_2FC8				;$06
+0031EC  1  71 2F        L31EC:		.word BENSON_2F71				;$07 wait for timer
+0031EE  1  D8 30        		.word BENSON_30D8				;$08
+0031F0  1  C2 2F        		.word BENSON_2FC2				;$09
+0031F2  1  66 2F        		.word BENSON_2F66				;$0A
+0031F4  1  E1 2F        L31F4:		.word BENSON_2FE1				;$0B, check pressed key
+0031F6  1  B8 2F        		.word BENSON_2FB8				;$0C
+0031F8  1  ED 30        		.word BENSON_30ED				;$0D
+0031FA  1  F4 30        		.word BENSON_30F4				;$0E
+0031FC  1  76 30        		.word BENSON_3076				;$0F
+0031FE  1  74 31        		.word BENSON_3174				;$10
+003200  1  80 31        		.word BENSON_3180				;$11
+003202  1  AE 2F        		.word BENSON_2FAE				;$12
+003204  1  A5 2F        		.word BENSON_2FA5				;$13
+003206  1  A3 31        		.word BENSON_31A3				;$14
+003208  1  19 31        		.word BENSON_3119				;$15
+00320A  1  C7 31        		.word BENSON_31C7				;$16
+00320C  1  84 2F        		.word BENSON_2F84				;$17
+00320E  1  51 2F        		.word BENSON_2F51				;$18
+003210  1  8E 31        		.word BENSON_318E				;$19
+003212  1  F3 2F        		.word BENSON_2FF3				;$1A
+003214  1  B5 31        		.word BENSON_31B5				;$1B
+003216  1  C1 31        		.word BENSON_31C1				;$1C
+003218  1  98 2F        		.word BENSON_2F98				;$1D
+00321A  1  5C 31        		.word BENSON_315C				;$1E
+00321C  1  D8 2F        		.word BENSON_2FD8				;$1F
+00321E  1  5C 30        		.word BENSON_305C				;$20
+003220  1  FD 2F        		.word BENSON_2FFD				;$21
+003222  1  8F 2F        L3222:		.word BENSON_2F8F				;$22	;check aircraft / walking
 003224  1               
 003224  1  A5 E6        L3224:		lda MESSAGE_PENDING_E6
 003226  1  D0 1A        		bne L3242
@@ -4669,19 +4688,22 @@ Current file: ..\src\merc-0700-6fff.a65
 00353C  1               ;------------------------------------------------------------
 00353C  1               SETUP_ROOM_L353C:
 00353C  1  A6 06        		ldx MUL_LO_06					;room number
-00353E  1  D0 34        		bne L3574
-003540  1  86 A6        		stx PLANET_UNDERGROUND_A6
-003542  1  86 CD        		stx ROOM_NO_CD
+00353E  1  D0 34        		bne L3574					;if zero, fall from the colony craft
+003540  1               
+003540  1  86 A6        		stx PLANET_UNDERGROUND_A6			;outside
+003542  1  86 CD        		stx ROOM_NO_CD					;room0
 003544  1  20 ED 37     		jsr OBJ_DRAW_LIST_37ED
-003547  1  A9 09        		lda #$09					;Prestinium
+003547  1  A9 09        		lda #$09					;falling!
 003549  1  85 A7        		sta CRAFT_ID_WALKING_A7
 00354B  1  20 89 41     		jsr COPY_SHIP_DATA_L4189
-00354E  1  20 FF 58     		jsr L58FF
-003551  1  A2 08        		ldx #$08
+00354E  1  20 FF 58     		jsr SET_COLOR_OUTSIDE_58FF
+003551  1               
+003551  1  A2 08        		ldx #$08					;set current position
 003553  1  BD 6B 35     L3553:		lda L356B,X
 003556  1  95 70        		sta CUR_X_LSB_70,X
 003558  1  CA           		dex
 003559  1  10 F8        		bpl L3553
+00355B  1               
 00355B  1  C6 22        		dec FLIP_SCREEN_22
 00355D  1  A9 00        		lda #$00
 00355F  1  85 C8        		sta room_change_L00C8
@@ -4690,13 +4712,12 @@ Current file: ..\src\merc-0700-6fff.a65
 003566  1  85 C8        		sta room_change_L00C8
 003568  1  4C 7E 39     		jmp L397E
 00356B  1               
-00356B  1               
 00356B  1  C0 67 08 80  L356B:		.byte $C0,$67,$08,$80,$F4,$40,$00,$70,$08
 00356F  1  F4 40 00 70  
 003573  1  08           
 003574  1               
 003574  1               ;------------------------------------------------------------
-003574  1               ;
+003574  1               ; X holds the room number
 003574  1               ;------------------------------------------------------------
 003574  1  A9 E0        L3574:		lda #$E0
 003576  1  85 8B        		sta L008B
@@ -4706,7 +4727,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003580  1  85 1A        		sta PTR_HI_1A
 003582  1  A0 00        		ldy #$00
 003584  1  B1 19        		lda (PTR_LO_19),Y
-003586  1  10 3E        		bpl L35C6
+003586  1  10 3E        		bpl L35C6					;bit7 set = teleporter?
 003588  1               
 003588  1  E0 72        		cpx #$72
 00358A  1  D0 0B        		bne L3597
@@ -4741,7 +4762,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0035BB  1  A9 1F        		lda #$1F					;laboratory teleporter
 0035BD  1  85 F0        		sta L00F0
 0035BF  1  E0 7F        		cpx #$7F					;laboratory
-0035C1  1  D0 03        		bne L35C6
+0035C1  1  D0 03        		bne L35C6					;no switch room?
 0035C3  1  20 CE 37     		jsr FLIP_VIEW_FLAG_37CE
 0035C6  1               
 0035C6  1               
@@ -4757,9 +4778,9 @@ Current file: ..\src\merc-0700-6fff.a65
 0035C6  1               ; 0  1  2  3  4  5  6  7  8  9  a  b  d  d
 0035C6  1               ; 08 a2 84 8a 00 22 03 04 00 12 20 04 04 00
 0035C6  1               ;
-0035C6  1               ; 00	GROUND_STRUCT_X_MSB
-0035C6  1               ; 01	GROUND_STRUCT_Y_MSB
-0035C6  1               ; 02	GROUND_STRUCTURE_Z_MSB
+0035C6  1               ; 00	width (X)
+0035C6  1               ; 01	bit0-2 = height (Y)
+0035C6  1               ; 02	bit(0-6) = depth (Z); bit7=1 send message?
 0035C6  1               ; 03	room color
 0035C6  1               ; 04	line color
 0035C6  1               ; 05	bit7 CUR_Z_LSB, !bit7 CUR_X_LSB
@@ -4867,16 +4888,16 @@ Current file: ..\src\merc-0700-6fff.a65
 003683  1               
 003683  1  A9 FF        L3683:		lda #$FF
 003685  1  85 96        		sta L0096
-003687  1  A0 01        		ldy #$01
+003687  1  A0 01        		ldy #$01					;Y=1
 003689  1  B1 19        		lda (PTR_LO_19),Y
 00368B  1  4A           		lsr
 00368C  1  4A           		lsr
 00368D  1  4A           		lsr
 00368E  1  AA           		tax
 00368F  1  F0 0E        		beq L369F
-003691  1  C8           		iny
+003691  1  C8           		iny						;Y=2
 003692  1  B1 19        		lda (PTR_LO_19),Y
-003694  1  10 07        		bpl L369D
+003694  1  10 07        		bpl L369D					;bit7 set = send message?
 003696  1  8A           		txa
 003697  1  20 0D 2F     		jsr BENSON_2F0D
 00369A  1  4C 9F 36     		jmp L369F
@@ -5028,7 +5049,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0037FD  1  86 04        		stx TMP_04
 0037FF  1  A2 00        		ldx #$00
 003801  1  A5 04        L3801:		lda TMP_04
-003803  1  D9 40 69     L3803:		cmp OBJECT_VISIBILITY_6940,Y
+003803  1  D9 40 69     L3803:		cmp OBJECT_ROOM_6940,Y
 003806  1  D0 05        		bne L380D
 003808  1  E8           		inx
 003809  1  98           		tya
@@ -5109,7 +5130,8 @@ Current file: ..\src\merc-0700-6fff.a65
 003890  1               ;------------------------------------------------------------
 003890  1               ; check if object number in A is in inventory list
 003890  1               ;------------------------------------------------------------
-003890  1  A6 EB        CHECK_INVENTORY_3890:		ldx NUM_INVENTORY_ITEMS_EB
+003890  1               CHECK_INVENTORY_3890:
+003890  1  A6 EB        		ldx NUM_INVENTORY_ITEMS_EB
 003892  1  CA           L3892:		dex
 003893  1  30 05        		bmi L389A
 003895  1  DD 2C 29     		cmp INVENTORY_LIST_L292C,X
@@ -5578,12 +5600,14 @@ Current file: ..\src\merc-0700-6fff.a65
 003B7D  1  F0 04        		beq L3B83
 003B7F  1  C9 15        		cmp #$15					; 'B' board
 003B81  1  D0 03        		bne L3B86
+003B83  1               
 003B83  1  20 EE 5A     L3B83:		jsr RESET_KEY_L5AEE
+003B86  1               
 003B86  1  A4 B0        L3B86:		ldy NUM_OBJS_TO_DRAW_B0
 003B88  1  F0 0E        		beq L3B98
 003B8A  1  84 B1        		sty L00B1
 003B8C  1  BE 80 69     L3B8C:		ldx OBJECT_DRAW_LIST_6980,Y			; go through object draw list
-003B8F  1  20 99 3B     		jsr L3B99					; check if take possible
+003B8F  1  20 99 3B     		jsr L3B99					; check if board or take is possible
 003B92  1  C6 B1        		dec L00B1
 003B94  1  A4 B1        		ldy L00B1
 003B96  1  D0 F4        		bne L3B8C
@@ -5598,7 +5622,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003BA0  1  BD 40 68     		lda OBJECT_SHAPE_POINTER_HI_L6840,X
 003BA3  1  85 1C        		sta OBJ_SHAPE_PTR_HI_1C
 003BA5  1  20 C8 3D     		jsr L3DC8					;compute distance
-003BA8  1  20 6B 3C     		jsr L3C6B					;check if in range for take
+003BA8  1  20 6B 3C     		jsr L3C6B					;check if in range for take or board
 003BAB  1  B0 01        		bcs L3BAE
 003BAD  1  60           L3BAD:		rts
 003BAE  1               
@@ -5756,7 +5780,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003CAD  1               
 003CAD  1  A9 FF        L3CAD:		lda #$FF
 003CAF  1  85 B6        		sta L00B6
-003CB1  1  9D 40 69     		sta OBJECT_VISIBILITY_6940,X
+003CB1  1  9D 40 69     		sta OBJECT_ROOM_6940,X				;no, room, $ff=boarded
 003CB4  1  20 ED 37     		jsr OBJ_DRAW_LIST_37ED
 003CB7  1  18           		clc
 003CB8  1  60           		rts
@@ -5772,11 +5796,14 @@ Current file: ..\src\merc-0700-6fff.a65
 003CC0  1               PLOT_POINT_POSSIBLY_L3CC0:					;title is wrong
 003CC0  1  C9 15        		cmp #$15					;'B' - board
 003CC2  1  D0 FA        		bne L3CBE
+003CC4  1               
 003CC4  1  A5 A7        		lda CRAFT_ID_WALKING_A7
-003CC6  1  10 F6        		bpl L3CBE
+003CC6  1  10 F6        		bpl L3CBE					;flying
+003CC8  1               
 003CC8  1  A5 AD        		lda OBJECT_NUMBER_AD
 003CCA  1  C9 08        		cmp #$08
-003CCC  1  B0 F0        		bcs L3CBE
+003CCC  1  B0 F0        		bcs L3CBE					;no ship
+003CCE  1               
 003CCE  1  A2 02        		ldx #$02
 003CD0  1  A0 00        		ldy #$00
 003CD2  1  20 0B 3E     		jsr CALC_ABS_DIST_L3E0B
@@ -5813,7 +5840,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003D13  1  8A           		txa
 003D14  1  20 89 41     L3D14:		jsr COPY_SHIP_DATA_L4189
 003D17  1  20 08 47     L3D17:		jsr SETUP_ROTATION_MATRIX_L4708
-003D1A  1  20 C1 3D     		jsr L3DC1
+003D1A  1  20 C1 3D     		jsr SET_SPEED_ZERO_3DC1
 003D1D  1  A6 AD        		ldx OBJECT_NUMBER_AD
 003D1F  1  4C AD 3C     L3D1F:		jmp L3CAD
 003D22  1               
@@ -5837,24 +5864,26 @@ Current file: ..\src\merc-0700-6fff.a65
 003D36  1  4C FB 5A     		jmp SOUND_EFFECT_L5AFB
 003D39  1  A4 A7        L3D39:		ldy CRAFT_ID_WALKING_A7
 003D3B  1  10 01        		bpl L3D3E
-003D3D  1  60           L3D3D:		rts
+003D3D  1  60           L3D3D:		rts						;walking
 003D3E  1               
 003D3E  1               ;------------------------------------------------------------
 003D3E  1               ;
 003D3E  1               ;------------------------------------------------------------
-003D3E  1  A5 7D        L3D3E:		lda INSDAT
+003D3E  1  A5 7D        L3D3E:		lda L007D					;flying, but what is 7D? meaning?
 003D40  1  F0 FB        		beq L3D3D
+003D42  1               
 003D42  1  A9 00        		lda #$00
 003D44  1  85 28        		sta PITCH_LO_28
 003D46  1  85 26        		sta ROLL_LO_26
 003D48  1  85 27        		sta ROLL_HI_27
-003D4A  1  20 C1 3D     		jsr L3DC1
+003D4A  1  20 C1 3D     		jsr SET_SPEED_ZERO_3DC1
 003D4D  1  A9 02        		lda #$02
 003D4F  1  85 29        		sta PITCH_HI_29
-003D51  1  A9 80        		lda #$80
+003D51  1  A9 80        		lda #$80					;walking
 003D53  1  85 A7        		sta CRAFT_ID_WALKING_A7
 003D55  1  C0 09        		cpy #$09
-003D57  1  F0 E4        		beq L3D3D
+003D57  1  F0 E4        		beq L3D3D					;falling, rts
+003D59  1               
 003D59  1  B0 31        		bcs L3D8C
 003D5B  1  A5 2B        		lda YAW_HI_2B
 003D5D  1  85 04        		sta TMP_04
@@ -5869,11 +5898,11 @@ Current file: ..\src\merc-0700-6fff.a65
 003D6C  1  4C 8C 3D     		jmp L3D8C
 003D6F  1               
 003D6F  1               ;------------------------------------------------------------
-003D6F  1               ;
+003D6F  1               ; drop an object
 003D6F  1               ;------------------------------------------------------------
 003D6F  1  AD F8 69     L3D6F:		lda L69F8
 003D72  1  30 04        		bmi L3D78
-003D74  1  A5 7D        		lda INSDAT
+003D74  1  A5 7D        		lda L007D
 003D76  1  F0 C5        		beq L3D3D
 003D78  1  A6 EB        L3D78:		ldx NUM_INVENTORY_ITEMS_EB
 003D7A  1  F0 C1        		beq L3D3D
@@ -5885,7 +5914,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003D89  1  20 FB 5A     		jsr SOUND_EFFECT_L5AFB
 003D8C  1               
 003D8C  1  A5 CD        L3D8C:		lda ROOM_NO_CD
-003D8E  1  99 40 69     		sta OBJECT_VISIBILITY_6940,Y
+003D8E  1  99 40 69     		sta OBJECT_ROOM_6940,Y
 003D91  1  A5 70        		lda CUR_X_LSB_70
 003D93  1  99 80 68     		sta OBJ_X_LSB_L6880,Y
 003D96  1  A5 71        		lda CUR_X_MSB_71
@@ -5909,7 +5938,8 @@ Current file: ..\src\merc-0700-6fff.a65
 003DC1  1               ;------------------------------------------------------------
 003DC1  1               ;
 003DC1  1               ;------------------------------------------------------------
-003DC1  1  A9 88        L3DC1:		lda #$88
+003DC1  1               SET_SPEED_ZERO_3DC1:
+003DC1  1  A9 88        		lda #$88
 003DC3  1  85 ED        		sta SPEED_FP_ED
 003DC5  1  85 25        		sta ZP_25
 003DC7  1  60           		rts
@@ -6535,32 +6565,70 @@ Current file: ..\src\merc-0700-6fff.a65
 00423D  1  56 42 20 08  		.byte $56,$42,$20,$08,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 004241  1  00 00 00 00  
 004245  1  00 00 00 00  
-00424D  1  4C 2A 50 A5  		.byte $4C,$2A,$50,$A5,$75,$F0,$5A,$10,$04,$A5,$75,$4A,$4A,$4A,$AA,$A5
-004251  1  75 F0 5A 10  
-004255  1  04 A5 75 4A  
-00425D  1  74 38 FD 8E  		.byte $74,$38,$FD,$8E,$42,$85,$74,$A5,$75,$FD,$9E,$42,$85,$75,$D0,$13
-004261  1  42 85 74 A5  
-004265  1  75 FD 9E 42  
-00426D  1  A9 4C CD 83  		.byte $A9,$4C,$CD,$83,$42,$F0,$0C,$8D,$83,$42,$A9,$06,$85,$75,$A9,$50
-004271  1  42 F0 0C 8D  
-004275  1  83 42 A9 06  
-00427D  1               
-00427D  1  8D C0 73 4C  		.byte $8D,$C0,$73,$4C,$C6,$42,$4C,$DE,$4F,$48,$8A,$18,$69,$0C,$AA,$68
-004281  1  C6 42 4C DE  
-004285  1  4F 48 8A 18  
-00428D  1  60 40 80 00  		.byte $60,$40,$80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$80,$00
-004291  1  80 00 80 00  
-004295  1  80 00 80 00  
-00429D  1  00 00 00 01  		.byte $00,$00,$00,$01,$01,$02,$02,$03,$03,$04,$04,$05,$05,$06,$06,$07,$08
-0042A1  1  01 02 02 03  
-0042A5  1  03 04 04 05  
-0042AE  1               
-0042AE  1               L421F		= $421F
-0042AE  1               L4283		= $4283
-0042AE  1               L41C4		= $41C4
-0042AE  1               L41C0		= $41C0
-0042AE  1               L41FF		= $41FF
-0042AE  1               
+00424D  1               
+00424D  1               L421F		= $421F
+00424D  1               ;------------------------------------------------------------
+00424D  1               ;
+00424D  1               ;------------------------------------------------------------
+00424D  1  4C 2A 50     		JMP $502A
+004250  1               
+004250  1               ;------------------------------------------------------------
+004250  1               ;
+004250  1               ;------------------------------------------------------------
+004250  1  A5 75        		lda CUR_Y_HSB_75
+004252  1  F0 5A        		beq $42AE
+004254  1  10 04        		bpl $425A
+004256  1  A5 75        		lda CUR_Y_HSB_75
+004258  1  4A           		lsr
+004259  1  4A           		lsr
+00425A  1  4A           L425A:		lsr
+00425B  1  AA           		tax
+00425C  1  A5 74        		lda CUR_Y_MSB_74
+00425E  1  38           		sec
+00425F  1  FD 8E 42     		sbc $428E,X
+004262  1  85 74        		sta CUR_Y_MSB_74
+004264  1  A5 75        		lda CUR_Y_HSB_75
+004266  1  FD 9E 42     		sbc $429E,X
+004269  1  85 75        		sta CUR_Y_HSB_75
+00426B  1  D0 13        		bne $4280
+00426D  1               
+00426D  1  A9 4C        		lda #$4C
+00426F  1  CD 83 42     		cmp $4283
+004272  1  F0 0C        		beq $4280
+004274  1  8D 83 42     		sta $4283
+004277  1  A9 06        		lda #$06
+004279  1  85 75        		sta CUR_Y_HSB_75
+00427B  1  A9 50        		lda #$50
+00427D  1  8D C0 73     		sta SHIP_DATA_L73C0
+004280  1  4C C6 42     L4280:		jmp $42C6
+004283  1               
+004283  1               ;------------------------------------------------------------
+004283  1               ;
+004283  1               ;------------------------------------------------------------
+004283  1  4C DE 4F     L4283:		jmp $4FDE
+004286  1               
+004286  1               ;------------------------------------------------------------
+004286  1               ;
+004286  1               ;------------------------------------------------------------
+004286  1  48           		pha
+004287  1  8A           		txa
+004288  1  18           		clc
+004289  1  69 0C        		adc #$0C
+00428B  1  AA           		tax
+00428C  1  68           		pla
+00428D  1  60           		rts
+00428E  1               
+00428E  1               ;------------------------------------------------------------
+00428E  1               ;
+00428E  1               ;------------------------------------------------------------
+00428E  1  40           		RTI
+00428F  1               
+00428F  1  80 00 80 00  		.byte $80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$80,$00,$00,$00
+004293  1  80 00 80 00  
+004297  1  80 00 80 00  
+00429F  1  00 01 01 02  		.byte $00,$01,$01,$02,$02,$03,$03,$04,$04,$05,$05,$06,$06,$07,$08
+0042A3  1  02 03 03 04  
+0042A7  1  04 05 05 06  
 0042AE  1               ;------------------------------------------------------------
 0042AE  1               ;
 0042AE  1               ;------------------------------------------------------------
@@ -6573,14 +6641,13 @@ Current file: ..\src\merc-0700-6fff.a65
 0042BA  1  85 75        		sta CUR_Y_HSB_75
 0042BC  1  10 08        		bpl L42C6
 0042BE  1  A9 00        L42BE:		lda #$00
-0042C0  1  85 F9        		sta L00F9
+0042C0  1  85 F9        		sta AT_COLONY_CRAFT_00F9
 0042C2  1  38           		sec
 0042C3  1  4C 9F 44     L42C3:		jmp L449F
 0042C6  1               
 0042C6  1               ;------------------------------------------------------------
 0042C6  1               ;
 0042C6  1               ;------------------------------------------------------------
-0042C6  1               
 0042C6  1  A5 26        L42C6:		lda ROLL_LO_26
 0042C8  1  18           		clc
 0042C9  1  6D C3 73     		adc L73C3
@@ -6609,7 +6676,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0042F2  1  A9 3F        		lda #$3F
 0042F4  1  85 73        		sta CUR_Y_LSB_73
 0042F6  1  20 07 43     		jsr L4307
-0042F9  1  A5 7D        		lda INSDAT
+0042F9  1  A5 7D        		lda L007D
 0042FB  1  D0 09        		bne L4306
 0042FD  1  C6 75        		dec CUR_Y_HSB_75
 0042FF  1  10 05        L42FF:		bpl L4306
@@ -6693,13 +6760,13 @@ Current file: ..\src\merc-0700-6fff.a65
 00438C  1  AE CE 73     		ldx L73CE
 00438F  1  AC CF 73     		ldy L73CF
 004392  1  20 D8 4D     		jsr FP_MUL_L4DD8
-004395  1  A6 24        		ldx ICBALZ
+004395  1  A6 24        		ldx ZP_24
 004397  1  A4 25        		ldy ZP_25
 004399  1  20 59 4E     		jsr FP_ADD_L4E59
 00439C  1  AC CB 73     		ldy L73CB
 00439F  1  AE CA 73     		ldx L73CA
 0043A2  1  20 D8 4D     		jsr FP_MUL_L4DD8
-0043A5  1  86 24        		stx ICBALZ
+0043A5  1  86 24        		stx ZP_24
 0043A7  1  84 25        		sty ZP_25
 0043A9  1  A6 36        		ldx COS_PITCH_LO_36
 0043AB  1  A4 37        		ldy COS_PITCH_HI_37
@@ -6708,7 +6775,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0043B1  1  A6 3C        		ldx COS_YAW_LO_3C
 0043B3  1  A4 3D        		ldy COS_YAW_HI_3D
 0043B5  1  20 D8 4D     		jsr FP_MUL_L4DD8
-0043B8  1  A6 24        		ldx ICBALZ
+0043B8  1  A6 24        		ldx ZP_24
 0043BA  1  A4 25        		ldy ZP_25
 0043BC  1  20 D8 4D     		jsr FP_MUL_L4DD8
 0043BF  1  20 75 4F     		jsr BIT16_TO_FP_L4F75
@@ -6732,7 +6799,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0043E0  1  A6 3A        		ldx SIN_YAW_LO_3A
 0043E2  1  A4 3B        		ldy SIN_YAW_HI_3B
 0043E4  1  20 D8 4D     		jsr FP_MUL_L4DD8
-0043E7  1  A6 24        		ldx ICBALZ
+0043E7  1  A6 24        		ldx ZP_24
 0043E9  1  A4 25        		ldy ZP_25
 0043EB  1  20 D8 4D     		jsr FP_MUL_L4DD8
 0043EE  1  20 75 4F     		jsr BIT16_TO_FP_L4F75
@@ -6749,12 +6816,15 @@ Current file: ..\src\merc-0700-6fff.a65
 004402  1  98           		tya
 004403  1  65 72        		adc CUR_X_HSB_72
 004405  1  85 72        		sta CUR_X_HSB_72
-004407  1  A5 7D        		lda INSDAT
+004407  1  A5 7D        		lda L007D
 004409  1  F0 1C        		beq L4427
-00440B  1  A5 F9        		lda L00F9
+00440B  1               
+00440B  1  A5 F9        		lda AT_COLONY_CRAFT_00F9
 00440D  1  F0 05        		beq L4414
+00440F  1               
 00440F  1  20 2D 45     		jsr COLONY_CRAFT_L452D
 004412  1  B0 13        		bcs L4427
+004414  1               
 004414  1  A5 25        L4414:		lda ZP_25
 004416  1  49 80        		eor #$80
 004418  1  C9 9C        		cmp #$9C
@@ -6772,7 +6842,7 @@ Current file: ..\src\merc-0700-6fff.a65
 004429  1  A4 35        		ldy SIN_PITCH_HI_35
 00442B  1  86 06        		stx MUL_LO_06
 00442D  1  84 07        		sty MUL_HI_07
-00442F  1  A6 24        		ldx ICBALZ
+00442F  1  A6 24        		ldx ZP_24
 004431  1  A4 25        		ldy ZP_25
 004433  1  20 D8 4D     		jsr FP_MUL_L4DD8
 004436  1  98           		tya
@@ -6838,7 +6908,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0044A6  1  85 26        L44A6:		sta ROLL_LO_26
 0044A8  1  85 27        		sta ROLL_HI_27
 0044AA  1  A9 3F        		lda #$3F
-0044AC  1  85 7D        		sta INSDAT
+0044AC  1  85 7D        		sta L007D
 0044AE  1  85 73        		sta CUR_Y_LSB_73
 0044B0  1  A5 29        		lda PITCH_HI_29
 0044B2  1  29 02        		and #$02
@@ -6865,16 +6935,18 @@ Current file: ..\src\merc-0700-6fff.a65
 0044D4  1  D0 11        		bne L44E7
 0044D6  1  20 2D 45     		jsr COLONY_CRAFT_L452D
 0044D9  1  B0 0C        		bcs L44E7
+0044DB  1               
 0044DB  1  A9 FF        		lda #$FF
 0044DD  1  85 74        		sta CUR_Y_MSB_74
-0044DF  1  85 F9        		sta L00F9
+0044DF  1  85 F9        		sta AT_COLONY_CRAFT_00F9
 0044E1  1  18           		clc
 0044E2  1  08           		php
 0044E3  1  A9 00        		lda #$00
 0044E5  1  F0 BF        		beq L44A6
+0044E7  1               
 0044E7  1  A9 00        L44E7:		lda #$00
-0044E9  1  85 7D        		sta INSDAT
-0044EB  1  85 F9        		sta L00F9
+0044E9  1  85 7D        		sta L007D
+0044EB  1  85 F9        		sta AT_COLONY_CRAFT_00F9
 0044ED  1  A5 A7        		lda CRAFT_ID_WALKING_A7
 0044EF  1  20 89 41     		jsr COPY_SHIP_DATA_L4189
 0044F2  1  A6 20        L44F2:		ldx ZP_20
@@ -6888,7 +6960,7 @@ Current file: ..\src\merc-0700-6fff.a65
 004500  1  8A           		txa
 004501  1  65 2B        		adc YAW_HI_2B
 004503  1  85 2B        		sta YAW_HI_2B
-004505  1  A5 7D        		lda INSDAT
+004505  1  A5 7D        		lda L007D
 004507  1  D0 12        		bne L451B
 004509  1  A6 20        		ldx ZP_20
 00450B  1  AD C7 73     		lda L73C7
@@ -6950,7 +7022,7 @@ Current file: ..\src\merc-0700-6fff.a65
 004562  1  D0 17        		bne JOYSTICK_UNDERGROUND_L457B			;1=underground
 004564  1  A5 A7        		lda CRAFT_ID_WALKING_A7
 004566  1  30 13        		bmi JOYSTICK_UNDERGROUND_L457B			;$80 = walking
-004568  1  6C C0 73     		jmp (SHIP_DATA_L73C0)					;$4307
+004568  1  6C C0 73     		jmp (SHIP_DATA_L73C0)				;$4307
 00456B  1               
 00456B  1               		;	0   1   2   3   4   5   6   7   8   9   a   b   c   d   e   f
 00456B  1  00 01 02 03  L456B:		.byte $00,$01,$02,$03,$08,$09,$0A,$0B,$04,$05,$06,$07,$0C,$0D,$0E,$0F
@@ -6964,9 +7036,11 @@ Current file: ..\src\merc-0700-6fff.a65
 00457B  1  A5 CA        		lda LIFT_UP_DOWN_CA
 00457D  1  F0 03        		beq L4582
 00457F  1  4C 3A 46     		jmp L463A
+004582  1               
 004582  1  A5 A7        L4582:		lda CRAFT_ID_WALKING_A7
 004584  1  10 16        		bpl L459C
-004586  1  A9 01        		lda #$01
+004586  1               
+004586  1  A9 01        		lda #$01					;flying
 004588  1  24 7E        		bit JOYA_7E
 00458A  1  D0 05        		bne L4591
 00458C  1  A9 01        		lda #$01
@@ -6976,6 +7050,7 @@ Current file: ..\src\merc-0700-6fff.a65
 004595  1  D0 05        		bne L459C
 004597  1  A9 00        		lda #$00
 004599  1  20 DD 45     		jsr L45DD
+00459C  1               
 00459C  1  A9 04        L459C:		lda #$04
 00459E  1  24 7E        		bit JOYA_7E
 0045A0  1  D0 0F        		bne L45B1
@@ -6998,11 +7073,14 @@ Current file: ..\src\merc-0700-6fff.a65
 0045C0  1  E9 00        		sbc #$00
 0045C2  1  29 03        		and #$03
 0045C4  1  85 2B        L45C4:		sta YAW_HI_2B
-0045C6  1  A5 F9        L45C6:		lda L00F9
+0045C6  1               
+0045C6  1  A5 F9        L45C6:		lda AT_COLONY_CRAFT_00F9
 0045C8  1  F0 10        		beq L45DA
+0045CA  1               
 0045CA  1  20 2D 45     		jsr COLONY_CRAFT_L452D
-0045CD  1  90 0B        		bcc L45DA
-0045CF  1  A9 09        		lda #$09
+0045CD  1  90 0B        		bcc L45DA					;at colony craft
+0045CF  1               
+0045CF  1  A9 09        		lda #$09					;falling down
 0045D1  1  85 A7        		sta CRAFT_ID_WALKING_A7
 0045D3  1  20 89 41     		jsr COPY_SHIP_DATA_L4189
 0045D6  1  A9 00        		lda #$00
@@ -7065,12 +7143,12 @@ Current file: ..\src\merc-0700-6fff.a65
 004639  1  60           L4639:		rts
 00463A  1               
 00463A  1               ;------------------------------------------------------------
-00463A  1               ;
+00463A  1               ; lift up/down
 00463A  1               ;------------------------------------------------------------
 00463A  1  A5 CB        L463A:		lda L00CB
 00463C  1  48           		pha
 00463D  1  A0 DD        		ldy #$DD
-00463F  1  20 99 4D     		jsr L4D99
+00463F  1  20 99 4D     		jsr A_TIMES_Y_4D99
 004642  1  0A           		asl
 004643  1  18           		clc
 004644  1  69 80        		adc #$80
@@ -7083,7 +7161,8 @@ Current file: ..\src\merc-0700-6fff.a65
 004650  1  85 74        		sta CUR_Y_MSB_74
 004652  1  68           		pla
 004653  1  C5 CB        		cmp L00CB
-004655  1  D0 E3        		bne L463A
+004655  1  D0 E3        		bne L463A					;who could changed it?
+004657  1               
 004657  1  A9 00        		lda #$00
 004659  1  85 75        		sta CUR_Y_HSB_75
 00465B  1  A5 74        		lda CUR_Y_MSB_74
@@ -7095,7 +7174,7 @@ Current file: ..\src\merc-0700-6fff.a65
 004667  1  B0 02        		bcs L466B
 004669  1  C6 75        		dec CUR_Y_HSB_75
 00466B  1  A5 CA        L466B:		lda LIFT_UP_DOWN_CA
-00466D  1  30 3E        		bmi L46AD
+00466D  1  30 3E        		bmi L46AD					;lift down
 00466F  1  A5 73        		lda CUR_Y_LSB_73
 004671  1  18           		clc
 004672  1  69 26        		adc #$26
@@ -7124,10 +7203,10 @@ Current file: ..\src\merc-0700-6fff.a65
 0046A3  1  A9 00        		lda #$00
 0046A5  1  85 CD        		sta ROOM_NO_CD
 0046A7  1  20 ED 37     		jsr OBJ_DRAW_LIST_37ED
-0046AA  1  4C FF 58     		jmp L58FF
+0046AA  1  4C FF 58     		jmp SET_COLOR_OUTSIDE_58FF
 0046AD  1               
 0046AD  1               ;------------------------------------------------------------
-0046AD  1               ;
+0046AD  1               ; list down
 0046AD  1               ;------------------------------------------------------------
 0046AD  1  A5 73        L46AD:		lda CUR_Y_LSB_73
 0046AF  1  38           		sec
@@ -7141,7 +7220,8 @@ Current file: ..\src\merc-0700-6fff.a65
 0046BE  1  C6 75        		dec CUR_Y_HSB_75
 0046C0  1  A5 A6        L46C0:		lda PLANET_UNDERGROUND_A6
 0046C2  1  D0 1E        		bne L46E2
-0046C4  1  E0 08        L46C4:		cpx #$08
+0046C4  1               
+0046C4  1  E0 08        L46C4:		cpx #$08					;we are going down
 0046C6  1  D0 2A        		bne L46F2
 0046C8  1  A6 CD        		ldx ROOM_NO_CD
 0046CA  1  A0 07        		ldy #$07
@@ -7154,7 +7234,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0046D9  1  A9 01        		lda #$01
 0046DB  1  85 A6        		sta PLANET_UNDERGROUND_A6
 0046DD  1  A9 00        		lda #$00
-0046DF  1  85 F9        		sta L00F9
+0046DF  1  85 F9        		sta AT_COLONY_CRAFT_00F9
 0046E1  1  60           		rts
 0046E2  1               
 0046E2  1               ;------------------------------------------------------------
@@ -7174,7 +7254,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0046F2  1               ;------------------------------------------------------------
 0046F2  1  A5 A6        L46F2:		lda PLANET_UNDERGROUND_A6
 0046F4  1  D0 FB        		bne L46F1
-0046F6  1  A5 F9        		lda L00F9
+0046F6  1  A5 F9        		lda AT_COLONY_CRAFT_00F9
 0046F8  1  F0 F7        		beq L46F1
 0046FA  1  A5 74        		lda CUR_Y_MSB_74
 0046FC  1  18           		clc
@@ -7201,8 +7281,8 @@ Current file: ..\src\merc-0700-6fff.a65
 004708  1  A5 CA        		lda LIFT_UP_DOWN_CA				;$80 lift down, $01 lift up
 00470A  1  D0 05        		bne L4711
 00470C  1  A5 A7        		lda CRAFT_ID_WALKING_A7				;01=Dart,03=Jet;$80 walking
-00470E  1  10 01        		bpl L4711
-004710  1  60           		rts
+00470E  1  10 01        		bpl L4711					;flying
+004710  1  60           		rts						;walking
 004711  1               
 004711  1  A6 2C        L4711:		ldx SIN_ROLL_LO_2C
 004713  1  A4 2D        		ldy SIN_ROLL_HI_2D
@@ -7805,7 +7885,7 @@ Current file: ..\src\merc-0700-6fff.a65
 004B44  1  A5 A6        		lda PLANET_UNDERGROUND_A6
 004B46  1  D0 04        		bne L4B4C
 004B48  1  A5 A7        		lda CRAFT_ID_WALKING_A7
-004B4A  1  10 03        		bpl ROTATE_XYZ_PERS_L4B4F
+004B4A  1  10 03        		bpl ROTATE_XYZ_PERS_L4B4F			;flying
 004B4C  1               
 004B4C  1  4C CA 4C     L4B4C:		jmp ROTATE_Y_PERS_L4CCA
 004B4F  1               
@@ -8115,8 +8195,14 @@ Current file: ..\src\merc-0700-6fff.a65
 004D94  1  86 06        		stx MUL_LO_06
 004D96  1  84 07        		sty MUL_HI_07
 004D98  1  60           		rts
-004D99  1  85 06        L4D99:		sta MUL_LO_06
+004D99  1               
+004D99  1               ;------------------------------------------------------------
+004D99  1               ; A:Y = A*Y
+004D99  1               ;------------------------------------------------------------
+004D99  1               A_TIMES_Y_4D99:
+004D99  1  85 06        		sta MUL_LO_06
 004D9B  1  84 07        		sty MUL_HI_07
+004D9D  1               
 004D9D  1  A0 08        		ldy #$08
 004D9F  1  A9 00        		lda #$00
 004DA1  1  66 07        L4DA1:		ror MUL_HI_07
@@ -8127,8 +8213,13 @@ Current file: ..\src\merc-0700-6fff.a65
 004DA9  1  66 04        		ror TMP_04
 004DAB  1  88           		dey
 004DAC  1  D0 F3        		bne L4DA1
+004DAE  1               
 004DAE  1  A4 04        		ldy TMP_04
 004DB0  1  60           		rts
+004DB1  1               
+004DB1  1               ;------------------------------------------------------------
+004DB1  1               ;
+004DB1  1               ;------------------------------------------------------------
 004DB1  1  85 04        L4DB1:		sta TMP_04
 004DB3  1  98           		tya
 004DB4  1  45 04        		eor TMP_04
@@ -8145,7 +8236,7 @@ Current file: ..\src\merc-0700-6fff.a65
 004DC6  1  49 FF        		eor #$FF
 004DC8  1  18           		clc
 004DC9  1  69 01        		adc #$01
-004DCB  1  20 99 4D     L4DCB:		jsr L4D99
+004DCB  1  20 99 4D     L4DCB:		jsr A_TIMES_Y_4D99
 004DCE  1  A4 05        		ldy TMP_04+1
 004DD0  1  10 05        		bpl L4DD7
 004DD2  1  49 FF        		eor #$FF
@@ -9115,9 +9206,10 @@ Current file: ..\src\merc-0700-6fff.a65
 0053F1  1  60           		rts
 0053F2  1               
 0053F2  1               ;------------------------------------------------------------
-0053F2  1               ;
+0053F2  1               ; lift DLI interrupts
 0053F2  1               ;------------------------------------------------------------
-0053F2  1  A6 C9        L53F2:		ldx L00C9
+0053F2  1               LIFT_DLI_53F2:
+0053F2  1  A6 C9        		ldx LIFT_DLI_LINE_C9
 0053F4  1  BD 08 28     		lda L2806+2,X
 0053F7  1  29 7F        		and #$7F
 0053F9  1  9D 08 28     		sta L2806+2,X
@@ -9127,7 +9219,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005402  1  90 02        		bcc L5406
 005404  1  C8           		iny
 005405  1  C8           		iny
-005406  1  84 C9        L5406:		sty L00C9
+005406  1  84 C9        L5406:		sty LIFT_DLI_LINE_C9
 005408  1  B9 08 28     		lda L2806+2,Y
 00540B  1  09 80        		ora #$80
 00540D  1  99 08 28     		sta L2806+2,Y
@@ -9157,13 +9249,13 @@ Current file: ..\src\merc-0700-6fff.a65
 005438  1  90 FA        		bcc L5434
 00543A  1               
 00543A  1  A5 A1        		lda COLBAKS_A1
-00543C  1  85 C4        		sta L00C4
+00543C  1  85 C4        		sta COLBAK_SAVE_C4
 00543E  1  A5 A2        		lda COLPF0S_A2
-005440  1  85 C5        L5440:		sta L00C5
+005440  1  85 C5        L5440:		sta COLPF1_SAVE_C5
 005442  1  A5 A3        		lda COLPF1S_A3
-005444  1  85 C6        		sta L00C6
+005444  1  85 C6        		sta COLPF2_SAVE_C6
 005446  1  A5 A4        		lda COLPF2S_A4
-005448  1  85 C7        L5448:		sta L00C7
+005448  1  85 C7        L5448:		sta COLPF3_SAVE_C7
 00544A  1  A5 C2        		lda ROOM_COLOR_C2
 00544C  1  85 A1        		sta COLBAKS_A1
 00544E  1  85 A2        		sta COLPF0S_A2
@@ -9174,10 +9266,12 @@ Current file: ..\src\merc-0700-6fff.a65
 005459  1  A9 00        		lda #$00
 00545B  1  85 17        		sta POINT_LINE_COUNT_17
 00545D  1  A8           L545D:		tay
-00545E  1  20 F2 53     		jsr L53F2
+00545E  1  20 F2 53     		jsr LIFT_DLI_53F2
+005461  1               
 005461  1  AD 0B D4     L5461:		lda VCOUNT
 005464  1  C9 70        		cmp #$70
 005466  1  D0 F9        		bne L5461
+005468  1               
 005468  1  8D 0A D4     		sta WSYNC
 00546B  1  8D 0A D4     		sta WSYNC
 00546E  1  A5 17        L546E:		lda POINT_LINE_COUNT_17
@@ -9189,7 +9283,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005479  1               
 005479  1  A5 C0        		lda BACKGND_COLOR_C0
 00547B  1  85 A1        		sta COLBAKS_A1
-00547D  1  A5 C1        		lda L00C1
+00547D  1  A5 C1        		lda OBJECT_COLOR_c1
 00547F  1  85 A2        		sta COLPF0S_A2
 005481  1  A5 C3        		lda LINE_COLOR_C3
 005483  1  85 A4        		sta COLPF2S_A4
@@ -9202,19 +9296,19 @@ Current file: ..\src\merc-0700-6fff.a65
 005490  1  84 C8        		sty room_change_L00C8
 005492  1  8C 01 D2     		sty AUDC1
 005495  1  88           		dey
-005496  1  4C F2 53     		jmp L53F2
+005496  1  4C F2 53     		jmp LIFT_DLI_53F2
 005499  1               
 005499  1               ;------------------------------------------------------------
 005499  1               ;
 005499  1               ;------------------------------------------------------------
 005499  1  A5 C0        L5499:		lda BACKGND_COLOR_C0
-00549B  1  85 C4        		sta L00C4
-00549D  1  A5 C1        		lda L00C1
-00549F  1  85 C5        		sta L00C5
+00549B  1  85 C4        		sta COLBAK_SAVE_C4
+00549D  1  A5 C1        		lda OBJECT_COLOR_c1
+00549F  1  85 C5        		sta COLPF1_SAVE_C5
 0054A1  1  A5 C2        		lda ROOM_COLOR_C2
-0054A3  1  85 C6        		sta L00C6
+0054A3  1  85 C6        		sta COLPF2_SAVE_C6
 0054A5  1  A5 C3        		lda LINE_COLOR_C3
-0054A7  1  85 C7        		sta L00C7
+0054A7  1  85 C7        		sta COLPF3_SAVE_C7
 0054A9  1  A5 A3        		lda COLPF1S_A3
 0054AB  1  85 A1        		sta COLBAKS_A1
 0054AD  1  85 A2        		sta COLPF0S_A2
@@ -9226,7 +9320,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0054BB  1  A9 93        		lda #$93
 0054BD  1  85 17        		sta POINT_LINE_COUNT_17
 0054BF  1  A8           L54BF:		tay
-0054C0  1  20 F2 53     		jsr L53F2
+0054C0  1  20 F2 53     		jsr LIFT_DLI_53F2
 0054C3  1               
 0054C3  1  AD 0B D4     L54C3:		lda VCOUNT
 0054C6  1  C9 70        		cmp #$70
@@ -9243,7 +9337,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0054DB  1  85 A3        		sta COLPF1S_A3
 0054DD  1  A5 C0        		lda BACKGND_COLOR_C0
 0054DF  1  85 A1        		sta COLBAKS_A1
-0054E1  1  A5 C1        		lda L00C1
+0054E1  1  A5 C1        		lda OBJECT_COLOR_c1
 0054E3  1  85 A2        		sta COLPF0S_A2
 0054E5  1  A5 C3        		lda LINE_COLOR_C3
 0054E7  1  85 A4        		sta COLPF2S_A4
@@ -9860,7 +9954,8 @@ Current file: ..\src\merc-0700-6fff.a65
 0058FF  1               ;------------------------------------------------------------
 0058FF  1               ;
 0058FF  1               ;------------------------------------------------------------
-0058FF  1  A2 03        L58FF: 		ldx #$03
+0058FF  1               SET_COLOR_OUTSIDE_58FF:
+0058FF  1  A2 03        		ldx #$03
 005901  1  BD 53 59     L5901: 		lda L5953,X
 005904  1  95 C0        		sta BACKGND_COLOR_C0,X
 005906  1  CA           		dex
@@ -10052,13 +10147,15 @@ Current file: ..\src\merc-0700-6fff.a65
 005A1C  1  4C A6 5A     		jmp L5AA6
 005A1F  1               
 005A1F  1  20 EE 5A     L5A1F:		jsr RESET_KEY_L5AEE
-005A22  1  A5 CA        		lda LIFT_UP_DOWN_CA
+005A22  1  A5 CA        		lda LIFT_UP_DOWN_CA				;$01=up, $80=down
 005A24  1  D0 2B        L5A24:		bne L5A51					;rts
-005A26  1  A5 A6        		lda PLANET_UNDERGROUND_A6
+005A26  1  A5 A6        		lda PLANET_UNDERGROUND_A6			;0=outside,1=underground
 005A28  1  D0 52        		bne L5A7C
-005A2A  1  A5 7D        		lda INSDAT
+005A2A  1               
+005A2A  1  A5 7D        		lda L007D
 005A2C  1  F0 23        		beq L5A51					;rts
-005A2E  1  A5 71        		lda CUR_X_MSB_71
+005A2E  1               
+005A2E  1  A5 71        		lda CUR_X_MSB_71				;check if in Hangar range
 005A30  1  4A           		lsr
 005A31  1  4A           		lsr
 005A32  1  C9 1C        		cmp #$1C
@@ -10067,7 +10164,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005A38  1  4A           		lsr
 005A39  1  4A           		lsr
 005A3A  1  C9 1C        		cmp #$1C
-005A3C  1  D0 13        		bne L5A51					;rts
+005A3C  1  D0 13        		bne L5A51					;no, rts
 005A3E  1               
 005A3E  1  A2 08        		ldx #$08					; compare current HSB position
 005A40  1  BD 01 5B     L5A40:		lda HANGAR_POS_5B02-1,X				; to all 8 hangar positions
@@ -10081,47 +10178,56 @@ Current file: ..\src\merc-0700-6fff.a65
 005A51  1  60           L5A51:		rts
 005A52  1               
 005A52  1               ;------------------------------------------------------------
-005A52  1               ;
+005A52  1               ; 'E' pressed and outside and in hanger position
 005A52  1               ;------------------------------------------------------------
 005A52  1  E0 05        L5A52:		cpx #$05					;are we at 03-15?
-005A54  1  D0 0A        		bne L5A60
+005A54  1  D0 0A        		bne L5A60					;no
+005A56  1               
 005A56  1  AD EE 69     		lda L69EE					;pass available?
 005A59  1  30 05        		bmi L5A60
 005A5B  1  A2 39        		ldx #$39					;"pass holders only"
 005A5D  1  4C 2A 32     L5A5D:		jmp START_MESSAGE_L322A
-005A60  1  20 FB 5A     L5A60:		jsr SOUND_EFFECT_L5AFB
+005A60  1               
+005A60  1  20 FB 5A     L5A60:		jsr SOUND_EFFECT_L5AFB				;hanger = 1-8
 005A63  1  86 CD        		stx ROOM_NO_CD
+005A65  1               
 005A65  1  A2 03        		ldx #$03
 005A67  1  AD 56 6B     L5A67:		lda L6B56
-005A6A  1  95 C4        		sta L00C4,X
-005A6C  1  AD 55 6B     		lda L6B54+1
+005A6A  1  95 C4        		sta COLBAK_SAVE_C4,X
+005A6C  1  AD 55 6B     		lda L6B55
 005A6F  1  95 C0        		sta BACKGND_COLOR_C0,X
 005A71  1  CA           		dex
 005A72  1  10 F3        		bpl L5A67
-005A74  1  A9 0D        		lda #$0D
-005A76  1  A2 93        		ldx #$93
-005A78  1  A0 80        		ldy #$80
+005A74  1               
+005A74  1  A9 0D        		lda #$0D					;value of $CC
+005A76  1  A2 93        		ldx #$93					;value of $CB
+005A78  1  A0 80        		ldy #$80					;value of $CA (down)
 005A7A  1  30 21        		bmi L5A9D
+005A7C  1               
+005A7C  1               ;------------------------------------------------------------
+005A7C  1               ; 'E' pressed and underground
+005A7C  1               ;------------------------------------------------------------
 005A7C  1  A2 00        L5A7C:		ldx #$00
 005A7E  1  A9 08        		lda #$08
 005A80  1  C5 CD        		cmp ROOM_NO_CD
-005A82  1  90 CD        		bcc L5A51
+005A82  1  90 CD        		bcc L5A51					;room>9 rts
 005A84  1  D0 01        		bne L5A87
 005A86  1  CA           		dex
-005A87  1  86 F9        L5A87:		stx L00F9
+005A87  1  86 F9        L5A87:		stx AT_COLONY_CRAFT_00F9			;F9=$FF when at colony craft
 005A89  1  20 FB 5A     		jsr SOUND_EFFECT_L5AFB
 005A8C  1  AD 51 6B     		lda L6B51
 005A8F  1  85 C0        		sta BACKGND_COLOR_C0
-005A91  1  85 C1        		sta L00C1
+005A91  1  85 C1        		sta OBJECT_COLOR_c1
 005A93  1  85 C2        		sta ROOM_COLOR_C2
 005A95  1  85 C3        		sta LINE_COLOR_C3
 005A97  1  A9 00        		lda #$00
 005A99  1  A2 4A        		ldx #$4A
 005A9B  1  A0 01        		ldy #$01
+005A9D  1               
 005A9D  1  85 CC        L5A9D:		sta L00CC
 005A9F  1  86 CB        		stx L00CB
 005AA1  1  84 CA        		sty LIFT_UP_DOWN_CA
-005AA3  1  4C C1 3D     		jmp L3DC1
+005AA3  1  4C C1 3D     		jmp SET_SPEED_ZERO_3DC1
 005AA6  1               
 005AA6  1               ;------------------------------------------------------------
 005AA6  1               ;
@@ -10185,7 +10291,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005AF3  1  A5 A6        L5AF3:		lda PLANET_UNDERGROUND_A6
 005AF5  1  D0 0A        		bne L5B01
 005AF7  1  A5 A7        L5AF7:		lda CRAFT_ID_WALKING_A7
-005AF9  1  30 06        		bmi L5B01
+005AF9  1  30 06        		bmi L5B01					;walking
 005AFB  1               
 005AFB  1               SOUND_EFFECT_L5AFB:
 005AFB  1  48           		pha
@@ -10472,7 +10578,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005C9A  1  68           		pla
 005C9B  1  AA           		tax
 005C9C  1  20 46 5D     		jsr L5D46
-005C9F  1  A6 24        		ldx ICBALZ
+005C9F  1  A6 24        		ldx ZP_24
 005CA1  1  A5 25        		lda ZP_25
 005CA3  1  4A           		lsr
 005CA4  1  B0 04        		bcs L5CAA
@@ -10521,7 +10627,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005CF0  1  0A           		asl
 005CF1  1  0A           		asl
 005CF2  1  85 04        		sta TMP_04
-005CF4  1  A5 24        		lda ICBALZ
+005CF4  1  A5 24        		lda ZP_24
 005CF6  1  4A           		lsr
 005CF7  1  4A           		lsr
 005CF8  1  4A           		lsr
@@ -11086,13 +11192,13 @@ Current file: ..\src\merc-0700-6fff.a65
 0060C9  1  48           		pha
 0060CA  1  98           		tya
 0060CB  1  48           		pha
-0060CC  1  A5 C4        		lda L00C4
-0060CE  1  A6 C5        		ldx L00C5
-0060D0  1  A4 C6        		ldy L00C6
+0060CC  1  A5 C4        		lda COLBAK_SAVE_C4
+0060CE  1  A6 C5        		ldx COLPF1_SAVE_C5
+0060D0  1  A4 C6        		ldy COLPF2_SAVE_C6
 0060D2  1  8D 1A D0     		sta COLBK
 0060D5  1  8E 16 D0     		stx COLPF0
 0060D8  1  8C 17 D0     		sty COLPF1
-0060DB  1  A5 C7        		lda L00C7
+0060DB  1  A5 C7        		lda COLPF3_SAVE_C7
 0060DD  1  8D 18 D0     		sta COLPF2
 0060E0  1  A9 85        		lda #$85
 0060E2  1  8D 00 02     		sta VDSLST
@@ -11230,24 +11336,26 @@ Current file: ..\src\merc-0700-6fff.a65
 0061C4  1  86 CC        		stx L00CC
 0061C6  1  E0 06        		cpx #$06
 0061C8  1  90 37        		bcc L6201
+0061CA  1               
 0061CA  1  A0 03        		ldy #$03
-0061CC  1  B9 C4 00     L61CC:		lda L00C4,Y
+0061CC  1  B9 C4 00     L61CC:		lda COLBAK_SAVE_C4,Y
 0061CF  1  99 15 D0     		sta COLPM3,Y
-0061D2  1  B9 C4 00     L61D2:		lda L00C4,Y
+0061D2  1  B9 C4 00     L61D2:		lda COLBAK_SAVE_C4,Y
 0061D5  1  99 A1 00     		sta COLBAKS_A1,Y
 0061D8  1  B9 C0 00     		lda BACKGND_COLOR_C0,Y
-0061DB  1  99 C4 00     		sta L00C4,Y
+0061DB  1  99 C4 00     		sta COLBAK_SAVE_C4,Y
 0061DE  1  BD 48 6B     		lda L6B48,X
 0061E1  1  99 C0 00     		sta BACKGND_COLOR_C0,Y
 0061E4  1  88           		dey
 0061E5  1  F0 EB        		beq L61D2
 0061E7  1  10 E3        		bpl L61CC
+0061E9  1               
 0061E9  1  E0 07        L61E9:		cpx #$07
 0061EB  1  90 14        		bcc L6201
 0061ED  1  A4 CB        		ldy L00CB
 0061EF  1  A9 42        L61EF:		lda #$42
 0061F1  1  8D 01 D2     		sta AUDC1
-0061F4  1  20 F2 53     L61F4:		jsr L53F2
+0061F4  1  20 F2 53     L61F4:		jsr LIFT_DLI_53F2
 0061F7  1  4C 8B 61     		jmp L618B
 0061FA  1               
 0061FA  1               ;------------------------------------------------------------
@@ -11284,7 +11392,7 @@ Current file: ..\src\merc-0700-6fff.a65
 006231  1  B9 C0 00     L6231:		lda BACKGND_COLOR_C0,Y
 006234  1  99 15 D0     		sta COLPM3,Y
 006237  1  B9 A1 00     L6237:		lda COLBAKS_A1,Y
-00623A  1  99 C4 00     		sta L00C4,Y
+00623A  1  99 C4 00     		sta COLBAK_SAVE_C4,Y
 00623D  1  B9 C0 00     		lda BACKGND_COLOR_C0,Y
 006240  1  99 A1 00     		sta COLBAKS_A1,Y
 006243  1  BD 4B 6B     		lda L6B49+2,X
@@ -11692,12 +11800,13 @@ Current file: ..\src\merc-0700-6fff.a65
 0065F8  1  D9 00 00 00  
 006600  1               
 006600  1               L65AB		= $65AB
-006600  1               L6507		= $6507
+006600  1               INT_SHIP_Z_MSB_6507		= $6507
 006600  1               L6486		= $6486
-006600  1               L65C7		= $65C7
-006600  1               L6547		= $6547
-006600  1               L64C7		= $64C7
-006600  1               L6587		= $6587
+006600  1               INT_SHIP_X_MSB_6487		= $6487
+006600  1               INT_SHIP_Z_HSB_65C7		= $65C7
+006600  1               INT_SHIP_X_HSB_6547		= $6547
+006600  1               INT_SHIP_Y_MSB_64C7		= $64C7
+006600  1               INT_SHIP_Y_HSB_6587		= $6587
 006600  1               
 006600  1               STRUCTURE_POINTER_LO_L6600:
 006600  1  24 CD EE A7  		.byte $24,$CD,$EE,$A7,$34,$90,$57,$03,$8B,$6F,$EA,$EE,$81,$9A,$2F,$30
@@ -11867,18 +11976,19 @@ Current file: ..\src\merc-0700-6fff.a65
 006934  1  C4 A2 ED AC  
 006938  1  69 80 00 00  
 006940  1               
-006940  1               L6907		= $6907
-006940  1               L6887		= $6887
-006940  1               L68C7		= $68C7
+006940  1               INT_SHIP_Z_LSB_6907		= $6907
+006940  1               INT_SHIP_X_LSB_6887		= $6887
+006940  1               INT_SHIP_Y_LSB_68C7		= $68C7
 006940  1               
 006940  1               ;
 006940  1               ; $00 = visible from afar?
 006940  1               ; room-no!
-006940  1               OBJECT_VISIBILITY_6940:
+006940  1               OBJECT_ROOM_6940:
 006940  1  00           		.byte $00
 006941  1  00 00 07 03  L6941:		.byte $00,$00,$07,$03,$02,$36
 006945  1  02 36        
-006947  1  05 FF FF 00  L6947:		.byte $05,$FF,$FF,$00,$FF,$66,$FF
+006947  1               INT_SHIP_ROOM_6947:
+006947  1  05 FF FF 00  		.byte $05,$FF,$FF,$00,$FF,$66,$FF
 00694B  1  FF 66 FF     
 00694E  1               
 00694E  1  FF           L694E:		.byte $FF
@@ -12172,6 +12282,7 @@ Current file: ..\src\merc-0700-6fff.a65
 007000  1               L6B49		= $6B49
 007000  1               L6B51		= $6B51
 007000  1               L6B54		= $6B54
+007000  1               L6B55		= $6B55
 007000  1               L6B56		= $6B56
 007000  1               L6BD3		= $6BD3
 007000  1               L6BCF		= $6BCF
