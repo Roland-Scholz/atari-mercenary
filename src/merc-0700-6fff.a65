@@ -2,9 +2,6 @@
 ; Code equates
 ;
 
-
-
-
 MEM_PTR_LO_00			= $00
 MEM_PTR_HI_01			= $01
 	
@@ -264,7 +261,7 @@ MSG_CHUNK_CNT_DE       = $00DE
 CHAR_CNT_DF       = $00DF
 JIFY_CNT_E0       = $00E0
 JIFY_MAX_E1       = $00E1
-L00E5       = $00E5
+BENSON_STACK_PTR_E5       = $00E5
 MESSAGE_PENDING_E6       = $00E6
 L00E7       = $00E7
 
@@ -716,18 +713,21 @@ L2004		= $2004
 ;
 		.org $0700
 ;
-; Benson jump vectors
+; Benson state machine vectors
 ;
-L0700:      	.byte $6C, $07, $39, $09, $01, $0D, $97, $0E, $AB, $0E, $BF, $0E
-		.byte $D2, $0E, $78, $0F, $13, $0A, $E5, $0E, $04, $11, $F8, $0E
-		.byte $E5, $09, $9A, $0C, $BC, $0D, $D0, $0D, $E3, $0D, $F6, $0D
-		.byte $09, $0E, $1D, $0E, $31, $0E, $66, $07, $46, $0E, $5B, $0E
-		.byte $6F, $0E, $83, $0E, $F1, $10, $7C, $0B, $DF, $0B, $13, $0A
-		.byte $66, $07, $66, $07, $66, $07, $66, $07, $D1, $0B, $D8, $0B
-		.byte $25, $0A, $3E, $0A, $6D, $0A, $82, $0A, $B1, $0A, $C8, $0A
-		.byte $DE, $0A, $F3, $0A, $0B, $0B, $1C, $0B, $32, $0B, $43, $0B
-		.byte $53, $0B, $A8, $0B, $94, $0B, $01, $23, $00, $11, $40, $05
-		.byte $0F, $FE, $01, $20, $04, $0F, $FE, $07, $20, $04, $0F, $FE
+L0700:		.word L076C, L0939, L0D01, L0E97, L0EAB, L0EBF
+		.word L0ED2, L0F78, L0A13, L0EE5, L1104, L0EF8
+		.word L09E5, L0C9A, L0DBC, L0DD0, L0DE3, L0DF6
+		.word L0E09, L0E1D, L0E31, L0766, L0E46, L0E5B
+		.word L0E6F, L0E83, L10F1, L0B7C, L0BDF, L0A13
+		.word L0766, L0766, L0766, L0766, L0BD1, L0BD8
+		.word L0A25, L0A3E, L0A6D, L0A82, L0AB1, L0AC8
+		.word L0ADE, L0AF3, L0B0B, L0B1C, L0B32, L0B43
+		.word L0B53, L0BA8, L0B94
+
+L0766:		.word L2301, L1100, L0540
+
+L076C:		.byte $0F, $FE, $01, $20, $04, $0F, $FE, $07, $20, $04, $0F, $FE
 		.byte $0C, $20, $04, $14, $32, $04, $8C, $09, $01, $EC, $23, $FF
 		.byte "IMMINENT", $EE, $00, $14, $32, $04, $8C, $09, $01, $EF, $FF, "RETURNIN", $C7
 		.byte $D5, $0A, $00, $01, $EC, $FF, "MANUA", $CC, $28, $00, $19, $01
@@ -756,12 +756,16 @@ L08B8:		.byte $22, $01, $39, $09, $03, $B8, $08, $01, $ED, $2B, $FF
 		.byte $09, $12, $80, $18, $09, $03, $0E, $09, $01, $ED, $FF, "AH", $EE
 		.byte $DC, $14, $1B, $00, $04, $8C, $09, $05, $0E, $F8, $00, $50, $99
 		.byte $99, $01, $EF, $D8, $29, $05, $00, $14, $15, $14, $32, $03
-		.byte $B8, $08, $0F, $FE, $01, $20, $F3, $11, $40, $12, $01, $6E, $09
+		.byte $B8, $08
+		
+L0939:		.byte $0F, $FE, $01, $20, $F3, $11, $40, $12, $01, $6E, $09
 		.byte $01, $D3, $22, $FF, "BELONGE", $C4, $D5, $00, $01, $BC, $00, $01
 		.byte $EC, $1F, $00, $01, $FF, " H", $C5, $2B, $A8, $D6, $B7, $05
 		.byte $00, $10, $20, $04, $B0, $10, $14, $32, $03, $7E, $09, $04
 		.byte $A1, $09, $8A, "P{", $09, $0F, $FF, $00, $13, $6E, $09, $04
-		.byte $C2, $09, $03, $7E, $09, $02, $12, $80, $8B, $09, $07, $0F
+		.byte $C2, $09
+		
+L097E:		.byte $03, $7E, $09, $02, $12, $80, $8B, $09, $07, $0F
 		.byte $00, $82, $09, $05, $02, $07, $02, $00, $8D, $09, $05, $02
 		.byte $07, $03, $00, $94, $09, $05, $02, $07, $01, $00, $9B, $09
 		.byte $05, $02, $07, $0F, $00, $A2, $09, $05, $1C, $01, $EE, $33, $DC
@@ -769,52 +773,115 @@ L08B8:		.byte $22, $01, $39, $09, $03, $B8, $08, $01, $ED, $2B, $FF
 		.byte $00, $B3, $09, $11, $01, $05, $10, $01, $05, $14, $03, $14
 		.byte $05, $01, $EF, $3C, $9E, $D1, $00, $01, $2E, $D5, $D0, $1E
 		.byte $03, $C1, $00, $01, $CD, $27, $17, $9B, $FF, $4F, $09, $0D
-		.byte $4F, $86, $00, $14, $07, $14, $32, $05, $04, $9A, $09, $14
+		.byte $4F, $86, $00, $14, $07, $14, $32, $05
+		
+L09E5:		.byte $04, $9A, $09, $14
 		.byte $0C, $01, $EF, $D0, $9F, $FF, "DEMAND", $D3, $00, $01, $EF, $FF
 		.byte "THA", $D4, $DC, $FF, "PUT HIM DOW", $CE, $00, $14, $32, $11, $40, $05
-		.byte $05, $04, $9A, $09, $01, $E7, $FF, "BAN", $CB, $00, $14, $15
-		.byte $14, $32, $11, $40, $05, $04, $BE, $0B, $01, $EF, $FF, "NOVABILL ", $8D
-		.byte $E3, $34, $06, $00, $14, $32, $11, $40, $05, $04, $BE, $0B
-		.byte $01, $EE, $D0, $16, $02, $FF, "ADVER", $D4, $00, $01, $FF, "THING", $D3
-		.byte $14, $2E, $03, $D5, $1D, $00, $01, $ED, $FF, "TOUG", $C8, $3E, $A9
-		.byte $AD, $00, $10, $08, $03, $C1, $0B, $04, $BE, $0B, $01, $EA
-		.byte $FF, "SABINS CUB", $C5, $00, $03, $C9, $0B, $04, $BE, $0B, $01, $EE
-		.byte $D0, $FF, "WALTON MONUMEN", $D4, $00, $01, $D5, $D0, $FF, "FAMOUS ARCHITEC", $D4, $00
-		.byte $03, $C1, $0B, $04, $BE, $0B, $01, $EB, $FF, "ST", $0E, " STALLARD", $D3
-		.byte $00, $03, $C1, $0B, $04, $BE, $0B, $01, $EC, $D0, $FF, "MOORBY ARC", $C8
-		.byte $00, $03, $C9, $0B, $04, $BE, $0B, $01, $EA, $FF, "TYLER POIN", $D4
-		.byte $00, $03, $C9, $0B, $04, $BE, $0B, $01, $EC, $FF, "BOSHER STADIU", $CD
-		.byte $00, $03, $C1, $0B, $04, $BE, $0B, $01, $EC, $FF, "JORDA", $CE
-		.byte $0F, $00, $03, $C1, $0B, $04, $BE, $0B, $01, $EB, $FF, "VECTOR HENG", $C5
-		.byte $00, $03, $C9, $0B, $04, $BE, $0B, $01, $BC, $00, $01, $EF
-		.byte $1F, $02, $A4, $00, $10, $20, $03, $C1, $0B, $04, $BE, $0B
-		.byte $01, $EE, $D0, $9F, $FF, "FOR", $D4, $00, $03, $C9, $0B, $04
-		.byte $BE, $0B, $01, $EF, $D0, $FF, "COACH AND HORSE", $D3, $00, $01, $DC, $E5
-		.byte $A8, $1D, $FF, "POPULA", $D2, $00, $03, $C1, $0B, $04, $BE, $0B
-		.byte $01, $BC, $00, $01, $EC, $1F, $02, $00, $01, $E9, $FF, "NE", $D7
-		.byte $C5, $00, $10, $20, $03, $C1, $0B, $04, $9A, $09, $01, $E9
-		.byte $FF, "TRAITOR", $EE, $00, $14, $32, $11, $40, $05, $04, $9A, $09
-		.byte $01, $EA, $FF, "GOOD SHOW", $EE, $00, $14, $32, $11, $40, $05, $14
-		.byte $17, $05, $04, $B0, $10, $14, $32, $11, $40, $05, $04, $BC
-		.byte $10, $14, $32, $11, $40, $05, $8A, $50, $C1, $0B, $11, $40, $05
-		.byte $8A, $50, $C9, $0B, $11, $40, $05, $04, $9A, $09, $0F, $FF
-		.byte $29, $01, $EF, $B4, $1E, $03, $C1, $00, $14, $32, $93, $97
-		.byte $0C, $01, $EC, $E2, $E5, $12, $00, $01, $EF, $FF, "DELIVER", $D9
-		.byte $AA, $0B, $A5, $02, $00, $01, $D5, $FF, "APPROPRIAT", $C5, $C1, $02
-		.byte $CD, $00, $01, $D0, $B4, $FF, "COLON", $D9, $22, $00, $14, $32, $93
-		.byte $97, $0C, $01, $D2, $2B, $08, $FF, "BI", $C7, "9<", $00, $01
-		.byte $EF, $08, $FF, "CAPTURE", $C4, $9F, $00, $14, $32, $93, $97, $0C
-		.byte $01, $AE, $E0, $DC, $FF, "KNOW HO", $D7, $00, $01, $D5, $FF, "CHOOS", $C5
-		.byte $CF, $3E, $DE, $00, $01, $EF, $30, $10, $9F, $00, $01, $FF
-		.byte "OCCUPIE", $C4, $9A, $02, $3C, $00, $01, $DF, $FF, "SPECIAL GRATITUD", $C5, $00
-		.byte $14, $32, $01, $EB, $1E, $03, $38, $02, $00, $14, $32, $11
-		.byte $40, $05, $04, $9A, $09, $0F, $FF, $66, $01, $9F, $1E, $03
+		.byte $05
+		
+		;Bank
+L0A13:		.byte $04, $9A, $09, $01, $E7, $FF, "BAN", $CB, $00, $14
+		.byte $15, $14, $32, $11, $40, $05
+
+L0A25:		.byte $04, $BE, $0B, $01, $EF, $FF
+		.byte "NOVABILL ", $8D, $E3, $34
+		.byte $06, $00, $14, $32, $11, $40, $05
+
+L0A3E:		.byte $04, $BE, $0B, $01, $EE, $D0, $16, $02, $FF
+		.byte "ADVER", $D4, $00, $01, $FF
+		.byte "THING", $D3, $14, $2E, $03, $D5, $1D, $00
+		.byte $01, $ED, $FF, "TOUG", $C8, $3E, $A9, $AD, $00
+		.byte $10, $08, $03, $C1, $0B
+
+L0A6D:		.byte $04, $BE, $0B, $01, $EA, $FF
+		.byte "SABINS CUB", $C5, $00
+		.byte $03, $C9, $0B
+
+L0A82:		.byte $04, $BE, $0B, $01, $EE, $D0, $FF
+		.byte "WALTON MONUMEN"
+		.byte $D4, $00, $01, $D5, $D0, $FF
+		.byte "FAMOUS ARCHITEC"
+		.byte $D4, $00, $03, $C1, $0B
+
+L0AB1:		.byte $04, $BE, $0B, $01, $EB, $FF, "ST", $0E
+		.byte " STALLARD", $D3, $00, $03
+		.byte $C1, $0B
+
+L0AC8:		.byte $04, $BE, $0B, $01, $EC, $D0, $FF
+		.byte "MOORBY ARC", $C8, $00
+		.byte $03, $C9, $0B
+
+L0ADE:		.byte $04, $BE, $0B, $01, $EA, $FF
+		.byte "TYLER POIN", $D4, $00
+		.byte $03, $C9, $0B
+
+L0AF3:		.byte $04, $BE, $0B, $01, $EC, $FF
+		.byte "BOSHER STADIU"
+		.byte $CD, $00, $03, $C1, $0B
+
+L0B0B:		.byte $04, $BE, $0B, $01, $EC, $FF, "JORDA", $CE
+		.byte $0F, $00, $03, $C1, $0B
+
+L0B1C:		.byte $04, $BE, $0B, $01, $EB, $FF
+		.byte "VECTOR HENG", $C5
+		.byte $00, $03, $C9, $0B
+
+L0B32:		.byte $04, $BE, $0B, $01, $BC, $00, $01, $EF, $1F, $02, $A4, $00
+		.byte $10, $20, $03, $C1, $0B
+
+L0B43:		.byte $04, $BE, $0B, $01, $EE, $D0, $9F, $FF, "FOR", $D4
+		.byte $00, $03, $C9, $0B
+
+L0B53:		.byte $04, $BE, $0B, $01, $EF, $D0, $FF
+		.byte "COACH AND HORSE"
+		.byte $D3, $00, $01, $DC, $E5, $A8, $1D, $FF
+		.byte "POPULA", $D2, $00, $03, $C1, $0B
+
+L0B7C:		.byte $04, $BE, $0B, $01, $BC, $00, $01, $EC, $1F, $02, $00, $01
+		.byte $E9, $FF, "NE", $D7, $C5, $00, $10, $20, $03, $C1, $0B
+
+L0B94:		.byte $04, $9A, $09, $01, $E9, $FF
+		.byte "TRAITOR", $EE, $00, $14, $32, $11
+		.byte $40, $05
+
+L0BA8:		.byte $04, $9A, $09, $01, $EA, $FF
+		.byte "GOOD SHOW", $EE, $00, $14
+		.byte $32, $11, $40, $05, $14, $17, $05, $04, $B0, $10, $14, $32
+		.byte $11, $40, $05, $04, $BC, $10, $14, $32, $11, $40, $05
+
+L0BD1:		.byte $8A, $50, $C1, $0B, $11, $40, $05
+
+L0BD8:		.byte $8A, $50, $C9, $0B, $11, $40, $05
+
+L0BDF:		.byte $04, $9A, $09, $0F, $FF, $29, $01, $EF, $B4, $1E, $03, $C1
+		.byte $00, $14, $32, $93, $97, $0C, $01, $EC, $E2, $E5, $12, $00
+		.byte $01, $EF, $FF, "DELIVER", $D9, $AA
+		.byte $0B, $A5, $02, $00, $01, $D5, $FF
+		.byte "APPROPRIAT", $C5, $C1
+		.byte $02, $CD, $00, $01, $D0, $B4, $FF, "COLON"
+		.byte $D9, $22, $00, $14, $32, $93, $97, $0C, $01, $D2, $2B, $08
+		.byte $FF, "BI", $C7, "9&lt;", $00, $01, $EF, $08, $FF
+		.byte "CAPTURE", $C4, $9F, $00, $14, $32
+		.byte $93, $97, $0C, $01, $AE, $E0, $DC, $FF
+		.byte "KNOW HO", $D7, $00, $01, $D5, $FF
+		.byte "CHOOS", $C5, $CF, $3E, $DE, $00, $01, $EF
+		.byte $30, $10, $9F, $00, $01, $FF
+		.byte "OCCUPIE", $C4, $9A, $02, $3C, $00
+		.byte $01, $DF, $FF
+		.byte "SPECIAL GRATITUD"
+		.byte $C5, $00, $14, $32, $01, $EB, $1E, $03, $38, $02, $00, $14
+		.byte $32, $11, $40, $05
+
+L0C9A:		.byte $04, $9A, $09, $0F, $FF, $66, $01, $9F, $1E, $03
 		.byte $C1, $00, $14, $32, $01, $EA, $E2, $E5, $B3, $00, $01, $3C, $B4
 		.byte $BF, $02, $00, $01, $EF, $E0, $2F, $04, $D5, $0B, $00, $01
 		.byte $28, $CD, $D3, $27, $00, $14, $32, $93, $FE, $0C, $01, $EE
 		.byte $E2, $A2, $FF, "ALS", $CF, $B3, $3C, $00, $01, $FF, "DESTRUCTION OF SELECTE", $C4
 		.byte $00, $01, $EF, $B4, $BE, $02, $00, $14, $32, $01, $EB, $1E
-		.byte $03, $38, $02, $00, $14, $32, $11, $40, $05, $14, $08, $0F
+		.byte $03, $38, $02, $00, $14, $32, $11, $40, $05
+		
+L0D01:		.byte $14, $08, $0F
 		.byte $FE, $1E, $0F, $FF, $10, $1D, $1A, $0D, $0C, $1A, $0D, $01
 		.byte $EB, $A8, $DB, $03, $00, $14, $32, $11, $40, $05, $01, $EB
 		.byte $A0, $3E, $00, $01, $FF, "HERTZ SPACESHIP RENTA", $CC, $00, $01, $C5, $3C, $FF
@@ -826,42 +893,68 @@ L08B8:		.byte $22, $01, $39, $09, $03, $B8, $08, $01, $ED, $2B, $FF
 		.byte $0E, $F8, $01, $00, $00, $99, $01, $EC, $C5, $FF, "DESPATCHE", $C4
 		.byte $00, $01, $EB, $CE, $E5, $98, $00, $01, $17, $9B, $FF, $08
 		.byte $0D, $08, " IN ", $82, $A1, $02, $00, $19, $7F, $29, $FF, $10
-		.byte $04, $11, $40, $05, $0F, $FE, $1F, $0F, $FF, $AD, $0D, $F9
+		.byte $04, $11, $40, $05
+		
+L0DBC:		.byte $0F, $FE, $1F, $0F, $FF, $AD, $0D, $F9
 		.byte $00, $00, $10, $00, $01, $EA, $AF, $C1, $00, $03, $09, $0F
-		.byte $0F, $FE, $22, $0F, $FF, $93, $0D, $F9, $00, $50, $03, $00
-		.byte $01, $E8, $C8, $00, $03, $09, $0F, $0F, $FE, $23, $0F, $FF
-		.byte $92, $0D, $F9, $00, $50, $06, $00, $01, $E8, $B0, $00, $03
-		.byte $09, $0F, $0F, $FE, $2B, $0F, $FF, $90, $0D, $F9, $00, $00
-		.byte $10, $00, $01, $EA, $B1, $00, $03, $09, $0F, $0F, $FE, $2D, $0F
-		.byte $FF, $AA, $0D, $F9, $00, $00, $10, $00, $01, $EB, $28, $C1
-		.byte $00, $03, $09, $0F, $0F, $FE, $0C, $0F, $FF, $9A, $0D, $F9
-		.byte $00, $00, $25, $00, $01, $EC, $B2, $C1, $00, $03, $09, $0F
-		.byte $0F, $FE, $1D, $0F, $FF, $46, $0D, $F9, $00, $00, $25, $00
-		.byte $01, $EF, $9F, $3B, $C8, $00, $03, $45, $0F, $0F, $FE, $1F
-		.byte $0F, $FF, $32, $0D, $F9, $00, $00, $10, $00, $01, $EF, $9F
-		.byte $AF, $C1, $00, $03, $45, $0F, $0F, $FE, $22, $0F, $FF, $30, $0D
-		.byte $F9, $00, $00, $08, $00, $01, $ED, $9F, $C8, $00, $03, $45, $0F
-		.byte $0F, $FE, $23, $0F, $FF, $22, $0D, $F9, $00, $00, $12, $00
-		.byte $01, $ED, $9F, $B0, $00, $03, $45, $0F, $0F, $FE, $2B, $0F
-		.byte $FF, $12, $0D, $F9, $00, $00, $25, $00, $01, $EF, $9F, $B1
-		.byte $00, $03, $45, $0F, $0F, $FE, $1D, $0F, $FF, $88, $0D, $F9
+L0DD0:		.byte $0F, $FE, $22, $0F, $FF, $93, $0D, $F9, $00, $50, $03, $00
+		.byte $01, $E8, $C8, $00, $03, $09, $0F
+		
+L0DE3:		.byte $0F, $FE, $23, $0F, $FF
+		.byte $92, $0D, $F9, $00, $50, $06, $00, $01, $E8, $B0, $00, $03, $09, $0F
+
+L0DF6:		.byte $0F, $FE, $2B, $0F, $FF, $90, $0D, $F9, $00, $00, $10, $00
+		.byte $01, $EA, $B1, $00, $03, $09, $0F
+
+L0E09:		.byte $0F, $FE, $2D, $0F, $FF, $AA, $0D, $F9, $00, $00, $10, $00
+		.byte $01, $EB, $28, $C1, $00, $03, $09, $0F
+
+L0E1D:		.byte $0F, $FE, $0C, $0F, $FF, $9A, $0D, $F9, $00, $00, $25, $00
+		.byte $01, $EC, $B2, $C1, $00, $03, $09, $0F
+
+L0E31:		.byte $0F, $FE, $1D, $0F, $FF, $46, $0D, $F9, $00, $00, $25, $00
+		.byte $01, $EF, $9F, $3B, $C8, $00, $03, $45, $0F
+
+L0E46:		.byte $0F, $FE, $1F, $0F, $FF, $32, $0D, $F9, $00, $00, $10, $00
+		.byte $01, $EF, $9F, $AF, $C1, $00, $03, $45, $0F
+
+L0E5B:		.byte $0F, $FE, $22, $0F, $FF, $30, $0D, $F9, $00, $00, $08, $00
+		.byte $01, $ED, $9F, $C8, $00, $03, $45, $0F
+
+L0E6F:		.byte $0F, $FE, $23, $0F, $FF, $22, $0D, $F9, $00, $00, $12, $00
+		.byte $01, $ED, $9F, $B0, $00, $03, $45, $0F
+
+L0E83:		.byte $0F, $FE, $2B, $0F, $FF, $12, $0D, $F9, $00, $00, $25, $00
+		.byte $01, $EF, $9F, $B1, $00, $03, $45, $0F
+
+L0E97:		.byte $0F, $FE, $1D, $0F, $FF, $88, $0D, $F9
 		.byte $00, $00, $20, $00, $01, $EA, $36, $C1, $00, $03, $09, $0F
-		.byte $0F, $FE, $2A, $0F, $FF, $9B, $0D, $F9, $00, $00, $05, $00
-		.byte $01, $EC, $BA, $C1, $00, $03, $09, $0F, $0F, $FE, $26, $0F
+		
+L0EAB:		.byte $0F, $FE, $2A, $0F, $FF, $9B, $0D, $F9, $00, $00, $05, $00
+		.byte $01, $EC, $BA, $C1, $00, $03, $09, $0F
+L0EBF:		.byte $0F, $FE, $26, $0F
 		.byte $FF, $A2, $0D, $F9, $00, $00, $10, $00, $01, $E9, $B8, $00
-		.byte $03, $09, $0F, $0F, $FE, $2C, $0F, $FF, $A3, $0D, $F9, $00
-		.byte $00, $06, $00, $01, $E8, $D4, $00, $03, $09, $0F, $0F, $FE
+		.byte $03, $09, $0F 
+		
+L0ED2:		.byte $0F, $FE, $2C, $0F, $FF, $A3, $0D, $F9, $00
+		.byte $00, $06, $00, $01, $E8, $D4, $00, $03, $09, $0F
+		
+L0EE5:		.byte $0F, $FE
 		.byte $29, $0F, $FF, $A5, $0D, $F9, $00, $00, $04, $00, $01, $E9
-		.byte $CC, $00, $03, $09, $0F, $04, $9A, $09, $01, $E8, $FF, "PRISO", $CE
+		.byte $CC, $00, $03, $09, $0F
+		
+L0EF8:		.byte $04, $9A, $09, $01, $E8, $FF, "PRISO", $CE
 		.byte $E6, $00, $11, $40, $05, $21, $01, $40, $0F, $0C, $16, $0F
 		.byte $1D, $16, $0F, $03, $40, $0F, $01, $EB, $B7, $FF, "LEAV", $C5
-		.byte $00, $14, $FE, $01, $EF, "-<", $F9, $12, $00, $1D, $32, $0F
+		.byte $00, $14, $FE, $01, $EF, "-&lt;", $F9, $12, $00, $1D, $32, $0F
 		.byte $13, $29, $0F, $03, $40, $0F, $20, $11, $01, $EE, $F9, $25, $B5
 		.byte $00, $15, $F9, $F8, $F8, $14, $15, $14, $32, $11, $40, $05
 		.byte $1E, $8E, $1E, $9F, $0F, $FE, $0C, $0F, $FF, $66, $9D, $59, $0F
 		.byte $1E, $E8, $1E, $F9, $03, $09, $0F, $01, $EE, $D0, $9F, $02
 		.byte $FF, "SA", $D9, $00, $01, $EE, $FF, "PU", $D4, $1B, $0B, $FF
-		.byte "LEADE", $D2, $00, $14, $32, $11, $40, $05, $0F, $FF, $00, $0F
+		.byte "LEADE", $D2, $00, $14, $32, $11, $40, $05
+		
+L0F78:		.byte $0F, $FF, $00, $0F
 		.byte $FE, $19, $01, $ED, $FF, "INTERSTELLA", $D2, $C5, $00
 
 L0F8F:		.byte $A2, $07, $D0
@@ -879,24 +972,39 @@ L0FC8:		.byte $0B, $2B, $D5, $0F
 L0FCC:		.byte $22, $07, $C8, $0F, $14, $32, $11, $40, $05
 
 ; check room ($13)
-L0FD5:		.byte $93, $8F
-		.byte $0F, $12, $04, $DF, $0F, $8C, $8F, $0F, $0F, $FD, $32, $9A
-		.byte $1C, $10, $01, $EE, $D0, $16, $FF, "WONoT LE", $D4, $00, $01, $EE
-		.byte $DC, $FF, "LEAVE UNTI", $CC, $DC, $00, $01, $EC, $FF, "FIX HIS ADVER", $D4, $00
-		.byte $14, $32, $11, $40, $05, $19, "~)", $01, $04, $8C, $09, $19
-		.byte $E1, $00, $96, $01, $EE, $D0, $16, $C2, $02, $DC, $00, $01
-		.byte $FF, "CONGRATULATION", $D3, $AD, $97, $00, $01, $EC, $FF, "ESCAP", $C5, $3E, $D7
-		.byte $00, $14, $32, $92, " o", $10, $01, $BC, $00, $01, $EC, $1F
-		.byte $00, $01, $2B, $B7, $05, $FF, "YOUnVE GON", $C5, $00, $14, $32, $01
-		.byte $FF, "SAVE OU", $D4, $D0, $C7, $13, $00, $01, $FF, "SE", $C5, $DC
-		.byte $CD, $FF, "MERCENARY I", $C9, $00, $04, $A1, $09, $04, $A1, $09, $01
-		.byte $E9, $FF, "GAME OVE", $D2, $00, $19, $01, $D2, $00, $19, $03, $D2
-		.byte $00, $03, $95, $10, $01, $EF, $B4, $C5, $32, $03, $00, $19
-		.byte "x)", $01, $05, $01, $EF, $9F, $C5, $32, $00, $19, "x)", $01
-		.byte $05, $01, $EE, $E2, $14, $BD, $B7, $05, $00, $01, $DC, ":0", $04
-		.byte $10, $00, $01, $EF, $FF, "KEY OPPOSITION SITE", $D3, $00, $10, $02, $05, $04
-		.byte $9A, $09, $12, $02, $01, $11, $14, $04, $04, $C7, $10, $14
-		.byte $07, $14, $32, $11, $40, $05, $04, $9A, $09, $12, $02, $3F, $11
+L0FD5:		.byte $93, $8F, $0F, $12, $04, $DF, $0F, $8C, $8F, $0F, $0F, $FD
+		.byte $32, $9A, $1C, $10, $01, $EE, $D0, $16, $FF
+		.byte "WONoT LE", $D4, $00, $01, $EE
+		.byte $DC, $FF, "LEAVE UNTI"
+		.byte $CC, $DC, $00, $01, $EC, $FF
+		.byte "FIX HIS ADVER"
+		.byte $D4, $00, $14, $32, $11, $40, $05, $19, "~)", $01, $04
+		.byte $8C, $09, $19, $E1, $00, $96, $01, $EE, $D0, $16, $C2, $02
+		.byte $DC, $00, $01, $FF
+		.byte "CONGRATULATION"
+		.byte $D3, $AD, $97, $00, $01, $EC, $FF, "ESCAP"
+		.byte $C5, $3E, $D7, $00, $14, $32, $92, " o", $10, $01, $BC
+		.byte $00, $01, $EC, $1F, $00, $01, $2B, $B7, $05, $FF
+		.byte "YOUnVE GON", $C5, $00
+		.byte $14, $32, $01, $FF, "SAVE OU", $D4
+		.byte $D0, $C7, $13, $00, $01, $FF, "SE", $C5, $DC, $CD, $FF
+		.byte "MERCENARY I", $C9
+		.byte $00, $04, $A1, $09, $04, $A1, $09, $01, $E9, $FF
+		.byte "GAME OVE", $D2, $00, $19, $01
+		.byte $D2, $00, $19, $03, $D2, $00, $03, $95, $10, $01, $EF, $B4
+		.byte $C5, $32, $03, $00, $19, "x)", $01, $05, $01, $EF, $9F
+		.byte $C5, $32, $00, $19, "x)", $01, $05, $01, $EE, $E2, $14
+		.byte $BD, $B7, $05, $00, $01, $DC, ":0", $04, $10, $00, $01
+		.byte $EF, $FF
+		.byte "KEY OPPOSITION SITE"
+		.byte $D3, $00, $10, $02, $05
+
+L10F1:		.byte $04, $9A, $09, $12, $02, $01, $11, $14, $04, $04, $C7, $10
+		.byte $14, $07, $14
+
+L1100:		.byte $32, $11, $40, $05
+
+L1104:		.byte $04, $9A, $09, $12, $02, $3F, $11
 		.byte $14, $03, $04, $C7, $10, $0D, $F9, $00, $00, $50, $00, $0F
 		.byte $FE, $2E, $0F, $FF, $50, $9D, $34, $0F, $01, $DC, $E5, $3D, $08
 		.byte $12, $00
@@ -1102,6 +1210,10 @@ L15BE:		.byte $EB,$DA,$98,$03,$06,$00
 L15C4:		.byte $E7,$FF,"OUCH",$EE,$00
 		.byte $4C
     
+    
+L0540		= $0540
+L2301		= $2301
+
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -2374,13 +2486,13 @@ L2EC1:		sec
 		rts
 		
 ;------------------------------------------------------------
-;
+; 
 ;------------------------------------------------------------
 BENSON_2F0D:	asl
 		tay
 		lda L293B
 		and #$40
-		bne L2F32
+		bne L2F32					;rts
 		lda L293B
 		ora #$40
 		sta L293B
@@ -2417,7 +2529,7 @@ L2F50:		rts
 
 L3206	= 	$3206
 ;------------------------------------------------------------
-;
+; compare to absolue value
 ;------------------------------------------------------------
 BENSON_2F51:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2431,7 +2543,7 @@ L2F60:		cmp L0100
 		jmp L300C
 		
 ;------------------------------------------------------------
-;
+; compare ($1D) to random number 
 ;------------------------------------------------------------
 BENSON_2F66:	jsr GET_RANDOM_L53B1
 		iny
@@ -2455,7 +2567,7 @@ BENSON_2F71:	lda TIMER_MSB_E3
 		jmp L300C
 
 ;------------------------------------------------------------
-;
+; compare to L2938, bit7 flipped
 ;------------------------------------------------------------
 BENSON_2F84:	lda L2938
 		eor #$80
@@ -2473,7 +2585,7 @@ BENSON_2F8F:	iny
 		bne L3008
 
 ;------------------------------------------------------------
-;
+; check if object X=L274E is in room L274F
 ;------------------------------------------------------------
 BENSON_2F98:	ldx L274E
 		lda L274F
@@ -2490,7 +2602,7 @@ BENSON_2FA5:	lda L274F
 		bne L3008
 		
 ;------------------------------------------------------------
-;
+; test bits ($1D) against L293B 
 ;------------------------------------------------------------
 BENSON_2FAE:	lda L293B
 		iny
@@ -2499,7 +2611,7 @@ BENSON_2FAE:	lda L293B
 		bne L300B
 
 ;------------------------------------------------------------
-;
+; is L274E in inventory
 ;------------------------------------------------------------
 BENSON_2FB8:	lda L274E
 		jsr CHECK_INVENTORY_3890
@@ -2513,7 +2625,7 @@ BENSON_2FC2:	jsr BENSON_30DE
 		jmp L300C
 
 ;------------------------------------------------------------
-;
+; compare ($1D),y with current position
 ;------------------------------------------------------------		
 BENSON_2FC8:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2525,6 +2637,9 @@ BENSON_2FC8:	iny
 		bne L3008
 		beq L300B
 		
+;------------------------------------------------------------
+; compare L274D to GROUND_STRUC_OBJ_TO_DRAW_B5
+;------------------------------------------------------------		
 BENSON_2FD8:	lda L274D
 		cmp GROUND_STRUC_OBJ_TO_DRAW_B5
 		bne L3008
@@ -2543,7 +2658,7 @@ BENSON_2FE1:	lda NEW_KEY_L00E9
 		jmp L300B
 
 ;------------------------------------------------------------
-;
+; test hi-bit of 1F00,X X=L274D
 ;------------------------------------------------------------
 BENSON_2FF3:	ldx L274D
 		lda L1F00,X
@@ -2551,7 +2666,7 @@ BENSON_2FF3:	ldx L274D
 		bpl L3008
 		
 ;------------------------------------------------------------
-;
+; and ($1D) with object attributes,X X=L274E
 ;------------------------------------------------------------
 BENSON_2FFD:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2621,25 +2736,25 @@ BENSON_303F:	jsr BENSON_3053
 		rts
 		
 ;------------------------------------------------------------
-;
+; sort of stack? push to it
 ;------------------------------------------------------------
-BENSON_304A:	ldx L00E5
+BENSON_304A:	ldx BENSON_STACK_PTR_E5
 		sta L293D,X
 		inx
-		stx L00E5
+		stx BENSON_STACK_PTR_E5
 		rts
 
 ;------------------------------------------------------------
-;
+; stack? pop from it
 ;------------------------------------------------------------
-BENSON_3053:	ldx L00E5
+BENSON_3053:	ldx BENSON_STACK_PTR_E5
 		dex
 		lda L293D,X
-		stx L00E5
+		stx BENSON_STACK_PTR_E5
 		rts
 
 ;------------------------------------------------------------
-;
+; and/or ($1D) to OBJECT_ATTRIBUTES_69C0,X X=L274E
 ;------------------------------------------------------------
 BENSON_305C:	ldx L274E
 		iny
@@ -2653,7 +2768,7 @@ L306D:		and OBJECT_ATTRIBUTES_69C0,X
 		jmp L3013
 
 ;------------------------------------------------------------
-;
+; room related message?
 ;------------------------------------------------------------
 BENSON_3076:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2698,7 +2813,7 @@ BENSON_30A4:	tax
 		rts
 		
 ;------------------------------------------------------------
-;
+; set a message?
 ;------------------------------------------------------------
 BENSON_30B7:	lda BENSON_PTR_LO_1D
 		sta L32A4+1
@@ -2746,7 +2861,8 @@ BENSON_30ED:	lda #$2C
 		bne L30F9
 
 ;------------------------------------------------------------
-;
+; add or copy ($1D),Y to L05E3,X 
+; (set or add/sub) money at $600
 ;------------------------------------------------------------
 BENSON_30F4:	lda #$7D
 		sta L310A
@@ -2771,7 +2887,7 @@ L310D:		sta L05E3,X
 		jmp L3013
 
 ;------------------------------------------------------------
-;
+; decimal add L05E0,X = L05E03,X + L05E3,Y
 ;------------------------------------------------------------
 BENSON_3119:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2797,6 +2913,7 @@ L3131:		lda L05E3,X
 		dey
 		dec TMP_04
 		bne L3131
+		
 		ldy TMP_04+1
 		iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2816,7 +2933,7 @@ L3131:		lda L05E3,X
 		jmp L3013
 
 ;------------------------------------------------------------
-;
+; copy L2740 low-nibble to high-nibble
 ;------------------------------------------------------------
 BENSON_315C:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2835,7 +2952,7 @@ BENSON_315C:	iny
 		jmp L3013
 
 ;------------------------------------------------------------
-;
+; set bits of ($1D) in L293B
 ;------------------------------------------------------------
 BENSON_3174:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2844,7 +2961,7 @@ BENSON_3174:	iny
 		jmp L3013
 		
 ;------------------------------------------------------------
-;
+; reset bits of ($1D) in L293B
 ;------------------------------------------------------------
 BENSON_3180:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2854,7 +2971,7 @@ BENSON_3180:	iny
 		jmp L3013
 		
 ;------------------------------------------------------------
-;
+; set value to absolute address
 ;------------------------------------------------------------
 BENSON_318E:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -2881,7 +2998,7 @@ BENSON_31AE:	tax
 L31B2:		jmp L3013
 
 ;------------------------------------------------------------
-;
+; issue random message?
 ;------------------------------------------------------------
 BENSON_31B5:	jsr GET_RANDOM_L53B1
 		iny
@@ -2898,7 +3015,7 @@ BENSON_31C1:	jsr RESET_KEY_L5AEE
 		jmp L3013
 
 ;------------------------------------------------------------
-;
+; signed add L2938 with max
 ;------------------------------------------------------------
 BENSON_31C7:	lda L2938
 		iny
@@ -2917,40 +3034,40 @@ L31D8:		sta L2938
 ;------------------------------------------------------------
 BENSON_JMP_TAB:
 		.byte $00,$00					;$00
-L31E0:		.word BENSON_30B7				;$01
-		.word BENSON_30CF				;$02
+L31E0:		.word BENSON_30B7				;$01 set a message?
+		.word BENSON_30CF				;$02 reset timer
 L31E4:		.word BENSON_3033				;$03 get next pointer?
-		.word BENSON_3024				;$04
-		.word BENSON_303F				;$05
-		.word BENSON_2FC8				;$06
+		.word BENSON_3024				;$04 push $1D to stack
+		.word BENSON_303F				;$05 pop $1D from stack
+		.word BENSON_2FC8				;$06 compare ($1D),y with current position
 L31EC:		.word BENSON_2F71				;$07 wait for timer
-		.word BENSON_30D8				;$08
-		.word BENSON_2FC2				;$09
-		.word BENSON_2F66				;$0A
-L31F4:		.word BENSON_2FE1				;$0B, check pressed key
-		.word BENSON_2FB8				;$0C
-		.word BENSON_30ED				;$0D
-		.word BENSON_30F4				;$0E
-		.word BENSON_3076				;$0F
-		.word BENSON_3174				;$10
-		.word BENSON_3180				;$11
-		.word BENSON_2FAE				;$12
-		.word BENSON_2FA5				;$13, send message
-		.word BENSON_31A3				;$14
-		.word BENSON_3119				;$15
-		.word BENSON_31C7				;$16
-		.word BENSON_2F84				;$17
-		.word BENSON_2F51				;$18
-		.word BENSON_318E				;$19
-		.word BENSON_2FF3				;$1A
-		.word BENSON_31B5				;$1B
-		.word BENSON_31C1				;$1C
-		.word BENSON_2F98				;$1D
-		.word BENSON_315C				;$1E
-		.word BENSON_2FD8				;$1F
-		.word BENSON_305C				;$20
-		.word BENSON_2FFD				;$21
-L3222:		.word BENSON_2F8F				;$22	;check aircraft / walking
+		.word BENSON_30D8				;$08 call subroutine
+		.word BENSON_2FC2				;$09 call sub with return (C)?
+		.word BENSON_2F66				;$0A compare ($1D) to random number
+L31F4:		.word BENSON_2FE1				;$0B check pressed key
+		.word BENSON_2FB8				;$0C check if 274E in inventory
+		.word BENSON_30ED				;$0D set money decimal
+		.word BENSON_30F4				;$0E add money decimal
+		.word BENSON_3076				;$0F room related message?
+		.word BENSON_3174				;$10 set bits of ($1D) L293B
+		.word BENSON_3180				;$11 reset bits of ($1D) in L293B
+		.word BENSON_2FAE				;$12 test bits ($1D) against in L293B 
+		.word BENSON_2FA5				;$13 compare room no in L274F to $CD
+		.word BENSON_31A3				;$14 send message
+		.word BENSON_3119				;$15 add decimal 4 bytes 
+		.word BENSON_31C7				;$16 signed add L2938 with max
+		.word BENSON_2F84				;$17 compare to L2938, bit7 flipped
+		.word BENSON_2F51				;$18 compare to absolue value (word, byte)
+		.word BENSON_318E				;$19 set value to absolute address
+		.word BENSON_2FF3				;$1A test hi-bit of 1F00,X X=L274D
+		.word BENSON_31B5				;$1B issue random message?
+		.word BENSON_31C1				;$1C reset key pressed
+		.word BENSON_2F98				;$1D check if object X=L274E is in room L274F
+		.word BENSON_315C				;$1E copy L2740 low-nibble to high-nibble
+		.word BENSON_2FD8				;$1F compare L274D to GROUND_STRUC_OBJ_TO_DRAW_B5
+		.word BENSON_305C				;$20 and/or ($1D) to OBJECT_ATTRIBUTES_69C0,X X=L274E
+		.word BENSON_2FFD				;$21 and ($1D) with object attributes,X X=L274E
+L3222:		.word BENSON_2F8F				;$22 check aircraft / walking
 		
 L3224:		lda MESSAGE_PENDING_E6
 		bne L3242
@@ -3615,7 +3732,7 @@ L3683:		lda #$FF
 		lda (PTR_LO_19),Y
 		bpl L369D					;bit7 set = send message?
 		txa
-		jsr BENSON_2F0D
+		jsr BENSON_2F0D					;send room related message?
 		jmp L369F
 L369D:		stx MESSAGE_TO_SEND_F6
 L369F:		jsr L3817
@@ -10438,7 +10555,7 @@ OBJECT_DRAW_LIST_6980:
 ;bit 6: unused?
 ;bit 5: heavy object, kitchen sink or antigrav required
 ;bit 4: is it takeable at all? kitchen sink required
-;bit 3: ?
+;bit 3: boarded?
 ;bit 2: ?
 ;bit 1: unused?
 ;bit 0: unused?
