@@ -127,7 +127,7 @@ CUR_Z_HSB_78			= $78
 SLOPE_FRACTION_79		= $79
 SLOPE_WHOLE_7A			= $7A
 MINUS_COTA_ROLL_7B		= $7B
-L007D				= $7D
+BOARDED_AND_FLYING_7D				= $7D
 JOYA_7E				= $7E
 FIRE_7F				= $7F
 	
@@ -715,18 +715,62 @@ L2004		= $2004
 ;
 ; Benson state machine vectors
 ;
-L0700:		.word L076C, L0939, L0D01, L0E97, L0EAB, L0EBF
-		.word L0ED2, L0F78, L0A13, L0EE5, L1104, L0EF8
-		.word L09E5, L0C9A, L0DBC, L0DD0, L0DE3, L0DF6
-		.word L0E09, L0E1D, L0E31, L0766, L0E46, L0E5B
-		.word L0E6F, L0E83, L10F1, L0B7C, L0BDF, L0A13
-		.word L0766, L0766, L0766, L0766, L0BD1, L0BD8
-		.word L0A25, L0A3E, L0A6D, L0A82, L0AB1, L0AC8
-		.word L0ADE, L0AF3, L0B0B, L0B1C, L0B32, L0B43
-		.word L0B53, L0BA8, L0B94
+L0700:		.word L076C					;beginning sequence
+		.word L0939					;BIL's ship nicked
+		.word L0D01					;HERTZ Spaceship rental
+		.word L0E97					;engine room
+		.word L0EAB					;conference room		
+		.word L0EBF					;exchequer
+		.word L0ED2					;kitchen
+		.word L0F78					;prestinimum boarded
+		.word L0A13					;bank
+		.word L0EE5					;infirmary
+		.word L1104					;we are most pleased ...
+		.word L0EF8					;prison
+		.word L09E5					;mechaniod...
+		.word L0C9A					;machanoid briefing room
+		.word L0DBC					;power room
+		.word L0DD0					;stores
+		.word L0DE3					;armoury
+		.word L0DF6					;laboratory
+		.word L0E09					;control room
+		.word L0E1D					;interview room
+		.word L0E31					;mechanoid fuel stores
+		.word L0766					;crash
+		.word L0E46					;mechanoid power room
+		.word L0E5B					;mechanoid stores
+		.word L0E6F					;mechanoid armoury
+		.word L0E83					;mechanoid laboratory
+		.word L10F1					;"message from mechanoids... reward"
+		.word L0B7C					;"you have just detroyed the BIL's new ship"
+		.word L0BDF					;palyar briefing room
+		.word L0A13					;bank
+		.word L0766					;crash
+		.word L0766                                     ;crash
+		.word L0766                                     ;crash
+		.word L0766                                     ;crash
+		.word L0BD1					;"palyer ship attacking"
+		.word L0BD8
+		.word L0A25					;"novabill destroyed"
+		.word L0A3E					;"advert destroyed"
+		.word L0A6D					;"sabins cube destroyed"
+		.word L0A82					;"walten monument destroyed"
+		.word L0AB1					;"St. Stallards destroyed"
+		.word L0AC8					;"Moorby arch  destroyed"
+		.word L0ADE					;"Tyler point destroyed"
+		.word L0AF3					;"Bosher stadium destroyed"
+		.word L0B0B					;"Jordan Airport destroyed"
+		.word L0B1C					;"Vector Henge"
+		.word L0B32					;"BIL's house  destroyed"
+		.word L0B43					;"mechanoid fort destroyed"
+		.word L0B53					;"The couch and horsed destroyed"
+		.word L0BA8					;"good show"
+		.word L0B94					;"traitor!"
 
-L0766:		.word L2301, L1100, L0540
-
+L0766:		.byte $01, $23, $00				;crash
+		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+		.byte $05					;rts
+		
 L076C:		.byte $0F, $FE, $01, $20, $04, $0F, $FE, $07, $20, $04, $0F, $FE
 		.byte $0C, $20, $04, $14, $32, $04, $8C, $09, $01, $EC, $23, $FF
 		.byte "IMMINENT", $EE, $00, $14, $32, $04, $8C, $09, $01, $EF, $FF, "RETURNIN", $C7
@@ -765,10 +809,27 @@ L0939:		.byte $0F, $FE, $01, $20, $F3, $11, $40, $12, $01, $6E, $09
 		.byte $A1, $09, $8A, "P{", $09, $0F, $FF, $00, $13, $6E, $09, $04
 		.byte $C2, $09
 		
-L097E:		.byte $03, $7E, $09, $02, $12, $80, $8B, $09, $07, $0F
-		.byte $00, $82, $09, $05, $02, $07, $02, $00, $8D, $09, $05, $02
-		.byte $07, $03, $00, $94, $09, $05, $02, $07, $01, $00, $9B, $09
-		.byte $05, $02, $07, $0F, $00, $A2, $09, $05, $1C, $01, $EE, $33, $DC
+L097E:		.byte $03
+		.word L097E
+
+L0981:		.byte $02, $12, $80, $8B, $09, $07, $0F
+		.byte $00, $82, $09, $05
+L098C:		.byte $02, $07, $02, $00, $8D, $09, $05, $02
+		.byte $07, $03, $00, $94, $09, $05
+
+L099A:		.byte $02					;reset timer
+L099B:		.byte $07					;wait timer 
+		.word $0001					;wait minuend
+		.word L099B					;jump back
+L09A0:		.byte $05					;pop ptr from stack
+
+L09A1:		.byte $02					;reset timer
+L09A2:		.byte $07					;$07 wait for timer
+		.word $000F					;wait minuend	
+		.word L09A2					;jump back
+		.byte $05					;rts
+		
+		.byte $1C, $01, $EE, $33, $DC
 		.byte $D9, $D5, $1C, $07, $00, $02, $0B, $2B, $BF, $09, $07, $05
 		.byte $00, $B3, $09, $11, $01, $05, $10, $01, $05, $14, $03, $14
 		.byte $05, $01, $EF, $3C, $9E, $D1, $00, $01, $2E, $D5, $D0, $1E
@@ -841,13 +902,21 @@ L0B53:		.byte $04, $BE, $0B, $01, $EF, $D0, $FF
 L0B7C:		.byte $04, $BE, $0B, $01, $BC, $00, $01, $EC, $1F, $02, $00, $01
 		.byte $E9, $FF, "NE", $D7, $C5, $00, $10, $20, $03, $C1, $0B
 
-L0B94:		.byte $04, $9A, $09, $01, $E9, $FF
-		.byte "TRAITOR", $EE, $00, $14, $32, $11
-		.byte $40, $05
+L0B94:		.byte $04					;jsr wait some time (L099A)
+		.word L099A
+		.byte $01, $E9, $FF, "TRAITOR", $EE, $00
+		.byte $14, $32					;clear message
+		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+		.byte $05                                       ;pop
 
-L0BA8:		.byte $04, $9A, $09, $01, $EA, $FF
-		.byte "GOOD SHOW", $EE, $00, $14
-		.byte $32, $11, $40, $05, $14, $17, $05, $04, $B0, $10, $14, $32
+L0BA8:		.byte $04					;push PTR+3 and wait some time (L099A)
+		.word L099A
+		.byte $01, $EA, $FF, "GOOD SHOW", $EE, $00
+		.byte $14, $32					;clear message
+		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+		.byte $05					;pop
+		
+		.byte $14, $17, $05, $04, $B0, $10, $14, $32
 		.byte $11, $40, $05, $04, $BC, $10, $14, $32, $11, $40, $05
 
 L0BD1:		.byte $8A, $50, $C1, $0B, $11, $40, $05
@@ -861,7 +930,7 @@ L0BDF:		.byte $04, $9A, $09, $0F, $FF, $29, $01, $EF, $B4, $1E, $03, $C1
 		.byte "APPROPRIAT", $C5, $C1
 		.byte $02, $CD, $00, $01, $D0, $B4, $FF, "COLON"
 		.byte $D9, $22, $00, $14, $32, $93, $97, $0C, $01, $D2, $2B, $08
-		.byte $FF, "BI", $C7, "9&lt;", $00, $01, $EF, $08, $FF
+		.byte $FF, "BI", $C7, $39, $3C, $00, $01, $EF, $08, $FF
 		.byte "CAPTURE", $C4, $9F, $00, $14, $32
 		.byte $93, $97, $0C, $01, $AE, $E0, $DC, $FF
 		.byte "KNOW HO", $D7, $00, $01, $D5, $FF
@@ -932,6 +1001,7 @@ L0E97:		.byte $0F, $FE, $1D, $0F, $FF, $88, $0D, $F9
 		
 L0EAB:		.byte $0F, $FE, $2A, $0F, $FF, $9B, $0D, $F9, $00, $00, $05, $00
 		.byte $01, $EC, $BA, $C1, $00, $03, $09, $0F
+
 L0EBF:		.byte $0F, $FE, $26, $0F
 		.byte $FF, $A2, $0D, $F9, $00, $00, $10, $00, $01, $E9, $B8, $00
 		.byte $03, $09, $0F 
@@ -946,70 +1016,149 @@ L0EE5:		.byte $0F, $FE
 L0EF8:		.byte $04, $9A, $09, $01, $E8, $FF, "PRISO", $CE
 		.byte $E6, $00, $11, $40, $05, $21, $01, $40, $0F, $0C, $16, $0F
 		.byte $1D, $16, $0F, $03, $40, $0F, $01, $EB, $B7, $FF, "LEAV", $C5
-		.byte $00, $14, $FE, $01, $EF, "-&lt;", $F9, $12, $00, $1D, $32, $0F
-		.byte $13, $29, $0F, $03, $40, $0F, $20, $11, $01, $EE, $F9, $25, $B5
-		.byte $00, $15, $F9, $F8, $F8, $14, $15, $14, $32, $11, $40, $05
+		.byte $00, $14, $FE, $01, $EF, $2D, $3C, $F9, $12, $00, $1D, $32, $0F
+		.byte $13, $29, $0F, $03, $40, $0F, $20, $11
+		
+L0F34:		.byte $01, $EE, $F9, $25, $B5, $00
+		.byte $15, $F9, $F8, $F8, $14
+		.byte $15, $14, $32, $11, $40
+		.byte $05					;rts
+		
 		.byte $1E, $8E, $1E, $9F, $0F, $FE, $0C, $0F, $FF, $66, $9D, $59, $0F
 		.byte $1E, $E8, $1E, $F9, $03, $09, $0F, $01, $EE, $D0, $9F, $02
 		.byte $FF, "SA", $D9, $00, $01, $EE, $FF, "PU", $D4, $1B, $0B, $FF
-		.byte "LEADE", $D2, $00, $14, $32, $11, $40, $05
+		.byte "LEADE", $D2, $00, $14, $32, $11, $40
+		.byte $05					;rts
 		
-L0F78:		.byte $0F, $FF, $00, $0F
-		.byte $FE, $19, $01, $ED, $FF, "INTERSTELLA", $D2, $C5, $00
+		;board Prestinium
+L0F78:		.byte $0F, $FF, $00				;$0F store $00 (room) in $2740,X (X=$F 1st nibble of $FF)
+L0F7B:		.byte $0F, $FE, $19				;$0F store $19 (object novadrive) in $2740,X (X=$E 1st nibble of $FE)
+L0F7E:		.byte $01, $ED, $FF, "INTERSTELLA", $D2, $C5, $00
+L0F8F:		.byte $A2, $07					;$22 check if still boarded Prestinium ($07), if no jump L0FD0
+		.word L0FD0
+L0F93:		.byte $93					;$13 check room against $274F (set in the first $0F function)
+		.word L0F8F					;do nothing if not outside
+L0F96:		.byte $04					;push PTR+3 and wait some time (L099A)
+		.word L099A
+L0F99:		.byte $12, $04					;$12 test (and) $04 against L293B (unconditional boarding)
+		.word L0FB2
+L0F9D:		.byte $0C					;$0C test if L274E is in inventory (Novadrive)
+		.word L0FB2
+L0FA0:		.byte $01, $EE, $A7, $FF, "REQUIRE", $C4, $00	;$01 send message "Novadrive required"
+L0FAD:		.byte $14, $32					;send message $32 (clear)
+L0FAF:		.byte $11, $40					;reset bit $40 in L293B
+L0FB1:		.byte $05					;pop ptr from stack
 
-L0F8F:		.byte $A2, $07, $D0
-		.byte $0F, $93, $8F, $0F, $04, $9A, $09, $12, $04, $B2, $0F, $0C
-		.byte $B2, $0F, $01, $EE, $A7, $FF, "REQUIRE", $C4, $00, $14, $32, $11
-		.byte $40, $05
-L0FB2:		.byte $1C, $01, $ED, $FF, "PRESS Y TO LAUNC", $C8, $00
+L0FB2:		.byte $1C					;$1C reset key pressed
+		.byte $01, $ED, $FF, "PRESS Y TO LAUNC", $C8, $00
 
+L0FC8:		.byte $0B, $2B					;check 'Y' ($2B) pressed, if yes, jmp L0FD5
+		.word L0FD5
 
-; check 'Y' ($2B) pressed, if yes, jmp $0FD5
-L0FC8:		.byte $0B, $2B, $D5, $0F
+L0FCC:		.byte $22, $07					;check prestinium ($07) boarded, if yes, jump $0FC8, 
+		.word L0FC8
+		
+L0FD0:		.byte $14, $32					;if not, $14 send message, value $32 (clear)
+		.byte $11, $40					;reset bit $40 in L293B
+		.byte $05					;pop ptr from stack
 
-; check prestinium ($07), if yes, jump $0FC8, if no function $14 send message, value $32 (clear)
+		;'Y' pressed
+L0FD5:		.byte $93					;$13 check room against $274F (set in the first $0F function)
+		.word L0F8F					;do nothing if not outside
+		.byte $12, $04 					;$12 test (and) $04 against L293B (unconditional boarding?)
+		.word L0FDF
+		
+		.byte $8C					;$0C test if L274E is not in inventory (Novadrive)
+		.word L0F8F
 
-L0FCC:		.byte $22, $07, $C8, $0F, $14, $32, $11, $40, $05
+L0FDF:		.byte $0F, $FD, $32				;$0F store $32 in $2740,X (X=$D 1st nibble of $FD)
+		.byte $9A					;test hi-bit of 1F00,X X=L274D
+		.word L101C					;jump if not set
+		
+		.byte $01, $EE, $D0, $16, $FF, "WONoT LE", $D4, $00
+		.byte $01, $EE, $DC, $FF, "LEAVE UNTI", $CC, $DC, $00
+		.byte $01, $EC, $FF, "FIX HIS ADVER", $D4, $00
+		.byte $14, $32					;send message $32 (clear)
+		.byte $11, $40					;reset bit $40 in L293B
+		.byte $05					;pop ptr from stack
+		
+L101C:		.byte $19, $7E, $29, $01			;$297E = #$01
+		.byte $04					;push & call L098C
+		.word L098C
+		.byte $19, $E1, $00, $96			;$E1 = #$96
+		.byte $01, $EE, $D0, $16, $C2, $02, $DC, $00	;"THE AUTHOR SENDS YOU"
+		.byte $01, $FF, "CONGRATULATION", $D3, $AD, $97, $00
+		.byte $01, $EC, $FF, "ESCAP", $C5, $3E, $D7, $00
+		.byte $14, $32					;clear message
+		.byte $92, $20					;test $20 against L293B
+		.word L106F
 
-; check room ($13)
-L0FD5:		.byte $93, $8F, $0F, $12, $04, $DF, $0F, $8C, $8F, $0F, $0F, $FD
-		.byte $32, $9A, $1C, $10, $01, $EE, $D0, $16, $FF
-		.byte "WONoT LE", $D4, $00, $01, $EE
-		.byte $DC, $FF, "LEAVE UNTI"
-		.byte $CC, $DC, $00, $01, $EC, $FF
-		.byte "FIX HIS ADVER"
-		.byte $D4, $00, $14, $32, $11, $40, $05, $19, "~)", $01, $04
-		.byte $8C, $09, $19, $E1, $00, $96, $01, $EE, $D0, $16, $C2, $02
-		.byte $DC, $00, $01, $FF
-		.byte "CONGRATULATION"
-		.byte $D3, $AD, $97, $00, $01, $EC, $FF, "ESCAP"
-		.byte $C5, $3E, $D7, $00, $14, $32, $92, " o", $10, $01, $BC
-		.byte $00, $01, $EC, $1F, $00, $01, $2B, $B7, $05, $FF
-		.byte "YOUnVE GON", $C5, $00
-		.byte $14, $32, $01, $FF, "SAVE OU", $D4
-		.byte $D0, $C7, $13, $00, $01, $FF, "SE", $C5, $DC, $CD, $FF
-		.byte "MERCENARY I", $C9
-		.byte $00, $04, $A1, $09, $04, $A1, $09, $01, $E9, $FF
-		.byte "GAME OVE", $D2, $00, $19, $01
-		.byte $D2, $00, $19, $03, $D2, $00, $03, $95, $10, $01, $EF, $B4
-		.byte $C5, $32, $03, $00, $19, "x)", $01, $05, $01, $EF, $9F
-		.byte $C5, $32, $00, $19, "x)", $01, $05, $01, $EE, $E2, $14
-		.byte $BD, $B7, $05, $00, $01, $DC, ":0", $04, $10, $00, $01
-		.byte $EF, $FF
-		.byte "KEY OPPOSITION SITE"
-		.byte $D3, $00, $10, $02, $05
+		.byte $01, $BC, $00				;"THE PALYAR COMMANDER'S BORTHER IN LAW IS PLEASED"
+		.byte $01, $EC, $1F, $00
+		.byte $01, $2B, $B7, $05, $FF, "YOUnVE GON", $C5, $00
+		.byte $14, $32					;clear message
+		
+L106F:		.byte $01, $FF, "SAVE OU", $D4, $D0, $C7, $13, $00
+		.byte $01, $FF, "SE", $C5, $DC, $CD, $FF, "MERCENARY I", $C9, $00
+		.byte $04
+		.word L09A1					;jsr L09A1
+		
+L1095:		.byte $04					;jsr L09A1
+		.word L09A1
+		.byte $01, $E9, $FF, "GAME OVE", $D2, $00
+		.byte $19, $01, $D2, $00			;$D201 = #$00 (AUDFRQ1)
+		.byte $19, $03, $D2, $00			;$D203 = #$00 (AUDFRQ1)
+		.byte $03					;jmp
+		.word L1095
+		
+L10B0:		.byte $01, $EF, $B4, $C5, $32, $03, $00
+		.byte $19, $78, $29, $01			;$2978 = #$01
+		.byte $05					;rts
+		
+L10BC:		.byte $01, $EF, $9F, $C5, $32, $00
+		.byte $19, $78, $29, $01			;$2978 = #$01
+		.byte $05					;rts
+		
+L10C7:		.byte $01, $EE, $E2, $14, $BD, $B7, $05, $00
+		.byte $01, $DC, $3A, $30, $04, $10, $00
+		.byte $01, $EF, $FF, "KEY OPPOSITION SITE", $D3, $00
+		.byte $10, $02					;$10 set bits of ($1D) L293B
+		.byte $05					;rts
 
-L10F1:		.byte $04, $9A, $09, $12, $02, $01, $11, $14, $04, $04, $C7, $10
-		.byte $14, $07, $14
+L10F1:		.byte $04					;jsr
+		.word $099A
+		.byte $12, $02					;$12 test bits ($1D) against in L293B 
+		.word L1101 
+		.byte $14, $04					;send message
+		.byte $04					;jsr
+		.word L10C7
+		.byte $14, $07					;send message
+		.byte $14, $32					;send message
+L1101:		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+		.byte $05					;rts
 
-L1100:		.byte $32, $11, $40, $05
-
-L1104:		.byte $04, $9A, $09, $12, $02, $3F, $11
-		.byte $14, $03, $04, $C7, $10, $0D, $F9, $00, $00, $50, $00, $0F
-		.byte $FE, $2E, $0F, $FF, $50, $9D, $34, $0F, $01, $DC, $E5, $3D, $08
-		.byte $12, $00
+L1104:		.byte $04					;jsr
+		.word $099A
+		.byte $12, $02
+		.word L113F					;$12 test bits ($1D) against in L293B 
+		.byte $14, $03					;send message
+		.byte $04					;jsr
+		.word L10C7
+		.byte $0D, $F9, $00, $00, $50, $00		;set 5000 credits
+		.byte $0F, $FE, $2E				;$0F store $2E (pass) in $2740,X (X=$E 1st nibble of $FE)
+		.byte $0F, $FF, $50				;$0F store $50 (room) in $2740,X (X=$F 1st nibble of $FF)
+		.byte $9D 					;$1D check if object X=L274E is in room L274F
+		.word L0F34					;if not pay $500000
+		
+		.byte $01, $DC, $E5, $3D, $08, $12, $00		;"Message from the Palyar we are most pleased..."
 		.byte $01, $EF, $FF, "INSIDE THE RE", $C4, $0E, $00
-		.byte $19, "ni", $01, $14, $07, $11, $40, $05, $00
+		.byte $19, $6E, $69, $01			;set $696E = #$01 (put pass in hanger 09-06)
+		.byte $14, $07					;send message $07
+L113F:		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+		.byte $05					;rts
+		
+		.byte $00
+
 		.byte "MEN", $D4, $D3
 		.byte "IN", $C7, $45, $C4
 		.byte $C4, $EE, $ED, $C1, $41, $CD
@@ -1025,12 +1174,14 @@ L1104:		.byte $04, $9A, $09, $12, $02, $3F, $11
 		.byte "AN", $C4
 		.byte "AR", $C5
 		.byte "ANTIGRA", $D6
-		.byte "AUTHO", $D2, $41, $D4
+		.byte "AUTHO", $D2
+		.byte "A", $D4
 		.byte "ANTENN", $C1
 		.byte "IT", $D3
 		.byte "GOL", $C4
 		.byte "BAC", $CB
-		.byte "BU", $D9, $42, $C5
+		.byte "BU", $D9
+		.byte "B", $C5
 		.byte "BRIE", $C6
 		.byte "BROTHER", $0D, "IN", $0D, "LA", $D7
 		.byte "CAL", $CC
@@ -1045,7 +1196,8 @@ L1104:		.byte $04, $9A, $09, $12, $02, $3F, $11
 		.byte "CRYSTA", $CC, $49, $D3
 		.byte "DAR", $CB
 		.byte "HER", $C5
-		.byte $47, $CF, "DELIVE", $D2
+		.byte $47, $CF
+		.byte "DELIVE", $D2
 		.byte "DESTRO", $D9, $8D
 		.byte "ATTAC", $CB, $44, $CF
 		.byte "DON", $C5
@@ -1210,10 +1362,6 @@ L15BE:		.byte $EB,$DA,$98,$03,$06,$00
 L15C4:		.byte $E7,$FF,"OUCH",$EE,$00
 		.byte $4C
     
-    
-L0540		= $0540
-L2301		= $2301
-
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -2098,8 +2246,8 @@ L2C2B:		ldy GROUND_STRUC_OBJ_TO_DRAW_B5
 		bne L2C18
 		lda L1F00,Y
 		sta L00F2
-		lda L69D8
-		bmi L2C9D
+		lda L69D8					;Anti Time Bomb in inventory?			
+		bmi L2C9D					;yes
 		jsr L3B1D
 		bne L2C47
 L2C40:		lda CRUMBLE_CNT_F3
@@ -2316,7 +2464,7 @@ L2DAA:		lda LIFT_UP_DOWN_CA
 		ldx #$0F
 		lda L70A8,X
 		bmi L2DA9
-		jsr L3DC8
+		jsr DIFF_CUR_OBJ_L3DC8
 		ldx #$30
 		ldy #$00
 		jsr CALC_ABS_DIST_L3E0B
@@ -2340,7 +2488,7 @@ L2DAA:		lda LIFT_UP_DOWN_CA
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
-L2DE6:		jsr L3DC8
+L2DE6:		jsr DIFF_CUR_OBJ_L3DC8
 		ldx #$04
 		ldy #$00
 		jsr CALC_ABS_DIST_L3E0B
@@ -2486,7 +2634,7 @@ L2EC1:		sec
 		rts
 		
 ;------------------------------------------------------------
-; 
+; stack current state ptr and execute new stream
 ;------------------------------------------------------------
 BENSON_2F0D:	asl
 		tay
@@ -2703,7 +2851,7 @@ L301F:		lda L00E7
 		bpl BENSON_3033
 
 ;------------------------------------------------------------
-;
+; push $1D-ptr + 3 and get next pointer
 ;------------------------------------------------------------
 BENSON_3024:	lda BENSON_PTR_LO_1D
 		clc
@@ -2711,8 +2859,7 @@ BENSON_3024:	lda BENSON_PTR_LO_1D
 		jsr BENSON_304A
 		lda BENSON_PTR_HIGH_1E
 L302E:		adc #$00
-		jsr BENSON_304A
-
+		jsr BENSON_304A					;fall through
 ;------------------------------------------------------------
 ; BENSON_PTR_NEXT
 ; Get next pointer from benson state machine
@@ -2775,10 +2922,10 @@ BENSON_3076:	iny
 		and #$0F
 		tax
 		iny
-		lda (BENSON_PTR_LO_1D),Y
+		lda (BENSON_PTR_LO_1D),Y			;room nr
 		sta L2740,X
 		cpx #$0D
-		bne L3013
+		bne L3013					;advance $1D PTR
 		sty TMP_04
 		ldy #$00
 		pha
@@ -2819,9 +2966,11 @@ BENSON_30B7:	lda BENSON_PTR_LO_1D
 		sta L32A4+1
 		lda BENSON_PTR_HIGH_1E
 		sta L32A4+2
-L30C1:		iny
+		
+L30C1:		iny						;advance Y until 00 read
 		lda (BENSON_PTR_LO_1D),Y
-L30C4:		bne L30C1
+		bne L30C1
+		
 		dec MESSAGE_PENDING_E6
 		sta CHAR_CNT_DF
 		sta MSG_CHUNK_CNT_DE
@@ -3037,7 +3186,7 @@ BENSON_JMP_TAB:
 L31E0:		.word BENSON_30B7				;$01 set a message?
 		.word BENSON_30CF				;$02 reset timer
 L31E4:		.word BENSON_3033				;$03 get next pointer?
-		.word BENSON_3024				;$04 push $1D to stack
+		.word BENSON_3024				;$04 push $1D-ptr + 3 and get next pointer
 		.word BENSON_303F				;$05 pop $1D from stack
 		.word BENSON_2FC8				;$06 compare ($1D),y with current position
 L31EC:		.word BENSON_2F71				;$07 wait for timer
@@ -3048,7 +3197,7 @@ L31F4:		.word BENSON_2FE1				;$0B check pressed key
 		.word BENSON_2FB8				;$0C check if 274E in inventory
 		.word BENSON_30ED				;$0D set money decimal
 		.word BENSON_30F4				;$0E add money decimal
-		.word BENSON_3076				;$0F room related message?
+		.word BENSON_3076				;$0F set value to L2740,X
 		.word BENSON_3174				;$10 set bits of ($1D) L293B
 		.word BENSON_3180				;$11 reset bits of ($1D) in L293B
 		.word BENSON_2FAE				;$12 test bits ($1D) against in L293B 
@@ -3528,7 +3677,7 @@ SETUP_ROOM_L353C:
 		stx PLANET_UNDERGROUND_A6			;outside
 		stx ROOM_NO_CD					;room0
 		jsr OBJ_DRAW_LIST_37ED
-		lda #$09					;falling!
+		lda #$09					;ship $09 = falling!
 		sta CRAFT_ID_WALKING_A7
 		jsr COPY_SHIP_DATA_L4189
 		jsr SET_COLOR_OUTSIDE_58FF
@@ -3845,7 +3994,7 @@ L37E6:		ldx #$7F
 ;------------------------------------------------------------
 OBJ_DRAW_LIST_37ED:		
 		lda #$00
-		ldx L69E8					;Sights attributes
+		ldx L69E8					;sights in inventory?
 		bpl L37F6					;not active
 		lda #$66
 L37F6:		sta L9AB5
@@ -4015,8 +4164,8 @@ L38B4:      	iny
 		ror
 		eor MUL_HI_07
 		bmi L38B4
-		lda L69F0
-L3907:      	bmi L3917
+		lda L69F0					;spider web in inventory
+L3907:      	bmi L3917					;yes
 		lda MUL_HI_07
 		and #$0F
 		cmp #$08
@@ -4426,7 +4575,7 @@ L3B99:		stx OBJECT_NUMBER_AD
 		sta OBJ_SHAPE_PTR_LO_1B
 		lda OBJECT_SHAPE_POINTER_HI_L6840,X
 		sta OBJ_SHAPE_PTR_HI_1C
-		jsr L3DC8					;compute distance
+		jsr DIFF_CUR_OBJ_L3DC8				;compute distance
 		jsr L3C6B					;check if in range for take or board
 		bcs L3BAE
 L3BAD:		rts
@@ -4547,7 +4696,7 @@ L3C52:		ldy L00AB
 	
 L3C6B:		lda L00B6
 		cmp #$2D					;'T' Take
-		bne PLOT_POINT_POSSIBLY_L3CC0
+		bne BOARD_SHIP_L3CC0
 			
 		ldx #$01					;object in range?
 		ldy #$00
@@ -4598,16 +4747,16 @@ L3CBE:		sec
 ;------------------------------------------------------------
 ; 
 ;------------------------------------------------------------
-PLOT_POINT_POSSIBLY_L3CC0:					;title is wrong
-		cmp #$15					;'B' - board 
+BOARD_SHIP_L3CC0:						;'B' - board 
+		cmp #$15					;rts carry set
 		bne L3CBE
 		
-		lda CRAFT_ID_WALKING_A7
+		lda CRAFT_ID_WALKING_A7				;board a ship
 		bpl L3CBE					;flying
 		
 		lda OBJECT_NUMBER_AD
 		cmp #$08
-		bcs L3CBE					;no ship
+		bcs L3CBE					;no ship rts carry set
 		
 		ldx #$02
 		ldy #$00
@@ -4615,7 +4764,7 @@ PLOT_POINT_POSSIBLY_L3CC0:					;title is wrong
 		bcs L3CBE
 		ldx OBJECT_NUMBER_AD
 		lda OBJECT_ATTRIBUTES_69C0,X
-		jsr L3D22
+		jsr L3D22					;kick off Benson
 		ldx OBJECT_NUMBER_AD
 		lda OBJ_X_LSB_L6880,X
 		sta CUR_X_LSB_70
@@ -4674,7 +4823,7 @@ L3D3D:		rts						;walking
 ;------------------------------------------------------------
 ; 
 ;------------------------------------------------------------
-L3D3E:		lda L007D					;flying, but what is 7D? meaning?
+L3D3E:		lda BOARDED_AND_FLYING_7D					;flying, but what is 7D? meaning?
 		beq L3D3D
 
 		lda #$00
@@ -4705,9 +4854,9 @@ L3D3E:		lda L007D					;flying, but what is 7D? meaning?
 ;------------------------------------------------------------
 ; drop an object
 ;------------------------------------------------------------
-L3D6F:		lda L69F8
-		bmi L3D78
-		lda L007D
+L3D6F:		lda L69F8					;pyramid taken?
+		bmi L3D78					;allow drop when flying in the air
+		lda BOARDED_AND_FLYING_7D
 		beq L3D3D
 L3D78:		ldx NUM_INVENTORY_ITEMS_EB
 		beq L3D3D
@@ -4750,9 +4899,10 @@ SET_SPEED_ZERO_3DC1:
 		rts
 		
 ;------------------------------------------------------------
-; 
+; compute difference between CUR_POS and OBJ_POS
 ;------------------------------------------------------------
-L3DC8:		sec
+DIFF_CUR_OBJ_L3DC8:		
+		sec
 		lda OBJ_X_LSB_L6880,X
 		sbc CUR_X_LSB_70
 		sta DIF_X_LSB_D5
@@ -5455,7 +5605,7 @@ L42EA:		jmp L451B
 		lda #$3F
 		sta CUR_Y_LSB_73
 		jsr L4307
-		lda L007D
+		lda BOARDED_AND_FLYING_7D
 		bne L4306
 		dec CUR_Y_HSB_75
 L42FF:		bpl L4306
@@ -5527,7 +5677,7 @@ L4360:		lda #$02						;joystick back?
 		sta PITCH_HI_29
 L4376:		ldx SPEED_FP_EC
 		lda SPEED_FP_ED
-		ldy L69DC
+		ldy L69DC						;power amp in inventory?
 		bpl L4388
 		ldy CRAFT_ID_WALKING_A7
 		cpy #$01
@@ -5595,7 +5745,7 @@ L43FE:		adc CUR_X_MSB_71
 		tya
 		adc CUR_X_HSB_72
 		sta CUR_X_HSB_72
-		lda L007D
+		lda BOARDED_AND_FLYING_7D
 		beq L4427
 		
 		lda AT_COLONY_CRAFT_00F9
@@ -5629,8 +5779,8 @@ L4427:		ldx SIN_PITCH_LO_34
 		lsr
 		bcs L445B
 		lda L73CD
-L4440:		ldx L69DC
-		bpl L444D
+L4440:		ldx L69DC					;power amp in inventory?
+		bpl L444D					;no
 L4445:		ldx CRAFT_ID_WALKING_A7
 		cpx #$01
 		bne L444D
@@ -5687,7 +5837,7 @@ L449F:		php
 L44A6:		sta ROLL_LO_26
 		sta ROLL_HI_27
 		lda #$3F
-		sta L007D
+		sta BOARDED_AND_FLYING_7D
 		sta CUR_Y_LSB_73
 		lda PITCH_HI_29
 		and #$02
@@ -5724,7 +5874,7 @@ L44D2:		cmp #$40
 		beq L44A6
 		
 L44E7:		lda #$00
-		sta L007D
+		sta BOARDED_AND_FLYING_7D
 		sta AT_COLONY_CRAFT_00F9
 		lda CRAFT_ID_WALKING_A7
 		jsr COPY_SHIP_DATA_L4189
@@ -5739,7 +5889,7 @@ L44F2:		ldx ZP_20
 		txa
 		adc YAW_HI_2B
 		sta YAW_HI_2B
-		lda L007D
+		lda BOARDED_AND_FLYING_7D
 		bne L451B
 		ldx ZP_20
 		lda L73C7
@@ -8929,7 +9079,7 @@ L5A24:		bne L5A51					;rts
 		lda PLANET_UNDERGROUND_A6			;0=outside,1=underground
 		bne L5A7C
 		
-		lda L007D
+		lda BOARDED_AND_FLYING_7D
 		beq L5A51					;rts
 		
 		lda CUR_X_MSB_71				;check if in Hangar range
@@ -8961,7 +9111,7 @@ L5A52:		cpx #$05					;are we at 03-15?
 		bne L5A60					;no
 		
 		lda L69EE					;pass available?
-		bmi L5A60
+		bmi L5A60					;yes
 		ldx #$39					;"pass holders only"
 L5A5D:		jmp START_MESSAGE_L322A
 
@@ -9291,8 +9441,9 @@ L5C39:		lda LIFT_UP_DOWN_CA
 		beq L5C3E
 		rts	
 		
-L5C3E:		lda L69DA
-		bpl L5C5F
+L5C3E:		lda L69DA					;metal detector in inventory?
+		bpl L5C5F					;no
+		
 		lda ROOM_NO_CD
 		bne L5C5F
 		lda GROUND_STRUC_OBJ_TO_DRAW_B5
@@ -10539,7 +10690,6 @@ OBJECT_ROOM_6940:
 L6941:		.byte $00,$00,$07,$03,$02,$36
 INT_SHIP_ROOM_6947:		
 		.byte $05,$FF,$FF,$00,$FF,$66,$FF
-		
 L694E:		.byte $FF
 L694F:		.byte $FF,$4A,$3E,$3A,$A4,$42,$6D,$52,$39,$A6,$89,$2F,$11,$43,$45,$62,$48
 		.byte $34,$9B,$44,$47,$A3,$A2,$33,$A8,$09,$0C,$32,$8E,$0F,$6C,$50,$A3
@@ -10551,26 +10701,81 @@ OBJECT_DRAW_LIST_6980:
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 		.byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
+;------------------------------------------------------------
 ;bit 7: is in inventory?
 ;bit 6: unused?
 ;bit 5: heavy object, kitchen sink or antigrav required
 ;bit 4: is it takeable at all? kitchen sink required
-;bit 3: boarded?
-;bit 2: ?
+;bit 3: display short message (name of object)
+;bit 2: start benson message
 ;bit 1: unused?
 ;bit 0: unused?
+;------------------------------------------------------------
 OBJECT_ATTRIBUTES_69C0:		
-		.byte   $30,$24,$20,$20,$20,$20,$08,$24
-L69C8:		.byte   $10,$10,$10,$10,$04,$10,$10,$10,$08,$00,$00,$00,$00,$00,$00,$00
-L69D8:		.byte   $08,$08
-L69DA:		.byte   $08
-L69DB:		.byte   $08
-L69DC:		.byte   $08,$28,$08,$08,$08,$00,$08,$08,$00,$10,$08,$00
-L69E8:		.byte   $08,$08,$08,$08,$08,$08
-L69EE:		.byte   $08
-L69EF:		.byte   $08
-L69F0:		.byte   $10,$00,$10,$10,$10,$00,$00,$00
-L69F8:		.byte   $10,$10,$10,$10,$10,$10,$10,$10
+		.byte   $30		; 00	Flying Dart		
+		.byte 	$24             ; 01	Dominition Dart       
+		.byte	$20             ; 02	Car                   
+		.byte	$20             ; 03	Jet                   
+		.byte	$20             ; 04	Saucer                
+		.byte	$20             ; 05	Speed Car             
+		.byte	$08             ; 06	Cheese                
+		.byte	$24             ; 07	Prestinium            
+L69C8:		.byte	$10             ; 08	shot                  
+		.byte	$10             ; 09	Dominion Dart         
+		.byte	$10             ; 0a	Destroyed Prestinium  
+		.byte	$10             ; 0b	Dart                  
+		.byte	$04             ; 0c	Mechanoid             
+		.byte	$10             ; 0d	Dart                  
+		.byte	$10             ; 0e	shot                  
+		.byte	$10             ; 0f	Saucer                
+		.byte	$08		; 10	Photon Emitter
+		.byte	$00             ; 11	key Triangle
+		.byte	$00             ; 12	key Frustum
+		.byte	$00             ; 13	key 5 corner
+		.byte	$00             ; 14	key 5 corner small
+		.byte	$00             ; 15	key reverse frustrum
+		.byte	$00             ; 16	key Diamond
+		.byte	$00             ; 17	key 6 corner
+L69D8:		.byte   $08             ; 18	Anti Time Bomb
+		.byte	$08             ; 19	Novadrive
+L69DA:		.byte   $08             ; 1a	Metal Detector
+L69DB:		.byte   $08             ; 1b	Antigrav
+L69DC:		.byte   $08             ; 1c	Power Amp
+		.byte	$28             ; 1d	Neutron fuel
+		.byte	$08             ; 1e	Antenna
+		.byte	$08             ; 1f	Energy Crystal
+		.byte	$08		; 20	Coffin			
+		.byte	$00             ; 21	Lectern                
+		.byte	$08             ; 22	Large Box              
+		.byte	$08             ; 23	Useful Weapon          
+		.byte	$00             ; 24	Kitchen cupboard       
+		.byte	$10             ; 25	Excequer chart         
+		.byte	$08             ; 26	Gold                   
+		.byte	$00             ; 27	Couch                  
+L69E8:		.byte   $08             ; 28	Sights                 
+		.byte	$08             ; 29	Medical Supplies       
+		.byte	$08             ; 2a	Essential 12939 Supply 
+		.byte	$08             ; 2b	Winchester             
+		.byte	$08             ; 2c	Cataring Provisions    
+		.byte	$08             ; 2d	Data Bank              
+L69EE:		.byte   $08             ; 2e	Pass                   
+L69EF:		.byte   $08             ; 2f	Kitchen Sink           
+L69F0:		.byte   $10		; 30	Spiderweb
+		.byte	$00             ; 31	Lamp
+		.byte	$10             ; 32	Big Prestinium
+		.byte	$10             ; 33	Fireplace
+		.byte	$10             ; 34	Communication
+		.byte	$00             ; 35	Table
+		.byte	$00             ; 36	Chair
+		.byte	$00             ; 37	Bed
+L69F8:		.byte   $10             ; 38	Pyramid
+		.byte	$10             ; 39	Skull rotated
+		.byte	$10             ; 3a	Skull small
+		.byte	$10             ; 3b	Skull large
+		.byte	$10             ; 3c	Skull large rotated
+		.byte	$10             ; 3d	Hangar
+		.byte	$10             ; 3e	Hangar
+		.byte	$10             ; 3f	Colony craft
 
 GROUND_STRUCTURES_LIST_L6A00:
 		.byte   $00,$01,$01,$02,$02,$02,$02,$03,$03,$03,$03,$03,$04,$04,$04,$04
