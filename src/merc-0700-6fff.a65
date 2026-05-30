@@ -830,11 +830,30 @@ L09A2:		.byte $07					;$07 wait for timer
 		.byte $05					;rts
 		
 		.byte $1C, $01, $EE, $33, $DC
-		.byte $D9, $D5, $1C, $07, $00, $02, $0B, $2B, $BF, $09, $07, $05
-		.byte $00, $B3, $09, $11, $01, $05, $10, $01, $05, $14, $03, $14
-		.byte $05, $01, $EF, $3C, $9E, $D1, $00, $01, $2E, $D5, $D0, $1E
-		.byte $03, $C1, $00, $01, $CD, $27, $17, $9B, $FF, $4F, $09, $0D
-		.byte $4F, $86, $00, $14, $07, $14, $32, $05
+		.byte $D9, $D5, $1C, $07, $00
+
+L09B2:		.byte $02					;reset timer
+L09B3:		.byte $0B, $2B					;check 'Y' pressed
+		.word L09BF					;jump if yes
+		.byte $07					;wait for timer
+		.byte $05					;rts
+		
+		.byte $00					;jump?
+		.word L09B3
+		.byte $11, $01					;reset bit0 in L29B3
+		.byte $05					;rts
+		
+L09BF:		.byte $10, $01					;set bit0 in L293B
+		.byte $05
+		
+		.byte $14, $03, $14
+		.byte $05
+		
+		.byte $01, $EF, $3C, $9E, $D1, $00
+		.byte $01, $2E, $D5, $D0, $1E, $03, $C1, $00
+		.byte $01, $CD, $27, $17, $9B, $FF, $4F, $09, $0D, $4F, $86, $00
+		.byte $14, $07, $14, $32
+		.byte $05					;rts
 		
 L09E5:		.byte $04, $9A, $09, $14
 		.byte $0C, $01, $EF, $D0, $9F, $FF, "DEMAND", $D3, $00, $01, $EF, $FF
@@ -949,20 +968,51 @@ L0C9A:		.byte $04, $9A, $09, $0F, $FF, $66, $01, $9F, $1E, $03
 		.byte $E2, $A2, $FF, "ALS", $CF, $B3, $3C, $00, $01, $FF, "DESTRUCTION OF SELECTE", $C4
 		.byte $00, $01, $EF, $B4, $BE, $02, $00, $14, $32, $01, $EB, $1E
 		.byte $03, $38, $02, $00, $14, $32, $11, $40, $05
+	
+
+L0D01:		.byte $14, $08
+		.byte $0F, $FE, $1E				;set $274E = #$1E (antenna)
+		.byte $0F, $FF, $10				;set $274F = #$10 (comm room)
+		.byte $1D					;jump if antenna is in comm room 
+		.word L0D1A
+		.byte $0C					;check inventory
+		.word L0D1A
+		.byte $01, $EB, $A8, $DB, $03, $00		;"not working"
+		.byte $14, $32					;clear message
+		.byte $11, $40					;reset Benson busy
+		.byte $05					;rts
 		
-L0D01:		.byte $14, $08, $0F
-		.byte $FE, $1E, $0F, $FF, $10, $1D, $1A, $0D, $0C, $1A, $0D, $01
-		.byte $EB, $A8, $DB, $03, $00, $14, $32, $11, $40, $05, $01, $EB
-		.byte $A0, $3E, $00, $01, $FF, "HERTZ SPACESHIP RENTA", $CC, $00, $01, $C5, $3C, $FF
-		.byte "HIRE ", $09, $09, $09, $09, $09, $89, $24, $00, $1C, $01, $EF
-		.byte $33, $DC, $D9, $D5, $FF, "HIRE", $ED, $00, $04, $B2, $09, $12
-		.byte $01, $6A, $0D, $01, $EF, $AB, $B7, $20, $0D, $00, $14, $07
-		.byte $11, $40, $05, $18, $00, $06, $00, $89, $0D, $01, $EE, $FF
-		.byte "INSUFFICIEN", $D4, $3F, $02, $00, $14, $15, $14, $07, $11, $40, $05
-		.byte $0E, $F8, $01, $00, $00, $99, $01, $EC, $C5, $FF, "DESPATCHE", $C4
-		.byte $00, $01, $EB, $CE, $E5, $98, $00, $01, $17, $9B, $FF, $08
-		.byte $0D, $08, " IN ", $82, $A1, $02, $00, $19, $7F, $29, $FF, $10
-		.byte $04, $11, $40, $05
+L0D1A:		.byte $01, $EB, $A0, $3E, $00	
+		.byte $01, $FF, "HERTZ SPACESHIP RENTA", $CC, $00
+		.byte $01, $C5, $3C, $FF, "HIRE ", $09, $09, $09, $09, $09, $89, $24, $00
+		.byte $1C					;reset key pressed
+		.byte $01, $EF, $33, $DC, $D9, $D5, $FF, "HIRE", $ED, $00
+		.byte $04					;jsr L09B2 (check "Y" key)
+		.word L09B2
+		
+		.byte $12, $01					;test bit0 in L293B 	
+		.word L0D6A
+L0D5E:		.byte $01, $EF, $AB, $B7, $20, $0D, $00		;"OK PLEASE CALL AGAIN"
+		.byte $14, $07					;send message
+		.byte $11, $40					;reset Benson busy
+		.byte $05					;rts
+		
+L0D6A:		.byte $18, $00, $06, $00			;test $0600 = #$00
+		.word L0D89
+		.byte $01, $EE, $FF, "INSUFFICIEN", $D4, $3F, $02, $00
+		.byte $14, $15					;send message
+		.byte $14, $07					;send message
+		.byte $11, $40                                  ;reset Benson busy
+		.byte $05                                       ;rts
+		
+L0D89:		.byte $0E, $F8, $01, $00, $00, $99		;subtract 999999
+		.byte $01, $EC, $C5, $FF, "DESPATCHE", $C4, $00
+		.byte $01, $EB, $CE, $E5, $98, $00
+		.byte $01, $17, $9B, $FF, $08, $0D, $08, " IN ", $82, $A1, $02, $00
+		.byte $19, $7F, $29, $FF			;set $297F (room) to #$FF
+		.byte $10, $04					;set bit3 of L297B (no novadrive required)
+		.byte $11, $40					;reset Benson busy
+		.byte $05					;rts
 		
 L0DBC:		.byte $0F, $FE, $1F, $0F, $FF, $AD, $0D, $F9
 		.byte $00, $00, $10, $00, $01, $EA, $AF, $C1, $00, $03, $09, $0F
@@ -3120,7 +3170,7 @@ BENSON_3180:	iny
 		jmp L3013
 		
 ;------------------------------------------------------------
-; set value to absolute address
+; store value to absolute address
 ;------------------------------------------------------------
 BENSON_318E:	iny
 		lda (BENSON_PTR_LO_1D),Y
@@ -3207,7 +3257,7 @@ L31F4:		.word BENSON_2FE1				;$0B check pressed key
 		.word BENSON_31C7				;$16 signed add L2938 with max
 		.word BENSON_2F84				;$17 compare to L2938, bit7 flipped
 		.word BENSON_2F51				;$18 compare to absolue value (word, byte)
-		.word BENSON_318E				;$19 set value to absolute address
+		.word BENSON_318E				;$19 store value to absolute address
 		.word BENSON_2FF3				;$1A test hi-bit of 1F00,X X=L274D
 		.word BENSON_31B5				;$1B issue random message?
 		.word BENSON_31C1				;$1C reset key pressed

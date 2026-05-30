@@ -921,7 +921,7 @@ Current file: ..\src\merc-0700-6fff.a65
 000700  1               ; Benson state machine vectors
 000700  1               ;
 000700  1  6C 07        L0700:		.word L076C					;beginning sequence
-000702  1  39 09        		.word L0939					;BIL's shipy nicked
+000702  1  39 09        		.word L0939					;BIL's ship nicked
 000704  1  01 0D        		.word L0D01					;HERTZ Spaceship rental
 000706  1  97 0E        		.word L0E97					;engine room
 000708  1  AB 0E        		.word L0EAB					;conference room
@@ -1103,20 +1103,35 @@ Current file: ..\src\merc-0700-6fff.a65
 0009A8  1               
 0009A8  1  1C 01 EE 33  		.byte $1C, $01, $EE, $33, $DC
 0009AC  1  DC           
-0009AD  1  D9 D5 1C 07  		.byte $D9, $D5, $1C, $07, $00, $02, $0B, $2B, $BF, $09, $07, $05
-0009B1  1  00 02 0B 2B  
-0009B5  1  BF 09 07 05  
-0009B9  1  00 B3 09 11  		.byte $00, $B3, $09, $11, $01, $05, $10, $01, $05, $14, $03, $14
-0009BD  1  01 05 10 01  
-0009C1  1  05 14 03 14  
-0009C5  1  05 01 EF 3C  		.byte $05, $01, $EF, $3C, $9E, $D1, $00, $01, $2E, $D5, $D0, $1E
-0009C9  1  9E D1 00 01  
-0009CD  1  2E D5 D0 1E  
-0009D1  1  03 C1 00 01  		.byte $03, $C1, $00, $01, $CD, $27, $17, $9B, $FF, $4F, $09, $0D
-0009D5  1  CD 27 17 9B  
-0009D9  1  FF 4F 09 0D  
-0009DD  1  4F 86 00 14  		.byte $4F, $86, $00, $14, $07, $14, $32, $05
-0009E1  1  07 14 32 05  
+0009AD  1  D9 D5 1C 07  		.byte $D9, $D5, $1C, $07, $00
+0009B1  1  00           
+0009B2  1               
+0009B2  1  02           L09B2:		.byte $02					;reset timer
+0009B3  1  0B 2B        L09B3:		.byte $0B, $2B					;check 'Y' pressed
+0009B5  1  BF 09        		.word L09BF					;jump if yes
+0009B7  1  07           		.byte $07					;wait for timer
+0009B8  1  05           		.byte $05					;rts
+0009B9  1               
+0009B9  1  00           		.byte $00					;jump?
+0009BA  1  B3 09        		.word L09B3
+0009BC  1  11 01        		.byte $11, $01					;reset bit0 in L29B3
+0009BE  1  05           		.byte $05					;rts
+0009BF  1               
+0009BF  1  10 01        L09BF:		.byte $10, $01					;set bit0 in L293B
+0009C1  1  05           		.byte $05
+0009C2  1               
+0009C2  1  14 03 14     		.byte $14, $03, $14
+0009C5  1  05           		.byte $05
+0009C6  1               
+0009C6  1  01 EF 3C 9E  		.byte $01, $EF, $3C, $9E, $D1, $00
+0009CA  1  D1 00        
+0009CC  1  01 2E D5 D0  		.byte $01, $2E, $D5, $D0, $1E, $03, $C1, $00
+0009D0  1  1E 03 C1 00  
+0009D4  1  01 CD 27 17  		.byte $01, $CD, $27, $17, $9B, $FF, $4F, $09, $0D, $4F, $86, $00
+0009D8  1  9B FF 4F 09  
+0009DC  1  0D 4F 86 00  
+0009E0  1  14 07 14 32  		.byte $14, $07, $14, $32
+0009E4  1  05           		.byte $05					;rts
 0009E5  1               
 0009E5  1  04 9A 09 14  L09E5:		.byte $04, $9A, $09, $14
 0009E9  1  0C 01 EF D0  		.byte $0C, $01, $EF, $D0, $9F, $FF, "DEMAND", $D3, $00, $01, $EF, $FF
@@ -1349,41 +1364,67 @@ Current file: ..\src\merc-0700-6fff.a65
 000CFC  1  14 32 11 40  
 000D00  1  05           
 000D01  1               
-000D01  1  14 08 0F     L0D01:		.byte $14, $08, $0F
-000D04  1  FE 1E 0F FF  		.byte $FE, $1E, $0F, $FF, $10, $1D, $1A, $0D, $0C, $1A, $0D, $01
-000D08  1  10 1D 1A 0D  
-000D0C  1  0C 1A 0D 01  
-000D10  1  EB A8 DB 03  		.byte $EB, $A8, $DB, $03, $00, $14, $32, $11, $40, $05, $01, $EB
-000D14  1  00 14 32 11  
-000D18  1  40 05 01 EB  
-000D1C  1  A0 3E 00 01  		.byte $A0, $3E, $00, $01, $FF, "HERTZ SPACESHIP RENTA", $CC, $00, $01, $C5, $3C, $FF
-000D20  1  FF 48 45 52  
-000D24  1  54 5A 20 53  
-000D3C  1  48 49 52 45  		.byte "HIRE ", $09, $09, $09, $09, $09, $89, $24, $00, $1C, $01, $EF
+000D01  1               
+000D01  1  14 08        L0D01:		.byte $14, $08
+000D03  1  0F FE 1E     		.byte $0F, $FE, $1E				;set $274E = #$1E (antenna)
+000D06  1  0F FF 10     		.byte $0F, $FF, $10				;set $274F = #$10 (comm room)
+000D09  1  1D           		.byte $1D					;jump if antenna is in comm room
+000D0A  1  1A 0D        		.word L0D1A
+000D0C  1  0C           		.byte $0C					;check inventory
+000D0D  1  1A 0D        		.word L0D1A
+000D0F  1  01 EB A8 DB  		.byte $01, $EB, $A8, $DB, $03, $00		;"not working"
+000D13  1  03 00        
+000D15  1  14 32        		.byte $14, $32					;clear message
+000D17  1  11 40        		.byte $11, $40					;reset Benson busy
+000D19  1  05           		.byte $05					;rts
+000D1A  1               
+000D1A  1  01 EB A0 3E  L0D1A:		.byte $01, $EB, $A0, $3E, $00
+000D1E  1  00           
+000D1F  1  01 FF 48 45  		.byte $01, $FF, "HERTZ SPACESHIP RENTA", $CC, $00
+000D23  1  52 54 5A 20  
+000D27  1  53 50 41 43  
+000D38  1  01 C5 3C FF  		.byte $01, $C5, $3C, $FF, "HIRE ", $09, $09, $09, $09, $09, $89, $24, $00
+000D3C  1  48 49 52 45  
 000D40  1  20 09 09 09  
-000D44  1  09 09 89 24  
-000D4C  1  33 DC D9 D5  		.byte $33, $DC, $D9, $D5, $FF, "HIRE", $ED, $00, $04, $B2, $09, $12
-000D50  1  FF 48 49 52  
-000D54  1  45 ED 00 04  
-000D5B  1  01 6A 0D 01  		.byte $01, $6A, $0D, $01, $EF, $AB, $B7, $20, $0D, $00, $14, $07
-000D5F  1  EF AB B7 20  
-000D63  1  0D 00 14 07  
-000D67  1  11 40 05 18  		.byte $11, $40, $05, $18, $00, $06, $00, $89, $0D, $01, $EE, $FF
-000D6B  1  00 06 00 89  
-000D6F  1  0D 01 EE FF  
-000D73  1  49 4E 53 55  		.byte "INSUFFICIEN", $D4, $3F, $02, $00, $14, $15, $14, $07, $11, $40, $05
-000D77  1  46 46 49 43  
-000D7B  1  49 45 4E D4  
-000D89  1  0E F8 01 00  		.byte $0E, $F8, $01, $00, $00, $99, $01, $EC, $C5, $FF, "DESPATCHE", $C4
-000D8D  1  00 99 01 EC  
-000D91  1  C5 FF 44 45  
-000D9D  1  00 01 EB CE  		.byte $00, $01, $EB, $CE, $E5, $98, $00, $01, $17, $9B, $FF, $08
-000DA1  1  E5 98 00 01  
-000DA5  1  17 9B FF 08  
-000DA9  1  0D 08 20 49  		.byte $0D, $08, " IN ", $82, $A1, $02, $00, $19, $7F, $29, $FF, $10
-000DAD  1  4E 20 82 A1  
-000DB1  1  02 00 19 7F  
-000DB8  1  04 11 40 05  		.byte $04, $11, $40, $05
+000D49  1  1C           		.byte $1C					;reset key pressed
+000D4A  1  01 EF 33 DC  		.byte $01, $EF, $33, $DC, $D9, $D5, $FF, "HIRE", $ED, $00
+000D4E  1  D9 D5 FF 48  
+000D52  1  49 52 45 ED  
+000D57  1  04           		.byte $04					;jsr L09B2 (check "Y" key)
+000D58  1  B2 09        		.word L09B2
+000D5A  1               
+000D5A  1  12 01        		.byte $12, $01					;test bit0 in L293B
+000D5C  1  6A 0D        		.word L0D6A
+000D5E  1  01 EF AB B7  L0D5E:		.byte $01, $EF, $AB, $B7, $20, $0D, $00		;"OK PLEASE CALL AGAIN"
+000D62  1  20 0D 00     
+000D65  1  14 07        		.byte $14, $07					;send message
+000D67  1  11 40        		.byte $11, $40					;reset Benson busy
+000D69  1  05           		.byte $05					;rts
+000D6A  1               
+000D6A  1  18 00 06 00  L0D6A:		.byte $18, $00, $06, $00			;test $0600 = #$00
+000D6E  1  89 0D        		.word L0D89
+000D70  1  01 EE FF 49  		.byte $01, $EE, $FF, "INSUFFICIEN", $D4, $3F, $02, $00
+000D74  1  4E 53 55 46  
+000D78  1  46 49 43 49  
+000D82  1  14 15        		.byte $14, $15					;send message
+000D84  1  14 07        		.byte $14, $07					;send message
+000D86  1  11 40        		.byte $11, $40                                  ;reset Benson busy
+000D88  1  05           		.byte $05                                       ;rts
+000D89  1               
+000D89  1  0E F8 01 00  L0D89:		.byte $0E, $F8, $01, $00, $00, $99		;subtract 999999
+000D8D  1  00 99        
+000D8F  1  01 EC C5 FF  		.byte $01, $EC, $C5, $FF, "DESPATCHE", $C4, $00
+000D93  1  44 45 53 50  
+000D97  1  41 54 43 48  
+000D9E  1  01 EB CE E5  		.byte $01, $EB, $CE, $E5, $98, $00
+000DA2  1  98 00        
+000DA4  1  01 17 9B FF  		.byte $01, $17, $9B, $FF, $08, $0D, $08, " IN ", $82, $A1, $02, $00
+000DA8  1  08 0D 08 20  
+000DAC  1  49 4E 20 82  
+000DB3  1  19 7F 29 FF  		.byte $19, $7F, $29, $FF			;set $297F (room) to #$FF
+000DB7  1  10 04        		.byte $10, $04					;set bit3 of L297B (no novadrive required)
+000DB9  1  11 40        		.byte $11, $40					;reset Benson busy
+000DBB  1  05           		.byte $05					;rts
 000DBC  1               
 000DBC  1  0F FE 1F 0F  L0DBC:		.byte $0F, $FE, $1F, $0F, $FF, $AD, $0D, $F9
 000DC0  1  FF AD 0D F9  
@@ -4379,7 +4420,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00318B  1  4C 13 30     		jmp L3013
 00318E  1               
 00318E  1               ;------------------------------------------------------------
-00318E  1               ; set value to absolute address
+00318E  1               ; store value to absolute address
 00318E  1               ;------------------------------------------------------------
 00318E  1  C8           BENSON_318E:	iny
 00318F  1  B1 1D        		lda (BENSON_PTR_LO_1D),Y
@@ -4466,7 +4507,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00320A  1  C7 31        		.word BENSON_31C7				;$16 signed add L2938 with max
 00320C  1  84 2F        		.word BENSON_2F84				;$17 compare to L2938, bit7 flipped
 00320E  1  51 2F        		.word BENSON_2F51				;$18 compare to absolue value (word, byte)
-003210  1  8E 31        		.word BENSON_318E				;$19 set value to absolute address
+003210  1  8E 31        		.word BENSON_318E				;$19 store value to absolute address
 003212  1  F3 2F        		.word BENSON_2FF3				;$1A test hi-bit of 1F00,X X=L274D
 003214  1  B5 31        		.word BENSON_31B5				;$1B issue random message?
 003216  1  C1 31        		.word BENSON_31C1				;$1C reset key pressed
