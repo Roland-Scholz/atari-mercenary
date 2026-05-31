@@ -2561,7 +2561,8 @@ Current file: ..\src\merc-0700-6fff.a65
 001EF4  1  B9 00 9D 85  
 001EF8  1  5A B9 40 9D  
 001F00  1               
-001F00  1  20 43 43 43  L1F00:		.byte $20,$43,$43,$43,$43,$02,$07,$4A,$43,$20,$43,$43,$43,$43,$02,$20
+001F00  1               GROUND_STRUCTURES_LIST_1F00:
+001F00  1  20 43 43 43  		.byte $20,$43,$43,$43,$43,$02,$07,$4A,$43,$20,$43,$43,$43,$43,$02,$20
 001F04  1  43 02 07 4A  
 001F08  1  43 20 43 43  
 001F10  1  20 43 43 43  		.byte $20,$43,$43,$43,$43,$02,$02,$43,$43,$43,$49,$43,$43,$43,$02,$02
@@ -2609,8 +2610,6 @@ Current file: ..\src\merc-0700-6fff.a65
 001FF0  1  02 02 02 02  		.byte $02,$02,$02,$02,$11,$02,$12,$02,$02,$11,$02,$12,$02,$43,$43,$02
 001FF4  1  11 02 12 02  
 001FF8  1  02 11 02 12  
-002000  1               
-002000  1               
 002000  1               
 002000  1               ;
 002000  1               ; Y-Pos Hi
@@ -3141,7 +3140,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00292C  1               ; 0e	shot                            ; 1e	Antenna
 00292C  1               ; 0f	Saucer                          ; 1f	Energy Crystal
 00292C  1               ;------------------------------------------------------------
-00292C  1               ; 20	Coffin				; 30	Spiderweb
+00292C  1               ; 20	Coffin				; 30	Cobweb
 00292C  1               ; 21	Lectern                         ; 31	Lamp
 00292C  1               ; 22	Large Box                       ; 32	Big Prestinium
 00292C  1               ; 23	Useful Weapon                   ; 33	Fireplace
@@ -3166,7 +3165,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002934  1  00 00        L2934:      	.byte $00,$00
 002936  1               
 002936  1               
-002936  1               PALYARS_STRUCTS_DESTROYED_2936:
+002936  1               PALYAR_STRUCTS_DESTROYED_2936:
 002936  1  00           		.byte $00
 002937  1               MECHNOID_STRUCTS_DESTROYED_2937:
 002937  1  00           		.byte $00
@@ -3547,10 +3546,10 @@ Current file: ..\src\merc-0700-6fff.a65
 002BDC  1  05 04        		ora TMP_04
 002BDE  1  85 F4        		sta CRUMBLE_POS_F4
 002BE0  1  A8           		tay
-002BE1  1  B9 00 1F     		lda L1F00,Y
+002BE1  1  B9 00 1F     		lda GROUND_STRUCTURES_LIST_1F00,Y
 002BE4  1  85 FA        		sta L00FA
 002BE6  1  09 80        		ora #$80
-002BE8  1  99 00 1F     		sta L1F00,Y
+002BE8  1  99 00 1F     		sta GROUND_STRUCTURES_LIST_1F00,Y
 002BEB  1  A9 10        		lda #$10
 002BED  1  85 F3        		sta CRUMBLE_CNT_F3
 002BEF  1  20 91 2B     		jsr L2B91
@@ -3575,8 +3574,12 @@ Current file: ..\src\merc-0700-6fff.a65
 002C13  1  A9 1B        		lda #$1B					;"BIL's ship destroyed
 002C15  1  20 0D 2F     		jsr BENSON_2F0D
 002C18  1  60           L2C18:		rts
+002C19  1               
+002C19  1               ;------------------------------------------------------------
+002C19  1               ;
+002C19  1               ;------------------------------------------------------------
 002C19  1  A6 F3        L2C19:		ldx CRUMBLE_CNT_F3
-002C1B  1  F0 FB        L2C1B:		beq L2C18
+002C1B  1  F0 FB        L2C1B:		beq L2C18					;rts
 002C1D  1  CA           		dex
 002C1E  1  86 F3        		stx CRUMBLE_CNT_F3
 002C20  1  8A           		txa
@@ -3587,9 +3590,9 @@ Current file: ..\src\merc-0700-6fff.a65
 002C2B  1  A4 B5        L2C2B:		ldy GROUND_STRUC_OBJ_TO_DRAW_B5
 002C2D  1  C4 F4        		cpy CRUMBLE_POS_F4
 002C2F  1  D0 E7        		bne L2C18
-002C31  1  B9 00 1F     		lda L1F00,Y
+002C31  1  B9 00 1F     		lda GROUND_STRUCTURES_LIST_1F00,Y
 002C34  1  85 F2        		sta L00F2
-002C36  1  AD D8 69     		lda L69D8					;Anti Time Bomb in inventory?
+002C36  1  AD D8 69     		lda ANTI_TIME_BOMB_69D8				;Anti Time Bomb in inventory?
 002C39  1  30 62        		bmi L2C9D					;yes
 002C3B  1  20 1D 3B     		jsr L3B1D
 002C3E  1  D0 07        		bne L2C47
@@ -3598,11 +3601,12 @@ Current file: ..\src\merc-0700-6fff.a65
 002C44  1  4A           		lsr
 002C45  1  B0 D2        		bcs L2C19
 002C47  1  60           L2C47:		rts
+002C48  1               
 002C48  1  A5 FA        L2C48:		lda L00FA
 002C4A  1  A4 F4        		ldy CRUMBLE_POS_F4
-002C4C  1  59 00 1F     		eor L1F00,Y
+002C4C  1  59 00 1F     		eor GROUND_STRUCTURES_LIST_1F00,Y
 002C4F  1  10 F6        		bpl L2C47
-002C51  1  B9 00 1F     		lda L1F00,Y
+002C51  1  B9 00 1F     		lda GROUND_STRUCTURES_LIST_1F00,Y
 002C54  1  2C 4E 39     		bit L394D+1
 002C57  1  D0 EE        		bne L2C47
 002C59  1  0A           		asl
@@ -3621,29 +3625,29 @@ Current file: ..\src\merc-0700-6fff.a65
 002C6A  1               ;
 002C6A  1               ;------------------------------------------------------------
 002C6A  1  B0 06        L2C6A:		bcs L2C72
-002C6C  1  CE 36 29     		dec PALYARS_STRUCTS_DESTROYED_2936
+002C6C  1  CE 36 29     		dec PALYAR_STRUCTS_DESTROYED_2936
 002C6F  1  4C 75 2C     		jmp L2C75
 002C72  1               
 002C72  1               ;------------------------------------------------------------
 002C72  1               ;
 002C72  1               ;------------------------------------------------------------
-002C72  1  EE 36 29     L2C72:		inc PALYARS_STRUCTS_DESTROYED_2936
+002C72  1  EE 36 29     L2C72:		inc PALYAR_STRUCTS_DESTROYED_2936
 002C75  1  A2 0A        L2C75:		ldx #$0A
 002C77  1  AD 37 29     		lda MECHNOID_STRUCTS_DESTROYED_2937
-002C7A  1  ED 36 29     		sbc PALYARS_STRUCTS_DESTROYED_2936
+002C7A  1  ED 36 29     		sbc PALYAR_STRUCTS_DESTROYED_2936
 002C7D  1  10 04        		bpl L2C83
 002C7F  1  49 FF        		eor #$FF
 002C81  1  A2 1A        		ldx #$1A
 002C83  1  C9 69        L2C83:		cmp #$69
 002C85  1  B0 12        		bcs L2C99
-002C87  1  B9 00 1F     		lda L1F00,Y
+002C87  1  B9 00 1F     		lda GROUND_STRUCTURES_LIST_1F00,Y
 002C8A  1  29 1F        		and #$1F
 002C8C  1  F0 B9        		beq L2C47					;rts
 002C8E  1  09 20        		ora #$20
 002C90  1  AA           		tax
-002C91  1  B9 00 1F     		lda L1F00,Y
+002C91  1  B9 00 1F     		lda GROUND_STRUCTURES_LIST_1F00,Y
 002C94  1  29 E0        		and #$E0
-002C96  1  99 00 1F     		sta L1F00,Y
+002C96  1  99 00 1F     		sta GROUND_STRUCTURES_LIST_1F00,Y
 002C99  1  8A           L2C99:		txa
 002C9A  1  4C 0D 2F     		jmp BENSON_2F0D
 002C9D  1               
@@ -3653,7 +3657,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002C9D  1  A5 FA        L2C9D:		lda L00FA
 002C9F  1  08           		php
 002CA0  1  29 7F        		and #$7F
-002CA2  1  99 00 1F     		sta L1F00,Y
+002CA2  1  99 00 1F     		sta GROUND_STRUCTURES_LIST_1F00,Y
 002CA5  1  28           		plp
 002CA6  1  10 98        		bpl L2C40
 002CA8  1  98           		tya
@@ -4152,7 +4156,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002FF3  1               ; test hi-bit of 1F00,X X=L274D
 002FF3  1               ;------------------------------------------------------------
 002FF3  1  AE 4D 27     BENSON_2FF3:	ldx L274D
-002FF6  1  BD 00 1F     		lda L1F00,X
+002FF6  1  BD 00 1F     		lda GROUND_STRUCTURES_LIST_1F00,X
 002FF9  1  30 10        		bmi L300B
 002FFB  1  10 0B        		bpl L3008
 002FFD  1               
@@ -5372,7 +5376,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0037ED  1               ;------------------------------------------------------------
 0037ED  1               OBJ_DRAW_LIST_37ED:
 0037ED  1  A9 00        		lda #$00
-0037EF  1  AE E8 69     		ldx L69E8					;sights in inventory?
+0037EF  1  AE E8 69     		ldx SIGHTS_69E8					;sights in inventory?
 0037F2  1  10 02        		bpl L37F6					;not active
 0037F4  1  A9 66        		lda #$66
 0037F6  1  8D B5 9A     L37F6:		sta L9AB5
@@ -5542,14 +5546,14 @@ Current file: ..\src\merc-0700-6fff.a65
 0038FF  1  6A           		ror
 003900  1  45 07        		eor MUL_HI_07
 003902  1  30 B0        		bmi L38B4
-003904  1  AD F0 69     		lda L69F0					;spider web in inventory
+003904  1  AD F0 69     		lda COBWEB_69F0					;cobweb in inventory
 003907  1  30 0E        L3907:      	bmi L3917					;yes
 003909  1  A5 07        		lda MUL_HI_07
 00390B  1  29 0F        		and #$0F
 00390D  1  C9 08        		cmp #$08
 00390F  1  90 06        		bcc L3917
 003911  1  AA           		tax
-003912  1  BD C8 69     		lda L69C8,X
+003912  1  BD C8 69     		lda SHOT_69C8,X
 003915  1  10 8F        		bpl L38A6
 003917  1  A5 07        L3917:      	lda MUL_HI_07
 003919  1  30 07        		bmi L3922
@@ -5696,7 +5700,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0039EA  1  85 00        		sta MEM_PTR_LO_00
 0039EC  1  BD 00 67     		lda STRUCTURE_POINTER_HI_L6700,X
 0039EF  1  85 01        		sta MEM_PTR_HI_01
-0039F1  1  BD 00 1F     		lda L1F00,X
+0039F1  1  BD 00 1F     		lda GROUND_STRUCTURES_LIST_1F00,X
 0039F4  1  85 F2        		sta L00F2
 0039F6  1  A0 00        		ldy #$00
 0039F8  1  B1 00        		lda (MEM_PTR_LO_00),Y
@@ -6083,14 +6087,14 @@ Current file: ..\src\merc-0700-6fff.a65
 003C78  1  B0 44        		bcs L3CBE					;no
 003C7A  1               
 003C7A  1  A6 AD        		ldx OBJECT_NUMBER_AD
-003C7C  1  AD EF 69     		lda L69EF					;kitchen sink in inventory?
+003C7C  1  AD EF 69     		lda KITCHEN_SINK_69EF					;kitchen sink in inventory?
 003C7F  1  30 13        		bmi L3C94					;yes, take it
 003C81  1               
 003C81  1  BD C0 69     		lda OBJECT_ATTRIBUTES_69C0,X			;check if takeable at all?
 003C84  1  29 10        		and #$10
 003C86  1  D0 36        		bne L3CBE					;bit4 set, not takeable
 003C88  1               
-003C88  1  AD DB 69     		lda L69DB					;Anti Grav?
+003C88  1  AD DB 69     		lda ANTIGRAV_69DB					;Anti Grav?
 003C8B  1  30 07        		bmi L3C94					;yes, take it
 003C8D  1               
 003C8D  1  BD C0 69     		lda OBJECT_ATTRIBUTES_69C0,X
@@ -6233,7 +6237,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003D6F  1               ;------------------------------------------------------------
 003D6F  1               ; drop an object
 003D6F  1               ;------------------------------------------------------------
-003D6F  1  AD F8 69     L3D6F:		lda L69F8					;pyramid taken?
+003D6F  1  AD F8 69     L3D6F:		lda PYRAMID_69F8					;pyramid taken?
 003D72  1  30 04        		bmi L3D78					;allow drop when flying in the air
 003D74  1  A5 7D        		lda BOARDED_AND_FLYING_7D
 003D76  1  F0 C5        		beq L3D3D
@@ -7082,7 +7086,7 @@ Current file: ..\src\merc-0700-6fff.a65
 004374  1  85 29        		sta PITCH_HI_29
 004376  1  A6 EC        L4376:		ldx SPEED_FP_EC
 004378  1  A5 ED        		lda SPEED_FP_ED
-00437A  1  AC DC 69     		ldy L69DC						;power amp in inventory?
+00437A  1  AC DC 69     		ldy POWERAMP_69DC						;power amp in inventory?
 00437D  1  10 09        		bpl L4388
 00437F  1  A4 A7        		ldy CRAFT_ID_WALKING_A7
 004381  1  C0 01        		cpy #$01
@@ -7184,7 +7188,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00443A  1  4A           		lsr
 00443B  1  B0 1E        		bcs L445B
 00443D  1  AD CD 73     		lda L73CD
-004440  1  AE DC 69     L4440:		ldx L69DC					;power amp in inventory?
+004440  1  AE DC 69     L4440:		ldx POWERAMP_69DC					;power amp in inventory?
 004443  1  10 08        		bpl L444D					;no
 004445  1  A6 A7        L4445:		ldx CRAFT_ID_WALKING_A7
 004447  1  E0 01        		cpx #$01
@@ -10517,7 +10521,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005A52  1  E0 05        L5A52:		cpx #$05					;are we at 03-15?
 005A54  1  D0 0A        		bne L5A60					;no
 005A56  1               
-005A56  1  AD EE 69     		lda L69EE					;pass available?
+005A56  1  AD EE 69     		lda PASS_69EE					;pass available?
 005A59  1  30 05        		bmi L5A60					;yes
 005A5B  1  A2 39        		ldx #$39					;"pass holders only"
 005A5D  1  4C 2A 32     L5A5D:		jmp START_MESSAGE_L322A
@@ -10856,7 +10860,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005C3B  1  F0 01        		beq L5C3E
 005C3D  1  60           		rts
 005C3E  1               
-005C3E  1  AD DA 69     L5C3E:		lda L69DA					;metal detector in inventory?
+005C3E  1  AD DA 69     L5C3E:		lda METAL_DETECTOR_69DA					;metal detector in inventory?
 005C41  1  10 1C        		bpl L5C5F					;no
 005C43  1               
 005C43  1  A5 CD        		lda ROOM_NO_CD
@@ -12361,7 +12365,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0069C0  1               ;bit 0: sold
 0069C0  1               ;------------------------------------------------------------
 0069C0  1               OBJECT_ATTRIBUTES_69C0:
-0069C0  1  30           		.byte   $30		; 00	Flying Dart
+0069C0  1  30           		.byte   $30		; 00	BIL's Dominion Dart
 0069C1  1  24           		.byte 	$24             ; 01	Dominition Dart
 0069C2  1  20           		.byte	$20             ; 02	Car
 0069C3  1  20           		.byte	$20             ; 03	Jet
@@ -12369,13 +12373,13 @@ Current file: ..\src\merc-0700-6fff.a65
 0069C5  1  20           		.byte	$20             ; 05	Speed Car
 0069C6  1  08           		.byte	$08             ; 06	Cheese
 0069C7  1  24           		.byte	$24             ; 07	Prestinium
-0069C8  1  10           L69C8:		.byte	$10             ; 08	shot
+0069C8  1  10           SHOT_69C8:	.byte	$10             ; 08	Shot
 0069C9  1  10           		.byte	$10             ; 09	Dominion Dart
 0069CA  1  10           		.byte	$10             ; 0a	Destroyed Prestinium
 0069CB  1  10           		.byte	$10             ; 0b	Dart
 0069CC  1  04           		.byte	$04             ; 0c	Mechanoid
 0069CD  1  10           		.byte	$10             ; 0d	Dart
-0069CE  1  10           		.byte	$10             ; 0e	shot
+0069CE  1  10           		.byte	$10             ; 0e	Shot
 0069CF  1  10           		.byte	$10             ; 0f	Saucer
 0069D0  1  08           		.byte	$08		; 10	Photon Emitter
 0069D1  1  00           		.byte	$00             ; 11	key Triangle
@@ -12385,11 +12389,13 @@ Current file: ..\src\merc-0700-6fff.a65
 0069D5  1  00           		.byte	$00             ; 15	key reverse frustrum
 0069D6  1  00           		.byte	$00             ; 16	key Diamond
 0069D7  1  00           		.byte	$00             ; 17	key 6 corner
-0069D8  1  08           L69D8:		.byte   $08             ; 18	Anti Time Bomb
+0069D8  1               ANTI_TIME_BOMB_69D8:
+0069D8  1  08           		.byte   $08             ; 18	Anti Time Bomb
 0069D9  1  08           		.byte	$08             ; 19	Novadrive
-0069DA  1  08           L69DA:		.byte   $08             ; 1a	Metal Detector
-0069DB  1  08           L69DB:		.byte   $08             ; 1b	Antigrav
-0069DC  1  08           L69DC:		.byte   $08             ; 1c	Power Amp
+0069DA  1               METAL_DETECTOR_69DA:
+0069DA  1  08           		.byte   $08             ; 1a	Metal Detector
+0069DB  1  08           ANTIGRAV_69DB:	.byte   $08             ; 1b	Antigrav
+0069DC  1  08           POWERAMP_69DC:	.byte   $08             ; 1c	Power Amp
 0069DD  1  28           		.byte	$28             ; 1d	Neutron fuel
 0069DE  1  08           		.byte	$08             ; 1e	Antenna
 0069DF  1  08           		.byte	$08             ; 1f	Energy Crystal
@@ -12401,15 +12407,16 @@ Current file: ..\src\merc-0700-6fff.a65
 0069E5  1  10           		.byte	$10             ; 25	Excequer chart
 0069E6  1  08           		.byte	$08             ; 26	Gold
 0069E7  1  00           		.byte	$00             ; 27	Couch
-0069E8  1  08           L69E8:		.byte   $08             ; 28	Sights
+0069E8  1  08           SIGHTS_69E8:	.byte   $08             ; 28	Sights
 0069E9  1  08           		.byte	$08             ; 29	Medical Supplies
 0069EA  1  08           		.byte	$08             ; 2a	Essential 12939 Supply
 0069EB  1  08           		.byte	$08             ; 2b	Winchester
 0069EC  1  08           		.byte	$08             ; 2c	Cataring Provisions
 0069ED  1  08           		.byte	$08             ; 2d	Data Bank
-0069EE  1  08           L69EE:		.byte   $08             ; 2e	Pass
-0069EF  1  08           L69EF:		.byte   $08             ; 2f	Kitchen Sink
-0069F0  1  10           L69F0:		.byte   $10		; 30	Spiderweb
+0069EE  1  08           PASS_69EE:	.byte   $08             ; 2e	Pass
+0069EF  1               KITCHEN_SINK_69EF:
+0069EF  1  08           		.byte   $08             ; 2f	Kitchen Sink
+0069F0  1  10           COBWEB_69F0:	.byte   $10		; 30	COBWEB
 0069F1  1  00           		.byte	$00             ; 31	Lamp
 0069F2  1  10           		.byte	$10             ; 32	Big Prestinium
 0069F3  1  10           		.byte	$10             ; 33	Fireplace
@@ -12417,7 +12424,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0069F5  1  00           		.byte	$00             ; 35	Table
 0069F6  1  00           		.byte	$00             ; 36	Chair
 0069F7  1  00           		.byte	$00             ; 37	Bed
-0069F8  1  10           L69F8:		.byte   $10             ; 38	Pyramid
+0069F8  1  10           PYRAMID_69F8:	.byte   $10             ; 38	Pyramid
 0069F9  1  10           		.byte	$10             ; 39	Skull rotated
 0069FA  1  10           		.byte	$10             ; 3a	Skull small
 0069FB  1  10           		.byte	$10             ; 3b	Skull large

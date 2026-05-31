@@ -1618,7 +1618,8 @@ ROOM_DATA_1EC0:
 		.byte $B9,$00,$9C,$85,$56,$B9,$40,$9C,$85,$57,$B9,$80,$9C,$85,$58,$B9
 		.byte $C0,$9C,$85,$59,$B9,$00,$9D,$85,$5A,$B9,$40,$9D,$85,$5B,$A5,$6D
 
-L1F00:		.byte $20,$43,$43,$43,$43,$02,$07,$4A,$43,$20,$43,$43,$43,$43,$02,$20
+GROUND_STRUCTURES_LIST_1F00:		
+		.byte $20,$43,$43,$43,$43,$02,$07,$4A,$43,$20,$43,$43,$43,$43,$02,$20
 		.byte $20,$43,$43,$43,$43,$02,$02,$43,$43,$43,$49,$43,$43,$43,$02,$02
 		.byte $43,$43,$02,$02,$02,$02,$02,$43,$02,$20,$02,$02,$43,$43,$02,$10
 		.byte $43,$43,$05,$02,$02,$02,$08,$43,$02,$02,$20,$02,$46,$43,$43,$43
@@ -1634,9 +1635,7 @@ L1F00:		.byte $20,$43,$43,$43,$43,$02,$07,$4A,$43,$20,$43,$43,$43,$43,$02,$20
 		.byte $20,$02,$20,$11,$02,$20,$02,$02,$02,$11,$02,$02,$0C,$43,$43,$43
 		.byte $02,$02,$02,$20,$20,$02,$02,$02,$02,$02,$02,$02,$02,$43,$43,$43
 		.byte $02,$02,$02,$02,$11,$02,$12,$02,$02,$11,$02,$12,$02,$43,$43,$02
-	
 
-	 
 ;
 ; Y-Pos Hi
 ;
@@ -1908,7 +1907,7 @@ INVENTORY_LIST_L292B:
 ; 0e	shot                            ; 1e	Antenna
 ; 0f	Saucer                          ; 1f	Energy Crystal
 ;------------------------------------------------------------
-; 20	Coffin				; 30	Spiderweb
+; 20	Coffin				; 30	Cobweb
 ; 21	Lectern                         ; 31	Lamp
 ; 22	Large Box                       ; 32	Big Prestinium
 ; 23	Useful Weapon                   ; 33	Fireplace
@@ -1932,7 +1931,7 @@ INVENTORY_LIST_L292C:
 L2934:      	.byte $00,$00
 
 
-PALYARS_STRUCTS_DESTROYED_2936:		
+PALYAR_STRUCTS_DESTROYED_2936:		
 		.byte $00
 MECHNOID_STRUCTS_DESTROYED_2937:		
 		.byte $00
@@ -2309,10 +2308,10 @@ L2BAE:		lda OBJ_X_MSB_L6480,X
 		ora TMP_04
 		sta CRUMBLE_POS_F4
 		tay
-		lda L1F00,Y
+		lda GROUND_STRUCTURES_LIST_1F00,Y
 		sta L00FA
 		ora #$80
-		sta L1F00,Y
+		sta GROUND_STRUCTURES_LIST_1F00,Y
 		lda #$10
 		sta CRUMBLE_CNT_F3
 		jsr L2B91
@@ -2337,8 +2336,12 @@ L2C0C:		ldy #$00
 		lda #$1B					;"BIL's ship destroyed
 		jsr BENSON_2F0D
 L2C18:		rts
+
+;------------------------------------------------------------
+; 
+;------------------------------------------------------------
 L2C19:		ldx CRUMBLE_CNT_F3
-L2C1B:		beq L2C18
+L2C1B:		beq L2C18					;rts
 		dex
 		stx CRUMBLE_CNT_F3
 		txa
@@ -2349,9 +2352,9 @@ L2C26:		lda #$20
 L2C2B:		ldy GROUND_STRUC_OBJ_TO_DRAW_B5
 		cpy CRUMBLE_POS_F4
 		bne L2C18
-		lda L1F00,Y
+		lda GROUND_STRUCTURES_LIST_1F00,Y
 		sta L00F2
-		lda L69D8					;Anti Time Bomb in inventory?			
+		lda ANTI_TIME_BOMB_69D8				;Anti Time Bomb in inventory?			
 		bmi L2C9D					;yes
 		jsr L3B1D
 		bne L2C47
@@ -2360,11 +2363,12 @@ L2C40:		lda CRUMBLE_CNT_F3
 		lsr
 		bcs L2C19
 L2C47:		rts
+
 L2C48:		lda L00FA
 		ldy CRUMBLE_POS_F4
-		eor L1F00,Y
+		eor GROUND_STRUCTURES_LIST_1F00,Y
 		bpl L2C47
-		lda L1F00,Y
+		lda GROUND_STRUCTURES_LIST_1F00,Y
 		bit L394D+1
 		bne L2C47
 		asl
@@ -2383,29 +2387,29 @@ L2C64:		inc MECHNOID_STRUCTS_DESTROYED_2937
 ;
 ;------------------------------------------------------------
 L2C6A:		bcs L2C72
-		dec PALYARS_STRUCTS_DESTROYED_2936
+		dec PALYAR_STRUCTS_DESTROYED_2936
 		jmp L2C75
 		
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
-L2C72:		inc PALYARS_STRUCTS_DESTROYED_2936
+L2C72:		inc PALYAR_STRUCTS_DESTROYED_2936
 L2C75:		ldx #$0A
 		lda MECHNOID_STRUCTS_DESTROYED_2937
-		sbc PALYARS_STRUCTS_DESTROYED_2936
+		sbc PALYAR_STRUCTS_DESTROYED_2936
 		bpl L2C83
 		eor #$FF
 		ldx #$1A
 L2C83:		cmp #$69
 		bcs L2C99
-		lda L1F00,Y
+		lda GROUND_STRUCTURES_LIST_1F00,Y
 		and #$1F
 		beq L2C47					;rts
 		ora #$20
 		tax
-		lda L1F00,Y
+		lda GROUND_STRUCTURES_LIST_1F00,Y
 		and #$E0
-		sta L1F00,Y
+		sta GROUND_STRUCTURES_LIST_1F00,Y
 L2C99:		txa
 		jmp BENSON_2F0D
 
@@ -2415,7 +2419,7 @@ L2C99:		txa
 L2C9D:		lda L00FA
 		php
 		and #$7F
-		sta L1F00,Y
+		sta GROUND_STRUCTURES_LIST_1F00,Y
 		plp
 		bpl L2C40
 		tya
@@ -2914,7 +2918,7 @@ BENSON_2FE1:	lda NEW_KEY_L00E9
 ; test hi-bit of 1F00,X X=L274D
 ;------------------------------------------------------------
 BENSON_2FF3:	ldx L274D
-		lda L1F00,X
+		lda GROUND_STRUCTURES_LIST_1F00,X
 		bmi L300B
 		bpl L3008
 		
@@ -4099,7 +4103,7 @@ L37E6:		ldx #$7F
 ;------------------------------------------------------------
 OBJ_DRAW_LIST_37ED:		
 		lda #$00
-		ldx L69E8					;sights in inventory?
+		ldx SIGHTS_69E8					;sights in inventory?
 		bpl L37F6					;not active
 		lda #$66
 L37F6:		sta L9AB5
@@ -4269,14 +4273,14 @@ L38B4:      	iny
 		ror
 		eor MUL_HI_07
 		bmi L38B4
-		lda L69F0					;spider web in inventory
+		lda COBWEB_69F0					;cobweb in inventory
 L3907:      	bmi L3917					;yes
 		lda MUL_HI_07
 		and #$0F
 		cmp #$08
 		bcc L3917
 		tax
-		lda L69C8,X
+		lda SHOT_69C8,X
 		bpl L38A6
 L3917:      	lda MUL_HI_07
 		bmi L3922
@@ -4422,7 +4426,7 @@ L39E6:		tax
 		sta MEM_PTR_LO_00
 		lda STRUCTURE_POINTER_HI_L6700,X
 		sta MEM_PTR_HI_01
-		lda L1F00,X
+		lda GROUND_STRUCTURES_LIST_1F00,X
 		sta L00F2
 		ldy #$00
 		lda (MEM_PTR_LO_00),Y
@@ -4809,14 +4813,14 @@ L3C6B:		lda L00B6
 		bcs L3CBE					;no
 			
 		ldx OBJECT_NUMBER_AD
-		lda L69EF					;kitchen sink in inventory?
+		lda KITCHEN_SINK_69EF					;kitchen sink in inventory?
 		bmi L3C94					;yes, take it
 		
 		lda OBJECT_ATTRIBUTES_69C0,X			;check if takeable at all?
 		and #$10
 		bne L3CBE					;bit4 set, not takeable
 			
-		lda L69DB					;Anti Grav?
+		lda ANTIGRAV_69DB					;Anti Grav?
 		bmi L3C94					;yes, take it
 			
 		lda OBJECT_ATTRIBUTES_69C0,X
@@ -4959,7 +4963,7 @@ L3D3E:		lda BOARDED_AND_FLYING_7D					;flying, but what is 7D? meaning?
 ;------------------------------------------------------------
 ; drop an object
 ;------------------------------------------------------------
-L3D6F:		lda L69F8					;pyramid taken?
+L3D6F:		lda PYRAMID_69F8					;pyramid taken?
 		bmi L3D78					;allow drop when flying in the air
 		lda BOARDED_AND_FLYING_7D
 		beq L3D3D
@@ -5782,7 +5786,7 @@ L4360:		lda #$02						;joystick back?
 		sta PITCH_HI_29
 L4376:		ldx SPEED_FP_EC
 		lda SPEED_FP_ED
-		ldy L69DC						;power amp in inventory?
+		ldy POWERAMP_69DC						;power amp in inventory?
 		bpl L4388
 		ldy CRAFT_ID_WALKING_A7
 		cpy #$01
@@ -5884,7 +5888,7 @@ L4427:		ldx SIN_PITCH_LO_34
 		lsr
 		bcs L445B
 		lda L73CD
-L4440:		ldx L69DC					;power amp in inventory?
+L4440:		ldx POWERAMP_69DC					;power amp in inventory?
 		bpl L444D					;no
 L4445:		ldx CRAFT_ID_WALKING_A7
 		cpx #$01
@@ -9215,7 +9219,7 @@ L5A51:		rts
 L5A52:		cpx #$05					;are we at 03-15?
 		bne L5A60					;no
 		
-		lda L69EE					;pass available?
+		lda PASS_69EE					;pass available?
 		bmi L5A60					;yes
 		ldx #$39					;"pass holders only"
 L5A5D:		jmp START_MESSAGE_L322A
@@ -9546,7 +9550,7 @@ L5C39:		lda LIFT_UP_DOWN_CA
 		beq L5C3E
 		rts	
 		
-L5C3E:		lda L69DA					;metal detector in inventory?
+L5C3E:		lda METAL_DETECTOR_69DA					;metal detector in inventory?
 		bpl L5C5F					;no
 		
 		lda ROOM_NO_CD
@@ -10817,7 +10821,7 @@ OBJECT_DRAW_LIST_6980:
 ;bit 0: sold
 ;------------------------------------------------------------
 OBJECT_ATTRIBUTES_69C0:		
-		.byte   $30		; 00	Flying Dart		
+		.byte   $30		; 00	BIL's Dominion Dart		
 		.byte 	$24             ; 01	Dominition Dart       
 		.byte	$20             ; 02	Car                   
 		.byte	$20             ; 03	Jet                   
@@ -10825,13 +10829,13 @@ OBJECT_ATTRIBUTES_69C0:
 		.byte	$20             ; 05	Speed Car             
 		.byte	$08             ; 06	Cheese                
 		.byte	$24             ; 07	Prestinium            
-L69C8:		.byte	$10             ; 08	shot                  
+SHOT_69C8:	.byte	$10             ; 08	Shot                  
 		.byte	$10             ; 09	Dominion Dart         
 		.byte	$10             ; 0a	Destroyed Prestinium  
 		.byte	$10             ; 0b	Dart                  
 		.byte	$04             ; 0c	Mechanoid             
 		.byte	$10             ; 0d	Dart                  
-		.byte	$10             ; 0e	shot                  
+		.byte	$10             ; 0e	Shot                  
 		.byte	$10             ; 0f	Saucer                
 		.byte	$08		; 10	Photon Emitter
 		.byte	$00             ; 11	key Triangle
@@ -10841,11 +10845,13 @@ L69C8:		.byte	$10             ; 08	shot
 		.byte	$00             ; 15	key reverse frustrum
 		.byte	$00             ; 16	key Diamond
 		.byte	$00             ; 17	key 6 corner
-L69D8:		.byte   $08             ; 18	Anti Time Bomb
+ANTI_TIME_BOMB_69D8:
+		.byte   $08             ; 18	Anti Time Bomb
 		.byte	$08             ; 19	Novadrive
-L69DA:		.byte   $08             ; 1a	Metal Detector
-L69DB:		.byte   $08             ; 1b	Antigrav
-L69DC:		.byte   $08             ; 1c	Power Amp
+METAL_DETECTOR_69DA:
+		.byte   $08             ; 1a	Metal Detector
+ANTIGRAV_69DB:	.byte   $08             ; 1b	Antigrav
+POWERAMP_69DC:	.byte   $08             ; 1c	Power Amp
 		.byte	$28             ; 1d	Neutron fuel
 		.byte	$08             ; 1e	Antenna
 		.byte	$08             ; 1f	Energy Crystal
@@ -10857,15 +10863,16 @@ L69DC:		.byte   $08             ; 1c	Power Amp
 		.byte	$10             ; 25	Excequer chart         
 		.byte	$08             ; 26	Gold                   
 		.byte	$00             ; 27	Couch                  
-L69E8:		.byte   $08             ; 28	Sights                 
+SIGHTS_69E8:	.byte   $08             ; 28	Sights                 
 		.byte	$08             ; 29	Medical Supplies       
 		.byte	$08             ; 2a	Essential 12939 Supply 
 		.byte	$08             ; 2b	Winchester             
 		.byte	$08             ; 2c	Cataring Provisions    
 		.byte	$08             ; 2d	Data Bank              
-L69EE:		.byte   $08             ; 2e	Pass                   
-L69EF:		.byte   $08             ; 2f	Kitchen Sink           
-L69F0:		.byte   $10		; 30	Spiderweb
+PASS_69EE:	.byte   $08             ; 2e	Pass                   
+KITCHEN_SINK_69EF:		
+		.byte   $08             ; 2f	Kitchen Sink           
+COBWEB_69F0:	.byte   $10		; 30	COBWEB
 		.byte	$00             ; 31	Lamp
 		.byte	$10             ; 32	Big Prestinium
 		.byte	$10             ; 33	Fireplace
@@ -10873,7 +10880,7 @@ L69F0:		.byte   $10		; 30	Spiderweb
 		.byte	$00             ; 35	Table
 		.byte	$00             ; 36	Chair
 		.byte	$00             ; 37	Bed
-L69F8:		.byte   $10             ; 38	Pyramid
+PYRAMID_69F8:	.byte   $10             ; 38	Pyramid
 		.byte	$10             ; 39	Skull rotated
 		.byte	$10             ; 3a	Skull small
 		.byte	$10             ; 3b	Skull large
