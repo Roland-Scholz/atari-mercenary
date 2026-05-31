@@ -920,60 +920,60 @@ Current file: ..\src\merc-0700-6fff.a65
 000700  1               ;
 000700  1               ; Benson state machine vectors
 000700  1               ;
-000700  1  6C 07        L0700:		.word L076C					;beginning sequence
-000702  1  39 09        		.word L0939					;BIL's ship nicked
-000704  1  01 0D        		.word L0D01					;HERTZ Spaceship rental
-000706  1  97 0E        		.word L0E97					;engine room
-000708  1  AB 0E        		.word L0EAB					;conference room
-00070A  1  BF 0E        		.word L0EBF					;exchequer
-00070C  1  D2 0E        		.word L0ED2					;kitchen
-00070E  1  78 0F        		.word L0F78					;prestinimum boarded
-000710  1  13 0A        		.word L0A13					;bank
-000712  1  E5 0E        		.word L0EE5					;infirmary
-000714  1  04 11        		.word L1104					;we are most pleased ...
-000716  1  F8 0E        		.word L0EF8					;prison
-000718  1  E5 09        		.word L09E5					;mechaniod...
-00071A  1  9A 0C        		.word L0C9A					;machanoid briefing room
-00071C  1  BC 0D        		.word L0DBC					;power room
-00071E  1  D0 0D        		.word L0DD0					;stores
-000720  1  E3 0D        		.word L0DE3					;armoury
-000722  1  F6 0D        		.word L0DF6					;laboratory
-000724  1  09 0E        		.word L0E09					;control room
-000726  1  1D 0E        		.word L0E1D					;interview room
-000728  1  31 0E        		.word L0E31					;mechanoid fuel stores
-00072A  1  66 07        		.word L0766					;crash
-00072C  1  46 0E        		.word L0E46					;mechanoid power room
-00072E  1  5B 0E        		.word L0E5B					;mechanoid stores
-000730  1  6F 0E        		.word L0E6F					;mechanoid armoury
-000732  1  83 0E        		.word L0E83					;mechanoid laboratory
-000734  1  F1 10        		.word L10F1					;"message from mechanoids... reward"
-000736  1  7C 0B        		.word L0B7C					;"you have just detroyed the BIL's new ship"
-000738  1  DF 0B        		.word L0BDF					;palyar briefing room
-00073A  1  13 0A        		.word L0A13					;bank
-00073C  1  66 07        		.word L0766					;crash
-00073E  1  66 07        		.word L0766                                     ;crash
-000740  1  66 07        		.word L0766                                     ;crash
-000742  1  66 07        		.word L0766                                     ;crash
-000744  1  D1 0B        		.word L0BD1					;"palyer ship attacking"
-000746  1  D8 0B        		.word L0BD8
-000748  1  25 0A        		.word L0A25					;"novabill destroyed"
-00074A  1  3E 0A        		.word L0A3E					;"advert destroyed"
-00074C  1  6D 0A        		.word L0A6D					;"sabins cube destroyed"
-00074E  1  82 0A        		.word L0A82					;"walten monument destroyed"
-000750  1  B1 0A        		.word L0AB1					;"St. Stallards destroyed"
-000752  1  C8 0A        		.word L0AC8					;"Moorby arch  destroyed"
-000754  1  DE 0A        		.word L0ADE					;"Tyler point destroyed"
-000756  1  F3 0A        		.word L0AF3					;"Bosher stadium destroyed"
-000758  1  0B 0B        		.word L0B0B					;"Jordan Airport destroyed"
-00075A  1  1C 0B        		.word L0B1C					;"Vector Henge"
-00075C  1  32 0B        		.word L0B32					;"BIL's house  destroyed"
-00075E  1  43 0B        		.word L0B43					;"mechanoid fort destroyed"
-000760  1  53 0B        		.word L0B53					;"The couch and horsed destroyed"
-000762  1  A8 0B        		.word L0BA8					;"good show"
-000764  1  94 0B        		.word L0B94					;"traitor!"
+000700  1  6C 07        L0700:		.word L076C					;$00 beginning sequence
+000702  1  39 09        		.word L0939					;$01 BIL's ship nicked
+000704  1  01 0D        		.word L0D01					;$02 HERTZ Spaceship rental
+000706  1  97 0E        		.word L0E97					;$03 engine room
+000708  1  AB 0E        		.word L0EAB					;$04 conference room
+00070A  1  BF 0E        		.word L0EBF					;$05 exchequer
+00070C  1  D2 0E        		.word L0ED2					;$06 kitchen
+00070E  1  78 0F        		.word L0F78					;$07 prestinimum boarded
+000710  1  13 0A        		.word L0A13					;$08 bank
+000712  1  E5 0E        		.word L0EE5					;$09 infirmary
+000714  1  04 11        		.word L1104					;$0A we are most pleased ...
+000716  1  F8 0E        		.word L0EF8					;$0B prison
+000718  1  E5 09        		.word L09E5					;$0C mechaniod... put down...
+00071A  1  9A 0C        		.word L0C9A					;$0D machanoid briefing room
+00071C  1  BC 0D        		.word L0DBC					;$0E power room
+00071E  1  D0 0D        		.word L0DD0					;$0F stores
+000720  1  E3 0D        		.word L0DE3					;$10 armoury
+000722  1  F6 0D        		.word L0DF6					;$11 laboratory
+000724  1  09 0E        		.word L0E09					;$12 control room
+000726  1  1D 0E        		.word L0E1D					;$13 interview room
+000728  1  31 0E        		.word L0E31					;$14 mechanoid fuel stores
+00072A  1  66 07        		.word L0766					;$15 crash
+00072C  1  46 0E        		.word L0E46					;$16 mechanoid power room
+00072E  1  5B 0E        		.word L0E5B					;$17 mechanoid stores
+000730  1  6F 0E        		.word L0E6F					;$18 mechanoid armoury
+000732  1  83 0E        		.word L0E83					;$19 mechanoid laboratory
+000734  1  F1 10        		.word L10F1					;$1A "message from mechanoids... reward"
+000736  1  7C 0B        		.word L0B7C					;$1B "you have just detroyed the BIL's new ship"
+000738  1  DF 0B        		.word L0BDF					;$1C palyar briefing room
+00073A  1  13 0A        		.word L0A13					;$1D bank
+00073C  1  66 07        		.word L0766					;$1E crash
+00073E  1  66 07        		.word L0766                                     ;$1F crash
+000740  1  66 07        		.word L0766                                     ;$20 crash
+000742  1  66 07        		.word L0766                                     ;$21 crash
+000744  1  D1 0B        		.word L0BD1					;$22 "palyer ship attacking"
+000746  1  D8 0B        		.word L0BD8                                     ;$23
+000748  1  25 0A        		.word L0A25					;$24 "novabill destroyed"
+00074A  1  3E 0A        		.word L0A3E					;$25 "advert destroyed"
+00074C  1  6D 0A        		.word L0A6D					;$26 "sabins cube destroyed"
+00074E  1  82 0A        		.word L0A82					;$27 "walten monument destroyed"
+000750  1  B1 0A        		.word L0AB1					;$28 "St. Stallards destroyed"
+000752  1  C8 0A        		.word L0AC8					;$29 "Moorby arch  destroyed"
+000754  1  DE 0A        		.word L0ADE					;$2A "Tyler point destroyed"
+000756  1  F3 0A        		.word L0AF3					;$2B "Bosher stadium destroyed"
+000758  1  0B 0B        		.word L0B0B					;$2C "Jordan Airport destroyed"
+00075A  1  1C 0B        		.word L0B1C					;$2D "Vector Henge"
+00075C  1  32 0B        		.word L0B32					;$2E "BIL's house  destroyed"
+00075E  1  43 0B        		.word L0B43					;$2F "mechanoid fort destroyed"
+000760  1  53 0B        		.word L0B53					;$30 "The couch and horsed destroyed"
+000762  1  A8 0B        		.word L0BA8					;$31 "good show"
+000764  1  94 0B        		.word L0B94					;$32 "traitor!"
 000766  1               
 000766  1  01 23 00     L0766:		.byte $01, $23, $00				;crash
-000769  1  11 40        		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+000769  1  11 40        		.byte $11, $40					;$11 reset Benson busy in L293B
 00076B  1  05           		.byte $05					;rts
 00076C  1               
 00076C  1  0F FE 01 20  L076C:		.byte $0F, $FE, $01, $20, $04, $0F, $FE, $07, $20, $04, $0F, $FE
@@ -1493,17 +1493,24 @@ Current file: ..\src\merc-0700-6fff.a65
 000E8F  1  01 EF 9F B1  		.byte $01, $EF, $9F, $B1, $00, $03, $45, $0F
 000E93  1  00 03 45 0F  
 000E97  1               
-000E97  1  0F FE 1D 0F  L0E97:		.byte $0F, $FE, $1D, $0F, $FF, $88, $0D, $F9
-000E9B  1  FF 88 0D F9  
-000E9F  1  00 00 20 00  		.byte $00, $00, $20, $00, $01, $EA, $36, $C1, $00, $03, $09, $0F
-000EA3  1  01 EA 36 C1  
-000EA7  1  00 03 09 0F  
+000E97  1               		;engine room
+000E97  1  0F FE 1D     L0E97:		.byte $0F, $FE, $1D				;set object $1D Neutron fuel
+000E9A  1  0F FF 88     		.byte $0F, $FF, $88				;set room $88
+000E9D  1  0D F9 00 00  		.byte $0D, $F9, $00, $00, $20, $00		;set decimal 200000
+000EA1  1  20 00        
+000EA3  1  01 EA 36 C1  		.byte $01, $EA, $36, $C1, $00
+000EA7  1  00           
+000EA8  1  03           		.byte $03					;jmp L0F09
+000EA9  1  09 0F        		.word L0F09
 000EAB  1               
-000EAB  1  0F FE 2A 0F  L0EAB:		.byte $0F, $FE, $2A, $0F, $FF, $9B, $0D, $F9, $00, $00, $05, $00
-000EAF  1  FF 9B 0D F9  
-000EB3  1  00 00 05 00  
-000EB7  1  01 EC BA C1  		.byte $01, $EC, $BA, $C1, $00, $03, $09, $0F
-000EBB  1  00 03 09 0F  
+000EAB  1  0F FE 2A     L0EAB:		.byte $0F, $FE, $2A
+000EAE  1  0F FF 9B     		.byte $0F, $FF, $9B
+000EB1  1  0D F9 00 00  		.byte $0D, $F9, $00, $00, $05, $00
+000EB5  1  05 00        
+000EB7  1  01 EC BA C1  		.byte $01, $EC, $BA, $C1, $00
+000EBB  1  00           
+000EBC  1  03           		.byte $03
+000EBD  1  09 0F        		.word L0F09
 000EBF  1               
 000EBF  1  0F FE 26 0F  L0EBF:		.byte $0F, $FE, $26, $0F
 000EC3  1  FF A2 0D F9  		.byte $FF, $A2, $0D, $F9, $00, $00, $10, $00, $01, $E9, $B8, $00
@@ -1528,38 +1535,59 @@ Current file: ..\src\merc-0700-6fff.a65
 000EF8  1  04 9A 09 01  L0EF8:		.byte $04, $9A, $09, $01, $E8, $FF, "PRISO", $CE
 000EFC  1  E8 FF 50 52  
 000F00  1  49 53 4F CE  
-000F04  1  E6 00 11 40  		.byte $E6, $00, $11, $40, $05, $21, $01, $40, $0F, $0C, $16, $0F
-000F08  1  05 21 01 40  
-000F0C  1  0F 0C 16 0F  
-000F10  1  1D 16 0F 03  		.byte $1D, $16, $0F, $03, $40, $0F, $01, $EB, $B7, $FF, "LEAV", $C5
-000F14  1  40 0F 01 EB  
-000F18  1  B7 FF 4C 45  
-000F1F  1  00 14 FE 01  		.byte $00, $14, $FE, $01, $EF, $2D, $3C, $F9, $12, $00, $1D, $32, $0F
-000F23  1  EF 2D 3C F9  
-000F27  1  12 00 1D 32  
-000F2C  1  13 29 0F 03  		.byte $13, $29, $0F, $03, $40, $0F, $20, $11
-000F30  1  40 0F 20 11  
-000F34  1               
+000F04  1  E6 00 11 40  		.byte $E6, $00, $11, $40
+000F08  1  05           		.byte $05					;rts
+000F09  1               
+000F09  1  21 01        L0F09:		.byte $21, $01					;test bit1 of object attribute
+000F0B  1  40 0F        		.word L0F40
+000F0D  1  0C           		.byte $0C					;check if object is in inventory
+000F0E  1  16 0F        		.word L0F16
+000F10  1  1D 16 0F     		.byte $1D, $16, $0F
+000F13  1  03           		.byte $03					;jump L0F40
+000F14  1  40 0F        		.word L0F40
+000F16  1               
+000F16  1  01 EB B7 FF  L0F16:		.byte $01, $EB, $B7, $FF, "LEAV", $C5, $00	;"please leave neutron fuel"
+000F1A  1  4C 45 41 56  
+000F1E  1  C5 00        
+000F20  1  14 FE        		.byte $14, $FE
+000F22  1  01 EF 2D 3C  		.byte $01, $EF, $2D, $3C, $F9, $12, $00
+000F26  1  F9 12 00     
+000F29  1  1D           L0F29:		.byte $1D					;is neutron fuel in room?
+000F2A  1  32 0F        		.word L0F32
+000F2C  1  13           		.byte $13					;compare room nr (still in engine room)
+000F2D  1  29 0F        		.word L0F29
+000F2F  1  03           		.byte $03					;jump
+000F30  1  40 0F        		.word L0F40
+000F32  1               
+000F32  1  20 11        L0F32:		.byte $20, $11					;set bit 4(cannot be taken) and 1 (sold) in object attributes
 000F34  1  01 EE F9 25  L0F34:		.byte $01, $EE, $F9, $25, $B5, $00
 000F38  1  B5 00        
-000F3A  1  15 F9 F8 F8  		.byte $15, $F9, $F8, $F8, $14
-000F3E  1  14           
-000F3F  1  15 14 32 11  		.byte $15, $14, $32, $11, $40
-000F43  1  40           
+000F3A  1  15 F9 F8 F8  		.byte $15, $F9, $F8, $F8			;add previously set decimal value
+000F3E  1  14 15        		.byte $14, $15					;"transaction completed"
+000F40  1               
+000F40  1  14 32        L0F40:		.byte $14, $32					;clear message
+000F42  1  11 40        		.byte $11, $40					;reset Benson busy
 000F44  1  05           		.byte $05					;rts
 000F45  1               
-000F45  1  1E 8E 1E 9F  		.byte $1E, $8E, $1E, $9F, $0F, $FE, $0C, $0F, $FF, $66, $9D, $59, $0F
-000F49  1  0F FE 0C 0F  
-000F4D  1  FF 66 9D 59  
-000F52  1  1E E8 1E F9  		.byte $1E, $E8, $1E, $F9, $03, $09, $0F, $01, $EE, $D0, $9F, $02
-000F56  1  03 09 0F 01  
-000F5A  1  EE D0 9F 02  
-000F5E  1  FF 53 41 D9  		.byte $FF, "SA", $D9, $00, $01, $EE, $FF, "PU", $D4, $1B, $0B, $FF
-000F62  1  00 01 EE FF  
-000F66  1  50 55 D4 1B  
-000F6C  1  4C 45 41 44  		.byte "LEADE", $D2, $00, $14, $32, $11, $40
-000F70  1  45 D2 00 14  
-000F74  1  32 11 40     
+000F45  1  1E 8E        L0F45:		.byte $1E, $8E					;copy L274E to L2748
+000F47  1  1E 9F        		.byte $1E, $9F					;copy L274F to L2749
+000F49  1  0F FE 0C     		.byte $0F, $FE, $0C				;set object $0c (mechanoid)
+000F4C  1  0F FF 66     		.byte $0F, $FF, $66				;set room $66
+000F4F  1  9D           		.byte $9D
+000F50  1  59 0F        		.word L0F59
+000F52  1  1E E8        		.byte $1E, $E8					;copy L2748 to L274E
+000F54  1  1E F9        		.byte $1E, $F9                                  ;copy L2749 to L274F
+000F56  1  03           		.byte $03
+000F57  1  09 0F        		.word L0F09					;jmp L0F09
+000F59  1               
+000F59  1  01 EE D0 9F  L0F59:		.byte $01, $EE, $D0, $9F, $02, $FF, "SA", $D9, $00
+000F5D  1  02 FF 53 41  
+000F61  1  D9 00        
+000F63  1  01 EE FF 50  		.byte $01, $EE, $FF, "PU", $D4, $1B, $0B, $FF, "LEADE", $D2, $00
+000F67  1  55 D4 1B 0B  
+000F6B  1  FF 4C 45 41  
+000F73  1  14 32        		.byte $14, $32                                  ;clear message
+000F75  1  11 40        		.byte $11, $40                                  ;reset Benson busy
 000F77  1  05           		.byte $05					;rts
 000F78  1               
 000F78  1               		;board Prestinium
@@ -1688,26 +1716,27 @@ Current file: ..\src\merc-0700-6fff.a65
 0010EE  1  10 02        		.byte $10, $02					;$10 set bits of ($1D) L293B
 0010F0  1  05           		.byte $05					;rts
 0010F1  1               
-0010F1  1  04           L10F1:		.byte $04					;jsr
-0010F2  1  9A 09        		.word $099A
+0010F1  1               ; Mechanoid reward message, but they don't pay anything
+0010F1  1  04           L10F1:		.byte $04					;jsr wait
+0010F2  1  9A 09        		.word L099A
 0010F4  1  12 02        		.byte $12, $02					;$12 test bits ($1D) against in L293B
 0010F6  1  01 11        		.word L1101
 0010F8  1  14 04        		.byte $14, $04					;send message
 0010FA  1  04           		.byte $04					;jsr
 0010FB  1  C7 10        		.word L10C7
 0010FD  1  14 07        		.byte $14, $07					;send message
-0010FF  1  14 32        		.byte $14, $32					;send message
-001101  1  11 40        L1101:		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+0010FF  1  14 32        		.byte $14, $32					;clear message
+001101  1  11 40        L1101:		.byte $11, $40					;reset Benson busy
 001103  1  05           		.byte $05					;rts
 001104  1               
-001104  1  04           L1104:		.byte $04					;jsr
+001104  1  04           L1104:		.byte $04					;jsr wait
 001105  1  9A 09        		.word $099A
-001107  1  12 02        		.byte $12, $02
+001107  1  12 02        		.byte $12, $02					;test bit1 L293B
 001109  1  3F 11        		.word L113F					;$12 test bits ($1D) against in L293B
 00110B  1  14 03        		.byte $14, $03					;send message
 00110D  1  04           		.byte $04					;jsr
 00110E  1  C7 10        		.word L10C7
-001110  1  0D F9 00 00  		.byte $0D, $F9, $00, $00, $50, $00		;set 5000 credits
+001110  1  0D F9 00 00  		.byte $0D, $F9, $00, $00, $50, $00		;set 500000 credits
 001114  1  50 00        
 001116  1  0F FE 2E     		.byte $0F, $FE, $2E				;$0F store $2E (pass) in $2740,X (X=$E 1st nibble of $FE)
 001119  1  0F FF 50     		.byte $0F, $FF, $50				;$0F store $50 (room) in $2740,X (X=$F 1st nibble of $FF)
@@ -1721,7 +1750,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00112E  1  45 20 54 48  
 001139  1  19 6E 69 01  		.byte $19, $6E, $69, $01			;set $696E = #$01 (put pass in hanger 09-06)
 00113D  1  14 07        		.byte $14, $07					;send message $07
-00113F  1  11 40        L113F:		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+00113F  1  11 40        L113F:		.byte $11, $40					;reset Benson Busy
 001141  1  05           		.byte $05					;rts
 001142  1               
 001142  1  00           		.byte $00
@@ -3137,11 +3166,25 @@ Current file: ..\src\merc-0700-6fff.a65
 002934  1  00 00        L2934:      	.byte $00,$00
 002936  1               
 002936  1               
-002936  1  00           L2936:		.byte $00
-002937  1  00           L2937:		.byte $00
+002936  1               PALYARS_STRUCTS_DESTROYED_2936:
+002936  1  00           		.byte $00
+002937  1               MECHNOID_STRUCTS_DESTROYED_2937:
+002937  1  00           		.byte $00
 002938  1  00           L2938:		.byte $00
 002939  1  00           L2939:		.byte $00
 00293A  1  00           L293A:		.byte $00
+00293B  1               
+00293B  1               GAME_STATUS_BYTE_293B:
+00293B  1               ;------------------------------------------------------------
+00293B  1               ;bit7	fire or joystick
+00293B  1               ;bit6	Benson busy
+00293B  1               ;bit5	BIL is not too pleased bit
+00293B  1               ;bit4
+00293B  1               ;bit3	Advert destroyed
+00293B  1               ;bit2	Prestinium, no novadrive required
+00293B  1               ;bit1	enough ground structures destroyed, "only once" bit
+00293B  1               ;bit0	'Y' key pressed
+00293B  1               ;------------------------------------------------------------
 00293B  1  00           L293B:		.byte $00
 00293C  1  00           L293C:		.byte $00
 00293D  1               
@@ -3529,7 +3572,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002C0C  1  A0 00        L2C0C:		ldy #$00
 002C0E  1  20 BA 2C     		jsr L2CBA
 002C11  1  B0 05        		bcs L2C18
-002C13  1  A9 1B        		lda #$1B
+002C13  1  A9 1B        		lda #$1B					;"BIL's ship destroyed
 002C15  1  20 0D 2F     		jsr BENSON_2F0D
 002C18  1  60           L2C18:		rts
 002C19  1  A6 F3        L2C19:		ldx CRUMBLE_CNT_F3
@@ -3565,29 +3608,29 @@ Current file: ..\src\merc-0700-6fff.a65
 002C59  1  0A           		asl
 002C5A  1  10 0E        		bpl L2C6A
 002C5C  1  B0 06        		bcs L2C64
-002C5E  1  CE 37 29     		dec L2937
+002C5E  1  CE 37 29     		dec MECHNOID_STRUCTS_DESTROYED_2937
 002C61  1  4C 75 2C     		jmp L2C75
 002C64  1               
 002C64  1               ;------------------------------------------------------------
 002C64  1               ;
 002C64  1               ;------------------------------------------------------------
-002C64  1  EE 37 29     L2C64:		inc L2937
+002C64  1  EE 37 29     L2C64:		inc MECHNOID_STRUCTS_DESTROYED_2937
 002C67  1  4C 75 2C     		jmp L2C75
 002C6A  1               
 002C6A  1               ;------------------------------------------------------------
 002C6A  1               ;
 002C6A  1               ;------------------------------------------------------------
 002C6A  1  B0 06        L2C6A:		bcs L2C72
-002C6C  1  CE 36 29     		dec L2936
+002C6C  1  CE 36 29     		dec PALYARS_STRUCTS_DESTROYED_2936
 002C6F  1  4C 75 2C     		jmp L2C75
 002C72  1               
 002C72  1               ;------------------------------------------------------------
 002C72  1               ;
 002C72  1               ;------------------------------------------------------------
-002C72  1  EE 36 29     L2C72:		inc L2936
+002C72  1  EE 36 29     L2C72:		inc PALYARS_STRUCTS_DESTROYED_2936
 002C75  1  A2 0A        L2C75:		ldx #$0A
-002C77  1  AD 37 29     		lda L2937
-002C7A  1  ED 36 29     		sbc L2936
+002C77  1  AD 37 29     		lda MECHNOID_STRUCTS_DESTROYED_2937
+002C7A  1  ED 36 29     		sbc PALYARS_STRUCTS_DESTROYED_2936
 002C7D  1  10 04        		bpl L2C83
 002C7F  1  49 FF        		eor #$FF
 002C81  1  A2 1A        		ldx #$1A
@@ -3595,7 +3638,7 @@ Current file: ..\src\merc-0700-6fff.a65
 002C85  1  B0 12        		bcs L2C99
 002C87  1  B9 00 1F     		lda L1F00,Y
 002C8A  1  29 1F        		and #$1F
-002C8C  1  F0 B9        		beq L2C47
+002C8C  1  F0 B9        		beq L2C47					;rts
 002C8E  1  09 20        		ora #$20
 002C90  1  AA           		tax
 002C91  1  B9 00 1F     		lda L1F00,Y
@@ -4526,8 +4569,8 @@ Current file: ..\src\merc-0700-6fff.a65
 00322A  1               ; issue a message if e6 zero
 00322A  1               ;------------------------------------------------------------
 00322A  1               START_MESSAGE_L322A:
-00322A  1  A5 E6        		lda MESSAGE_PENDING_E6				;exit if MESSAGE_PENDING_E6 not zero, message pending?
-00322C  1  D0 14        		bne L3242
+00322A  1  A5 E6        		lda MESSAGE_PENDING_E6				;exit if MESSAGE_PENDING_E6 not zero, message pending
+00322C  1  D0 14        		bne L3242					;rts
 00322E  1               
 00322E  1  BD E0 7D     L322E:		lda L7DE0,X					;CTRL-S = $3B
 003231  1  8D A6 32     		sta L32A4+2					;copy pointer to msg structure, high byte
@@ -12315,7 +12358,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0069C0  1               ;bit 3: display short message (name of object)
 0069C0  1               ;bit 2: start benson message
 0069C0  1               ;bit 1: unused?
-0069C0  1               ;bit 0: unused?
+0069C0  1               ;bit 0: sold
 0069C0  1               ;------------------------------------------------------------
 0069C0  1               OBJECT_ATTRIBUTES_69C0:
 0069C0  1  30           		.byte   $30		; 00	Flying Dart

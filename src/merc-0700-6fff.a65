@@ -715,60 +715,60 @@ L2004		= $2004
 ;
 ; Benson state machine vectors
 ;
-L0700:		.word L076C					;beginning sequence
-		.word L0939					;BIL's ship nicked
-		.word L0D01					;HERTZ Spaceship rental
-		.word L0E97					;engine room
-		.word L0EAB					;conference room		
-		.word L0EBF					;exchequer
-		.word L0ED2					;kitchen
-		.word L0F78					;prestinimum boarded
-		.word L0A13					;bank
-		.word L0EE5					;infirmary
-		.word L1104					;we are most pleased ...
-		.word L0EF8					;prison
-		.word L09E5					;mechaniod...
-		.word L0C9A					;machanoid briefing room
-		.word L0DBC					;power room
-		.word L0DD0					;stores
-		.word L0DE3					;armoury
-		.word L0DF6					;laboratory
-		.word L0E09					;control room
-		.word L0E1D					;interview room
-		.word L0E31					;mechanoid fuel stores
-		.word L0766					;crash
-		.word L0E46					;mechanoid power room
-		.word L0E5B					;mechanoid stores
-		.word L0E6F					;mechanoid armoury
-		.word L0E83					;mechanoid laboratory
-		.word L10F1					;"message from mechanoids... reward"
-		.word L0B7C					;"you have just detroyed the BIL's new ship"
-		.word L0BDF					;palyar briefing room
-		.word L0A13					;bank
-		.word L0766					;crash
-		.word L0766                                     ;crash
-		.word L0766                                     ;crash
-		.word L0766                                     ;crash
-		.word L0BD1					;"palyer ship attacking"
-		.word L0BD8
-		.word L0A25					;"novabill destroyed"
-		.word L0A3E					;"advert destroyed"
-		.word L0A6D					;"sabins cube destroyed"
-		.word L0A82					;"walten monument destroyed"
-		.word L0AB1					;"St. Stallards destroyed"
-		.word L0AC8					;"Moorby arch  destroyed"
-		.word L0ADE					;"Tyler point destroyed"
-		.word L0AF3					;"Bosher stadium destroyed"
-		.word L0B0B					;"Jordan Airport destroyed"
-		.word L0B1C					;"Vector Henge"
-		.word L0B32					;"BIL's house  destroyed"
-		.word L0B43					;"mechanoid fort destroyed"
-		.word L0B53					;"The couch and horsed destroyed"
-		.word L0BA8					;"good show"
-		.word L0B94					;"traitor!"
+L0700:		.word L076C					;$00 beginning sequence
+		.word L0939					;$01 BIL's ship nicked
+		.word L0D01					;$02 HERTZ Spaceship rental
+		.word L0E97					;$03 engine room
+		.word L0EAB					;$04 conference room		
+		.word L0EBF					;$05 exchequer
+		.word L0ED2					;$06 kitchen
+		.word L0F78					;$07 prestinimum boarded
+		.word L0A13					;$08 bank
+		.word L0EE5					;$09 infirmary
+		.word L1104					;$0A we are most pleased ...
+		.word L0EF8					;$0B prison
+		.word L09E5					;$0C mechaniod... put down...
+		.word L0C9A					;$0D machanoid briefing room
+		.word L0DBC					;$0E power room
+		.word L0DD0					;$0F stores
+		.word L0DE3					;$10 armoury
+		.word L0DF6					;$11 laboratory
+		.word L0E09					;$12 control room
+		.word L0E1D					;$13 interview room
+		.word L0E31					;$14 mechanoid fuel stores
+		.word L0766					;$15 crash
+		.word L0E46					;$16 mechanoid power room
+		.word L0E5B					;$17 mechanoid stores
+		.word L0E6F					;$18 mechanoid armoury
+		.word L0E83					;$19 mechanoid laboratory
+		.word L10F1					;$1A "message from mechanoids... reward"
+		.word L0B7C					;$1B "you have just detroyed the BIL's new ship"
+		.word L0BDF					;$1C palyar briefing room
+		.word L0A13					;$1D bank
+		.word L0766					;$1E crash
+		.word L0766                                     ;$1F crash
+		.word L0766                                     ;$20 crash
+		.word L0766                                     ;$21 crash
+		.word L0BD1					;$22 "palyer ship attacking"
+		.word L0BD8                                     ;$23 
+		.word L0A25					;$24 "novabill destroyed"
+		.word L0A3E					;$25 "advert destroyed"
+		.word L0A6D					;$26 "sabins cube destroyed"
+		.word L0A82					;$27 "walten monument destroyed"
+		.word L0AB1					;$28 "St. Stallards destroyed"
+		.word L0AC8					;$29 "Moorby arch  destroyed"
+		.word L0ADE					;$2A "Tyler point destroyed"
+		.word L0AF3					;$2B "Bosher stadium destroyed"
+		.word L0B0B					;$2C "Jordan Airport destroyed"
+		.word L0B1C					;$2D "Vector Henge"
+		.word L0B32					;$2E "BIL's house  destroyed"
+		.word L0B43					;$2F "mechanoid fort destroyed"
+		.word L0B53					;$30 "The couch and horsed destroyed"
+		.word L0BA8					;$31 "good show"
+		.word L0B94					;$32 "traitor!"
 
 L0766:		.byte $01, $23, $00				;crash
-		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+		.byte $11, $40					;$11 reset Benson busy in L293B
 		.byte $05					;rts
 		
 L076C:		.byte $0F, $FE, $01, $20, $04, $0F, $FE, $07, $20, $04, $0F, $FE
@@ -1046,12 +1046,21 @@ L0E6F:		.byte $0F, $FE, $23, $0F, $FF, $22, $0D, $F9, $00, $00, $12, $00
 L0E83:		.byte $0F, $FE, $2B, $0F, $FF, $12, $0D, $F9, $00, $00, $25, $00
 		.byte $01, $EF, $9F, $B1, $00, $03, $45, $0F
 
-L0E97:		.byte $0F, $FE, $1D, $0F, $FF, $88, $0D, $F9
-		.byte $00, $00, $20, $00, $01, $EA, $36, $C1, $00, $03, $09, $0F
+		;engine room
+L0E97:		.byte $0F, $FE, $1D				;set object $1D Neutron fuel
+		.byte $0F, $FF, $88				;set room $88
+		.byte $0D, $F9, $00, $00, $20, $00		;set decimal 200000
+		.byte $01, $EA, $36, $C1, $00
+		.byte $03					;jmp L0F09	
+		.word L0F09
 		
-L0EAB:		.byte $0F, $FE, $2A, $0F, $FF, $9B, $0D, $F9, $00, $00, $05, $00
-		.byte $01, $EC, $BA, $C1, $00, $03, $09, $0F
-
+L0EAB:		.byte $0F, $FE, $2A
+		.byte $0F, $FF, $9B
+		.byte $0D, $F9, $00, $00, $05, $00
+		.byte $01, $EC, $BA, $C1, $00
+		.byte $03
+		.word L0F09
+		
 L0EBF:		.byte $0F, $FE, $26, $0F
 		.byte $FF, $A2, $0D, $F9, $00, $00, $10, $00, $01, $E9, $B8, $00
 		.byte $03, $09, $0F 
@@ -1064,20 +1073,51 @@ L0EE5:		.byte $0F, $FE
 		.byte $CC, $00, $03, $09, $0F
 		
 L0EF8:		.byte $04, $9A, $09, $01, $E8, $FF, "PRISO", $CE
-		.byte $E6, $00, $11, $40, $05, $21, $01, $40, $0F, $0C, $16, $0F
-		.byte $1D, $16, $0F, $03, $40, $0F, $01, $EB, $B7, $FF, "LEAV", $C5
-		.byte $00, $14, $FE, $01, $EF, $2D, $3C, $F9, $12, $00, $1D, $32, $0F
-		.byte $13, $29, $0F, $03, $40, $0F, $20, $11
+		.byte $E6, $00, $11, $40
+		.byte $05					;rts 
 		
+L0F09:		.byte $21, $01					;test bit1 of object attribute
+		.word L0F40
+		.byte $0C					;check if object is in inventory
+		.word L0F16
+		.byte $1D, $16, $0F
+		.byte $03					;jump L0F40
+		.word L0F40
+		
+L0F16:		.byte $01, $EB, $B7, $FF, "LEAV", $C5, $00	;"please leave neutron fuel"
+		.byte $14, $FE
+		.byte $01, $EF, $2D, $3C, $F9, $12, $00
+L0F29:		.byte $1D					;is neutron fuel in room?
+		.word L0F32
+		.byte $13					;compare room nr (still in engine room)
+		.word L0F29
+		.byte $03					;jump
+		.word L0F40
+		
+L0F32:		.byte $20, $11					;set bit 4(cannot be taken) and 1 (sold) in object attributes
 L0F34:		.byte $01, $EE, $F9, $25, $B5, $00
-		.byte $15, $F9, $F8, $F8, $14
-		.byte $15, $14, $32, $11, $40
+		.byte $15, $F9, $F8, $F8			;add previously set decimal value
+		.byte $14, $15					;"transaction completed"
+
+L0F40:		.byte $14, $32					;clear message
+		.byte $11, $40					;reset Benson busy
 		.byte $05					;rts
 		
-		.byte $1E, $8E, $1E, $9F, $0F, $FE, $0C, $0F, $FF, $66, $9D, $59, $0F
-		.byte $1E, $E8, $1E, $F9, $03, $09, $0F, $01, $EE, $D0, $9F, $02
-		.byte $FF, "SA", $D9, $00, $01, $EE, $FF, "PU", $D4, $1B, $0B, $FF
-		.byte "LEADE", $D2, $00, $14, $32, $11, $40
+L0F45:		.byte $1E, $8E					;copy L274E to L2748
+		.byte $1E, $9F					;copy L274F to L2749
+		.byte $0F, $FE, $0C				;set object $0c (mechanoid)
+		.byte $0F, $FF, $66				;set room $66
+		.byte $9D
+		.word L0F59
+		.byte $1E, $E8					;copy L2748 to L274E
+		.byte $1E, $F9                                  ;copy L2749 to L274F
+		.byte $03
+		.word L0F09					;jmp L0F09
+		
+L0F59:		.byte $01, $EE, $D0, $9F, $02, $FF, "SA", $D9, $00
+		.byte $01, $EE, $FF, "PU", $D4, $1B, $0B, $FF, "LEADE", $D2, $00
+		.byte $14, $32                                  ;clear message
+		.byte $11, $40                                  ;reset Benson busy
 		.byte $05					;rts
 		
 		;board Prestinium
@@ -1175,26 +1215,27 @@ L10C7:		.byte $01, $EE, $E2, $14, $BD, $B7, $05, $00
 		.byte $10, $02					;$10 set bits of ($1D) L293B
 		.byte $05					;rts
 
-L10F1:		.byte $04					;jsr
-		.word $099A
+; Mechanoid reward message, but they don't pay anything
+L10F1:		.byte $04					;jsr wait
+		.word L099A
 		.byte $12, $02					;$12 test bits ($1D) against in L293B 
 		.word L1101 
 		.byte $14, $04					;send message
 		.byte $04					;jsr
 		.word L10C7
 		.byte $14, $07					;send message
-		.byte $14, $32					;send message
-L1101:		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+		.byte $14, $32					;clear message
+L1101:		.byte $11, $40					;reset Benson busy
 		.byte $05					;rts
 
-L1104:		.byte $04					;jsr
+L1104:		.byte $04					;jsr wait
 		.word $099A
-		.byte $12, $02
+		.byte $12, $02					;test bit1 L293B
 		.word L113F					;$12 test bits ($1D) against in L293B 
 		.byte $14, $03					;send message
 		.byte $04					;jsr
 		.word L10C7
-		.byte $0D, $F9, $00, $00, $50, $00		;set 5000 credits
+		.byte $0D, $F9, $00, $00, $50, $00		;set 500000 credits
 		.byte $0F, $FE, $2E				;$0F store $2E (pass) in $2740,X (X=$E 1st nibble of $FE)
 		.byte $0F, $FF, $50				;$0F store $50 (room) in $2740,X (X=$F 1st nibble of $FF)
 		.byte $9D 					;$1D check if object X=L274E is in room L274F
@@ -1204,7 +1245,7 @@ L1104:		.byte $04					;jsr
 		.byte $01, $EF, $FF, "INSIDE THE RE", $C4, $0E, $00
 		.byte $19, $6E, $69, $01			;set $696E = #$01 (put pass in hanger 09-06)
 		.byte $14, $07					;send message $07
-L113F:		.byte $11, $40					;$11 reset bits of ($1D) in L293B
+L113F:		.byte $11, $40					;reset Benson Busy
 		.byte $05					;rts
 		
 		.byte $00
@@ -1891,11 +1932,25 @@ INVENTORY_LIST_L292C:
 L2934:      	.byte $00,$00
 
 
-L2936:		.byte $00
-L2937:		.byte $00
+PALYARS_STRUCTS_DESTROYED_2936:		
+		.byte $00
+MECHNOID_STRUCTS_DESTROYED_2937:		
+		.byte $00
 L2938:		.byte $00
 L2939:		.byte $00
 L293A:		.byte $00
+
+GAME_STATUS_BYTE_293B:
+;------------------------------------------------------------
+;bit7	fire or joystick
+;bit6	Benson busy
+;bit5	BIL is not too pleased bit
+;bit4
+;bit3	Advert destroyed
+;bit2	Prestinium, no novadrive required
+;bit1	enough ground structures destroyed, "only once" bit
+;bit0	'Y' key pressed
+;------------------------------------------------------------
 L293B:		.byte $00
 L293C:		.byte $00
 
@@ -2279,7 +2334,7 @@ L2BFE:		ldx ZP_08
 L2C0C:		ldy #$00
 		jsr L2CBA
 		bcs L2C18
-		lda #$1B
+		lda #$1B					;"BIL's ship destroyed
 		jsr BENSON_2F0D
 L2C18:		rts
 L2C19:		ldx CRUMBLE_CNT_F3
@@ -2315,29 +2370,29 @@ L2C48:		lda L00FA
 		asl
 		bpl L2C6A
 		bcs L2C64
-		dec L2937
+		dec MECHNOID_STRUCTS_DESTROYED_2937
 		jmp L2C75
 
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
-L2C64:		inc L2937
+L2C64:		inc MECHNOID_STRUCTS_DESTROYED_2937
 		jmp L2C75
 
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
 L2C6A:		bcs L2C72
-		dec L2936
+		dec PALYARS_STRUCTS_DESTROYED_2936
 		jmp L2C75
 		
 ;------------------------------------------------------------
 ;
 ;------------------------------------------------------------
-L2C72:		inc L2936
+L2C72:		inc PALYARS_STRUCTS_DESTROYED_2936
 L2C75:		ldx #$0A
-		lda L2937
-		sbc L2936
+		lda MECHNOID_STRUCTS_DESTROYED_2937
+		sbc PALYARS_STRUCTS_DESTROYED_2936
 		bpl L2C83
 		eor #$FF
 		ldx #$1A
@@ -2345,7 +2400,7 @@ L2C83:		cmp #$69
 		bcs L2C99
 		lda L1F00,Y
 		and #$1F
-		beq L2C47
+		beq L2C47					;rts
 		ora #$20
 		tax
 		lda L1F00,Y
@@ -3276,8 +3331,8 @@ L3228:		inc JIFY_CNT_E0
 ; issue a message if e6 zero
 ;------------------------------------------------------------
 START_MESSAGE_L322A:		
-		lda MESSAGE_PENDING_E6				;exit if MESSAGE_PENDING_E6 not zero, message pending?
-		bne L3242
+		lda MESSAGE_PENDING_E6				;exit if MESSAGE_PENDING_E6 not zero, message pending
+		bne L3242					;rts
 		
 L322E:		lda L7DE0,X					;CTRL-S = $3B
 		sta L32A4+2					;copy pointer to msg structure, high byte
@@ -10759,7 +10814,7 @@ OBJECT_DRAW_LIST_6980:
 ;bit 3: display short message (name of object)
 ;bit 2: start benson message
 ;bit 1: unused?
-;bit 0: unused?
+;bit 0: sold
 ;------------------------------------------------------------
 OBJECT_ATTRIBUTES_69C0:		
 		.byte   $30		; 00	Flying Dart		
