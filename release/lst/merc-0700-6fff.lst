@@ -2392,7 +2392,7 @@ Current file: ..\src\merc-0700-6fff.a65
 001E74  1  9F 10 01 60  
 001E78  1  BD 00 9F 85  
 001E80  1               
-001E80  1               ROOM_DATA_1E80:
+001E80  1               LINE_FROM_1E80:
 001E80  1  00 01 02 00  		.byte $00,$01,$02,$00,$01,$02,$04,$05,$06,$07,$08,$09,$0A,$0B,$BD,$80
 001E84  1  01 02 04 05  
 001E88  1  06 07 08 09  
@@ -2406,7 +2406,7 @@ Current file: ..\src\merc-0700-6fff.a65
 001EB4  1  85 54 BD 40  
 001EB8  1  9D 85 55 B9  
 001EC0  1               
-001EC0  1               ROOM_DATA_1EC0:
+001EC0  1               LINE_TO_1EC0:
 001EC0  1  01 02 00 03  		.byte $01,$02,$00,$03,$03,$03,$05,$06,$07,$08,$09,$0A,$0B,$04,$9D,$85
 001EC4  1  03 03 05 06  
 001EC8  1  07 08 09 0A  
@@ -3108,7 +3108,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0029F6  1  F0 14        		beq INSIDE_L2A0C
 0029F8  1  A5 AF        		lda L00AF
 0029FA  1  D0 10        		bne INSIDE_L2A0C
-0029FC  1  20 AD 38     		jsr L38AD
+0029FC  1  20 AD 38     		jsr L38AD					;teleporter
 0029FF  1  90 0B        		bcc INSIDE_L2A0C
 002A01  1  20 3C 35     		jsr SETUP_ROOM_L353C
 002A04  1  A5 A6        		lda PLANET_UNDERGROUND_A6
@@ -3150,20 +3150,20 @@ Current file: ..\src\merc-0700-6fff.a65
 002A48  1               
 002A48  1  EE 00 65     L2A48:		inc OBJ_Z_MSB_L6500                             ; flying ship at edge of city
 002A4B  1  D0 0B        		bne L2A58
-002A4D  1  EE C0 65     		inc OBJ_Z_HSB_L65C0                             ; flying ship at edge of city
-002A50  1  AD C0 65     		lda OBJ_Z_HSB_L65C0                             ; flying ship at edge of city
-002A53  1  29 0F        		and #$0F                                        ; flying ship at edge of city
-002A55  1  8D C0 65     		sta OBJ_Z_HSB_L65C0                             ; flying ship at edge of city
+002A4D  1  EE C0 65     		inc OBJ_Z_HSB_L65C0                             ;
+002A50  1  AD C0 65     		lda OBJ_Z_HSB_L65C0                             ;
+002A53  1  29 0F        		and #$0F                                        ;
+002A55  1  8D C0 65     		sta OBJ_Z_HSB_L65C0                             ;
 002A58  1               
 002A58  1  20 B7 53     L2A58:		jsr WHITE_LINES_L53B7                           ; setup white lines
 002A5B  1  20 77 3B     		jsr DRAW_OBJECTS_L3B77                          ; draw objects
 002A5E  1  20 57 59     		jsr JOYSTICK_L5957
 002A61  1  20 55 45     		jsr L4555                                       ; lift
 002A64  1  A9 30        		lda #$30                                        ;
-002A66  1  20 EE 2C     		jsr L2CEE                                       ;
+002A66  1  20 EE 2C     		jsr L2CEE                                       ; fire pressed?
 002A69  1  20 19 2C     		jsr L2C19                                       ; destroy/rebuild ground structure
-002A6C  1  20 13 2B     		jsr L2B13                                       ;
-002A6F  1  20 A4 2D     		jsr L2DA4                                       ;
+002A6C  1  20 13 2B     		jsr L2B13                                       ; move movable objects
+002A6F  1  20 A4 2D     		jsr L2DA4                                       ; have you been hit?
 002A72  1  4C DF 29     		jmp MAIN_LOOP_L29DF                             ; next loop
 002A75  1               
 002A75  1               ;------------------------------------------------------------
@@ -4893,7 +4893,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003580  1  85 1A        		sta PTR_HI_1A
 003582  1  A0 00        		ldy #$00
 003584  1  B1 19        		lda (PTR_LO_19),Y
-003586  1  10 3E        		bpl L35C6					;bit7 set = teleporter?
+003586  1  10 3E        		bpl SETUP_ROOM_35C6				;bit7 set = teleporter?
 003588  1               
 003588  1  E0 72        		cpx #$72
 00358A  1  D0 0B        		bne L3597
@@ -4910,7 +4910,7 @@ Current file: ..\src\merc-0700-6fff.a65
 00359F  1  C8           		iny
 0035A0  1  C8           		iny
 0035A1  1  D1 19        		cmp (PTR_LO_19),Y
-0035A3  1  F0 21        		beq L35C6
+0035A3  1  F0 21        		beq SETUP_ROOM_35C6
 0035A5  1               
 0035A5  1  B1 19        L35A5:		lda (PTR_LO_19),Y
 0035A7  1  48           		pha
@@ -4928,10 +4928,11 @@ Current file: ..\src\merc-0700-6fff.a65
 0035BB  1  A9 1F        		lda #$1F					;teleporter flash
 0035BD  1  85 F0        		sta TELEP_FLASH_CNT_F0
 0035BF  1  E0 7F        		cpx #$7F					;laboratory
-0035C1  1  D0 03        		bne L35C6					;no switch room?
+0035C1  1  D0 03        		bne SETUP_ROOM_35C6					;no switch room?
 0035C3  1  20 CE 37     		jsr FLIP_VIEW_FLAG_37CE
 0035C6  1               
 0035C6  1               
+0035C6  1               ;------------------------------------------------------------
 0035C6  1               ; room 1
 0035C6  1               ; 10 4c 10 30 3a 82 58 10 0c 02 09 0b 10 02 59 05
 0035C6  1               ; 00 00
@@ -4939,8 +4940,13 @@ Current file: ..\src\merc-0700-6fff.a65
 0035C6  1               ; 10 4c 10 22 28 06 75 08 00 83 96 10 04 82 98 10
 0035C6  1               ; 01 82 97 10 06 22 71 04 10 99 4A 00 06 09 48 04
 0035C6  1               ; 00 00
+0035C6  1               ;------------------------------------------------------------
+0035C6  1               ; room $05 @ $C074
+0035C6  1               ;  0  1  2  3  4  5  6  7  8  9  A  B  B  D  E  F
+0035C6  1               ; 10 4C 10 2A 22 82 50 10 04 82 49 10 0C 02 6F 03
+0035C6  1               ;------------------------------------------------------------
 0035C6  1               
-0035C6  1               
+0035C6  1               ;------------------------------------------------------------
 0035C6  1               ; 0  1  2  3  4  5  6  7  8  9  a  b  d  d
 0035C6  1               ; 08 a2 84 8a 00 22 03 04 00 12 20 04 04 00
 0035C6  1               ;
@@ -4952,8 +4958,12 @@ Current file: ..\src\merc-0700-6fff.a65
 0035C6  1               ; 05	bit7 CUR_Z_LSB, !bit7 CUR_X_LSB
 0035C6  1               ; 07	CUR_X_MSB
 0035C6  1               ; 08	CUR_Z_MSB
+0035C6  1               ;------------------------------------------------------------
 0035C6  1               
-0035C6  1  A4 07        L35C6:		ldy MUL_HI_07					;Y=7
+0035C6  1               ;------------------------------------------------------------
+0035C6  1               SETUP_ROOM_35C6:
+0035C6  1               ;------------------------------------------------------------
+0035C6  1  A4 07        		ldy MUL_HI_07					;Y=7
 0035C8  1  86 CD        		stx ROOM_NO_CD
 0035CA  1  B1 19        		lda (PTR_LO_19),Y
 0035CC  1  85 71        		sta CUR_X_MSB_71
@@ -4989,9 +4999,9 @@ Current file: ..\src\merc-0700-6fff.a65
 00360B  1               
 00360B  1  A0 0C        		ldy #$0C
 00360D  1  B9 B5 37     L360D:		lda L37B6-1,Y
-003610  1  99 7F 1E     		sta ROOM_DATA_1E80-1,Y
+003610  1  99 7F 1E     		sta LINE_FROM_1E80-1,Y
 003613  1  B9 C1 37     		lda L37C2-1,Y
-003616  1  99 BF 1E     		sta ROOM_DATA_1EC0-1,Y
+003616  1  99 BF 1E     		sta LINE_TO_1EC0-1,Y
 003619  1  88           		dey
 00361A  1  D0 F1        		bne L360D
 00361C  1               
@@ -5032,10 +5042,11 @@ Current file: ..\src\merc-0700-6fff.a65
 003660  1               
 003660  1  C8           L3660:		iny						;Y=5
 003661  1  B1 19        		lda (PTR_LO_19),Y
-003663  1  F0 1E        		beq L3683
-003665  1  10 43        		bpl L36AA
-003667  1  C9 80        		cmp #$80
-003669  1  D0 43        		bne L36AE
+003663  1  F0 1E        		beq L3683					;done!
+003665  1               
+003665  1  10 43        		bpl DOOR_VERTICES_X_L36AA
+003667  1  C9 80        		cmp #$80					;if $80 -> dark room
+003669  1  D0 43        		bne DOOR_VERTICES_Z_L36AA
 00366B  1               
 00366B  1  A9 10        		lda #$10					;obj 16 photon emitter
 00366D  1  20 90 38     		jsr CHECK_INVENTORY_3890
@@ -5075,39 +5086,46 @@ Current file: ..\src\merc-0700-6fff.a65
 0036A9  1  60           		rts
 0036AA  1               
 0036AA  1               ;------------------------------------------------------------
-0036AA  1               ; set room vertices?
+0036AA  1               ; set room vertices
+0036AA  1               ; Z_LSB: TAB,x
+0036AA  1               ; Y_LSB: TAB,x
+0036AA  1               ; X_MSB: room_data
+0036AA  1               ; Z_MSB: room_data+1
 0036AA  1               ;------------------------------------------------------------
-0036AA  1  A2 1D        L36AA:		ldx #$1D
+0036AA  1               DOOR_VERTICES_X_L36AA:
+0036AA  1  A2 1D        		ldx #$1D					;1D00 = X_LSB
 0036AC  1  D0 02        		bne L36B0
 0036AE  1               
-0036AE  1  A2 1E        L36AE: 		ldx #$1E					;set hi-byte
-0036B0  1  8E D3 36     L36B0: 		stx L36D1+2
+0036AE  1               DOOR_VERTICES_Z_L36AA:
+0036AE  1  A2 1E        		ldx #$1E					;set hi-byte
+0036B0  1  8E D3 36     L36B0: 		stx L36D1+2					;$1E00 = Z_LSB
 0036B3  1  29 0F        		and #$0F
 0036B5  1  AA           		tax
 0036B6  1  BD A6 37     		lda L37A6,X
 0036B9  1  AA           		tax
 0036BA  1  C8           		iny
 0036BB  1  C8           		iny
-0036BC  1  B1 19        		lda (PTR_LO_19),Y
+0036BC  1  B1 19        		lda (PTR_LO_19),Y				;Y = 7
 0036BE  1  85 06        		sta MUL_LO_06
 0036C0  1  C8           		iny
-0036C1  1  B1 19        		lda (PTR_LO_19),Y
+0036C1  1  B1 19        		lda (PTR_LO_19),Y				;Y = 8
 0036C3  1  85 07        		sta MUL_HI_07
 0036C5  1  84 AB        		sty OBJECT_MEM_PTR_AB
 0036C7  1  A4 6E        		ldy ZP_6E
+0036C9  1               
 0036C9  1  BD 05 37     L36C9: 		lda L3705,X
 0036CC  1  C9 FF        		cmp #$FF
 0036CE  1  F0 19        		beq L36E9
 0036D0  1  C8           		iny
-0036D1  1  99 00 1D     L36D1: 		sta GROUND_STRUCTURE_X_LSB_1D00,Y
-0036D4  1  E8           L36D4: 		inx
+0036D1  1  99 00 1D     L36D1: 		sta GROUND_STRUCTURE_X_LSB_1D00,Y		;or Z_LSB_1E00,Y
+0036D4  1  E8            		inx
 0036D5  1  BD 05 37     		lda L3705,X
 0036D8  1  99 80 1D     		sta GROUND_STRUCTURE_Y_LSB_1D80,Y
 0036DB  1  A5 06        		lda MUL_LO_06
 0036DD  1  99 40 1D     		sta GROUND_STRUCTURE_X_MSB_1D40,Y
 0036E0  1  A5 07        		lda MUL_HI_07
-0036E2  1  99 40 1E     L36E2: 		sta GROUND_STRUCTURE_Z_MSB_1E40,Y
-0036E5  1  E8           L36E5: 		inx
+0036E2  1  99 40 1E      		sta GROUND_STRUCTURE_Z_MSB_1E40,Y
+0036E5  1  E8            		inx
 0036E6  1  4C C9 36     		jmp L36C9
 0036E9  1               
 0036E9  1               ;------------------------------------------------------------
@@ -5116,19 +5134,22 @@ Current file: ..\src\merc-0700-6fff.a65
 0036E9  1  A6 6F        L36E9: 		ldx LINE_CNT_6F
 0036EB  1  E6 6E        		inc ZP_6E
 0036ED  1  A5 6E        		lda ZP_6E
+0036EF  1               
 0036EF  1  E8           L36EF: 		inx
-0036F0  1  9D 80 1E     		sta ROOM_DATA_1E80,X
+0036F0  1  9D 80 1E     		sta LINE_FROM_1E80,X
 0036F3  1  E6 6E        		inc ZP_6E
 0036F5  1  A5 6E        L36F5: 		lda ZP_6E
-0036F7  1  9D C0 1E     L36F7: 		sta ROOM_DATA_1EC0,X
+0036F7  1  9D C0 1E     L36F7: 		sta LINE_TO_1EC0,X
 0036FA  1  C4 6E        		cpy ZP_6E
 0036FC  1  D0 F1        		bne L36EF
+0036FE  1               
 0036FE  1  A4 AB        		ldy OBJECT_MEM_PTR_AB
 003700  1  86 6F        		stx LINE_CNT_6F
-003702  1  4C 60 36     L3702: 		jmp L3660
+003702  1  4C 60 36     L3702: 		jmp L3660					;next door!
 003705  1               
 003705  1               ;------------------------------------------------------------
-003705  1               ;
+003705  1               ; Table of door shapes and transporters
+003705  1               ; pairs (x or z-offset / y-offset)
 003705  1               ;------------------------------------------------------------
 003705  1  50 00 50 C0  L3705: 		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$FF
 003709  1  B0 C0 B0 00  
@@ -5136,34 +5157,38 @@ Current file: ..\src\merc-0700-6fff.a65
 00370E  1  50 00 50 C0  		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$B0,$60,$80,$A0,$50,$60,$B0,$60,$FF
 003712  1  B0 C0 B0 00  
 003716  1  B0 60 80 A0  
-00371F  1  50 00 50 C0  		.byte $50,$00,$50,$C0,$B0,$C0
-003723  1  B0 C0        
-003725  1  B0 00 80 00  		.byte $B0,$00,$80,$00,$80,$A0,$70,$80,$90,$80,$80,$A0,$FF,$50,$00,$50
-003729  1  80 A0 70 80  
-00372D  1  90 80 80 A0  
-003735  1  C0 B0 C0 B0  		.byte $C0,$B0,$C0,$B0,$00,$80,$00,$70,$20,$90,$20,$80,$00,$80,$A0,$FF
-003739  1  00 80 00 70  
-00373D  1  20 90 20 80  
-003745  1  50 C0 B0 00  		.byte $50,$C0,$B0,$00,$B0,$C0,$50,$C0,$50,$00,$B0,$C0,$FF,$50,$00,$50
+00371F  1  50 00 50 C0  		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$80,$00,$80,$A0,$70,$80,$90,$80,$80,$A0,$FF
+003723  1  B0 C0 B0 00  
+003727  1  80 00 80 A0  
+003732  1  50 00 50 C0  		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$80,$00,$70,$20,$90,$20,$80,$00,$80,$A0,$FF
+003736  1  B0 C0 B0 00  
+00373A  1  80 00 70 20  
+003745  1  50 C0 B0 00  		.byte $50,$C0,$B0,$00,$B0,$C0,$50,$C0,$50,$00,$B0,$C0,$FF
 003749  1  B0 C0 50 C0  
 00374D  1  50 00 B0 C0  
-003755  1  C0 B0 C0 B0  		.byte $C0,$B0,$C0,$B0,$00,$50,$C0,$FF,$30,$00,$80,$C0,$D0,$00,$FF,$40
-003759  1  00 50 C0 FF  
-00375D  1  30 00 80 C0  
-003765  1  00 60 C0 A0  		.byte $00,$60,$C0,$A0,$C0,$C0,$00,$FF,$48,$00,$25,$6B,$80,$AC,$DB,$6B
-003769  1  C0 C0 00 FF  
-00376D  1  48 00 25 6B  
-003775  1  B8 00 FF 50  		.byte $B8,$00,$FF,$50,$00,$50,$A0,$80,$C0,$B0,$A0,$B0,$00,$FF,$60,$00
-003779  1  00 50 A0 80  
-00377D  1  C0 B0 A0 B0  
-003785  1  40 C0 C0 C0  		.byte $40,$C0,$C0,$C0,$A0,$00,$FF,$60,$00,$40,$60,$60,$C0,$A0,$C0,$C0
-003789  1  A0 00 FF 60  
-00378D  1  00 40 60 60  
-003795  1  60 A0 00 FF  		.byte $60,$A0,$00,$FF,$50,$00,$50,$80,$70,$C0,$90,$C0,$B0,$80,$B0,$00
-003799  1  50 00 50 80  
+003752  1  50 00 50 C0  		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$50,$C0,$FF
+003756  1  B0 C0 B0 00  
+00375A  1  50 C0 FF     
+00375D  1  30 00 80 C0  		.byte $30,$00,$80,$C0,$D0,$00,$FF,$40,$00,$60,$C0,$A0,$C0,$C0,$00,$FF
+003761  1  D0 00 FF 40  
+003765  1  00 60 C0 A0  
+00376D  1  48 00 25 6B  		.byte $48,$00,$25,$6B,$80,$AC,$DB,$6B,$B8,$00,$FF
+003771  1  80 AC DB 6B  
+003775  1  B8 00 FF     
+003778  1  50 00 50 A0  		.byte $50,$00,$50,$A0,$80,$C0,$B0,$A0,$B0,$00,$FF
+00377C  1  80 C0 B0 A0  
+003780  1  B0 00 FF     
+003783  1  60 00 40 C0  		.byte $60,$00,$40,$C0,$C0,$C0,$A0,$00,$FF			;reverse frustum
+003787  1  C0 C0 A0 00  
+00378B  1  FF           
+00378C  1  60 00 40 60  		.byte $60,$00,$40,$60,$60,$C0,$A0,$C0,$C0,$60,$A0,$00,$FF	;diamond
+003790  1  60 C0 A0 C0  
+003794  1  C0 60 A0 00  
+003799  1  50 00 50 80  		.byte $50,$00,$50,$80,$70,$C0,$90,$C0,$B0,$80,$B0,$00,$FF	;key 6 corner small
 00379D  1  70 C0 90 C0  
-0037A5  1  FF           		.byte $FF
+0037A1  1  B0 80 B0 00  
 0037A6  1               
+0037A6  1               ;index into table above
 0037A6  1  00 00 00 09  L37A6:		.byte $00,$00,$00,$09,$1A,$2D,$40,$4D,$00,$58,$5F,$68,$73,$7E,$87,$94
 0037AA  1  1A 2D 40 4D  
 0037AE  1  00 58 5F 68  
@@ -5573,7 +5598,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003A33  1  4A           		lsr
 003A34  1  4A           		lsr
 003A35  1  4A           		lsr
-003A36  1  9D 80 1E     		sta ROOM_DATA_1E80,X
+003A36  1  9D 80 1E     		sta LINE_FROM_1E80,X
 003A39  1  68           		pla
 003A3A  1  29 0F        L3A3A:		and #$0F
 003A3C  1  9D C0 1E     		sta L1EC0,X
@@ -5583,7 +5608,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003A45  1  E8           L3A45:		inx
 003A46  1  C8           L3A46:		iny
 003A47  1  B1 00        		lda (MEM_PTR_LO_00),Y
-003A49  1  9D 80 1E     		sta ROOM_DATA_1E80,X
+003A49  1  9D 80 1E     		sta LINE_FROM_1E80,X
 003A4C  1  C8           		iny
 003A4D  1  B1 00        		lda (MEM_PTR_LO_00),Y
 003A4F  1  9D C0 1E     		sta L1EC0,X
@@ -5750,7 +5775,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003B61  1  C4 96        		cpy L0096
 003B63  1  D0 03        		bne L3B68
 003B65  1  20 B7 53     		jsr WHITE_LINES_L53B7
-003B68  1  BE 80 1E     L3B68:		ldx ROOM_DATA_1E80,Y
+003B68  1  BE 80 1E     L3B68:		ldx LINE_FROM_1E80,Y
 003B6B  1  B9 C0 1E     		lda L1EC0,Y
 003B6E  1  A8           		tay
 003B6F  1  20 4E 3E     		jsr LINE_DRAW_L42AE
@@ -11170,7 +11195,7 @@ Current file: ..\src\merc-0700-6fff.a65
 005F79  1               ;------------------------------------------------------------
 005F79  1               ;
 005F79  1               ;------------------------------------------------------------
-005F79  1  3E 7E 1E     L5F79:		rol ROOM_DATA_1E80-2,X
+005F79  1  3E 7E 1E     L5F79:		rol LINE_FROM_1E80-2,X
 005F7C  1  AE A4 BC     L5F7C:		ldx LBCA4
 005F7F  1  C0 8F        		cpy #$8F
 005F81  1  D0 0F        		bne L5F92
@@ -12220,8 +12245,8 @@ Current file: ..\src\merc-0700-6fff.a65
 0069D3  1  00           		.byte	$00             			; $13	key 5 corner
 0069D4  1  00           		.byte	$00             			; $14	key 5 corner small
 0069D5  1  00           		.byte	$00             			; $15	key reverse frustrum
-0069D6  1  00           		.byte	$00             			; $16	key Diamond
-0069D7  1  00           		.byte	$00             			; $17	key 6 corner
+0069D6  1  00           		.byte	$00             			; $16	key Diamond (regular 6 corner)
+0069D7  1  00           		.byte	$00             			; $17	key 6 corner small
 0069D8  1               ANTI_TIME_BOMB_69D8:
 0069D8  1  08           		.byte   $08             			; $18	Anti Time Bomb
 0069D9  1  08           		.byte	$08             			; $19	Novadrive

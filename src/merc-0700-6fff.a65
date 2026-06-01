@@ -1470,13 +1470,13 @@ GROUND_STRUCTURE_Z_MSB_1E40:
 		.byte $80,$85,$04,$BD,$40,$9D,$49,$80,$C5,$04,$B0,$0C,$98,$86,$04,$AA
 		.byte $A4,$04,$BD,$00,$9F,$10,$01,$60,$BD,$00,$9F,$85,$6C,$30,$1E,$BD
 		
-ROOM_DATA_1E80:
+LINE_FROM_1E80:
 		.byte $00,$01,$02,$00,$01,$02,$04,$05,$06,$07,$08,$09,$0A,$0B,$BD,$80
 		.byte $9D,$85,$5D,$BD,$00,$9E,$85,$5E,$BD,$40,$9E,$85,$5F,$BD,$00,$9C
 		.byte $85,$50,$BD,$40,$9C,$85,$51,$BD,$80,$9C,$85,$52,$BD,$C0,$9C,$85
 		.byte $53,$BD,$00,$9D,$85,$54,$BD,$40,$9D,$85,$55,$B9,$00,$9F,$85,$6D
 
-ROOM_DATA_1EC0:
+LINE_TO_1EC0:
 		.byte $01,$02,$00,$03,$03,$03,$05,$06,$07,$08,$09,$0A,$0B,$04,$9D,$85
 		.byte $60,$B9,$80,$9D,$85,$61,$B9,$00,$9E,$85,$62,$B9,$40,$9E,$85,$63
 		.byte $B9,$00,$9C,$85,$56,$B9,$40,$9C,$85,$57,$B9,$80,$9C,$85,$58,$B9
@@ -1873,7 +1873,7 @@ MAIN_LOOP_L29DF:
 		beq INSIDE_L2A0C                                
 		lda L00AF                                       
 		bne INSIDE_L2A0C                                
-		jsr L38AD                                       
+		jsr L38AD					;teleporter                                       
 		bcc INSIDE_L2A0C                                
 		jsr SETUP_ROOM_L353C                            
 		lda PLANET_UNDERGROUND_A6                    
@@ -1915,20 +1915,20 @@ L2A42:		jsr ROTATE_GROUND_STRUCTURE_L3B49               ; rotate ground structur
 		
 L2A48:		inc OBJ_Z_MSB_L6500                             ; flying ship at edge of city
 		bne L2A58                                       
-		inc OBJ_Z_HSB_L65C0                             ; flying ship at edge of city
-		lda OBJ_Z_HSB_L65C0                             ; flying ship at edge of city
-		and #$0F                                        ; flying ship at edge of city
-		sta OBJ_Z_HSB_L65C0                             ; flying ship at edge of city
+		inc OBJ_Z_HSB_L65C0                             ;
+		lda OBJ_Z_HSB_L65C0                             ;
+		and #$0F                                        ;
+		sta OBJ_Z_HSB_L65C0                             ;
 
 L2A58:		jsr WHITE_LINES_L53B7                           ; setup white lines
 		jsr DRAW_OBJECTS_L3B77                          ; draw objects
 		jsr JOYSTICK_L5957                              
 		jsr L4555                                       ; lift
 		lda #$30                                        ;
-		jsr L2CEE                                       ;
+		jsr L2CEE                                       ; fire pressed?
 		jsr L2C19                                       ; destroy/rebuild ground structure
-		jsr L2B13                                       ;
-		jsr L2DA4                                       ;
+		jsr L2B13                                       ; move movable objects 
+		jsr L2DA4                                       ; have you been hit?
 		jmp MAIN_LOOP_L29DF                             ; next loop
 		
 ;------------------------------------------------------------
@@ -3650,7 +3650,7 @@ L357B:		sta PTR_LO_19
 		sta PTR_HI_1A
 		ldy #$00
 		lda (PTR_LO_19),Y
-		bpl L35C6					;bit7 set = teleporter?
+		bpl SETUP_ROOM_35C6				;bit7 set = teleporter?
 		
 		cpx #$72
 		bne L3597
@@ -3667,7 +3667,7 @@ L3597:		lda ROOM_NO_CD
 		iny
 		iny
 		cmp (PTR_LO_19),Y
-		beq L35C6
+		beq SETUP_ROOM_35C6
 		
 L35A5:		lda (PTR_LO_19),Y
 		pha
@@ -3685,10 +3685,11 @@ L35A5:		lda (PTR_LO_19),Y
 		lda #$1F					;teleporter flash
 		sta TELEP_FLASH_CNT_F0
 		cpx #$7F					;laboratory
-		bne L35C6					;no switch room?
+		bne SETUP_ROOM_35C6					;no switch room?
 		jsr FLIP_VIEW_FLAG_37CE
 
 
+;------------------------------------------------------------
 ; room 1
 ; 10 4c 10 30 3a 82 58 10 0c 02 09 0b 10 02 59 05
 ; 00 00
@@ -3696,8 +3697,13 @@ L35A5:		lda (PTR_LO_19),Y
 ; 10 4c 10 22 28 06 75 08 00 83 96 10 04 82 98 10
 ; 01 82 97 10 06 22 71 04 10 99 4A 00 06 09 48 04
 ; 00 00
+;------------------------------------------------------------
+; room $05 @ $C074
+;  0  1  2  3  4  5  6  7  8  9  A  B  B  D  E  F
+; 10 4C 10 2A 22 82 50 10 04 82 49 10 0C 02 6F 03
+;------------------------------------------------------------
 
-
+;------------------------------------------------------------
 ; 0  1  2  3  4  5  6  7  8  9  a  b  d  d
 ; 08 a2 84 8a 00 22 03 04 00 12 20 04 04 00
 ;			  	
@@ -3709,8 +3715,12 @@ L35A5:		lda (PTR_LO_19),Y
 ; 05	bit7 CUR_Z_LSB, !bit7 CUR_X_LSB
 ; 07	CUR_X_MSB
 ; 08	CUR_Z_MSB
+;------------------------------------------------------------
 
-L35C6:		ldy MUL_HI_07					;Y=7
+;------------------------------------------------------------
+SETUP_ROOM_35C6:
+;------------------------------------------------------------
+		ldy MUL_HI_07					;Y=7
 		stx ROOM_NO_CD
 		lda (PTR_LO_19),Y
 		sta CUR_X_MSB_71
@@ -3746,9 +3756,9 @@ L35ED:		sta GROUND_STRUCTURE_X_LSB_1D00,Y		;clear all struct positions
 		
 		ldy #$0C
 L360D:		lda L37B6-1,Y
-		sta ROOM_DATA_1E80-1,Y
+		sta LINE_FROM_1E80-1,Y
 		lda L37C2-1,Y
-		sta ROOM_DATA_1EC0-1,Y
+		sta LINE_TO_1EC0-1,Y
 		dey
 		bne L360D
 		
@@ -3789,10 +3799,11 @@ L360D:		lda L37B6-1,Y
 		
 L3660:		iny						;Y=5
 		lda (PTR_LO_19),Y
-		beq L3683
-		bpl L36AA
-		cmp #$80
-		bne L36AE
+		beq L3683					;done!
+		
+		bpl DOOR_VERTICES_X_L36AA
+		cmp #$80					;if $80 -> dark room
+		bne DOOR_VERTICES_Z_L36AA
 		
 		lda #$10					;obj 16 photon emitter
 		jsr CHECK_INVENTORY_3890
@@ -3832,39 +3843,46 @@ L369F:		jsr L3817
 		rts
 
 ;------------------------------------------------------------
-; set room vertices?
+; set room vertices
+; Z_LSB: TAB,x
+; Y_LSB: TAB,x
+; X_MSB: room_data
+; Z_MSB: room_data+1
 ;------------------------------------------------------------
-L36AA:		ldx #$1D
+DOOR_VERTICES_X_L36AA:		
+		ldx #$1D					;1D00 = X_LSB
 		bne L36B0
 		
-L36AE: 		ldx #$1E					;set hi-byte
-L36B0: 		stx L36D1+2
+DOOR_VERTICES_Z_L36AA: 		
+		ldx #$1E					;set hi-byte
+L36B0: 		stx L36D1+2					;$1E00 = Z_LSB
 		and #$0F
-		tax
+		tax						
 		lda L37A6,X
 		tax
 		iny
 		iny
-		lda (PTR_LO_19),Y
+		lda (PTR_LO_19),Y				;Y = 7
 		sta MUL_LO_06
 		iny
-		lda (PTR_LO_19),Y
+		lda (PTR_LO_19),Y				;Y = 8
 		sta MUL_HI_07
 		sty OBJECT_MEM_PTR_AB
 		ldy ZP_6E
+		
 L36C9: 		lda L3705,X
 		cmp #$FF
 		beq L36E9
 		iny
-L36D1: 		sta GROUND_STRUCTURE_X_LSB_1D00,Y
-L36D4: 		inx
+L36D1: 		sta GROUND_STRUCTURE_X_LSB_1D00,Y		;or Z_LSB_1E00,Y
+ 		inx
 		lda L3705,X
 		sta GROUND_STRUCTURE_Y_LSB_1D80,Y
 		lda MUL_LO_06
 		sta GROUND_STRUCTURE_X_MSB_1D40,Y
 		lda MUL_HI_07
-L36E2: 		sta GROUND_STRUCTURE_Z_MSB_1E40,Y
-L36E5: 		inx
+ 		sta GROUND_STRUCTURE_Z_MSB_1E40,Y
+ 		inx
 		jmp L36C9
 
 ;------------------------------------------------------------
@@ -3873,33 +3891,37 @@ L36E5: 		inx
 L36E9: 		ldx LINE_CNT_6F
 		inc ZP_6E
 		lda ZP_6E
+		
 L36EF: 		inx
-		sta ROOM_DATA_1E80,X
+		sta LINE_FROM_1E80,X
 		inc ZP_6E
 L36F5: 		lda ZP_6E
-L36F7: 		sta ROOM_DATA_1EC0,X
+L36F7: 		sta LINE_TO_1EC0,X
 		cpy ZP_6E
 		bne L36EF
+		
 		ldy OBJECT_MEM_PTR_AB
 		stx LINE_CNT_6F
-L3702: 		jmp L3660
+L3702: 		jmp L3660					;next door!
 
 ;------------------------------------------------------------
-; 
+; Table of door shapes and transporters
+; pairs (x or z-offset / y-offset)
 ;------------------------------------------------------------
 L3705: 		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$FF
 		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$B0,$60,$80,$A0,$50,$60,$B0,$60,$FF
-		.byte $50,$00,$50,$C0,$B0,$C0 
-		.byte $B0,$00,$80,$00,$80,$A0,$70,$80,$90,$80,$80,$A0,$FF,$50,$00,$50 
-		.byte $C0,$B0,$C0,$B0,$00,$80,$00,$70,$20,$90,$20,$80,$00,$80,$A0,$FF 
-		.byte $50,$C0,$B0,$00,$B0,$C0,$50,$C0,$50,$00,$B0,$C0,$FF,$50,$00,$50 
-		.byte $C0,$B0,$C0,$B0,$00,$50,$C0,$FF,$30,$00,$80,$C0,$D0,$00,$FF,$40 
-		.byte $00,$60,$C0,$A0,$C0,$C0,$00,$FF,$48,$00,$25,$6B,$80,$AC,$DB,$6B 
-		.byte $B8,$00,$FF,$50,$00,$50,$A0,$80,$C0,$B0,$A0,$B0,$00,$FF,$60,$00
-		.byte $40,$C0,$C0,$C0,$A0,$00,$FF,$60,$00,$40,$60,$60,$C0,$A0,$C0,$C0 
-		.byte $60,$A0,$00,$FF,$50,$00,$50,$80,$70,$C0,$90,$C0,$B0,$80,$B0,$00 
-		.byte $FF
+		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$80,$00,$80,$A0,$70,$80,$90,$80,$80,$A0,$FF
+		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$80,$00,$70,$20,$90,$20,$80,$00,$80,$A0,$FF 
+		.byte $50,$C0,$B0,$00,$B0,$C0,$50,$C0,$50,$00,$B0,$C0,$FF
+		.byte $50,$00,$50,$C0,$B0,$C0,$B0,$00,$50,$C0,$FF
+		.byte $30,$00,$80,$C0,$D0,$00,$FF,$40,$00,$60,$C0,$A0,$C0,$C0,$00,$FF
+		.byte $48,$00,$25,$6B,$80,$AC,$DB,$6B,$B8,$00,$FF
+		.byte $50,$00,$50,$A0,$80,$C0,$B0,$A0,$B0,$00,$FF
+		.byte $60,$00,$40,$C0,$C0,$C0,$A0,$00,$FF			;reverse frustum
+		.byte $60,$00,$40,$60,$60,$C0,$A0,$C0,$C0,$60,$A0,$00,$FF	;diamond
+		.byte $50,$00,$50,$80,$70,$C0,$90,$C0,$B0,$80,$B0,$00,$FF	;key 6 corner small
 
+;index into table above
 L37A6:		.byte $00,$00,$00,$09,$1A,$2D,$40,$4D,$00,$58,$5F,$68,$73,$7E,$87,$94
 		
 L37B6:		.byte $00,$01,$02,$03,$00,$01,$02,$03,$04,$05,$06,$07
@@ -4302,7 +4324,7 @@ L3A2B:		inx
 		lsr
 		lsr
 		lsr
-		sta ROOM_DATA_1E80,X
+		sta LINE_FROM_1E80,X
 		pla
 L3A3A:		and #$0F
 		sta L1EC0,X
@@ -4312,7 +4334,7 @@ L3A3A:		and #$0F
 L3A45:		inx
 L3A46:		iny
 		lda (MEM_PTR_LO_00),Y
-		sta ROOM_DATA_1E80,X
+		sta LINE_FROM_1E80,X
 		iny
 		lda (MEM_PTR_LO_00),Y
 		sta L1EC0,X
@@ -4479,7 +4501,7 @@ L3B5F:		ldy POINT_LINE_COUNT_17
 		cpy L0096
 		bne L3B68
 		jsr WHITE_LINES_L53B7
-L3B68:		ldx ROOM_DATA_1E80,Y
+L3B68:		ldx LINE_FROM_1E80,Y
 		lda L1EC0,Y
 		tay
 		jsr LINE_DRAW_L42AE
@@ -9864,7 +9886,7 @@ L5F78:		rts
 ;------------------------------------------------------------
 ; 
 ;------------------------------------------------------------
-L5F79:		rol ROOM_DATA_1E80-2,X
+L5F79:		rol LINE_FROM_1E80-2,X
 L5F7C:		ldx LBCA4
 		cpy #$8F
 		bne L5F92
@@ -10680,8 +10702,8 @@ SHOT_69C8:	.byte	$10             			; $08	Shot
 		.byte	$00             			; $13	key 5 corner
 		.byte	$00             			; $14	key 5 corner small
 		.byte	$00             			; $15	key reverse frustrum
-		.byte	$00             			; $16	key Diamond
-		.byte	$00             			; $17	key 6 corner
+		.byte	$00             			; $16	key Diamond (regular 6 corner)
+		.byte	$00             			; $17	key 6 corner small
 ANTI_TIME_BOMB_69D8:                    			  
 		.byte   $08             			; $18	Anti Time Bomb
 		.byte	$08             			; $19	Novadrive
