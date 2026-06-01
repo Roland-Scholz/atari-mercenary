@@ -1873,7 +1873,7 @@ MAIN_LOOP_L29DF:
 		beq INSIDE_L2A0C                                
 		lda L00AF                                       
 		bne INSIDE_L2A0C                                
-		jsr L38AD					;teleporter                                       
+		jsr DOOR_TELEPORT_38AD				;door / teleporter                                       
 		bcc INSIDE_L2A0C                                
 		jsr SETUP_ROOM_L353C                            
 		lda PLANET_UNDERGROUND_A6                    
@@ -1915,10 +1915,10 @@ L2A42:		jsr ROTATE_GROUND_STRUCTURE_L3B49               ; rotate ground structur
 		
 L2A48:		inc OBJ_Z_MSB_L6500                             ; flying ship at edge of city
 		bne L2A58                                       
-		inc OBJ_Z_HSB_L65C0                             ;
-		lda OBJ_Z_HSB_L65C0                             ;
-		and #$0F                                        ;
-		sta OBJ_Z_HSB_L65C0                             ;
+		inc OBJ_Z_HSB_L65C0
+		lda OBJ_Z_HSB_L65C0
+		and #$0F           
+		sta OBJ_Z_HSB_L65C0
 
 L2A58:		jsr WHITE_LINES_L53B7                           ; setup white lines
 		jsr DRAW_OBJECTS_L3B77                          ; draw objects
@@ -4077,28 +4077,30 @@ L38AB:		clc
 ;------------------------------------------------------------
 ; 
 ;------------------------------------------------------------
-L38AD:      	lda TELEP_FLASH_CNT_F0
+DOOR_TELEPORT_38AD:      	
+		lda TELEP_FLASH_CNT_F0
 		bne L38AB					;still flashing, rts
 		
 		ldy #$03
 L38B3:      	iny
 L38B4:      	iny
 		lda (PTR_LO_19),Y
-		sta MUL_HI_07
+		sta MUL_HI_07					;get door in 07
 		asl
-		beq L38AB
+		beq L38AB					;if $80 or 00 exit (dark room?)
 		iny
-		lda (PTR_LO_19),Y
+		lda (PTR_LO_19),Y				;get next room
 		sta MUL_LO_06
 		lda MUL_HI_07
-		and #$80
+		and #$80					;extract X or Z direction
 		clc
 		adc CUR_X_LSB_70
 		lda CUR_X_MSB_71
 		adc #$00
 		iny
 		cmp (PTR_LO_19),Y
-		bne L38B3
+		bne L38B3					;try next door
+		
 		lda CUR_Z_LSB_76
 		sec
 		sbc #$40
@@ -4113,13 +4115,15 @@ L38B4:      	iny
 		adc #$00
 		iny
 		cmp (PTR_LO_19),Y
-		bne L38B4
+		bne L38B4					;try next door
+
 		lda CUR_X_LSB_70
 		sec
 		sbc #$28
 		eor MUL_HI_07
-		bmi L38B4
-		lda YAW_LO_2A
+		bmi L38B4					;try next door
+
+		lda YAW_LO_2A					;orientation
 		asl
 		lda YAW_HI_2B
 		adc #$02
@@ -4127,18 +4131,23 @@ L38B4:      	iny
 		lsr
 		ror
 		eor MUL_HI_07
-		bmi L38B4
+		bmi L38B4					;try next door
+		
 		lda COBWEB_69F0					;cobweb in inventory
 L3907:      	bmi L3917					;yes
-		lda MUL_HI_07
+
+		lda MUL_HI_07					;doors 0-7 do not need keys
 		and #$0F
 		cmp #$08
 		bcc L3917
-		tax
+		
+		tax						;check if key is in inventory
 		lda SHOT_69C8,X
-		bpl L38A6
-L3917:      	lda MUL_HI_07
+		bpl L38A6					;no, "locked"
+		
+L3917:      	lda MUL_HI_07					;X or Z orientation
 		bmi L3922
+		
 		ldy CUR_Z_LSB_76
 		lda CUR_Z_MSB_77
 		jmp L3926
@@ -4148,6 +4157,7 @@ L3917:      	lda MUL_HI_07
 ;------------------------------------------------------------
 L3922:      	ldy CUR_X_LSB_70
 		lda CUR_X_MSB_71
+		
 L3926:      	bne L3931
 		tya
 		rol

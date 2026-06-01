@@ -3108,7 +3108,7 @@ Current file: ..\src\merc-0700-6fff.a65
 0029F6  1  F0 14        		beq INSIDE_L2A0C
 0029F8  1  A5 AF        		lda L00AF
 0029FA  1  D0 10        		bne INSIDE_L2A0C
-0029FC  1  20 AD 38     		jsr L38AD					;teleporter
+0029FC  1  20 AD 38     		jsr DOOR_TELEPORT_38AD				;door / teleporter
 0029FF  1  90 0B        		bcc INSIDE_L2A0C
 002A01  1  20 3C 35     		jsr SETUP_ROOM_L353C
 002A04  1  A5 A6        		lda PLANET_UNDERGROUND_A6
@@ -3150,10 +3150,10 @@ Current file: ..\src\merc-0700-6fff.a65
 002A48  1               
 002A48  1  EE 00 65     L2A48:		inc OBJ_Z_MSB_L6500                             ; flying ship at edge of city
 002A4B  1  D0 0B        		bne L2A58
-002A4D  1  EE C0 65     		inc OBJ_Z_HSB_L65C0                             ;
-002A50  1  AD C0 65     		lda OBJ_Z_HSB_L65C0                             ;
-002A53  1  29 0F        		and #$0F                                        ;
-002A55  1  8D C0 65     		sta OBJ_Z_HSB_L65C0                             ;
+002A4D  1  EE C0 65     		inc OBJ_Z_HSB_L65C0
+002A50  1  AD C0 65     		lda OBJ_Z_HSB_L65C0
+002A53  1  29 0F        		and #$0F
+002A55  1  8D C0 65     		sta OBJ_Z_HSB_L65C0
 002A58  1               
 002A58  1  20 B7 53     L2A58:		jsr WHITE_LINES_L53B7                           ; setup white lines
 002A5B  1  20 77 3B     		jsr DRAW_OBJECTS_L3B77                          ; draw objects
@@ -5350,28 +5350,30 @@ Current file: ..\src\merc-0700-6fff.a65
 0038AD  1               ;------------------------------------------------------------
 0038AD  1               ;
 0038AD  1               ;------------------------------------------------------------
-0038AD  1  A5 F0        L38AD:      	lda TELEP_FLASH_CNT_F0
+0038AD  1               DOOR_TELEPORT_38AD:
+0038AD  1  A5 F0        		lda TELEP_FLASH_CNT_F0
 0038AF  1  D0 FA        		bne L38AB					;still flashing, rts
 0038B1  1               
 0038B1  1  A0 03        		ldy #$03
 0038B3  1  C8           L38B3:      	iny
 0038B4  1  C8           L38B4:      	iny
 0038B5  1  B1 19        		lda (PTR_LO_19),Y
-0038B7  1  85 07        		sta MUL_HI_07
+0038B7  1  85 07        		sta MUL_HI_07					;get door in 07
 0038B9  1  0A           		asl
-0038BA  1  F0 EF        		beq L38AB
+0038BA  1  F0 EF        		beq L38AB					;if $80 or 00 exit (dark room?)
 0038BC  1  C8           		iny
-0038BD  1  B1 19        		lda (PTR_LO_19),Y
+0038BD  1  B1 19        		lda (PTR_LO_19),Y				;get next room
 0038BF  1  85 06        		sta MUL_LO_06
 0038C1  1  A5 07        		lda MUL_HI_07
-0038C3  1  29 80        		and #$80
+0038C3  1  29 80        		and #$80					;extract X or Z direction
 0038C5  1  18           		clc
 0038C6  1  65 70        		adc CUR_X_LSB_70
 0038C8  1  A5 71        		lda CUR_X_MSB_71
 0038CA  1  69 00        		adc #$00
 0038CC  1  C8           		iny
 0038CD  1  D1 19        		cmp (PTR_LO_19),Y
-0038CF  1  D0 E2        		bne L38B3
+0038CF  1  D0 E2        		bne L38B3					;try next door
+0038D1  1               
 0038D1  1  A5 76        		lda CUR_Z_LSB_76
 0038D3  1  38           		sec
 0038D4  1  E9 40        		sbc #$40
@@ -5386,13 +5388,15 @@ Current file: ..\src\merc-0700-6fff.a65
 0038E5  1  69 00        		adc #$00
 0038E7  1  C8           		iny
 0038E8  1  D1 19        		cmp (PTR_LO_19),Y
-0038EA  1  D0 C8        		bne L38B4
+0038EA  1  D0 C8        		bne L38B4					;try next door
+0038EC  1               
 0038EC  1  A5 70        		lda CUR_X_LSB_70
 0038EE  1  38           		sec
 0038EF  1  E9 28        		sbc #$28
 0038F1  1  45 07        		eor MUL_HI_07
-0038F3  1  30 BF        		bmi L38B4
-0038F5  1  A5 2A        		lda YAW_LO_2A
+0038F3  1  30 BF        		bmi L38B4					;try next door
+0038F5  1               
+0038F5  1  A5 2A        		lda YAW_LO_2A					;orientation
 0038F7  1  0A           		asl
 0038F8  1  A5 2B        		lda YAW_HI_2B
 0038FA  1  69 02        		adc #$02
@@ -5400,18 +5404,23 @@ Current file: ..\src\merc-0700-6fff.a65
 0038FE  1  4A           		lsr
 0038FF  1  6A           		ror
 003900  1  45 07        		eor MUL_HI_07
-003902  1  30 B0        		bmi L38B4
+003902  1  30 B0        		bmi L38B4					;try next door
+003904  1               
 003904  1  AD F0 69     		lda COBWEB_69F0					;cobweb in inventory
 003907  1  30 0E        L3907:      	bmi L3917					;yes
-003909  1  A5 07        		lda MUL_HI_07
+003909  1               
+003909  1  A5 07        		lda MUL_HI_07					;doors 0-7 do not need keys
 00390B  1  29 0F        		and #$0F
 00390D  1  C9 08        		cmp #$08
 00390F  1  90 06        		bcc L3917
-003911  1  AA           		tax
+003911  1               
+003911  1  AA           		tax						;check if key is in inventory
 003912  1  BD C8 69     		lda SHOT_69C8,X
-003915  1  10 8F        		bpl L38A6
-003917  1  A5 07        L3917:      	lda MUL_HI_07
+003915  1  10 8F        		bpl L38A6					;no, "locked"
+003917  1               
+003917  1  A5 07        L3917:      	lda MUL_HI_07					;X or Z orientation
 003919  1  30 07        		bmi L3922
+00391B  1               
 00391B  1  A4 76        		ldy CUR_Z_LSB_76
 00391D  1  A5 77        		lda CUR_Z_MSB_77
 00391F  1  4C 26 39     		jmp L3926
@@ -5421,6 +5430,7 @@ Current file: ..\src\merc-0700-6fff.a65
 003922  1               ;------------------------------------------------------------
 003922  1  A4 70        L3922:      	ldy CUR_X_LSB_70
 003924  1  A5 71        		lda CUR_X_MSB_71
+003926  1               
 003926  1  D0 09        L3926:      	bne L3931
 003928  1  98           		tya
 003929  1  2A           		rol
